@@ -1,413 +1,1156 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <title>Statista Pro | Full Edition</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Statista</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --accent: #6366f1;
-      --accent-glow: rgba(99, 102, 241, 0.2);
-      --bg: #0f172a;
-      --card: #1e293b;
-      --text: #f8fafc;
-      --text-dim: #94a3b8;
-      --success: #10b981;
-      --danger: #ef4444;
-      --radius: 20px;
-    }
+<style>
+  :root {
+    --bg:       #0d0f14;
+    --surface:  #161b25;
+    --surface2: #1e2538;
+    --border:   #2a3347;
+    --accent:   #4f8ef7;
+    --accent2:  #7b5cf5;
+    --green:    #22c887;
+    --red:      #f7556a;
+    --amber:    #f5a623;
+    --text:     #e8edf5;
+    --muted:    #7a8499;
+    --white:    #ffffff;
+    --r:        14px;
+    --rsm:      8px;
+  }
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      margin: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg);
-      background-image:
-        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 40%);
-      background-attachment: fixed;
-      color: var(--text);
-    }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
 
-    header {
-      backdrop-filter: blur(15px);
-      background: rgba(30, 41, 59, 0.7);
-      padding: 18px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
+  /* HEADER */
+  header {
+    background: rgba(22, 27, 37, 0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
 
-    header b {
-      font-size: 22px;
-      font-weight: 800;
-      background: linear-gradient(to right, #818cf8, #10b981);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+  header b {
+    font-family: 'Space Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
-    .container {
-      max-width: 500px;
-      margin: 0 auto;
-      padding: 20px 16px;
-    }
+  /* WEBVIEW WARNING */
+  #webviewWarning {
+    display: none;
+    background: #2a1f08;
+    color: var(--amber);
+    border-bottom: 1px solid #4a3510;
+    padding: 10px 16px;
+    font-size: 13px;
+    text-align: center;
+    font-weight: 500;
+  }
 
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    }
+  /* HELP BTN */
+  #helpBtn {
+    background: rgba(79,142,247,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(79,142,247,0.3);
+    padding: 7px 13px;
+    border-radius: var(--rsm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  #helpBtn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-    .card:hover {
-      border-color: var(--accent);
-      transform: translateY(-3px);
-    }
+  /* CONTAINER */
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 28px 16px 80px;
+  }
 
-    .card:active {
-      transform: scale(0.97);
-    }
+  /* TYPOGRAPHY */
+  h2 { font-size: 20px; font-weight: 800; color: var(--white); margin-bottom: 20px; }
+  h3 { font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 16px; }
+  h4 { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    button {
-      width: 100%;
-      padding: 16px;
-      border: none;
-      border-radius: 16px;
-      font-family: inherit;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 16px;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+  }
 
-    .primary {
-      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-      color: white;
-    }
+  /* BUTTONS */
+  button {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    border-radius: var(--rsm);
+    cursor: pointer;
+    padding: 12px 16px;
+    transition: all 0.18s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    line-height: 1;
+  }
 
-    .secondary {
-      background: rgba(255, 255, 255, 0.05);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
+  .primary {
+    background: linear-gradient(135deg, var(--accent), #3a7ef5);
+    color: #fff;
+    width: 100%;
+    justify-content: flex-start;
+    box-shadow: 0 2px 10px rgba(79,142,247,0.2);
+  }
+  .primary:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(79,142,247,0.35); }
+  .primary:active { transform: translateY(0); }
 
-    .back {
-      background: none;
-      color: var(--text-dim);
-      width: auto;
-      padding: 10px 0;
-    }
+  .secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .secondary:hover { border-color: var(--accent); color: var(--white); background: var(--border); }
 
-    .status-badge {
-      padding: 4px 12px;
-      border-radius: 100px;
-      font-size: 11px;
-      font-weight: 800;
-    }
+  .danger {
+    background: rgba(247,85,106,0.1);
+    color: var(--red);
+    border: 1px solid rgba(247,85,106,0.3);
+    padding: 10px 14px;
+  }
+  .danger:hover { background: var(--red); color: #fff; border-color: var(--red); }
 
-    .green-bg {
-      background: rgba(16, 185, 129, 0.2);
-      color: #34d399;
-    }
+  .back {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 8px 13px;
+    margin-bottom: 18px;
+    font-size: 13px;
+    width: auto;
+  }
+  .back:hover { background: var(--surface2); color: var(--text); }
 
-    .red-bg {
-      background: rgba(239, 68, 68, 0.2);
-      color: #f87171;
-    }
+  /* STATUS BADGES */
+  .green {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--green);
+    font-weight: 700;
+    font-size: 13px;
+    background: rgba(34,200,135,0.1);
+    border: 1px solid rgba(34,200,135,0.25);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
 
-    img {
-      width: 100%;
-      border-radius: 12px;
-      margin-top: 15px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
+  .red {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--red);
+    font-weight: 700;
+    font-size: 13px;
+    background: rgba(247,85,106,0.08);
+    border: 1px solid rgba(247,85,106,0.2);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
 
-    .upload-area {
-      margin-top: 15px;
-      border: 2px dashed rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 16px;
-      text-align: center;
-      cursor: pointer;
-    }
+  /* IMAGES */
+  img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin: 8px 6px 0 0;
+  }
 
-    #helpBtn {
-      background: rgba(99, 102, 241, 0.1);
-      color: #818cf8;
-      padding: 8px 16px;
-      border-radius: 12px;
-      border: 1px solid rgba(99, 102, 241, 0.3);
-    }
+  /* UPLOAD LABELS */
+  label.primary, label.danger {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    border-radius: var(--rsm);
+    padding: 9px 14px;
+    margin-top: 10px;
+    transition: all 0.18s;
+    line-height: 1;
+  }
+  label.primary {
+    background: linear-gradient(135deg, var(--accent), #3a7ef5);
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(79,142,247,0.2);
+  }
+  label.primary:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(79,142,247,0.35); }
+  label.danger {
+    background: rgba(247,85,106,0.1);
+    color: var(--red);
+    border: 1px solid rgba(247,85,106,0.3);
+  }
+  label.danger:hover { background: var(--red); color: #fff; }
 
-    input[type=file] {
-      display: none;
-    }
-  </style>
+  input[type=file] { display: none; }
+
+  /* HW CARD */
+  .hw {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--rsm);
+    padding: 14px;
+    margin-bottom: 8px;
+  }
+  .hw b { font-size: 14px; color: var(--text); display: block; margin-bottom: 8px; }
+
+  /* HOME */
+  .home-wrap { padding-top: 40px; text-align: center; }
+  .home-title {
+    font-size: 32px;
+    font-weight: 800;
+    font-family: 'Space Mono', monospace;
+    background: linear-gradient(135deg, #fff 0%, var(--muted) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+  }
+  .home-sub { color: var(--muted); font-size: 14px; margin-bottom: 36px; }
+  .home-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+  .home-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 28px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .home-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.3); }
+  .home-card.student { border-top: 3px solid var(--accent); }
+  .home-card.teacher { border-top: 3px solid var(--accent2); }
+  .home-card .label { font-weight: 700; font-size: 15px; color: var(--white); }
+  .home-card .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* ADMIN */
+  .admin-group-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 16px;
+    margin-bottom: 10px;
+  }
+  .admin-group-name { font-weight: 700; font-size: 14px; color: var(--white); margin-bottom: 12px; }
+  .admin-group-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .admin-group-actions .primary { width: auto; flex: 1; }
+
+  .admin-student-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 14px 16px;
+    margin-bottom: 8px;
+  }
+  .admin-student-name {
+    font-weight: 700; font-size: 14px; color: var(--white);
+    margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+  }
+  .hw-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; gap: 8px;
+  }
+  .hw-row:last-child { border-bottom: none; }
+  .hw-row-name { color: var(--muted); flex: 1; }
+
+  /* EXPORT BTN */
+  .export-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(34,200,135,0.1); color: var(--green);
+    border: 1px solid rgba(34,200,135,0.3);
+    padding: 9px 16px; border-radius: var(--rsm);
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    margin-bottom: 18px; font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.2s; width: auto;
+  }
+  .export-btn:hover { background: var(--green); color: var(--bg); }
+
+  /* INSTRUCTION STEPS */
+  .step-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 18px 18px 18px 64px;
+    margin-bottom: 10px; position: relative;
+  }
+  .step-num {
+    position: absolute; left: 16px; top: 16px;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; font-weight: 800; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+  }
+  .step-title { font-weight: 700; color: var(--white); margin-bottom: 5px; font-size: 15px; }
+  .step-body { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .step-body ul { padding-left: 16px; margin-top: 6px; }
+  .step-body b { color: var(--text); }
+
+  .alert-card {
+    background: rgba(245,166,35,0.08); border: 1px solid rgba(245,166,35,0.3);
+    border-radius: var(--r); padding: 14px 16px; margin-bottom: 10px;
+    font-size: 13px; color: var(--amber); line-height: 1.7;
+  }
+  .alert-card ul { padding-left: 16px; margin-top: 6px; }
+  .alert-card b { color: #ffc542; }
+
+  /* BREADCRUMB */
+  .bc {
+    font-size: 12px; color: var(--muted); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+  }
+  .bc b { color: var(--accent); }
+
+  /* LOADING */
+  .loading {
+    text-align: center; padding: 50px 20px;
+    color: var(--muted); font-size: 14px;
+  }
+  .loading::before {
+    content: ''; display: block; width: 30px; height: 30px;
+    border: 3px solid var(--border); border-top-color: var(--accent);
+    border-radius: 50%; margin: 0 auto 16px;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 999;
+    animation: fadeIn 0.15s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 360px;
+    margin: 16px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    animation: slideUp 0.2s ease;
+  }
+  @keyframes slideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+  .modal-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .modal-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .modal-field {
+    margin-bottom: 14px;
+  }
+  .modal-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .modal-field input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--rsm);
+    padding: 12px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .modal-field input:focus {
+    border-color: var(--accent);
+  }
+  .modal-error {
+    font-size: 13px;
+    color: var(--red);
+    margin-bottom: 14px;
+    min-height: 18px;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  .modal-actions .primary { flex: 1; justify-content: center; }
+  .modal-actions .btn-cancel {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 12px 18px;
+    border-radius: var(--rsm);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .modal-actions .btn-cancel:hover { background: var(--surface2); color: var(--text); }
+
+  /* NEW GROUP BUTTON */
+  .btn-new-group {
+    background: rgba(34,200,135,0.1);
+    color: var(--green);
+    border: 1px solid rgba(34,200,135,0.3);
+    padding: 9px 16px;
+    border-radius: var(--rsm);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+    width: auto;
+  }
+  .btn-new-group:hover { background: var(--green); color: var(--bg); }
+
+  /* DELETE GROUP BUTTON */
+  .btn-delete-group {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    border-radius: var(--rsm);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+    width: auto;
+  }
+  .btn-delete-group:hover { background: var(--red); color: #fff; border-color: var(--red); }
+</style>
 </head>
 
 <body>
 
-  <header>
-    <b>Homework Statista</b>
-    <div id="helpBtn" onclick="openInstruction()">Guide</div>
-  </header>
+<header>
+  <b>Statista</b>
+  <div id="helpBtn" onclick="openInstruction()">Instructions</div>
+</header>
 
-  <div class="container" id="app"></div>
+<div id="webviewWarning">
+  For stable photo upload, open in browser: <b>⋮ → Open in Chrome / Safari</b>
+</div>
 
-  <script>
-    // Настройки Firebase
-    firebase.initializeApp({
-      apiKey: "AIzaSyDJDVZazGiEUshVicJX8ObvxIjDPgA5rTo",
-      authDomain: "studentstatista.firebaseapp.com",
-      databaseURL: "https://studentstatista-default-rtdb.firebaseio.com",
-      projectId: "studentstatista",
-      storageBucket: "studentstatista.firebasestorage.app"
-    });
-    const db = firebase.database();
-    const storage = firebase.storage();
+<div class="container" id="app"></div>
 
-    
-    // ПОЛНЫЕ ДАННЫЕ ГРУПП
-    const GROUPS = {
-      "GROUP IELTS 9:00 M/W/F": ["HOSHIMOVA NILUFAR", "JURAYEVA AZIZA", "MAHMUDOV SUNNAT", "MUHIDDINOVA MAHBUBA", "NORBOYEV SHOHJAXON", "OCHILOV LOCHINBEK", "ORALOVA SHOHINUR", "RAVSHANOVA ZAYNAB", "TOSHPULATOV ABBOS"],
-      "GROUP IELTS 17:00 MWF": ["ABDURAHIMOVA ZILOLA", "ALIMOV BEHRUZ", "ANVAROVA RUXSHONA", "ASADOV SARDOR", "BAXRONOVA FAYRUZA", "GAFURJONOV ULUGBEK", "ISMOILOV ISMOIL", "JULIBOYEVA ZEBO", "KOZIMJONOVA DURDONA", "MELIKUZIYEVA RUXSHONA", "NIGMATOV ABDURAHIM", "RAHMATULLAYEV BEXRUZ", "TALABOV SAUD", "XISLATULLAYEV JAVOXIR", "XODJAYEVA LAZIZA", "YORMATOV MIRABROR"],
-      "GROUP CEFR 15:30 MWF": ["ABDUGAFFAROVA MANZURA", "ISROILOV ISMOIL", "JORABEKOV AZIZBEK", "NORBOYEVA YULDUZ", "TULKUNOVA EZOZA", "XURSANBEKOVA AZIZA", "QUDRATILLA OMONOV", "MANSUROV MUSTAFO", "OCHILOV KAMRONBEK", "GUZOROV MAHMUDBEK"],
-      "GROUP IELTS 14:00 MWF": ["Adele","Muhammadiyeva Sevinch", "Yadgaraliyeva Gulhayo", "Ruziyeva Gavhar", "Rashidjanova Farangiz"],
-      "GROUP IELTS T/T/S 9:00": ["SAIDUSMONOVA MADINA", "SOBIROVA MARJONA", "TILLAYEV OYBEK", "TOSHTEMIROVA MUBORAK", "UMAROVA MOXIGUL"],
-      "GROUP IELTS 10:30 TTS": ["ADXAMOVA MUBINA", "BAXTIYOROVA NILUFAR", "ISAMATOVA LAYLO", "NOSIROVA LAZIZA", "QILICHOVA GULISTON"],
-      "GROUP IELTS T/T/S 14:00": ["ABDUAZIZOVA HABIBA", "ABDUJABBOROVA LOLA", "ABDUVALIYEVA OMINA", "ALISHEROV NURMUHAMMAD", "DJURAYEVA NURGUL", "ISLOMBEKOVA EZOZA", "ISMAILOVA EZOZA", "JORABEKOV AFZALBEK", "MAHMUDJONOV FAYZULLOH", "MIRAHMEDOVA MUSLIMA", "OLIMJONOVA DILNURA", "TOJIBOYEV MUXAMMAD", "UROLOV SIROJ", "XUDOYBERDIYEV QOSIMBEK", "NARGIZA MAVLANOVNA"],
-      "GROUP IELTS 15:30 TTS": ["ABUBAKIROVA RAHIMA", "IMANKULOVA CHAROS", "ISLOMXOJAYEV YUNUS", "KAYUMKHAJAYEVA JASMINA", "MAVLONBEKOV NURMUHAMMAD", "MIRAXMEDOVA ROBIYA", "MIRSAIDOVA MALIKA", "MIRSODIQOV MIRABROR", "QODIROV ABDUVALI", "QOSIMOVA NARGIZA", "RAVSHANOVA MUSLIMA", "SHARAXMEDOVA KAMILA", "SHERALIYEV ELSHOD", "TOGAYEVA SHAXINA", "UMARXONOVA JAVOHIRPOSHSHA", "YOLDASHEVA FARZONA", "ZOIRXOJAYEVA ROBIYA"]
-    };
-
-    // ПОЛНЫЕ ДАННЫЕ STAGES
-    const STAGES = {
-      "STAGE 1 - WRITING TASK 1": {
-        "LESSON 1": ["Dictation 1-3", "Reading Test Bank Updated 1-3", "New Podcasts 1-4", "Writing Task 1 (3 graphs - introduction & overview)", "Vocabulary for Test Bank (Learn)", "Speaking: Work or Study"],
-        "LESSON 2": ["Dictation 4-6", "Reading Test Bank Updated 4-6", "New Podcasts 5-8", "Writing Task 1 (Full report)", "Vocabulary for Test Bank (Learn)", "Speaking: Hometown"],
-        "LESSON 3": ["Dictation 7-9", "Reading Test Bank Updated 7-9", "New Podcasts 9-12", "Writing Task 1 (Full report)", "Vocabulary for Test Bank (Learn)", "Speaking: Home"],
-        "LESSON 4": ["Dictation 10-12", "Reading Test Bank Updated 10-12", "New Podcasts 13-16", "Writing Task 1 (Report 5-6 full)", "Vocabulary for Test Bank (Learn)", "Speaking: Social Media"],
-        "LESSON 5": ["Dictation 13-15", "Reading Test Bank Updated 13-15", "New Podcasts 17-20", "Writing Task 1 (Report 7-8 full)", "Vocabulary for Test Bank (Learn)", "Speaking: Colors"],
-        "LESSON 6": ["Dictation 16-18", "Reading Test Bank Updated 16-18", "New Podcasts 21-24", "Writing Task 1 (Full report)", "Vocabulary for Test Bank (Learn)", "Speaking: Music"],
-        "LESSON 7": ["Dictation 19-21", "Reading Test Bank Updated 19-21", "New Podcasts 25-28", "Writing Task 1 (Full report)", "Vocabulary for Test Bank (Learn)", "Speaking: Food"],
-        "LESSON 8": ["Dictation 22-24", "Reading Test Bank Updated 22-24", "New Podcasts 29-32", "Vocabulary for Test Bank (Learn)", "Writing Report", "Speaking: Shopping"],
-        "LESSON 9": ["Dictation 25-27", "Reading Test Bank Updated 25-27", "New Podcasts 33-36", "Vocabulary for Test Bank (Learn)", "Writing Task 1", "Speaking: Sport"]
-      },
-      "STAGE 2 - LISTENING": {
-        "LESSON 1": ["Listening Strategies Unit 1", "Listening Practice Lesson 1", "Reading Practice Lesson 1", "Spelling Dictation (Pages 2-3)", "Task 1 Editing (Rewriting)", "Speaking: Shopping"],
-        "LESSON 2": ["Listening Strategies Unit 2", "Listening Practice Lesson 2", "Reading Practice Lesson 2", "Spelling Dictation (All pages)", "Listening Made Easy", "Task 1 (Rewriting)", "Speaking: Morning routine"],
-        "LESSON 3": ["Listening Strategies Unit 3", "Listening Practice Lesson 3", "Reading Practice Lesson 3", "Spelling Dictation", "Listening Made Easy", "Task 1 (Rewriting)", "Speaking: News"],
-        "LESSON 4": ["Listening Strategies Unit 4", "Listening Practice Lesson 4", "Reading Practice Lesson 4", "Spelling Dictation", "Listening Made Easy", "Task 1 (Rewriting)", "Speaking: Sharing things"],
-        "LESSON 5": ["Listening Strategies Unit 5", "Listening Practice Lesson 5", "Reading Practice Lesson 5", "Spelling Dictation"]
-      },
-      "STAGE 3 - READING": {
-        "LESSON 1": ["Cambridge 10 Test 1 (L/R)", "TED Radio Hour (Joy) P1", "Shadowing Video", "Articles"],
-        "LESSON 2": ["Cambridge 10 Test 2 (L/R)", "TED Radio Hour (Joy) P2", "Task 1 review", "Articles"],
-        "LESSON 3": ["Cambridge 10 Test 3 (L/R)", "TED Radio Hour (Quiet) P1", "Shadowing Video", "Articles"],
-        "LESSON 4": ["Cambridge 10 Test 4 (L/R)", "TED Radio Hour (Quiet) P2", "Task 1 review", "Articles"],
-        "LESSON 5": ["Cambridge 11 Test 1 (L/R)", "TED Radio Hour (Food) P1", "Shadowing Video", "Articles"],
-        "LESSON 6": ["Cambridge 11 Test 2 (L/R)", "TED Radio Hour (Food) P2", "Task 1 report", "Articles"],
-        "LESSON 7": ["Cambridge 11 Test 3 (L/R)", "TED Radio Hour (Senses) P1", "Shadowing Video", "Articles"],
-        "LESSON 8": ["Cambridge 11 Test 4 (L/R)", "TED Radio Hour (Senses) P2", "Task 1 report", "Articles"],
-        "LESSON 9": ["Cambridge 12 Test 1 (L/R)", "TED Radio Hour (Design) P1", "Shadowing Video", "Articles"],
-        "LESSON 10": ["Cambridge 12 Test 2 (L/R)", "TED Radio Hour (Design) P2", "Task 1 report", "Articles"]
-      },
-      "STAGE 4 - WRITING TASK 2 AND SPEAKING": {
-        "LESSON 1": ["Cambridge 12 Test 3 (L/R)", "TED Radio Hour (Mistakes) P1", "Speaking P2+P3", "Articles"],
-        "LESSON 2": ["Cambridge 12 Test 4 (L/R)", "TED Radio Hour (Mistakes) P2", "Speaking P2+P3", "Opinion Essay"],
-        "LESSON 3": ["Cambridge 13 Test 1 (L/R)", "TED Radio Hour (School) P1", "Speaking P2+P3", "Discussion Essay"],
-        "LESSON 4": ["Cambridge 13 Test 2 (L/R)", "TED Radio Hour (School) P2", "Speaking P2+P3", "Adv/Disadv Essay"],
-        "LESSON 5": ["Cambridge 13 Test 3 (L/R)", "TED Radio Hour (Overcoming)", "Speaking P2+P3", "Issue Essay"],
-        "LESSON 6": ["Cambridge 13 Test 4 (L/R)", "TED Radio Hour (Networks) P1", "Speaking P2+P3", "Mixed Essay"],
-        "LESSON 7": ["Cambridge 14 Test 1 (L/R)", "TED Radio Hour (Networks) P2", "Speaking P2+P3", "Direct Essay"],
-        "LESSON 8": ["Cambridge 14 Test 2 (L/R/W)", "TED Radio Hour (Curiosity) P1", "Speaking P2+P3", "Articles"],
-        "LESSON 9": ["Cambridge 14 Test 3 (L/R/W)", "TED Radio Hour (Curiosity) P2", "Speaking P2+P3", "Articles"],
-        "LESSON 10": ["Cambridge 14 Test 4 (L/R/W)", "TED Radio Hour (Comfort Zone) P1", "Speaking P2+P3", "Articles"],
-        "LESSON 11": ["Cambridge 15 Test 1 (L/R/W)", "TED Radio Hour (Comfort Zone) P2", "Speaking P2+P3", "Articles"],
-        "LESSON 12": ["Cambridge 15 Test 2 (L/R/W)", "TED Radio Hour (Money) P1", "Speaking P2+P3", "Articles"]
-      },
-      "STAGE 5 - POLISHING SKILLS": {
-        "LESSON 1": ["Full Listening x1", "Full Reading x1", "Article reading", "1 hour podcast", "Writing Task 1", "Speaking Practice"],
-        "LESSON 2": ["Full Listening x1", "Full Reading x1", "Article reading", "1 hour podcast", "Writing Task 2", "Speaking Practice"]
-      }
-    };
-
-    const app = document.getElementById("app");
-
-    function fireConfetti() {
-      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#6366f1', '#10b981', '#ffffff'] });
-    }
-
-    function render(html) { app.innerHTML = html; window.scrollTo(0, 0); }
-
-    function home() {
-      render(`
-    <div style="text-align:center; padding: 40px 0;" class="animate__animated animate__fadeIn">
-      <h1>Homework Statista</h1>
-      
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal-overlay" style="display:none;" onclick="closeLoginModal(event)">
+  <div class="modal">
+    <div class="modal-title">Admin Access</div>
+    <div class="modal-sub">Enter your credentials to continue</div>
+    <div class="modal-field">
+      <label>Login</label>
+      <input type="text" id="modalLogin" placeholder="Enter login" autocomplete="off">
     </div>
-    <div class="card animate__animated animate__zoomIn"><button class="primary" onclick="enterStudent()">👨‍🎓 Student Portal</button></div>
-    <div class="card animate__animated animate__zoomIn" style="animation-delay: 0.1s"><button class="secondary" onclick="login()">👨‍🏫 Teacher Portal</button></div>
-  `);
-    }
+    <div class="modal-field">
+      <label>Password</label>
+      <input type="password" id="modalPassword" placeholder="Enter password"
+        onkeydown="if(event.key==='Enter') submitLogin()">
+    </div>
+    <div class="modal-error" id="modalError"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeLoginModal()">Cancel</button>
+      <button class="primary" onclick="submitLogin()">Sign In</button>
+    </div>
+  </div>
+</div>
 
-    function enterStudent() {
-      let h = `<button class="back" onclick="home()">← Back</button><h3>Select Group</h3>`;
-      Object.keys(GROUPS).forEach((g, i) => {
-        h += `<div class="card animate__animated animate__fadeInLeft" style="animation-delay: ${i * 0.03}s" onclick="selectStudent('${g}')"><b>${g}</b></div>`;
-      });
-      render(h);
-    }
+<!-- NEW GROUP MODAL -->
+<div id="newGroupModal" class="modal-overlay" style="display:none;" onclick="closeNewGroupModal(event)">
+  <div class="modal">
+    <div class="modal-title">Create New Group</div>
+    <div class="modal-sub">Add a group name and student list</div>
+    <div class="modal-field">
+      <label>Group Name</label>
+      <input type="text" id="newGroupName" placeholder="e.g. GROUP IELTS 11:00 MWF" autocomplete="off">
+    </div>
+    <div class="modal-field">
+      <label>Students — one per line</label>
+      <textarea id="newGroupStudents" placeholder="LASTNAME FIRSTNAME&#10;LASTNAME FIRSTNAME&#10;..."
+        style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);
+               padding:12px 14px;font-size:13px;font-family:inherit;color:var(--text);
+               outline:none;resize:vertical;min-height:130px;line-height:1.6;
+               transition:border-color 0.2s;"
+        onfocus="this.style.borderColor='var(--accent)'"
+        onblur="this.style.borderColor='var(--border)'"></textarea>
+    </div>
+    <div class="modal-error" id="newGroupError"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeNewGroupModal()">Cancel</button>
+      <button class="primary" onclick="submitNewGroup()">Create Group</button>
+    </div>
+  </div>
+</div>
 
-    function selectStudent(group) {
-      let h = `<button class="back" onclick="enterStudent()">← Back</button><h3>${group}</h3>`;
-      GROUPS[group].forEach((s, i) => {
-        h += `<div class="card animate__animated animate__fadeInRight" style="animation-delay: ${i * 0.02}s" onclick="showStages('${group}','${s}')"><b>${s}</b></div>`;
-      });
-      render(h);
-    }
+<script>
+/* ================= FIREBASE ================= */
+firebase.initializeApp({
+  apiKey: "AIzaSyDJDVZazGiEUshVicJX8ObvxIjDPgA5rTo",
+  authDomain: "studentstatista.firebaseapp.com",
+  databaseURL: "https://studentstatista-default-rtdb.firebaseio.com",
+  projectId: "studentstatista",
+  storageBucket: "studentstatista.firebasestorage.app"
+});
+const db = firebase.database();
+const storage = firebase.storage();
 
-    function showStages(group, student) {
-      let h = `<button class="back" onclick="selectStudent('${group}')">← Back</button><h3>${student}</h3>`;
-      Object.keys(STAGES).forEach((stage, i) => {
-        h += `<div class="card animate__animated animate__flipInX" style="animation-delay: ${i * 0.05}s" onclick="showLessons('${group}','${student}','${stage}')"><b>${stage}</b></div>`;
-      });
-      render(h);
-    }
+(function detectWebView(){
+  const ua = navigator.userAgent.toLowerCase();
+  const isWebView =
+    ua.includes("wv") ||
+    ua.includes("telegram") ||
+    ua.includes("instagram") ||
+    (ua.includes("android") && !ua.includes("chrome"));
+  if (isWebView) {
+    const bar = document.getElementById("webviewWarning");
+    if (bar) bar.style.display = "block";
+  }
+})();
 
-    function showLessons(group, student, stage) {
-      let h = `<button class="back" onclick="showStages('${group}','${student}')">← Back</button><h3>${stage}</h3>`;
-      Object.keys(STAGES[stage]).forEach((lesson, i) => {
-        h += `<div class="card animate__animated animate__bounceIn" style="animation-delay: ${i * 0.05}s" onclick="showHomework('${group}','${student}','${stage}','${lesson}')"><b>${lesson}</b></div>`;
-      });
-      render(h);
-    }
+/* ================= NAV STATE ================= */
+const NAV_KEY = "statista_nav_v1";
+function setNav(view, payload){
+  try{ localStorage.setItem(NAV_KEY, JSON.stringify({ view, payload, t: Date.now() })); }catch(e){}
+}
+function getNav(){
+  try{ const raw = localStorage.getItem(NAV_KEY); return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
+}
+function clearNav(){
+  try{ localStorage.removeItem(NAV_KEY); }catch(e){}
+}
+function restoreNavOrHome(){
+  const nav = getNav();
+  if(!nav || !nav.view){ home(); return; }
+  try{
+    if(nav.view === "home") return home();
+    if(nav.view === "enterStudent") return enterStudent();
+    if(nav.view === "selectStudent") return selectStudent(nav.payload.group);
+    if(nav.view === "showStages") return showStages(nav.payload.group, nav.payload.student);
+    if(nav.view === "showLessons") return showLessons(nav.payload.group, nav.payload.student, nav.payload.stage);
+    if(nav.view === "showHomework") return showHomework(nav.payload.group, nav.payload.student, nav.payload.stage, nav.payload.lesson);
+    if(nav.view === "instructions") return openInstruction();
+    if(nav.view === "admin") return admin();
+    if(nav.view === "adminGroup") return adminGroup(nav.payload.group);
+    if(nav.view === "adminStageSelect") return adminStageSelect(nav.payload.group, nav.payload.stage);
+    if(nav.view === "adminLessonView") return adminLessonView(nav.payload.group, nav.payload.stage, nav.payload.lesson);
+    home();
+  }catch(e){ home(); }
+}
 
-    async function showHomework(group, student, stage, lesson) {
-      render(`<div class="card animate__animated animate__pulse animate__infinite" style="background:rgba(255,255,255,0.05); height:150px"></div>`);
-      let h = `<button class="back" onclick="showLessons('${group}','${student}','${stage}')">← Back</button><h3>${lesson}</h3>`;
+/* ================= GROUPS ================= */
+const GROUPS = {
+  "GROUP IELTS 9:00 M/W/F":[
+    "HOSHIMOVA NILUFAR","JURAYEVA AZIZA","MAHMUDOV SUNNAT","MUHIDDINOVA MAHBUBA",
+    "NORBOYEV SHOHJAXON","OCHILOV LOCHINBEK","ORALOVA SHOHINUR",
+    "RAVSHANOVA ZAYNAB","TOSHPULATOV ABBOS"
+  ],
+  "GROUP IELTS 17:00 MWF":[
+    "ABDURAHIMOVA ZILOLA","ALIMOV BEHRUZ","ANVAROVA RUXSHONA","ASADOV SARDOR",
+    "BAXRONOVA FAYRUZA","GAFURJONOV ULUGBEK","ISMOILOV ISMOIL",
+    "JULIBOYEVA ZEBO","KOZIMJONOVA DURDONA","MELIKUZIYEVA RUXSHONA",
+    "NIGMATOV ABDURAHIM","RAHMATULLAYEV BEXRUZ","TALABOV SAUD",
+    "XISLATULLAYEV JAVOXIR","XODJAYEVA LAZIZA","YORMATOV MIRABROR"
+  ],
+  "GROUP IELTS M/W/F 14:00":[
+    "RASHIDJANOVA FARANGIZ","RUZIYEVA GAVHAR","YADGARALIYEVA GULHAYO",
+    "MUHAMMADIYEVA SEVINCH","KHUDOYBERDIYEVA LAZIZA","ODIL RAZZOQOV","SOBIRJONOVA FOTIMA"
+  ],
+  "GROUP IELTS T/T/S 9:00":[
+    "ZARINA FAYZULLAEVA","MURODOVA NOZIMA","AZIZA ERKINOVA","NURIDDIN QOCHQOROV",
+    "QIDIRALIEVA JAYNA","HAMROYEVA NIGORA","QILICHOVA GULISTON"
+  ],
+  "GROUP IELTS 10:30 TTS":[
+    "ADXAMOVA MUBINA","BAXTIYOROVA NILUFAR",
+    "ISAMATOVA LAYLO","NOSIROVA LAZIZA"
+  ],
+  "GROUP IELTS T/T/S 14:00":[
+    "ABDUAZIZOVA HABIBA","ABDUJABBOROVA LOLA","ABDUVALIYEVA OMINA",
+    "ALISHEROV NURMUHAMMAD","DJURAYEVA NURGUL","ISLOMBEKOVA EZOZA",
+    "ISMAILOVA EZOZA","JORABEKOV AFZALBEK","MAHMUDJONOV FAYZULLOH",
+    "MIRAHMEDOVA MUSLIMA","OLIMJONOVA DILNURA","TOJIBOYEV MUXAMMAD",
+    "UROLOV SIROJ","XUDOYBERDIYEV QOSIMBEK","SHODIYEVA ROBIYA","ABDULXAMIDOV DILYORBEK",
+    "KAYUMXODJAYEVA JASMINA","MIRSIDIQOV MIRABROR"
+  ],
+  "GROUP IELTS 15:30 TTS":[
+    "FAYZULLAYEVA HILOLA","MUSTAFOYEVA SEVINCH","SOBIRJONOVA DURDONA",
+    "MIRVALIEVA XADICHA","ABDURAHMONOVA EZOZA","QODIRJANOVA RUSHANA","AMETOV UMIRBEK","SULTANBEKOVA LAZIZA",
+    "MIRFOTIHOVA HADICHA","ZOHIDOV ASILBEK","TOXIROV AYUBHON","SHAVKATOV HUSAN","MELIKUZIEVA FARZONA",
+    "SULTONOVA MUSLIMA","ABDUGANIEVA MOXINUR","SHAVKATOV KHASAN","URALOVA MUXLISA","TOSHXOJAYEV ISROILXOJA",
+    "AXMADJONOV DONIYOR","XASANOV JAHONGIR","UMARALIYEV OYATILLO","ESHMUHAMMEDOV SAIDAHROR"
+  ],
+  "GROUP IELTS T/T/S 18:30":[
+    "GANIJONOV AZIZBEK","HAMIDJONOV ABDULMALIK","IBROHIMOV JASURBEK","OLIMJONOV ABDUGAFFOR","RAXMATULAYEVA ROZITYA",
+    "SHOKIROV ABDURAZZOQ","ULMASOV DALER","ZAHRIDDINOV FAZLIDDIN","MIRZABOYEVA ROZYA","XUSHNAZAROV TEMUR",
+    "DAYNOVOVA ZEBINISO","JURAYEV KAMRON","TIMUR ABDUSADIKOV","SALOHIDDINOV BUNYOD","GANISHEROVA ZARIFA"
+  ]
+};
 
-      for (const hw of STAGES[stage][lesson]) {
-        const snap = await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).once("value");
-        const d = snap.val();
-        const submitted = d && Array.isArray(d.files) && d.files.length > 0;
+/* ================= STAGES ================= */
+const STAGES = {
+  "STAGE 1 - WRITING TASK 1": {
+    "LESSON 1": ["Dictation 1-3","Reading Test Bank Updated 1-3","New Podcasts 1-4","Writing Task 1 (3 graphs - introduction & overview)","Vocabulary for Test Bank (Learn)","Speaking: Work or Study"],
+    "LESSON 2": ["Dictation 4-6","Reading Test Bank Updated 4-6","New Podcasts 5-8","Writing Task 1 (Full report)","Vocabulary for Test Bank (Learn)","Speaking: Hometown"],
+    "LESSON 3": ["Dictation 7-9","Reading Test Bank Updated 7-9","New Podcasts 9-12","Writing Task 1 (Full report)","Vocabulary for Test Bank (Learn)","Speaking: Home"],
+    "LESSON 4": ["Dictation 10-12","Reading Test Bank Updated 10-12","New Podcasts 13-16","Writing Task 1 (Report 5-6 full)","Vocabulary for Test Bank (Learn)","Speaking: Social Media"],
+    "LESSON 5": ["Dictation 13-15","Reading Test Bank Updated 13-15","New Podcasts 17-20","Writing Task 1 (Report 7-8 full)","Vocabulary for Test Bank (Learn)","Speaking: Colors"],
+    "LESSON 6": ["Dictation 16-18","Reading Test Bank Updated 16-18","New Podcasts 21-24","Writing Task 1 (Full report)","Vocabulary for Test Bank (Learn)","Speaking: Music"],
+    "LESSON 7": ["Dictation 19-21","Reading Test Bank Updated 19-21","New Podcasts 25-28","Writing Task 1 (Full report)","Vocabulary for Test Bank (Learn)","Speaking: Food"],
+    "LESSON 8": ["Dictation 22-24","Reading Test Bank Updated 22-24","New Podcasts 29-32","Vocabulary for Test Bank (Learn)","Writing Report","Speaking: Shopping"],
+    "LESSON 9": ["Dictation 25-27","Reading Test Bank Updated 25-27","New Podcasts 33-36","Vocabulary for Test Bank (Learn)","Writing Task 1","Speaking: Sport"]
+  },
+  "STAGE 2 - LISTENING": {
+    "LESSON 1":["Listening Strategies Unit 1","Listening Practice Lesson 1","Reading Practice Lesson 1","Spelling Dictation (Pages 2-3)","Task 1 Editing (Rewriting)","Speaking: Shopping"],
+    "LESSON 2":["Listening Strategies Unit 2","Listening Practice Lesson 2","Reading Practice Lesson 2","Spelling Dictation (All pages)","Listening Made Easy","Task 1 (Rewriting)","Speaking: Morning routine"],
+    "LESSON 3":["Listening Strategies Unit 3","Listening Practice Lesson 3","Reading Practice Lesson 3","Spelling Dictation","Listening Made Easy","Task 1 (Rewriting)","Speaking: News"],
+    "LESSON 4":["Listening Strategies Unit 4","Listening Practice Lesson 4","Reading Practice Lesson 4","Spelling Dictation","Listening Made Easy","Task 1 (Rewriting)","Speaking: Sharing things"],
+    "LESSON 5":["Listening Strategies Unit 5","Listening Practice Lesson 5","Reading Practice Lesson 5","Spelling Dictation"]
+  },
+  "STAGE 3 - READING": {
+    "LESSON 1":["Cambridge 10 Test 1 (L/R) + deep analysis","TED Radio Hour (Where Joy Hides?) Part 1","Shadowing Video","Articles"],
+    "LESSON 2":["Cambridge 10 Test 2 (L/R) + deep analysis","TED Radio Hour (Where Joy Hides?) Part 2","Task 1 report review","Articles"],
+    "LESSON 3":["Cambridge 10 Test 3 (L/R) + deep analysis","TED Radio Hour (Quiet) Part 1","Shadowing Video","Articles"],
+    "LESSON 4":["Cambridge 10 Test 4 (L/R) + deep analysis","TED Radio Hour (Quiet) Part 2","Task 1 report review","Articles"],
+    "LESSON 5":["Cambridge 11 Test 1 (L/R) + deep analysis","TED Radio Hour (The Food We Eat) Part 1","Shadowing Video","Articles"],
+    "LESSON 6":["Cambridge 11 Test 2 (L/R) + deep analysis","TED Radio Hour (The Food We Eat) Part 2","Task 1 report review","Articles"],
+    "LESSON 7":["Cambridge 11 Test 3 (L/R) + deep analysis","TED Radio Hour (The Five Senses) Part 1","Shadowing Video","Articles"],
+    "LESSON 8":["Cambridge 11 Test 4 (L/R) + deep analysis","TED Radio Hour (The Five Senses) Part 2","Task 1 new report","Articles"],
+    "LESSON 9":["Cambridge 12 Test 1 (L/R) + deep analysis","TED Radio Hour (The Power Of Design) Part 1","Shadowing Video","Articles"],
+    "LESSON 10":["Cambridge 12 Test 2 (L/R) + deep analysis","TED Radio Hour (The Power Of Design) Part 2","Task 1 new report","Articles"]
+  },
+  "STAGE 4 - WRITING TASK 2 AND SPEAKING": {
+    "LESSON 1":["Cambridge 12 Test 3 (L/R) + deep analysis","TED Radio Hour (Making Mistakes) Part 1","Speaking Part 2 + Part 3","Articles"],
+    "LESSON 2":["Cambridge 12 Test 4 (L/R) + deep analysis","TED Radio Hour (Making Mistakes) Part 2","Speaking Part 2 + Part 3","Articles","Opinion Essay"],
+    "LESSON 3":["Cambridge 13 Test 1 (L/R) + deep analysis","TED Radio Hour (Rethinking School) Part 1","Speaking Part 2 + Part 3","Articles","Discussion Essay"],
+    "LESSON 4":["Cambridge 13 Test 2 (L/R) + deep analysis","TED Radio Hour (Rethinking School) Part 2","Speaking Part 2 + Part 3","Articles","Advantages / Disadvantages Essay"],
+    "LESSON 5":["Cambridge 13 Test 3 (L/R) + deep analysis","TED Radio Hour (Overcoming)","Speaking Part 2 + Part 3","Articles","Issue Discussion Essay"],
+    "LESSON 6":["Cambridge 13 Test 4 (L/R) + deep analysis","TED Radio Hour (Networks) Part 1","Speaking Part 2 + Part 3","Articles","Mixed / Direct Essays"],
+    "LESSON 7":["Cambridge 14 Test 1 (L/R) + deep analysis","TED Radio Hour (Networks) Part 2","Speaking Part 2 + Part 3","Articles","Direct Essay"],
+    "LESSON 8":["Cambridge 14 Test 2 (L/R/W) + deep analysis","TED Radio Hour (From Curiosity To Discovery) Part 1","Speaking Part 2 + Part 3","Articles"],
+    "LESSON 9":["Cambridge 14 Test 3 (L/R/W) + deep analysis","TED Radio Hour (From Curiosity To Discovery) Part 2","Speaking Part 2 + Part 3","Articles"],
+    "LESSON 10":["Cambridge 14 Test 4 (L/R/W) + deep analysis","TED Radio Hour (Comfort Zone) Part 1","Speaking Part 2 + Part 3","Articles"],
+    "LESSON 11":["Cambridge 15 Test 1 (L/R/W) + deep analysis","TED Radio Hour (Comfort Zone) Part 2","Speaking Part 2 + Part 3","Articles"],
+    "LESSON 12":["Cambridge 15 Test 2 (L/R/W) + deep analysis","TED Radio Hour (Money Paradox) Part 1","Speaking Part 2 + Part 3","Articles"]
+  },
+  "STAGE 5 - POLISHING SKILLS": {
+    "LESSON 1":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 1","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
+    "LESSON 2":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 2","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
+    "LESSON 3":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 1","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
+    "LESSON 4":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 2","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
+    "LESSON 5":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 1","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
+    "LESSON 6":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 2","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
+    "LESSON 7":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 1","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
+    "LESSON 8":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 2","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
+    "LESSON 9":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 1","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
+    "LESSON 10":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 2","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
+    "LESSON 11":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 1","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
+    "LESSON 12":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 2","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"]
+  },
+  "STAGE 6 - FINAL PRACTICE": {
+    "LESSON 1":["Listening full","Reading full","Article - new words","Article ELS (pages 312-315)","Task 1","Speaking","Cambridge 19 - test 1","Longer Article","Grammar revision lesson 1"],
+    "LESSON 2":["Listening full","Reading full","Article - new words","Article ELS (pages 316-319)","Task 2","Speaking","Cambridge 19 - test 2","Longer Article","Grammar revision lesson 2"],
+    "LESSON 3":["Listening full","Reading full","Article - new words","Article ELS (pages 320-323)","Task 1","Speaking","Cambridge 19 - test 3","Longer Article","Grammar revision lesson 3"],
+    "LESSON 4":["Listening full","Reading full","Article - new words","Article ELS (pages 324-327)","Task 2","Speaking","Cambridge 19 - test 4","Longer Article","Grammar revision lesson 4"],
+    "LESSON 5":["Listening full","Reading full","Article - new words","Article ELS (pages 328-331)","Task 1","Speaking","Cambridge 20 - test 1","Longer Article","Grammar revision lesson 5"],
+    "LESSON 6":["Listening full","Reading full","Article - new words","Article ELS (pages 332-335)","Task 2","Speaking","Cambridge 20 - test 2","Longer Article","Grammar revision lesson 6"],
+    "LESSON 7":["Listening full","Reading full","Article - new words","Article ELS (pages 336-339)","Task 1","Speaking","Cambridge 20 - test 3","Longer Article","Grammar revision lesson 7"],
+    "LESSON 8":["Listening full","Reading full","Article - new words","Article ELS (pages 340-343)","Task 2","Speaking","Cambridge 20 - test 4","Longer Article","Grammar revision lesson 8"],
+    "LESSON 9":["Listening full","Reading full","Article - new words","Article ELS (pages 344-347)","Task 1","Speaking","Volume 7 - Test 1","Longer Article"],
+    "LESSON 10":["Listening full","Reading full","Article - new words","Article ELS (pages 348-351)","Task 2","Speaking","Volume 7 - Test 2","Longer Article"],
+    "LESSON 11":["Listening full","Reading full","Article - new words","Article ELS (pages 352-355)","Task 1","Speaking","Volume 7 - Test 3","Longer Article"],
+    "LESSON 12":["Listening full","Reading full","Article - new words","Article ELS (pages 356-359)","Task 2","Speaking","Volume 7 - Test 4","Longer Article"]
+  }
+};
 
-        h += `
-      <div class="card animate__animated animate__fadeInUp">
-        <div style="display:flex; justify-content:space-between; align-items:start">
-          <div style="font-weight:700; max-width:70%">${hw}</div>
-          <span class="status-badge ${submitted ? 'green-bg' : 'red-bg'}">${submitted ? 'Done' : 'Pending'}</span>
+/* ================= APP ================= */
+const app = document.getElementById("app");
+
+function openInstruction(){
+  setNav("instructions", {});
+  app.innerHTML = `
+    <button class="back" onclick="home()">← Back</button>
+    <h2>How to Use Statista</h2>
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-title">Open the App</div>
+      <div class="step-body">On the home screen, tap <b>"Enter as Student"</b>.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-title">Find Yourself</div>
+      <div class="step-body">Select your <b>group</b>, then find your <b>full name</b> in the list.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-title">Choose Your Homework</div>
+      <div class="step-body">You will see <b>6 stages</b>. Tap your current stage, then choose the <b>lesson</b> and the <b>homework task</b>.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-title">Submit a Photo</div>
+      <div class="step-body">Attach <b>at least one photo</b> of your completed homework.<br><br><b>Without a photo, the homework will NOT be saved.</b></div>
+    </div>
+    <div class="alert-card">
+      <b>Speaking homework:</b>
+      <ul>
+        <li>Send your speaking to the group as usual</li>
+        <li>Take a screenshot of it</li>
+        <li>Upload the screenshot here</li>
+      </ul>
+    </div>
+    <div class="step-card">
+      <div class="step-num">5</div>
+      <div class="step-title">Confirm Submission</div>
+      <div class="step-body">After submitting, check that the status shows <span class="green" style="vertical-align:middle;font-size:12px">Submitted</span>.</div>
+    </div>
+  `;
+}
+
+function home(){
+  setNav("home", {});
+  app.innerHTML = `
+    <div class="home-wrap">
+      <div class="home-title">Statista</div>
+      <div class="home-sub">IELTS Homework Tracker</div>
+      <div class="home-cards">
+        <div class="home-card student" onclick="enterStudent()">
+          <div class="label">Student</div>
+          <div class="sub">Submit homework</div>
         </div>
-        ${submitted ? `<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">${d.files.map(url => `<img src="${url}" />`).join("")}</div>` : ''}
-        <label class="upload-area">
-          <div style="font-size:20px">📷</div>
-          <div style="font-size:12px; margin-top:5px">${submitted ? 'Update Photo' : 'Upload Photo'}</div>
-          <input type="file" accept="image/*" multiple onchange="submitHW(this,'${group}','${student}','${stage}','${lesson}','${hw}')">
+        <div class="home-card teacher" onclick="login()">
+          <div class="label">Teacher</div>
+          <div class="sub">Admin panel</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function enterStudent(){
+  setNav("enterStudent", {});
+  let h = `<button class="back" onclick="home()">← Back</button><h3>Select Group</h3>`;
+  Object.keys(GROUPS).forEach(g => {
+    h += `<div class="card"><button class="primary" onclick="selectStudent('${g}')">${g}</button></div>`;
+  });
+  app.innerHTML = h;
+}
+
+function selectStudent(group){
+  setNav("selectStudent", { group });
+  let h = `
+    <button class="back" onclick="enterStudent()">← Back</button>
+    <div class="bc"><span>${group}</span></div>
+    <h3>Select Your Name</h3>
+  `;
+  GROUPS[group].forEach(s => {
+    h += `<div class="card"><button class="primary" onclick="showStages('${group}','${s}')">${s}</button></div>`;
+  });
+  app.innerHTML = h;
+}
+
+function showStages(group, student){
+  setNav("showStages", { group, student });
+  const icons = ["01","02","03","04","05","06"];
+  let h = `
+    <button class="back" onclick="selectStudent('${group}')">← Back</button>
+    <div class="bc"><span>${group}</span> › <b>${student}</b></div>
+    <h3>Select Stage</h3>
+  `;
+  Object.keys(STAGES).forEach((stage, i) => {
+    h += `<div class="card"><button class="primary" onclick="showLessons('${group}','${student}','${stage}')">${stage}</button></div>`;
+  });
+  app.innerHTML = h;
+}
+
+function showLessons(group, student, stage){
+  setNav("showLessons", { group, student, stage });
+  let h = `
+    <button class="back" onclick="showStages('${group}','${student}')">← Back</button>
+    <div class="bc"><b>${student}</b> › <span>${stage}</span></div>
+    <h3>Select Lesson</h3>
+  `;
+  Object.keys(STAGES[stage]).forEach(lesson => {
+    h += `<div class="card"><button class="secondary" onclick="showHomework('${group}','${student}','${stage}','${lesson}')">${lesson}</button></div>`;
+  });
+  app.innerHTML = h;
+}
+
+async function showHomework(group, student, stage, lesson){
+  setNav("showHomework", { group, student, stage, lesson });
+  app.innerHTML = `<div class="loading">Loading…</div>`;
+
+  const lessonSnap = await db
+    .ref(`submissions/${group}/${student}/${stage}/${lesson}`)
+    .once("value");
+  const lessonData = lessonSnap.val() || {};
+
+  let h = `
+    <button class="back" onclick="showLessons('${group}','${student}','${stage}')">← Back</button>
+    <div class="bc"><b>${student}</b> › <span>${stage}</span> › <b>${lesson}</b></div>
+    <h3>Homework Tasks</h3>
+  `;
+
+  for (const hw of STAGES[stage][lesson]) {
+    const d = lessonData[hw];
+    const submitted = d && Array.isArray(d.files) && d.files.length > 0;
+    h += `
+      <div class="card hw">
+        <b>${hw}</b>
+        <span class="${submitted ? 'green' : 'red'}">${submitted ? 'Submitted' : 'Not submitted'}</span><br>
+        ${submitted ? d.files.map(url => `<a href="${url}" target="_blank"><img src="${url}" /></a>`).join("") : ''}
+        <br>
+        <label class="primary">
+          Submit photo (max 4)
+          <input type="file" accept="image/*" multiple
+            onchange="submitHW(this,'${group}','${student}','${stage}','${lesson}','${hw}')">
         </label>
+        ${submitted ? `
+          <label class="danger" style="margin-left:8px;">
+            Replace photos
+            <input type="file" accept="image/*" multiple
+              onchange="replaceHW(this,'${group}','${student}','${stage}','${lesson}','${hw}')">
+          </label>
+        ` : ''}
       </div>
     `;
-      }
-      render(h);
+  }
+  app.innerHTML = h;
+}
+
+function safe(v){
+  return String(v).replace(/[^a-zA-Z0-9_-]/g, "_");
+}
+
+async function compressImage(file, maxW=1280, quality=0.75){
+  const img = document.createElement("img");
+  const url = URL.createObjectURL(file);
+  img.src = url;
+  await new Promise(res => img.onload = res);
+  const scale = Math.min(1, maxW / img.width);
+  const w = Math.round(img.width * scale);
+  const h = Math.round(img.height * scale);
+  const canvas = document.createElement("canvas");
+  canvas.width = w; canvas.height = h;
+  canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+  URL.revokeObjectURL(url);
+  const blob = await new Promise(res => canvas.toBlob(res, "image/jpeg", quality));
+  if (!blob) return file;
+  return new File([blob], file.name.replace(/\.\w+$/, ".jpg"), { type:"image/jpeg" });
+}
+
+async function deleteFilesByUrls(urls){
+  if(!urls || !Array.isArray(urls) || urls.length === 0) return;
+  for(const url of urls){
+    try{ const ref = storage.refFromURL(url); await ref.delete(); }catch(e){}
+  }
+}
+
+async function submitHW(input, group, student, stage, lesson, hw) {
+  const files = Array.from(input.files || []);
+  if (files.length === 0) { alert("At least one photo is required."); return; }
+  if (files.length > 4) { alert("Max 4 photos allowed."); input.value = ""; return; }
+
+  let uploadedUrls = [];
+  for (const file of files) {
+    const filePath = `submissions/${safe(group)}/${safe(student)}/${safe(stage)}/${safe(lesson)}/${safe(hw)}/${Date.now()}_${safe(file.name)}`;
+    const ref = storage.ref(filePath);
+    const small = await compressImage(file);
+    try {
+      await ref.put(small);
+      const url = await ref.getDownloadURL();
+      uploadedUrls.push(url);
+    } catch(e) {
+      alert("Upload failed: " + (e.message || e));
+      input.value = ""; return;
     }
+  }
+  await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).set({ files: uploadedUrls, time: Date.now() });
+  input.value = "";
+  await showHomework(group, student, stage, lesson);
+  alert("Submitted successfully ");
+}
 
-    async function submitHW(input, group, student, stage, lesson, hw) {
-      const files = Array.from(input.files);
-      if (!files.length) return;
-      input.parentElement.innerHTML = "<span>Uploading...</span>";
-      let uploadedUrls = [];
-      for (const file of files) {
-        const path = `submissions/${safe(group)}/${safe(student)}/${Date.now()}_${safe(file.name)}`;
-        const ref = storage.ref(path);
-        await ref.put(file);
-        uploadedUrls.push(await ref.getDownloadURL());
-      }
-      await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).set({ files: uploadedUrls, time: Date.now() });
-      fireConfetti();
-      setTimeout(() => showHomework(group, student, stage, lesson), 1000);
+async function replaceHW(input, group, student, stage, lesson, hw) {
+  const files = Array.from(input.files || []);
+  if (files.length === 0) { alert("At least one photo is required."); return; }
+  if (files.length > 4) { alert("Max 4 photos allowed."); input.value = ""; return; }
+
+  const snap = await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).once("value");
+  const old = snap.val();
+  const oldUrls = old && Array.isArray(old.files) ? old.files : [];
+  await deleteFilesByUrls(oldUrls);
+
+  let uploadedUrls = [];
+  for (const file of files) {
+    const filePath = `submissions/${safe(group)}/${safe(student)}/${safe(stage)}/${safe(lesson)}/${safe(hw)}/${Date.now()}_${safe(file.name)}`;
+    const ref = storage.ref(filePath);
+    const small = await compressImage(file);
+    try {
+      await ref.put(small);
+      const url = await ref.getDownloadURL();
+      uploadedUrls.push(url);
+    } catch(e) {
+      alert("Upload failed: " + (e.message || e));
+      input.value = ""; return;
     }
+  }
+  await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).set({ files: uploadedUrls, time: Date.now() });
+  input.value = "";
+  await showHomework(group, student, stage, lesson);
+  alert("Replaced successfully ");
+}
 
-    function safe(v) { return v.replace(/[^a-zA-Z0-9]/g, "_"); }
-    function openInstruction() { alert("1. Choose Group\n2. Select Lesson\n3. Upload Photo\n4. Enjoy Confetti!"); }
+function login(){
+  document.getElementById("modalLogin").value = "";
+  document.getElementById("modalPassword").value = "";
+  document.getElementById("modalError").textContent = "";
+  document.getElementById("loginModal").style.display = "flex";
+  setTimeout(() => document.getElementById("modalLogin").focus(), 100);
+}
 
-    function login() {
-      const u = prompt("User"); const p = prompt("Pass");
-      if ((u === "Teacher1" && p === "Admin1") || (u === "Assistant1" && p === "Admin2")) admin();
+function closeLoginModal(e){
+  if(e && e.target !== document.getElementById("loginModal")) return;
+  document.getElementById("loginModal").style.display = "none";
+}
+
+function submitLogin(){
+  const u = document.getElementById("modalLogin").value.trim();
+  const p = document.getElementById("modalPassword").value;
+  if((u==="Teacher1"&&p==="Admin1")||(u==="Assistant1"&&p==="Admin2")){
+    document.getElementById("loginModal").style.display = "none";
+    admin();
+  } else {
+    document.getElementById("modalError").textContent = "Incorrect login or password.";
+    document.getElementById("modalPassword").value = "";
+    document.getElementById("modalPassword").focus();
+  }
+}
+
+function openNewGroupModal(){
+  document.getElementById("newGroupName").value = "";
+  document.getElementById("newGroupStudents").value = "";
+  document.getElementById("newGroupError").textContent = "";
+  document.getElementById("newGroupModal").style.display = "flex";
+  setTimeout(() => document.getElementById("newGroupName").focus(), 100);
+}
+
+function closeNewGroupModal(e){
+  if(e && e.target !== document.getElementById("newGroupModal")) return;
+  document.getElementById("newGroupModal").style.display = "none";
+}
+
+function submitNewGroup(){
+  const name = document.getElementById("newGroupName").value.trim();
+  const raw  = document.getElementById("newGroupStudents").value.trim();
+
+  if(!name){ document.getElementById("newGroupError").textContent = "Group name is required."; return; }
+  if(GROUPS[name]){ document.getElementById("newGroupError").textContent = "A group with this name already exists."; return; }
+  if(!raw){ document.getElementById("newGroupError").textContent = "Add at least one student."; return; }
+
+  const students = raw.split("\n").map(s => s.trim().toUpperCase()).filter(s => s.length > 0);
+
+  GROUPS[name] = students;
+  document.getElementById("newGroupModal").style.display = "none";
+  admin();
+}
+
+function admin(){
+  setNav("admin", {});
+  let h = `
+    <button class="back" onclick="home()">← Back</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <h3 style="margin-bottom:0">Admin Panel</h3>
+      <button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button>
+    </div>
+  `;
+  Object.keys(GROUPS).forEach(g => {
+    const gKey = g.replace(/'/g, "\\'");
+    h += `
+      <div class="admin-group-card">
+        <div class="admin-group-name">${g}</div>
+        <div class="admin-group-actions">
+          <button class="primary" onclick="adminGroup('${gKey}')">Open Group</button>
+          <button class="danger" onclick="clearGroup('${gKey}')">Clear Files</button>
+          <button class="btn-delete-group" onclick="deleteGroup('${gKey}')">Delete</button>
+        </div>
+      </div>
+    `;
+  });
+  app.innerHTML = h;
+}
+
+function deleteGroup(group){
+  if(!confirm(`Delete group "${group}" and all its data?\n\nThis cannot be undone.`)) return;
+  db.ref(`submissions/${group}`).remove();
+  delete GROUPS[group];
+  admin();
+}
+
+function adminGroup(group){
+  setNav("adminGroup", { group });
+  let h = `
+    <button class="back" onclick="admin()">← Admin</button>
+    <div class="bc"><b>${group}</b></div>
+    <h3>Select Stage</h3>
+  `;
+  Object.keys(STAGES).forEach(stage => {
+    h += `<div class="card"><button class="primary" onclick="adminStageSelect('${group}','${stage}')">${stage}</button></div>`;
+  });
+  app.innerHTML = h;
+}
+
+function adminStageSelect(group, stage){
+  setNav("adminStageSelect", { group, stage });
+  let h = `
+    <button class="back" onclick="adminGroup('${group}')">← Back</button>
+    <div class="bc"><span>${group}</span> › <b>${stage}</b></div>
+    <h3>Select Lesson</h3>
+  `;
+  Object.keys(STAGES[stage]).forEach(lesson => {
+    h += `<div class="card"><button class="secondary" onclick="adminLessonView('${group}','${stage}','${lesson}')">${lesson}</button></div>`;
+  });
+  app.innerHTML = h;
+}
+
+async function adminLessonView(group, stage, lesson){
+  setNav("adminLessonView", { group, stage, lesson });
+  app.innerHTML = `<div class="loading">Loading results…</div>`;
+
+  let h = `
+    <button class="back" onclick="adminStageSelect('${group}','${stage}')">← Back</button>
+    <div class="bc"><span>${group}</span> › <span>${stage}</span> › <b>${lesson}</b></div>
+    <h3>${lesson} — Results</h3>
+    <button class="export-btn" onclick="exportLessonCSV('${group}','${stage}','${lesson}')">Export to CSV</button>
+  `;
+
+  for (const student of GROUPS[group]) {
+    h += `<div class="admin-student-card"><div class="admin-student-name">${student}</div>`;
+    for (const hw of STAGES[stage][lesson]) {
+      const snap = await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).once("value");
+      const d = snap.val();
+      const ok = d && Array.isArray(d.files) && d.files.length > 0;
+      h += `
+        <div class="hw-row">
+          <div class="hw-row-name">${hw}</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="${ok ? 'green' : 'red'}">${ok ? 'Yes' : 'No'}</span>
+            ${ok ? d.files.map(url => `<a href="${url}" target="_blank" style="color:var(--accent);font-size:12px;font-weight:600;text-decoration:none;">view</a>`).join("") : ''}
+          </div>
+        </div>
+      `;
     }
+    h += `</div>`;
+  }
+  app.innerHTML = h;
+}
 
-    function admin() {
-      let h = `<button class="back" onclick="home()">← Back</button><h3>Admin Panel</h3>`;
-      Object.keys(GROUPS).forEach(g => {
-        h += `<div class="card animate__animated animate__fadeIn">
-          <b>${g}</b><br><br>
-          <button class="primary" onclick="adminGroup('${g}')">Check Homework</button>
-        </div>`;
-      });
-      render(h);
+function clearGroup(group){
+  if(!confirm("Clear ALL files for this group?")) return;
+  db.ref(`submissions/${group}`).remove().then(() => alert("Cleared"));
+}
+
+async function exportLessonCSV(group, stage, lesson){
+  const students = GROUPS[group];
+  const homeworks = STAGES[stage][lesson];
+  let csv = [["Student Name", ...homeworks].join(",")];
+  for (const student of students) {
+    let row = [student];
+    for (const hw of homeworks) {
+      const snap = await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).once("value");
+      const d = snap.val();
+      row.push(d && Array.isArray(d.files) && d.files.length > 0 ? "Yes" : "No");
     }
+    csv.push(row.join(","));
+  }
+  const blob = new Blob([csv.join("\n")], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${group} - ${stage} - ${lesson}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 
-    function adminGroup(group) {
-      let h = `<button class="back" onclick="admin()">← Back</button><h3>${group}</h3>`;
-      Object.keys(STAGES).forEach(s => h += `<div class="card" onclick="adminStageSelect('${group}','${s}')">${s}</div>`);
-      render(h);
-    }
-
-    function adminStageSelect(group, stage) {
-      let h = `<button class="back" onclick="adminGroup('${group}')">← Back</button><h3>${stage}</h3>`;
-      Object.keys(STAGES[stage]).forEach(l => h += `<div class="card" onclick="adminLessonView('${group}','${stage}','${l}')">${l}</div>`);
-      render(h);
-    }
-
-    async function adminLessonView(group, stage, lesson) {
-      render("<h3>Loading Results...</h3>");
-      let h = `<button class="back" onclick="adminStageSelect('${group}','${stage}')">← Back</button><h3>${lesson}</h3>`;
-      for (const student of GROUPS[group]) {
-        h += `<div class="card"><b>${student}</b><hr style="opacity:0.1">`;
-        for (const hw of STAGES[stage][lesson]) {
-          const snap = await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).once("value");
-          const ok = snap.val() && snap.val().files;
-          h += `<div style="font-size:12px; display:flex; justify-content:space-between; margin:4px 0">
-              <span>${hw}</span>
-              <span style="color:${ok ? '#10b981' : '#ef4444'}">${ok ? '✔' : '✖'}</span>
-            </div>`;
-        }
-        h += `</div>`;
-      }
-      render(h);
-    }
-
-    home();
-  </script>
+restoreNavOrHome();
+</script>
 </body>
-
-
 </html>
-
-
-
-
-
-
-
