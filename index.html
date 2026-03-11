@@ -495,6 +495,152 @@
     width: auto;
   }
   .btn-delete-group:hover { background: var(--red); color: #fff; border-color: var(--red); }
+
+  /* NOTIFICATION BELL */
+  #notifBell {
+    position: relative;
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--rsm);
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  #notifBell:hover { border-color: var(--accent); color: var(--accent); }
+  #notifBell.has-notif { color: var(--accent); border-color: rgba(79,142,247,0.4); }
+
+  #notifBadge {
+    position: absolute;
+    top: -5px; right: -5px;
+    background: var(--red);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    min-width: 18px; height: 18px;
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 4px;
+    font-family: 'Space Mono', monospace;
+    pointer-events: none;
+  }
+
+  /* NOTIFICATION PANEL */
+  #notifOverlay {
+    position: fixed; inset: 0;
+    z-index: 199;
+  }
+  #notifPanel {
+    position: fixed;
+    top: 68px; right: 16px;
+    width: 320px;
+    max-height: 440px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    z-index: 200;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: slideDown 0.18s ease;
+  }
+  @keyframes slideDown {
+    from { opacity:0; transform:translateY(-8px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  #notifPanelHeader {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  #notifClearBtn {
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 4px 8px;
+    border-radius: 4px;
+    width: auto;
+    transition: color 0.15s;
+  }
+  #notifClearBtn:hover { color: var(--red); }
+
+  #notifList {
+    overflow-y: auto;
+    flex: 1;
+    padding: 8px;
+  }
+
+  .notif-empty {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 28px 16px;
+  }
+
+  .notif-item {
+    padding: 12px 14px;
+    border-radius: var(--rsm);
+    margin-bottom: 6px;
+    border-left: 3px solid transparent;
+    background: var(--bg);
+    transition: background 0.15s;
+    cursor: default;
+  }
+  .notif-item:last-child { margin-bottom: 0; }
+  .notif-item.unread { background: rgba(79,142,247,0.06); }
+  .notif-item.type-reminder { border-left-color: var(--amber); }
+  .notif-item.type-blocked  { border-left-color: var(--red); }
+  .notif-item.type-info     { border-left-color: var(--accent); }
+  .notif-item.type-success  { border-left-color: var(--green); }
+
+  .notif-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 3px;
+  }
+  .notif-body {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .notif-time {
+    font-size: 11px;
+    color: var(--border);
+    margin-top: 5px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* SCHEDULE BANNERS */
+  .schedule-banner {
+    border-radius: var(--rsm);
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .warning-banner {
+    background: rgba(245,166,35,0.12);
+    border: 1px solid rgba(245,166,35,0.4);
+    color: var(--amber);
+  }
+  .blocked-banner {
+    background: rgba(247,85,106,0.1);
+    border: 1px solid rgba(247,85,106,0.35);
+    color: var(--red);
+  }
 </style>
 </head>
 
@@ -502,8 +648,26 @@
 
 <header>
   <b>Statista</b>
-  <div id="helpBtn" onclick="openInstruction()">Instructions</div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div id="notifBell" onclick="toggleNotifPanel()" title="Notifications">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span id="notifBadge" style="display:none;">0</span>
+    </div>
+    <div id="helpBtn" onclick="openInstruction()">Instructions</div>
+  </div>
 </header>
+
+<!-- NOTIFICATION PANEL -->
+<div id="notifPanel" style="display:none;">
+  <div id="notifPanelHeader">
+    <span style="font-weight:700;font-size:15px;color:var(--white);">Notifications</span>
+    <button onclick="clearAllNotifs()" id="notifClearBtn">Clear all</button>
+  </div>
+  <div id="notifList">
+    <div class="notif-empty">No notifications yet</div>
+  </div>
+</div>
+<div id="notifOverlay" onclick="closeNotifPanel()" style="display:none;"></div>
 
 <div id="webviewWarning">
   For stable photo upload, open in browser: <b>⋮ → Open in Chrome / Safari</b>
@@ -1035,10 +1199,13 @@ function admin(){
   setNav("admin", {});
   let h = `
     <button class="back" onclick="home()">← Back</button>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
       <h3 style="margin-bottom:0">Admin Panel</h3>
       <button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button>
     </div>
+    <button onclick="window._sendTestNotif&&window._sendTestNotif()" style="width:100%;background:rgba(79,142,247,0.1);color:var(--accent);border:1px solid rgba(79,142,247,0.3);padding:11px;border-radius:var(--rsm);font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;margin-bottom:18px;justify-content:center;">
+      Send Test Notification
+    </button>
   `;
   Object.keys(GROUPS).forEach(g => {
     const gKey = g.replace(/'/g, "\\'");
@@ -1151,6 +1318,322 @@ async function exportLessonCSV(group, stage, lesson){
 }
 
 restoreNavOrHome();
+
+/* ========================================================
+   SCHEDULE — lesson start times per group (24h format)
+   Edit these to match your real timetable.
+   days: 1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat,0=Sun
+======================================================== */
+const SCHEDULE = {
+  "GROUP IELTS 9:00 M/W/F":    { days:[1,3,5], hour:9,  minute:0  },
+  "GROUP IELTS 17:00 MWF":     { days:[1,3,5], hour:17, minute:0  },
+  "GROUP IELTS M/W/F 14:00":   { days:[1,3,5], hour:14, minute:0  },
+  "GROUP IELTS T/T/S 9:00":    { days:[2,4,6], hour:9,  minute:0  },
+  "GROUP IELTS 10:30 TTS":     { days:[2,4,6], hour:10, minute:30 },
+  "GROUP IELTS T/T/S 14:00":   { days:[2,4,6], hour:14, minute:0  },
+  "GROUP IELTS 15:30 TTS":     { days:[2,4,6], hour:15, minute:30 },
+  "GROUP IELTS T/T/S 18:30":   { days:[2,4,6], hour:18, minute:30 }
+};
+
+/* Returns minutes until next lesson for a group.
+   Negative = lesson already started (within same day window of 90 min).
+   null = no schedule found. */
+function minutesUntilLesson(group){
+  const s = SCHEDULE[group];
+  if(!s) return null;
+  const now = new Date();
+  const day = now.getDay();
+  const nowMins = now.getHours() * 60 + now.getMinutes();
+  const lessonMins = s.hour * 60 + s.minute;
+
+  if(s.days.includes(day)){
+    return lessonMins - nowMins; // positive = upcoming, negative = started
+  }
+  return null; // not a lesson day
+}
+
+/* Is submission currently BLOCKED for this group?
+   Blocked if lesson started less than 90 minutes ago. */
+function isSubmissionBlocked(group){
+  const mins = minutesUntilLesson(group);
+  if(mins === null) return false;
+  return mins <= 0 && mins >= -90; // lesson started, within 90-min window
+}
+
+/* ── PATCH showHomework to show warning + block inputs ── */
+const _origShowHomework = showHomework;
+showHomework = async function(group, student, stage, lesson){
+  await _origShowHomework(group, student, stage, lesson);
+
+  const mins = minutesUntilLesson(group);
+  const blocked = isSubmissionBlocked(group);
+
+  // inject banner
+  const container = document.getElementById("app");
+  if(!container) return;
+
+  if(blocked){
+    const banner = document.createElement("div");
+    banner.className = "schedule-banner blocked-banner";
+    banner.textContent = "Lesson has started — homework submission is now closed.";
+    container.insertBefore(banner, container.children[2] || container.firstChild);
+
+    // disable all file inputs
+    container.querySelectorAll("input[type=file]").forEach(inp => inp.disabled = true);
+    container.querySelectorAll("label.primary, label.danger").forEach(lbl => {
+      lbl.style.opacity = "0.35";
+      lbl.style.pointerEvents = "none";
+      lbl.style.cursor = "not-allowed";
+    });
+  } else if(mins !== null && mins > 0 && mins <= 30){
+    const banner = document.createElement("div");
+    banner.className = "schedule-banner warning-banner";
+    banner.textContent = `Lesson starts in ${mins} minute${mins===1?'':'s'} — submit any missing homework now!`;
+    container.insertBefore(banner, container.children[2] || container.firstChild);
+  }
+};
+
+/* ── PATCH submitHW and replaceHW to double-check block ── */
+const _origSubmitHW = submitHW;
+submitHW = async function(input, group, student, stage, lesson, hw){
+  if(isSubmissionBlocked(group)){
+    alert("Submission is closed — lesson has already started.");
+    input.value = ""; return;
+  }
+  return _origSubmitHW(input, group, student, stage, lesson, hw);
+};
+
+const _origReplaceHW = replaceHW;
+replaceHW = async function(input, group, student, stage, lesson, hw){
+  if(isSubmissionBlocked(group)){
+    alert("Submission is closed — lesson has already started.");
+    input.value = ""; return;
+  }
+  return _origReplaceHW(input, group, student, stage, lesson, hw);
+};
+
+/* ── NOTIFICATION PANEL UI ── */
+const _notifStore = []; // { id, title, body, type, time, read }
+let _notifUnread = 0;
+
+function _notifTimeStr(){
+  const now = new Date();
+  return now.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) +
+         ' · ' + now.toLocaleDateString([], { day:'numeric', month:'short' });
+}
+
+function pushNotif(title, body, type = 'info'){
+  const item = { id: Date.now(), title, body, type, time: _notifTimeStr(), read: false };
+  _notifStore.unshift(item);
+  if(_notifStore.length > 50) _notifStore.pop();
+  _notifUnread++;
+  _renderBell();
+  _renderNotifList();
+}
+
+function _renderBell(){
+  const bell  = document.getElementById('notifBell');
+  const badge = document.getElementById('notifBadge');
+  if(!bell || !badge) return;
+  if(_notifUnread > 0){
+    badge.style.display = 'flex';
+    badge.textContent = _notifUnread > 99 ? '99+' : _notifUnread;
+    bell.classList.add('has-notif');
+  } else {
+    badge.style.display = 'none';
+    bell.classList.remove('has-notif');
+  }
+}
+
+function _renderNotifList(){
+  const list = document.getElementById('notifList');
+  if(!list) return;
+  if(_notifStore.length === 0){
+    list.innerHTML = '<div class="notif-empty">No notifications yet</div>';
+    return;
+  }
+  list.innerHTML = _notifStore.map(n => `
+    <div class="notif-item type-${n.type} ${n.read ? '' : 'unread'}">
+      <div class="notif-title">${n.title}</div>
+      <div class="notif-body">${n.body}</div>
+      <div class="notif-time">${n.time}</div>
+    </div>
+  `).join('');
+}
+
+function toggleNotifPanel(){
+  const panel   = document.getElementById('notifPanel');
+  const overlay = document.getElementById('notifOverlay');
+  const isOpen  = panel.style.display !== 'none';
+  if(isOpen){
+    closeNotifPanel();
+  } else {
+    // Mark all as read
+    _notifStore.forEach(n => n.read = true);
+    _notifUnread = 0;
+    _renderBell();
+    _renderNotifList();
+    panel.style.display   = 'flex';
+    overlay.style.display = 'block';
+  }
+}
+
+function closeNotifPanel(){
+  document.getElementById('notifPanel').style.display   = 'none';
+  document.getElementById('notifOverlay').style.display = 'none';
+}
+
+function clearAllNotifs(){
+  _notifStore.length = 0;
+  _notifUnread = 0;
+  _renderBell();
+  _renderNotifList();
+}
+
+/* ── SERVICE WORKER + BROWSER NOTIFICATIONS ── */
+(function initNotifications(){
+  if(!("Notification" in window) || !("serviceWorker" in navigator)) return;
+
+  const swCode = `
+    self.addEventListener('message', e => {
+      if(e.data && e.data.type === 'NOTIFY'){
+        self.registration.showNotification(e.data.title, {
+          body: e.data.body,
+          vibrate: [200, 100, 200],
+          tag: e.data.tag || 'statista',
+          requireInteraction: true
+        });
+      }
+    });
+    self.addEventListener('notificationclick', e => {
+      e.notification.close();
+      e.waitUntil(clients.matchAll({type:'window'}).then(list => {
+        if(list.length) return list[0].focus();
+        return clients.openWindow('/');
+      }));
+    });
+  `;
+
+  let swReg = null;
+  const blob = new Blob([swCode], { type: 'application/javascript' });
+  navigator.serviceWorker.register(URL.createObjectURL(blob))
+    .then(reg => { swReg = reg; }).catch(() => {});
+
+  function askPermission(){
+    if(Notification.permission === 'default'){
+      Notification.requestPermission().then(p => {
+        if(p === 'granted'){
+          sendNotif('Statista — Notifications On',
+            'You will be reminded 30 min before lessons.', 'info', 'welcome');
+        }
+      });
+    }
+  }
+  document.addEventListener('click', askPermission, { once: true });
+
+  function sendNotif(title, body, type, tag){
+    // Always add to panel
+    pushNotif(title, body, type || 'info');
+    // Browser push if permitted
+    if(Notification.permission === 'granted'){
+      if(swReg && swReg.active){
+        swReg.active.postMessage({ type:'NOTIFY', title, body, tag });
+      } else {
+        new Notification(title, { body });
+      }
+    }
+  }
+
+  const _sent = {};
+  setInterval(() => {
+    Object.keys(SCHEDULE).forEach(group => {
+      const mins = minutesUntilLesson(group);
+      if(mins === null) return;
+      const dateKey = new Date().toDateString();
+
+      if(mins >= 29 && mins <= 31){
+        const k = `warn_${group}_${dateKey}`;
+        if(!_sent[k]){ _sent[k] = true;
+          sendNotif('Homework Reminder',
+            `${group}: lesson in 30 min. Submit missing homework now!`,
+            'reminder', 'r_' + group);
+        }
+      }
+      if(mins >= -1 && mins <= 1){
+        const k = `start_${group}_${dateKey}`;
+        if(!_sent[k]){ _sent[k] = true;
+          sendNotif('Lesson Started',
+            `${group}: lesson begun. Submissions are now closed.`,
+            'blocked', 's_' + group);
+        }
+      }
+    });
+  }, 60000);
+
+  window._sendTestNotif = function(){
+    if(Notification.permission !== 'granted'){
+      Notification.requestPermission().then(p => {
+        if(p === 'granted') sendNotif('Test', 'Notifications are working!', 'success', 'test');
+      });
+      return;
+    }
+    sendNotif('Test Notification', 'Notifications are working correctly!', 'success', 'test');
+  };
+})();
+
+/* ========================================================
+   DEVTOOLS PROTECTION
+   — Disables right-click context menu
+   — Blocks F12, Ctrl+Shift+I/J/U, Ctrl+U
+   — Detects DevTools open via window size diff
+   — Clears console periodically
+======================================================== */
+(function devtoolsProtect(){
+  // Disable right-click
+  document.addEventListener("contextmenu", e => e.preventDefault());
+
+  // Block keyboard shortcuts
+  document.addEventListener("keydown", e => {
+    const k = e.key;
+    const ctrl = e.ctrlKey || e.metaKey;
+    const shift = e.shiftKey;
+
+    if(
+      k === "F12" ||
+      (ctrl && shift && ["I","i","J","j","C","c"].includes(k)) ||
+      (ctrl && ["U","u"].includes(k)) ||
+      (ctrl && shift && k === "C")
+    ){
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+  }, true);
+
+  // Detect DevTools via window size
+  const threshold = 160;
+  setInterval(() => {
+    const widthDiff  = window.outerWidth  - window.innerWidth;
+    const heightDiff = window.outerHeight - window.innerHeight;
+    if(widthDiff > threshold || heightDiff > threshold){
+      document.body.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:center;
+                    height:100vh;background:#0d0f14;flex-direction:column;gap:16px;">
+          <div style="color:#f7556a;font-size:20px;font-weight:800;font-family:sans-serif;">
+            Access Denied
+          </div>
+          <div style="color:#7a8499;font-size:14px;font-family:sans-serif;">
+            Developer tools are not allowed on this page.
+          </div>
+        </div>`;
+    }
+  }, 1000);
+
+  // Clear console periodically
+  setInterval(() => {
+    try{ console.clear(); }catch(e){}
+  }, 2000);
+})();
 </script>
 </body>
 </html>
