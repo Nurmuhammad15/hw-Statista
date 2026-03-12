@@ -478,6 +478,69 @@
   .warning-banner { background: rgba(245,166,35,0.12); border: 1px solid rgba(245,166,35,0.4); color: var(--amber); }
   .blocked-banner { background: rgba(247,85,106,0.1); border: 1px solid rgba(247,85,106,0.35); color: var(--red); }
 
+  /* AI DETECTION */
+  .ai-detect-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--rsm);
+    padding: 14px 16px;
+    margin-bottom: 18px;
+  }
+  .ai-detect-title {
+    font-size: 12px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+  }
+  .ai-detect-bar-wrap {
+    position: relative;
+    height: 28px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--surface2);
+    margin-bottom: 10px;
+  }
+  .ai-detect-bar-human {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: linear-gradient(90deg, var(--green), #1aad74);
+    border-radius: 20px 0 0 20px;
+    display: flex; align-items: center; justify-content: flex-start;
+    padding-left: 12px;
+    font-size: 12px; font-weight: 800; color: #fff;
+    font-family: 'Space Mono', monospace;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 50px;
+  }
+  .ai-detect-bar-ai {
+    position: absolute; right: 0; top: 0; bottom: 0;
+    background: linear-gradient(90deg, #7c3aed, var(--accent2));
+    border-radius: 0 20px 20px 0;
+    display: flex; align-items: center; justify-content: flex-end;
+    padding-right: 12px;
+    font-size: 12px; font-weight: 800; color: #fff;
+    font-family: 'Space Mono', monospace;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 50px;
+  }
+  .ai-detect-labels {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .ai-detect-label-human {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12px; font-weight: 700; color: var(--green);
+  }
+  .ai-detect-label-ai {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12px; font-weight: 700; color: var(--accent2);
+  }
+  .ai-detect-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .ai-detect-note {
+    font-size: 12px; color: var(--muted); margin-top: 10px;
+    padding-top: 10px; border-top: 1px solid var(--border);
+    line-height: 1.5; font-style: italic;
+  }
+
   /* ========== AI CHECKER STYLES ========== */
   .ai-check-btn {
     display: inline-flex;
@@ -968,6 +1031,11 @@ function isWritingTask(hwName) {
   );
 }
 
+function openAiCheckerById(hwId) {
+  const hwName = window['_hw_' + hwId] || hwId;
+  openAiChecker(hwName);
+}
+
 function openAiChecker(hwName) {
   document.getElementById("aiHwNameBadge").textContent = hwName;
   document.getElementById("aiEssayText").value = "";
@@ -1026,6 +1094,9 @@ JSON format (all fields required):
   "cc": 6.0,
   "lr": 7.0,
   "gra": 6.5,
+  "human_percent": 78,
+  "ai_percent": 22,
+  "ai_detection_note": "One sentence explaining what patterns suggest AI involvement, or confirming it looks human-written.",
   "summary": "2-3 sentence overall summary of the writing quality.",
   "strengths": ["strength 1", "strength 2", "strength 3"],
   "improvements": ["specific actionable improvement 1", "specific actionable improvement 2", "specific actionable improvement 3"],
@@ -1047,6 +1118,11 @@ IELTS scoring criteria:
 - LR: Lexical Resource — vocabulary range, collocations, avoiding repetition, precision
 - GRA: Grammatical Range & Accuracy — tense accuracy, complex sentences, punctuation, articles
 - overall: average of the four scores, rounded to nearest 0.5
+
+AI Detection criteria (human_percent + ai_percent must equal 100):
+- Look for: unnaturally perfect grammar, overly formal tone, repetitive sentence structures, lack of personal voice, generic transitions (furthermore, moreover, in conclusion), perfect paragraph balance, no contractions or colloquialisms.
+- More AI signs = lower human_percent. Natural mistakes, personal voice, varied flow = higher human_percent.
+- Be strict and realistic. Most students write 60-90% human content.
 
 Valid IELTS bands only: 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0
 Be honest and specific. Quote actual text from the student when pointing out errors.`;
@@ -1105,12 +1181,41 @@ function renderAiResult(r) {
   const vocabHtml = (r.vocabulary_tips || []).map(s => `<li style="margin-bottom:8px;">${s}</li>`).join("");
   const sentenceHtml = (r.sentence_structure || []).map(s => `<li>${s}</li>`).join("");
 
+  const humanPct = r.human_percent || 80;
+  const aiPct = r.ai_percent || (100 - humanPct);
+  const aiNote = r.ai_detection_note || "";
+
+  // Pick warning color for AI bar label
+  const aiWarning = aiPct >= 50 ? "var(--red)" : aiPct >= 30 ? "var(--amber)" : "var(--accent2)";
+
   document.getElementById("aiResultArea").innerHTML = `
     <div class="ai-result">
       <div class="ai-overall-band">
         <div class="ai-overall-label">Estimated IELTS Band</div>
         <div class="ai-overall-num">${r.overall}</div>
         <div class="ai-overall-desc">${r.band_description || ""}</div>
+      </div>
+
+      <div class="ai-detect-card">
+        <div class="ai-detect-title">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          AI Detection Analysis
+        </div>
+        <div class="ai-detect-bar-wrap" id="aiDetectBarWrap">
+          <div class="ai-detect-bar-human" id="aiBarHuman" style="width:${humanPct}%">${humanPct}%</div>
+          <div class="ai-detect-bar-ai" id="aiBarAI" style="width:${aiPct}%">${aiPct}%</div>
+        </div>
+        <div class="ai-detect-labels">
+          <div class="ai-detect-label-human">
+            <div class="ai-detect-dot" style="background:var(--green)"></div>
+            Human written — ${humanPct}%
+          </div>
+          <div class="ai-detect-label-ai" style="color:${aiWarning}">
+            <div class="ai-detect-dot" style="background:${aiWarning}"></div>
+            AI generated — ${aiPct}%
+          </div>
+        </div>
+        ${aiNote ? `<div class="ai-detect-note">💡 ${aiNote}</div>` : ""}
       </div>
 
       <div class="ai-scores-grid">
@@ -1321,37 +1426,32 @@ async function showHomework(group, student, stage, lesson){
   for (const hw of STAGES[stage][lesson]) {
     const d = lessonData[hw];
     const submitted = d && Array.isArray(d.files) && d.files.length > 0;
-    const hwEsc = hw.replace(/'/g, "\\'");
+    const hwId = hw.replace(/[^a-zA-Z0-9]/g, "_");
     const showAiBtn = isWritingTask(hw);
 
-    h += `
-      <div class="card hw">
-        <b>${hw}</b>
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
-          <span class="${submitted ? 'green' : 'red'}">${submitted ? 'Submitted' : 'Not submitted'}</span>
-          ${showAiBtn ? `
-            <button class="ai-check-btn" onclick="openAiChecker('${hwEsc}')">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-              Check with AI
-            </button>
-          ` : ''}
-        </div>
-        ${submitted ? d.files.map(url => `<a href="${url}" target="_blank"><img src="${url}" /></a>`).join("") : ''}
-        <br>
-        <label class="primary">
-          Submit photo (max 4)
-          <input type="file" accept="image/*" multiple
-            onchange="submitHW(this,'${group}','${student}','${stage}','${lesson}','${hwEsc}')">
-        </label>
-        ${submitted ? `
-          <label class="danger" style="margin-left:8px;">
-            Replace photos
-            <input type="file" accept="image/*" multiple
-              onchange="replaceHW(this,'${group}','${student}','${stage}','${lesson}','${hwEsc}')">
-          </label>
-        ` : ''}
-      </div>
-    `;
+    let cardHtml = '<div class="card hw"><b>' + hw + '</b>';
+    cardHtml += '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">';
+    cardHtml += submitted ? '<span class="green">Submitted</span>' : '<span class="red">Not submitted</span>';
+    if (showAiBtn) {
+      cardHtml += '<button class="ai-check-btn" onclick="openAiCheckerById('' + hwId + '')">'
+        + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>'
+        + ' Check with AI</button>';
+      window['_hw_' + hwId] = hw;
+    }
+    cardHtml += '</div>';
+    if (submitted) {
+      cardHtml += d.files.map(url => '<a href="' + url + '" target="_blank"><img src="' + url + '" /></a>').join('');
+    }
+    cardHtml += '<br><label class="primary">Submit photo (max 4)'
+      + '<input type="file" accept="image/*" multiple onchange="submitHW(this,'' + group + '','' + student + '','' + stage + '','' + lesson + '','' + hw.replace(/'/g,"\'") + '')">'
+      + '</label>';
+    if (submitted) {
+      cardHtml += '<label class="danger" style="margin-left:8px;">Replace photos'
+        + '<input type="file" accept="image/*" multiple onchange="replaceHW(this,'' + group + '','' + student + '','' + stage + '','' + lesson + '','' + hw.replace(/'/g,"\'") + '')">'
+        + '</label>';
+    }
+    cardHtml += '</div>';
+    h += cardHtml;
   }
   app.innerHTML = h;
 }
