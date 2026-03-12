@@ -968,11 +968,6 @@ function isWritingTask(hwName) {
   );
 }
 
-function openAiCheckerById(hwId) {
-  const hwName = window['_hw_' + hwId] || hwId;
-  openAiChecker(hwName);
-}
-
 function openAiChecker(hwName) {
   document.getElementById("aiHwNameBadge").textContent = hwName;
   document.getElementById("aiEssayText").value = "";
@@ -1326,32 +1321,37 @@ async function showHomework(group, student, stage, lesson){
   for (const hw of STAGES[stage][lesson]) {
     const d = lessonData[hw];
     const submitted = d && Array.isArray(d.files) && d.files.length > 0;
-    const hwId = hw.replace(/[^a-zA-Z0-9]/g, "_");
+    const hwEsc = hw.replace(/'/g, "\\'");
     const showAiBtn = isWritingTask(hw);
 
-    let cardHtml = '<div class="card hw"><b>' + hw + '</b>';
-    cardHtml += '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">';
-    cardHtml += submitted ? '<span class="green">Submitted</span>' : '<span class="red">Not submitted</span>';
-    if (showAiBtn) {
-      cardHtml += '<button class="ai-check-btn" onclick="openAiCheckerById('' + hwId + '')">'
-        + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>'
-        + ' Check with AI</button>';
-      window['_hw_' + hwId] = hw;
-    }
-    cardHtml += '</div>';
-    if (submitted) {
-      cardHtml += d.files.map(url => '<a href="' + url + '" target="_blank"><img src="' + url + '" /></a>').join('');
-    }
-    cardHtml += '<br><label class="primary">Submit photo (max 4)'
-      + '<input type="file" accept="image/*" multiple onchange="submitHW(this,'' + group + '','' + student + '','' + stage + '','' + lesson + '','' + hw.replace(/'/g,"\'") + '')">'
-      + '</label>';
-    if (submitted) {
-      cardHtml += '<label class="danger" style="margin-left:8px;">Replace photos'
-        + '<input type="file" accept="image/*" multiple onchange="replaceHW(this,'' + group + '','' + student + '','' + stage + '','' + lesson + '','' + hw.replace(/'/g,"\'") + '')">'
-        + '</label>';
-    }
-    cardHtml += '</div>';
-    h += cardHtml;
+    h += `
+      <div class="card hw">
+        <b>${hw}</b>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+          <span class="${submitted ? 'green' : 'red'}">${submitted ? 'Submitted' : 'Not submitted'}</span>
+          ${showAiBtn ? `
+            <button class="ai-check-btn" onclick="openAiChecker('${hwEsc}')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              Check with AI
+            </button>
+          ` : ''}
+        </div>
+        ${submitted ? d.files.map(url => `<a href="${url}" target="_blank"><img src="${url}" /></a>`).join("") : ''}
+        <br>
+        <label class="primary">
+          Submit photo (max 4)
+          <input type="file" accept="image/*" multiple
+            onchange="submitHW(this,'${group}','${student}','${stage}','${lesson}','${hwEsc}')">
+        </label>
+        ${submitted ? `
+          <label class="danger" style="margin-left:8px;">
+            Replace photos
+            <input type="file" accept="image/*" multiple
+              onchange="replaceHW(this,'${group}','${student}','${stage}','${lesson}','${hwEsc}')">
+          </label>
+        ` : ''}
+      </div>
+    `;
   }
   app.innerHTML = h;
 }
