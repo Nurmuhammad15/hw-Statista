@@ -1032,7 +1032,7 @@ function isWritingTask(hwName) {
 }
 
 function openAiCheckerById(hwId) {
-  const hwName = window['_hw_' + hwId] || hwId;
+  const hwName = (window._hwRegistry && window._hwRegistry[hwId]) || hwId.replace(/^hw_/, '').replace(/_/g, ' ');
   openAiChecker(hwName);
 }
 
@@ -1412,48 +1412,100 @@ function showLessons(group, student, stage){
 
 async function showHomework(group, student, stage, lesson){
   setNav("showHomework", { group, student, stage, lesson });
-  app.innerHTML = `<div class="loading">Loading…</div>`;
+  app.innerHTML = '<div class="loading">Loading…</div>';
 
-  const lessonSnap = await db.ref(`submissions/${group}/${student}/${stage}/${lesson}`).once("value");
+  const lessonSnap = await db.ref("submissions/" + group + "/" + student + "/" + stage + "/" + lesson).once("value");
   const lessonData = lessonSnap.val() || {};
 
-  let h = `
-    <button class="back" onclick="showLessons('${group}','${student}','${stage}')">← Back</button>
-    <div class="bc"><b>${student}</b> › <span>${stage}</span> › <b>${lesson}</b></div>
-    <h3>Homework Tasks</h3>
-  `;
+  window._hwRegistry = window._hwRegistry || {};
+
+  let cards = [];
 
   for (const hw of STAGES[stage][lesson]) {
     const d = lessonData[hw];
     const submitted = d && Array.isArray(d.files) && d.files.length > 0;
-    const hwId = hw.replace(/[^a-zA-Z0-9]/g, "_");
-    const showAiBtn = isWritingTask(hw);
+    const hwId = "hw_" + hw.replace(/[^a-zA-Z0-9]/g, "_");
+    window._hwRegistry[hwId] = hw;
 
-    let cardHtml = '<div class="card hw"><b>' + hw + '</b>';
-    cardHtml += '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">';
-    cardHtml += submitted ? '<span class="green">Submitted</span>' : '<span class="red">Not submitted</span>';
-    if (showAiBtn) {
-      cardHtml += '<button class="ai-check-btn" onclick="openAiCheckerById('' + hwId + '')">'
-        + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>'
-        + ' Check with AI</button>';
-      window['_hw_' + hwId] = hw;
+    let card = document.createElement("div");
+    card.className = "card hw";
+
+    let title = document.createElement("b");
+    title.textContent = hw;
+    card.appendChild(title);
+
+    let statusRow = document.createElement("div");
+    statusRow.style.cssText = "display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;";
+
+    let badge = document.createElement("span");
+    badge.className = submitted ? "green" : "red";
+    badge.textContent = submitted ? "Submitted" : "Not submitted";
+    statusRow.appendChild(badge);
+
+    if (isWritingTask(hw)) {
+      let aiBtn = document.createElement("button");
+      aiBtn.className = "ai-check-btn";
+      aiBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Check with AI';
+      aiBtn.addEventListener("click", (function(id){ return function(){ openAiCheckerById(id); }; })(hwId));
+      statusRow.appendChild(aiBtn);
     }
-    cardHtml += '</div>';
+
+    card.appendChild(statusRow);
+
     if (submitted) {
-      cardHtml += d.files.map(url => '<a href="' + url + '" target="_blank"><img src="' + url + '" /></a>').join('');
+      d.files.forEach(function(url) {
+        let a = document.createElement("a");
+        a.href = url; a.target = "_blank";
+        let img = document.createElement("img");
+        img.src = url;
+        a.appendChild(img);
+        card.appendChild(a);
+      });
     }
-    cardHtml += '<br><label class="primary">Submit photo (max 4)'
-      + '<input type="file" accept="image/*" multiple onchange="submitHW(this,'' + group + '','' + student + '','' + stage + '','' + lesson + '','' + hw.replace(/'/g,"\'") + '')">'
-      + '</label>';
+
+    card.appendChild(document.createElement("br"));
+
+    let submitLabel = document.createElement("label");
+    submitLabel.className = "primary";
+    submitLabel.textContent = "Submit photo (max 4)";
+    let submitInput = document.createElement("input");
+    submitInput.type = "file"; submitInput.accept = "image/*"; submitInput.multiple = true;
+    submitInput.addEventListener("change", (function(g,st,sg,ls,h){ return function(){ submitHW(this,g,st,sg,ls,h); }; })(group,student,stage,lesson,hw));
+    submitLabel.appendChild(submitInput);
+    card.appendChild(submitLabel);
+
     if (submitted) {
-      cardHtml += '<label class="danger" style="margin-left:8px;">Replace photos'
-        + '<input type="file" accept="image/*" multiple onchange="replaceHW(this,'' + group + '','' + student + '','' + stage + '','' + lesson + '','' + hw.replace(/'/g,"\'") + '')">'
-        + '</label>';
+      let replaceLabel = document.createElement("label");
+      replaceLabel.className = "danger";
+      replaceLabel.style.marginLeft = "8px";
+      replaceLabel.textContent = "Replace photos";
+      let replaceInput = document.createElement("input");
+      replaceInput.type = "file"; replaceInput.accept = "image/*"; replaceInput.multiple = true;
+      replaceInput.addEventListener("change", (function(g,st,sg,ls,h){ return function(){ replaceHW(this,g,st,sg,ls,h); }; })(group,student,stage,lesson,hw));
+      replaceLabel.appendChild(replaceInput);
+      card.appendChild(replaceLabel);
     }
-    cardHtml += '</div>';
-    h += cardHtml;
+
+    cards.push(card);
   }
-  app.innerHTML = h;
+
+  app.innerHTML = "";
+  let backBtn = document.createElement("button");
+  backBtn.className = "back";
+  backBtn.textContent = "← Back";
+  backBtn.addEventListener("click", function(){ showLessons(group, student, stage); });
+  app.appendChild(backBtn);
+
+  let bc = document.createElement("div");
+  bc.className = "bc";
+  bc.innerHTML = "<b>" + student + "</b> › <span>" + stage + "</span> › <b>" + lesson + "</b>";
+  app.appendChild(bc);
+
+  let h3 = document.createElement("h3");
+  h3.textContent = "Homework Tasks";
+  app.appendChild(h3);
+
+  cards.forEach(function(c){ app.appendChild(c); });
 }
 
 function safe(v){ return String(v).replace(/[^a-zA-Z0-9_-]/g, "_"); }
