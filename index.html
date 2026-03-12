@@ -406,30 +406,32 @@ function home(){
 
 function enterStudent(){
   setNav("enterStudent",{});
-  var h='<button class="back" onclick="home()">← Back</button><h3>Select Group</h3>';
+  app.innerHTML="";
+  var back=document.createElement("button"); back.className="back"; back.textContent="← Back";
+  back.addEventListener("click",home); app.appendChild(back);
+  var h3=document.createElement("h3"); h3.textContent="Select Group"; app.appendChild(h3);
   Object.keys(GROUPS).forEach(function(g){
-    h+='<div class="card"><button class="primary" onclick="selectStudent(\''+g.replace(/'/g,"\\'")+'\'">'+g+'</button></div>';
+    var div=document.createElement("div"); div.className="card";
+    var btn=document.createElement("button"); btn.className="primary"; btn.textContent=g;
+    btn.addEventListener("click",function(){ selectStudent(g); });
+    div.appendChild(btn); app.appendChild(div);
   });
-  app.innerHTML=h;
 }
 
 function selectStudent(group){
   setNav("selectStudent",{group:group});
-  var h='<button class="back" onclick="enterStudent()">← Back</button><div class="bc">'+group+'</div><h3>Select Your Name</h3>';
-  GROUPS[group].forEach(function(s){
-    h+='<div class="card"><button class="primary" onclick="showStages(\''+group.replace(/'/g,"\\'")+'_SEP_\'+ \''+s.replace(/'/g,"\\'")+'\')">'+s+'</button></div>';
-  });
-  // Use data approach instead
-  app.innerHTML='<button class="back" onclick="enterStudent()">← Back</button><div class="bc">'+group+'</div><h3>Select Your Name</h3><div id="studentList"></div>';
-  var list=document.getElementById("studentList");
+  app.innerHTML="";
+  var back=document.createElement("button"); back.className="back"; back.textContent="← Back";
+  back.addEventListener("click",enterStudent); app.appendChild(back);
+  var bc=document.createElement("div"); bc.className="bc"; bc.textContent=group; app.appendChild(bc);
+  var h3=document.createElement("h3"); h3.textContent="Select Your Name"; app.appendChild(h3);
   GROUPS[group].forEach(function(s){
     var div=document.createElement("div"); div.className="card";
     var btn=document.createElement("button"); btn.className="primary"; btn.textContent=s;
     btn.addEventListener("click",function(){ showStages(group,s); });
-    div.appendChild(btn); list.appendChild(div);
+    div.appendChild(btn); app.appendChild(div);
   });
 }
-
 function showStages(group,student){
   setNav("showStages",{group:group,student:student});
   app.innerHTML='<button class="back" onclick="selectStudent(\''+group.replace(/'/g,"\\'")+'\')">← Back</button><div class="bc">'+group+' › <b>'+student+'</b></div><h3>Select Stage</h3><div id="stageList"></div>';
