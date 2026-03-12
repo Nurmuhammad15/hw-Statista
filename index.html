@@ -39,7 +39,6 @@
     line-height: 1.6;
   }
 
-  /* HEADER */
   header {
     background: rgba(22, 27, 37, 0.85);
     backdrop-filter: blur(16px);
@@ -64,7 +63,6 @@
     background-clip: text;
   }
 
-  /* WEBVIEW WARNING */
   #webviewWarning {
     display: none;
     background: #2a1f08;
@@ -76,7 +74,6 @@
     font-weight: 500;
   }
 
-  /* HELP BTN */
   #helpBtn {
     background: rgba(79,142,247,0.1);
     color: var(--accent);
@@ -92,19 +89,16 @@
   }
   #helpBtn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-  /* CONTAINER */
   .container {
     max-width: 600px;
     margin: 0 auto;
     padding: 28px 16px 80px;
   }
 
-  /* TYPOGRAPHY */
   h2 { font-size: 20px; font-weight: 800; color: var(--white); margin-bottom: 20px; }
   h3 { font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 16px; }
   h4 { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-  /* CARD */
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -114,7 +108,6 @@
     transition: border-color 0.2s;
   }
 
-  /* BUTTONS */
   button {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 600;
@@ -168,7 +161,6 @@
   }
   .back:hover { background: var(--surface2); color: var(--text); }
 
-  /* STATUS BADGES */
   .green {
     display: inline-flex;
     align-items: center;
@@ -195,7 +187,6 @@
     border-radius: 20px;
   }
 
-  /* IMAGES */
   img {
     width: 90px;
     height: 90px;
@@ -205,7 +196,6 @@
     margin: 8px 6px 0 0;
   }
 
-  /* UPLOAD LABELS */
   label.primary, label.danger {
     display: inline-flex;
     align-items: center;
@@ -235,7 +225,6 @@
 
   input[type=file] { display: none; }
 
-  /* HW CARD */
   .hw {
     background: var(--bg);
     border: 1px solid var(--border);
@@ -245,7 +234,6 @@
   }
   .hw b { font-size: 14px; color: var(--text); display: block; margin-bottom: 8px; }
 
-  /* HOME */
   .home-wrap { padding-top: 40px; text-align: center; }
   .home-title {
     font-size: 32px;
@@ -280,7 +268,6 @@
   .home-card .label { font-weight: 700; font-size: 15px; color: var(--white); }
   .home-card .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-  /* ADMIN */
   .admin-group-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -310,7 +297,6 @@
   .hw-row:last-child { border-bottom: none; }
   .hw-row-name { color: var(--muted); flex: 1; }
 
-  /* EXPORT BTN */
   .export-btn {
     display: inline-flex; align-items: center; gap: 6px;
     background: rgba(34,200,135,0.1); color: var(--green);
@@ -322,7 +308,6 @@
   }
   .export-btn:hover { background: var(--green); color: var(--bg); }
 
-  /* INSTRUCTION STEPS */
   .step-card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--r); padding: 18px 18px 18px 64px;
@@ -349,14 +334,12 @@
   .alert-card ul { padding-left: 16px; margin-top: 6px; }
   .alert-card b { color: #ffc542; }
 
-  /* BREADCRUMB */
   .bc {
     font-size: 12px; color: var(--muted); margin-bottom: 14px;
     display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
   }
   .bc b { color: var(--accent); }
 
-  /* LOADING */
   .loading {
     text-align: center; padding: 50px 20px;
     color: var(--muted); font-size: 14px;
@@ -369,12 +352,10 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* SCROLLBAR */
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-  /* MODAL */
   .modal-overlay {
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.6);
@@ -398,204 +379,87 @@
   }
   @keyframes slideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
 
-  .modal-title {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--white);
-    margin-bottom: 6px;
-  }
-  .modal-sub {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 24px;
-  }
-  .modal-field {
-    margin-bottom: 14px;
-  }
+  .modal-title { font-size: 18px; font-weight: 800; color: var(--white); margin-bottom: 6px; }
+  .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+  .modal-field { margin-bottom: 14px; }
   .modal-field label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
+    display: block; font-size: 12px; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
   }
   .modal-field input {
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--rsm);
-    padding: 12px 14px;
-    font-size: 14px;
-    font-family: inherit;
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.2s;
+    width: 100%; background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--rsm); padding: 12px 14px; font-size: 14px;
+    font-family: inherit; color: var(--text); outline: none; transition: border-color 0.2s;
   }
-  .modal-field input:focus {
-    border-color: var(--accent);
-  }
-  .modal-error {
-    font-size: 13px;
-    color: var(--red);
-    margin-bottom: 14px;
-    min-height: 18px;
-  }
-  .modal-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 6px;
-  }
+  .modal-field input:focus { border-color: var(--accent); }
+  .modal-error { font-size: 13px; color: var(--red); margin-bottom: 14px; min-height: 18px; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 6px; }
   .modal-actions .primary { flex: 1; justify-content: center; }
   .modal-actions .btn-cancel {
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    padding: 12px 18px;
-    border-radius: var(--rsm);
-    font-family: inherit;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.18s;
+    background: transparent; color: var(--muted); border: 1px solid var(--border);
+    padding: 12px 18px; border-radius: var(--rsm); font-family: inherit;
+    font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.18s;
   }
   .modal-actions .btn-cancel:hover { background: var(--surface2); color: var(--text); }
 
-  /* NEW GROUP BUTTON */
   .btn-new-group {
-    background: rgba(34,200,135,0.1);
-    color: var(--green);
-    border: 1px solid rgba(34,200,135,0.3);
-    padding: 9px 16px;
-    border-radius: var(--rsm);
-    font-family: inherit;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.18s;
-    white-space: nowrap;
-    width: auto;
+    background: rgba(34,200,135,0.1); color: var(--green);
+    border: 1px solid rgba(34,200,135,0.3); padding: 9px 16px;
+    border-radius: var(--rsm); font-family: inherit; font-weight: 700;
+    font-size: 13px; cursor: pointer; transition: all 0.18s; white-space: nowrap; width: auto;
   }
   .btn-new-group:hover { background: var(--green); color: var(--bg); }
 
-  /* DELETE GROUP BUTTON */
   .btn-delete-group {
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    padding: 10px 14px;
-    border-radius: var(--rsm);
-    font-family: inherit;
-    font-weight: 600;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.18s;
-    white-space: nowrap;
-    width: auto;
+    background: transparent; color: var(--muted); border: 1px solid var(--border);
+    padding: 10px 14px; border-radius: var(--rsm); font-family: inherit;
+    font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.18s; white-space: nowrap; width: auto;
   }
   .btn-delete-group:hover { background: var(--red); color: #fff; border-color: var(--red); }
 
-  /* NOTIFICATION BELL */
   #notifBell {
-    position: relative;
-    width: 38px; height: 38px;
+    position: relative; width: 38px; height: 38px;
     display: flex; align-items: center; justify-content: center;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--rsm);
-    cursor: pointer;
-    color: var(--muted);
-    transition: all 0.2s;
-    flex-shrink: 0;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--rsm); cursor: pointer; color: var(--muted);
+    transition: all 0.2s; flex-shrink: 0;
   }
   #notifBell:hover { border-color: var(--accent); color: var(--accent); }
   #notifBell.has-notif { color: var(--accent); border-color: rgba(79,142,247,0.4); }
 
   #notifBadge {
-    position: absolute;
-    top: -5px; right: -5px;
-    background: var(--red);
-    color: #fff;
-    font-size: 10px;
-    font-weight: 800;
-    min-width: 18px; height: 18px;
-    border-radius: 20px;
+    position: absolute; top: -5px; right: -5px;
+    background: var(--red); color: #fff; font-size: 10px; font-weight: 800;
+    min-width: 18px; height: 18px; border-radius: 20px;
     display: flex; align-items: center; justify-content: center;
-    padding: 0 4px;
-    font-family: 'Space Mono', monospace;
-    pointer-events: none;
+    padding: 0 4px; font-family: 'Space Mono', monospace; pointer-events: none;
   }
 
-  /* NOTIFICATION PANEL */
-  #notifOverlay {
-    position: fixed; inset: 0;
-    z-index: 199;
-  }
+  #notifOverlay { position: fixed; inset: 0; z-index: 199; }
   #notifPanel {
-    position: fixed;
-    top: 68px; right: 16px;
-    width: 320px;
-    max-height: 440px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    z-index: 200;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    position: fixed; top: 68px; right: 16px; width: 320px; max-height: 440px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    z-index: 200; overflow: hidden; display: flex; flex-direction: column;
     animation: slideDown 0.18s ease;
   }
-  @keyframes slideDown {
-    from { opacity:0; transform:translateY(-8px); }
-    to   { opacity:1; transform:translateY(0); }
-  }
+  @keyframes slideDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
 
   #notifPanelHeader {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
+    padding: 14px 16px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
   }
   #notifClearBtn {
-    background: transparent;
-    color: var(--muted);
-    border: none;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
-    padding: 4px 8px;
-    border-radius: 4px;
-    width: auto;
-    transition: color 0.15s;
+    background: transparent; color: var(--muted); border: none; font-size: 12px;
+    font-weight: 600; cursor: pointer; font-family: inherit; padding: 4px 8px;
+    border-radius: 4px; width: auto; transition: color 0.15s;
   }
   #notifClearBtn:hover { color: var(--red); }
-
-  #notifList {
-    overflow-y: auto;
-    flex: 1;
-    padding: 8px;
-  }
-
-  .notif-empty {
-    text-align: center;
-    color: var(--muted);
-    font-size: 13px;
-    padding: 28px 16px;
-  }
-
+  #notifList { overflow-y: auto; flex: 1; padding: 8px; }
+  .notif-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 28px 16px; }
   .notif-item {
-    padding: 12px 14px;
-    border-radius: var(--rsm);
-    margin-bottom: 6px;
-    border-left: 3px solid transparent;
-    background: var(--bg);
-    transition: background 0.15s;
-    cursor: default;
+    padding: 12px 14px; border-radius: var(--rsm); margin-bottom: 6px;
+    border-left: 3px solid transparent; background: var(--bg); transition: background 0.15s; cursor: default;
   }
   .notif-item:last-child { margin-bottom: 0; }
   .notif-item.unread { background: rgba(79,142,247,0.06); }
@@ -603,44 +467,247 @@
   .notif-item.type-blocked  { border-left-color: var(--red); }
   .notif-item.type-info     { border-left-color: var(--accent); }
   .notif-item.type-success  { border-left-color: var(--green); }
+  .notif-title { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+  .notif-body { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .notif-time { font-size: 11px; color: var(--border); margin-top: 5px; font-family: 'Space Mono', monospace; }
 
-  .notif-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 3px;
-  }
-  .notif-body {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-  .notif-time {
-    font-size: 11px;
-    color: var(--border);
-    margin-top: 5px;
-    font-family: 'Space Mono', monospace;
-  }
-
-  /* SCHEDULE BANNERS */
   .schedule-banner {
+    border-radius: var(--rsm); padding: 12px 16px; font-size: 13px;
+    font-weight: 600; margin-bottom: 14px; text-align: center;
+  }
+  .warning-banner { background: rgba(245,166,35,0.12); border: 1px solid rgba(245,166,35,0.4); color: var(--amber); }
+  .blocked-banner { background: rgba(247,85,106,0.1); border: 1px solid rgba(247,85,106,0.35); color: var(--red); }
+
+  /* ========== AI CHECKER STYLES ========== */
+  .ai-check-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, rgba(123,92,245,0.15), rgba(79,142,247,0.15));
+    color: #a78bfa;
+    border: 1px solid rgba(123,92,245,0.4);
+    padding: 8px 13px;
     border-radius: var(--rsm);
-    padding: 12px 16px;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 10px;
+    width: auto;
+    white-space: nowrap;
+  }
+  .ai-check-btn:hover {
+    background: linear-gradient(135deg, rgba(123,92,245,0.35), rgba(79,142,247,0.25));
+    border-color: rgba(123,92,245,0.7);
+    color: #c4b5fd;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(123,92,245,0.25);
+  }
+  .ai-check-btn svg { flex-shrink: 0; }
+
+  /* AI Checker Modal */
+  .ai-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: flex-end;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.15s ease;
+  }
+
+  @media (min-height: 600px) {
+    .ai-modal-overlay { align-items: center; }
+  }
+
+  .ai-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px 32px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 -20px 60px rgba(0,0,0,0.6);
+    animation: slideUpModal 0.25s ease;
+    position: relative;
+  }
+
+  @media (min-height: 600px) {
+    .ai-modal {
+      border-radius: 20px;
+      max-height: 88vh;
+      margin: 16px;
+    }
+  }
+
+  @keyframes slideUpModal {
+    from { opacity:0; transform:translateY(30px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  .ai-modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .ai-modal-title {
+    font-size: 17px; font-weight: 800; color: var(--white);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ai-modal-title span {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .ai-modal-close {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--muted); width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; padding: 0; flex-shrink: 0; font-size: 20px;
+    line-height: 1; font-family: Arial, sans-serif; font-weight: 300;
+    transition: all 0.15s;
+  }
+  .ai-modal-close:hover { background: var(--red); color: #fff; border-color: var(--red); }
+
+  .ai-modal-hw-name {
+    font-size: 12px; color: var(--accent2); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px;
+    background: rgba(123,92,245,0.1); border: 1px solid rgba(123,92,245,0.2);
+    padding: 5px 12px; border-radius: 20px; display: inline-block;
+  }
+
+  .ai-textarea-wrap { position: relative; margin-bottom: 14px; }
+  .ai-textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--rsm);
+    padding: 14px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    outline: none;
+    resize: vertical;
+    min-height: 160px;
+    line-height: 1.7;
+    transition: border-color 0.2s;
+  }
+  .ai-textarea:focus { border-color: var(--accent2); }
+  .ai-textarea::placeholder { color: var(--muted); }
+
+  .ai-char-count {
+    font-size: 11px; color: var(--muted); text-align: right;
+    margin-top: 4px; font-family: 'Space Mono', monospace;
+  }
+
+  .ai-submit-btn {
+    width: 100%; background: linear-gradient(135deg, var(--accent2), #6d4fe5);
+    color: #fff; border: none; border-radius: var(--rsm);
+    padding: 13px 20px; font-family: inherit; font-weight: 700;
+    font-size: 15px; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 4px 16px rgba(123,92,245,0.3);
+  }
+  .ai-submit-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(123,92,245,0.45); }
+  .ai-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  /* AI Result */
+  .ai-result {
+    margin-top: 20px;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .ai-scores-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .ai-score-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--rsm);
+    padding: 12px 14px;
     text-align: center;
+    position: relative;
+    overflow: hidden;
   }
-  .warning-banner {
-    background: rgba(245,166,35,0.12);
-    border: 1px solid rgba(245,166,35,0.4);
-    color: var(--amber);
+  .ai-score-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
   }
-  .blocked-banner {
-    background: rgba(247,85,106,0.1);
-    border: 1px solid rgba(247,85,106,0.35);
-    color: var(--red);
+  .ai-score-card.ta::before { background: var(--accent); }
+  .ai-score-card.cc::before { background: var(--green); }
+  .ai-score-card.lr::before { background: var(--amber); }
+  .ai-score-card.gra::before { background: var(--accent2); }
+
+  .ai-score-label {
+    font-size: 10px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
   }
+  .ai-score-num {
+    font-size: 28px; font-weight: 800; font-family: 'Space Mono', monospace;
+    line-height: 1;
+  }
+  .ai-score-card.ta .ai-score-num { color: var(--accent); }
+  .ai-score-card.cc .ai-score-num { color: var(--green); }
+  .ai-score-card.lr .ai-score-num { color: var(--amber); }
+  .ai-score-card.gra .ai-score-num { color: var(--accent2); }
+
+  .ai-overall-band {
+    background: linear-gradient(135deg, rgba(123,92,245,0.15), rgba(79,142,247,0.1));
+    border: 1px solid rgba(123,92,245,0.35);
+    border-radius: var(--rsm);
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .ai-overall-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .ai-overall-num {
+    font-size: 48px; font-weight: 800; font-family: 'Space Mono', monospace;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    line-height: 1;
+  }
+  .ai-overall-desc { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  .ai-feedback-section { margin-bottom: 16px; }
+  .ai-feedback-title {
+    font-size: 13px; font-weight: 700; color: var(--white);
+    margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+  }
+  .ai-feedback-body {
+    font-size: 13px; color: var(--muted); line-height: 1.7;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--rsm); padding: 12px 14px;
+  }
+  .ai-feedback-body ul { padding-left: 18px; }
+  .ai-feedback-body li { margin-bottom: 5px; }
+  .ai-feedback-body strong { color: var(--text); }
+
+  .ai-error-box {
+    background: rgba(247,85,106,0.08); border: 1px solid rgba(247,85,106,0.25);
+    border-radius: var(--rsm); padding: 14px; color: var(--red);
+    font-size: 13px; margin-top: 14px; text-align: center;
+  }
+
+  .ai-loading {
+    text-align: center; padding: 30px 20px; color: var(--muted); font-size: 13px;
+  }
+  .ai-loading-dots {
+    display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 14px;
+  }
+  .ai-loading-dots span {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent2); animation: dotPulse 1.2s infinite ease-in-out;
+  }
+  .ai-loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .ai-loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dotPulse { 0%,80%,100% { transform: scale(0.6); opacity:0.4; } 40% { transform: scale(1); opacity:1; } }
 </style>
 </head>
 
@@ -657,7 +724,6 @@
   </div>
 </header>
 
-<!-- NOTIFICATION PANEL -->
 <div id="notifPanel" style="display:none;">
   <div id="notifPanelHeader">
     <span style="font-weight:700;font-size:15px;color:var(--white);">Notifications</span>
@@ -724,6 +790,40 @@
   </div>
 </div>
 
+<!-- AI CHECKER MODAL -->
+<div id="aiCheckerModal" style="display:none;">
+  <div class="ai-modal-overlay" onclick="closeAiChecker(event)">
+    <div class="ai-modal" id="aiModalInner">
+      <div class="ai-modal-header">
+        <div class="ai-modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 8v4l3 3"/></svg>
+          <span>AI Essay Checker</span>
+        </div>
+        <button class="ai-modal-close" onclick="closeAiChecker()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+        </button>
+      </div>
+      <div id="aiHwNameBadge" class="ai-modal-hw-name"></div>
+      <div id="aiCheckerBody">
+        <div class="ai-textarea-wrap">
+          <textarea
+            class="ai-textarea"
+            id="aiEssayText"
+            placeholder="Paste your essay or writing here…"
+            oninput="updateCharCount()"
+          ></textarea>
+        </div>
+        <div class="ai-char-count" id="aiCharCount">0 words</div>
+        <button class="ai-submit-btn" id="aiSubmitBtn" onclick="runAiCheck()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Check my writing
+        </button>
+        <div id="aiResultArea"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ================= FIREBASE ================= */
 firebase.initializeApp({
@@ -738,28 +838,15 @@ const storage = firebase.storage();
 
 (function detectWebView(){
   const ua = navigator.userAgent.toLowerCase();
-  const isWebView =
-    ua.includes("wv") ||
-    ua.includes("telegram") ||
-    ua.includes("instagram") ||
-    (ua.includes("android") && !ua.includes("chrome"));
-  if (isWebView) {
-    const bar = document.getElementById("webviewWarning");
-    if (bar) bar.style.display = "block";
-  }
+  const isWebView = ua.includes("wv") || ua.includes("telegram") || ua.includes("instagram") || (ua.includes("android") && !ua.includes("chrome"));
+  if(isWebView){ const bar = document.getElementById("webviewWarning"); if(bar) bar.style.display = "block"; }
 })();
 
 /* ================= NAV STATE ================= */
 const NAV_KEY = "statista_nav_v1";
-function setNav(view, payload){
-  try{ localStorage.setItem(NAV_KEY, JSON.stringify({ view, payload, t: Date.now() })); }catch(e){}
-}
-function getNav(){
-  try{ const raw = localStorage.getItem(NAV_KEY); return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
-}
-function clearNav(){
-  try{ localStorage.removeItem(NAV_KEY); }catch(e){}
-}
+function setNav(view, payload){ try{ localStorage.setItem(NAV_KEY, JSON.stringify({ view, payload, t: Date.now() })); }catch(e){} }
+function getNav(){ try{ const raw = localStorage.getItem(NAV_KEY); return raw ? JSON.parse(raw) : null; }catch(e){ return null; } }
+function clearNav(){ try{ localStorage.removeItem(NAV_KEY); }catch(e){} }
 function restoreNavOrHome(){
   const nav = getNav();
   if(!nav || !nav.view){ home(); return; }
@@ -781,50 +868,14 @@ function restoreNavOrHome(){
 
 /* ================= GROUPS ================= */
 const GROUPS = {
-  "GROUP IELTS 9:00 M/W/F":[
-    "HOSHIMOVA NILUFAR","JURAYEVA AZIZA","MAHMUDOV SUNNAT","MUHIDDINOVA MAHBUBA",
-    "NORBOYEV SHOHJAXON","OCHILOV LOCHINBEK","ORALOVA SHOHINUR",
-    "RAVSHANOVA ZAYNAB","TOSHPULATOV ABBOS"
-  ],
-  "GROUP IELTS 17:00 MWF":[
-    "ABDURAHIMOVA ZILOLA","ALIMOV BEHRUZ","ANVAROVA RUXSHONA","ASADOV SARDOR",
-    "BAXRONOVA FAYRUZA","GAFURJONOV ULUGBEK","ISMOILOV ISMOIL",
-    "JULIBOYEVA ZEBO","KOZIMJONOVA DURDONA","MELIKUZIYEVA RUXSHONA",
-    "NIGMATOV ABDURAHIM","RAHMATULLAYEV BEXRUZ","TALABOV SAUD",
-    "XISLATULLAYEV JAVOXIR","XODJAYEVA LAZIZA","YORMATOV MIRABROR"
-  ],
-  "GROUP IELTS M/W/F 14:00":[
-    "RASHIDJANOVA FARANGIZ","RUZIYEVA GAVHAR","YADGARALIYEVA GULHAYO",
-    "MUHAMMADIYEVA SEVINCH","KHUDOYBERDIYEVA LAZIZA","ODIL RAZZOQOV","SOBIRJONOVA FOTIMA"
-  ],
-  "GROUP IELTS T/T/S 9:00":[
-    "ZARINA FAYZULLAEVA","MURODOVA NOZIMA","AZIZA ERKINOVA","NURIDDIN QOCHQOROV",
-    "QIDIRALIEVA JAYNA","HAMROYEVA NIGORA","QILICHOVA GULISTON"
-  ],
-  "GROUP IELTS 10:30 TTS":[
-    "ADXAMOVA MUBINA","BAXTIYOROVA NILUFAR",
-    "ISAMATOVA LAYLO","NOSIROVA LAZIZA"
-  ],
-  "GROUP IELTS T/T/S 14:00":[
-    "ABDUAZIZOVA HABIBA","ABDUJABBOROVA LOLA","ABDUVALIYEVA OMINA",
-    "ALISHEROV NURMUHAMMAD","DJURAYEVA NURGUL","ISLOMBEKOVA EZOZA",
-    "ISMAILOVA EZOZA","JORABEKOV AFZALBEK","MAHMUDJONOV FAYZULLOH",
-    "MIRAHMEDOVA MUSLIMA","OLIMJONOVA DILNURA","TOJIBOYEV MUXAMMAD",
-    "UROLOV SIROJ","XUDOYBERDIYEV QOSIMBEK","SHODIYEVA ROBIYA","ABDULXAMIDOV DILYORBEK",
-    "KAYUMXODJAYEVA JASMINA","MIRSIDIQOV MIRABROR"
-  ],
-  "GROUP IELTS 15:30 TTS":[
-    "FAYZULLAYEVA HILOLA","MUSTAFOYEVA SEVINCH","SOBIRJONOVA DURDONA",
-    "MIRVALIEVA XADICHA","ABDURAHMONOVA EZOZA","QODIRJANOVA RUSHANA","AMETOV UMIRBEK","SULTANBEKOVA LAZIZA",
-    "MIRFOTIHOVA HADICHA","ZOHIDOV ASILBEK","TOXIROV AYUBHON","SHAVKATOV HUSAN","MELIKUZIEVA FARZONA",
-    "SULTONOVA MUSLIMA","ABDUGANIEVA MOXINUR","SHAVKATOV KHASAN","URALOVA MUXLISA","TOSHXOJAYEV ISROILXOJA",
-    "AXMADJONOV DONIYOR","XASANOV JAHONGIR","UMARALIYEV OYATILLO","ESHMUHAMMEDOV SAIDAHROR"
-  ],
-  "GROUP IELTS T/T/S 18:30":[
-    "GANIJONOV AZIZBEK","HAMIDJONOV ABDULMALIK","IBROHIMOV JASURBEK","OLIMJONOV ABDUGAFFOR","RAXMATULAYEVA ROZITYA",
-    "SHOKIROV ABDURAZZOQ","ULMASOV DALER","ZAHRIDDINOV FAZLIDDIN","MIRZABOYEVA ROZYA","XUSHNAZAROV TEMUR",
-    "DAYNOVOVA ZEBINISO","JURAYEV KAMRON","TIMUR ABDUSADIKOV","SALOHIDDINOV BUNYOD","GANISHEROVA ZARIFA"
-  ]
+  "GROUP IELTS 9:00 M/W/F":["HOSHIMOVA NILUFAR","JURAYEVA AZIZA","MAHMUDOV SUNNAT","MUHIDDINOVA MAHBUBA","NORBOYEV SHOHJAXON","OCHILOV LOCHINBEK","ORALOVA SHOHINUR","RAVSHANOVA ZAYNAB","TOSHPULATOV ABBOS"],
+  "GROUP IELTS 17:00 MWF":["ABDURAHIMOVA ZILOLA","ALIMOV BEHRUZ","ANVAROVA RUXSHONA","ASADOV SARDOR","BAXRONOVA FAYRUZA","GAFURJONOV ULUGBEK","ISMOILOV ISMOIL","JULIBOYEVA ZEBO","KOZIMJONOVA DURDONA","MELIKUZIYEVA RUXSHONA","NIGMATOV ABDURAHIM","RAHMATULLAYEV BEXRUZ","TALABOV SAUD","XISLATULLAYEV JAVOXIR","XODJAYEVA LAZIZA","YORMATOV MIRABROR"],
+  "GROUP IELTS M/W/F 14:00":["RASHIDJANOVA FARANGIZ","RUZIYEVA GAVHAR","YADGARALIYEVA GULHAYO","MUHAMMADIYEVA SEVINCH","KHUDOYBERDIYEVA LAZIZA","ODIL RAZZOQOV","SOBIRJONOVA FOTIMA"],
+  "GROUP IELTS T/T/S 9:00":["ZARINA FAYZULLAEVA","MURODOVA NOZIMA","AZIZA ERKINOVA","NURIDDIN QOCHQOROV","QIDIRALIEVA JAYNA","HAMROYEVA NIGORA","QILICHOVA GULISTON"],
+  "GROUP IELTS 10:30 TTS":["ADXAMOVA MUBINA","BAXTIYOROVA NILUFAR","ISAMATOVA LAYLO","NOSIROVA LAZIZA"],
+  "GROUP IELTS T/T/S 14:00":["ABDUAZIZOVA HABIBA","ABDUJABBOROVA LOLA","ABDUVALIYEVA OMINA","ALISHEROV NURMUHAMMAD","DJURAYEVA NURGUL","ISLOMBEKOVA EZOZA","ISMAILOVA EZOZA","JORABEKOV AFZALBEK","MAHMUDJONOV FAYZULLOH","MIRAHMEDOVA MUSLIMA","OLIMJONOVA DILNURA","TOJIBOYEV MUXAMMAD","UROLOV SIROJ","XUDOYBERDIYEV QOSIMBEK","SHODIYEVA ROBIYA","ABDULXAMIDOV DILYORBEK","KAYUMXODJAYEVA JASMINA","MIRSIDIQOV MIRABROR"],
+  "GROUP IELTS 15:30 TTS":["FAYZULLAYEVA HILOLA","MUSTAFOYEVA SEVINCH","SOBIRJONOVA DURDONA","MIRVALIEVA XADICHA","ABDURAHMONOVA EZOZA","QODIRJANOVA RUSHANA","AMETOV UMIRBEK","SULTANBEKOVA LAZIZA","MIRFOTIHOVA HADICHA","ZOHIDOV ASILBEK","TOXIROV AYUBHON","SHAVKATOV HUSAN","MELIKUZIEVA FARZONA","SULTONOVA MUSLIMA","ABDUGANIEVA MOXINUR","SHAVKATOV KHASAN","URALOVA MUXLISA","TOSHXOJAYEV ISROILXOJA","AXMADJONOV DONIYOR","XASANOV JAHONGIR","UMARALIYEV OYATILLO","ESHMUHAMMEDOV SAIDAHROR"],
+  "GROUP IELTS T/T/S 18:30":["GANIJONOV AZIZBEK","HAMIDJONOV ABDULMALIK","IBROHIMOV JASURBEK","OLIMJONOV ABDUGAFFOR","RAXMATULAYEVA ROZITYA","SHOKIROV ABDURAZZOQ","ULMASOV DALER","ZAHRIDDINOV FAZLIDDIN","MIRZABOYEVA ROZYA","XUSHNAZAROV TEMUR","DAYNOVOVA ZEBINISO","JURAYEV KAMRON","TIMUR ABDUSADIKOV","SALOHIDDINOV BUNYOD","GANISHEROVA ZARIFA"]
 };
 
 /* ================= STAGES ================= */
@@ -903,6 +954,245 @@ const STAGES = {
   }
 };
 
+/* ================= AI CHECKER ================= */
+function isWritingTask(hwName) {
+  const name = hwName.toLowerCase();
+  return (
+    name.includes("writing task 1") ||
+    name.includes("writing task 2") ||
+    name.includes("writing report") ||
+    name.includes("task 1") ||
+    name.includes("task 2") ||
+    name.includes("essay") ||
+    name.includes("report")
+  );
+}
+
+function openAiCheckerById(hwId) {
+  const hwName = window['_hw_' + hwId] || hwId;
+  openAiChecker(hwName);
+}
+
+function openAiChecker(hwName) {
+  document.getElementById("aiHwNameBadge").textContent = hwName;
+  document.getElementById("aiEssayText").value = "";
+  document.getElementById("aiResultArea").innerHTML = "";
+  document.getElementById("aiCharCount").textContent = "0 words";
+  document.getElementById("aiSubmitBtn").disabled = false;
+  document.getElementById("aiCheckerModal").style.display = "block";
+  setTimeout(() => document.getElementById("aiEssayText").focus(), 200);
+}
+
+function closeAiChecker(event) {
+  if (event && event.target !== document.querySelector(".ai-modal-overlay")) return;
+  document.getElementById("aiCheckerModal").style.display = "none";
+}
+
+function updateCharCount() {
+  const text = document.getElementById("aiEssayText").value.trim();
+  const words = text ? text.split(/\s+/).filter(w => w.length > 0).length : 0;
+  document.getElementById("aiCharCount").textContent = words + " word" + (words !== 1 ? "s" : "");
+}
+
+function getTaskType(hwName) {
+  const name = hwName.toLowerCase();
+  if (name.includes("task 2") || name.includes("essay")) return "task2";
+  return "task1";
+}
+
+async function runAiCheck() {
+  const essayText = document.getElementById("aiEssayText").value.trim();
+  const hwName = document.getElementById("aiHwNameBadge").textContent;
+
+  if (!essayText || essayText.split(/\s+/).length < 10) {
+    document.getElementById("aiResultArea").innerHTML = `
+      <div class="ai-error-box">Please paste at least 10 words of your writing to check.</div>`;
+    return;
+  }
+
+  const taskType = getTaskType(hwName);
+  const taskLabel = taskType === "task2" ? "IELTS Writing Task 2 (essay)" : "IELTS Writing Task 1 (report/graph description)";
+
+  document.getElementById("aiSubmitBtn").disabled = true;
+  document.getElementById("aiResultArea").innerHTML = `
+    <div class="ai-loading">
+      <div class="ai-loading-dots">
+        <span></span><span></span><span></span>
+      </div>
+      Analysing your writing…
+    </div>`;
+
+  const systemPrompt = `You are an expert IELTS examiner and English writing coach. Analyse the student's ${taskLabel} in detail, like Grammarly + IELTS examiner combined. Respond ONLY with a valid JSON object — no markdown, no backticks, no extra text before or after.
+
+JSON format (all fields required):
+{
+  "overall": 6.5,
+  "ta": 6.5,
+  "cc": 6.0,
+  "lr": 7.0,
+  "gra": 6.5,
+  "summary": "2-3 sentence overall summary of the writing quality.",
+  "strengths": ["strength 1", "strength 2", "strength 3"],
+  "improvements": ["specific actionable improvement 1", "specific actionable improvement 2", "specific actionable improvement 3"],
+  "grammar_errors": [
+    "ERROR: [quote exact wrong phrase] → FIX: [corrected version] — REASON: [brief explanation]",
+    "ERROR: [quote exact wrong phrase] → FIX: [corrected version] — REASON: [brief explanation]"
+  ],
+  "vocabulary_tips": [
+    "WEAK: [word/phrase used] → BETTER: [stronger alternative] — WHY: [explanation]",
+    "WEAK: [word/phrase used] → BETTER: [stronger alternative] — WHY: [explanation]"
+  ],
+  "sentence_structure": ["tip about sentence variety", "tip about sentence length"],
+  "band_description": "One sentence describing what this band score means for IELTS."
+}
+
+IELTS scoring criteria:
+- TA: Task Achievement — did they fully answer the task, cover all bullet points, meet word count?
+- CC: Coherence & Cohesion — logical flow, paragraphing, linking words, topic sentences
+- LR: Lexical Resource — vocabulary range, collocations, avoiding repetition, precision
+- GRA: Grammatical Range & Accuracy — tense accuracy, complex sentences, punctuation, articles
+- overall: average of the four scores, rounded to nearest 0.5
+
+Valid IELTS bands only: 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0
+Be honest and specific. Quote actual text from the student when pointing out errors.`;
+
+  try {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer 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"
+      },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        max_tokens: 1200,
+        temperature: 0.3,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: essayText }
+        ]
+      })
+    });
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData.error?.message || "API error: " + response.status);
+    }
+
+    const data = await response.json();
+    let raw = data.choices[0].message.content.trim();
+    raw = raw.replace(/```json|```/g, "").trim();
+    const result = JSON.parse(raw);
+
+    renderAiResult(result);
+  } catch (err) {
+    document.getElementById("aiResultArea").innerHTML = `
+      <div class="ai-error-box">
+        Something went wrong. Please try again.<br>
+        <span style="font-size:11px;opacity:0.7;">${err.message || err}</span>
+      </div>`;
+  } finally {
+    document.getElementById("aiSubmitBtn").disabled = false;
+  }
+}
+
+function bandColor(score) {
+  if (score >= 7.5) return "var(--green)";
+  if (score >= 6.5) return "var(--accent)";
+  if (score >= 5.5) return "var(--amber)";
+  return "var(--red)";
+}
+
+function renderAiResult(r) {
+  const strengthsHtml = (r.strengths || []).map(s => `<li>${s}</li>`).join("");
+  const improvementsHtml = (r.improvements || []).map(s => `<li>${s}</li>`).join("");
+  const errorsHtml = (r.grammar_errors || []).map(s => `<li style="margin-bottom:8px;">${s}</li>`).join("");
+  const vocabHtml = (r.vocabulary_tips || []).map(s => `<li style="margin-bottom:8px;">${s}</li>`).join("");
+  const sentenceHtml = (r.sentence_structure || []).map(s => `<li>${s}</li>`).join("");
+
+  document.getElementById("aiResultArea").innerHTML = `
+    <div class="ai-result">
+      <div class="ai-overall-band">
+        <div class="ai-overall-label">Estimated IELTS Band</div>
+        <div class="ai-overall-num">${r.overall}</div>
+        <div class="ai-overall-desc">${r.band_description || ""}</div>
+      </div>
+
+      <div class="ai-scores-grid">
+        <div class="ai-score-card ta">
+          <div class="ai-score-label">Task Achievement</div>
+          <div class="ai-score-num">${r.ta}</div>
+        </div>
+        <div class="ai-score-card cc">
+          <div class="ai-score-label">Coherence & Cohesion</div>
+          <div class="ai-score-num">${r.cc}</div>
+        </div>
+        <div class="ai-score-card lr">
+          <div class="ai-score-label">Lexical Resource</div>
+          <div class="ai-score-num">${r.lr}</div>
+        </div>
+        <div class="ai-score-card gra">
+          <div class="ai-score-label">Grammar & Accuracy</div>
+          <div class="ai-score-num">${r.gra}</div>
+        </div>
+      </div>
+
+      <div class="ai-feedback-section">
+        <div class="ai-feedback-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          Summary
+        </div>
+        <div class="ai-feedback-body">${r.summary || ""}</div>
+      </div>
+
+      ${strengthsHtml ? `
+      <div class="ai-feedback-section">
+        <div class="ai-feedback-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Strengths
+        </div>
+        <div class="ai-feedback-body"><ul>${strengthsHtml}</ul></div>
+      </div>` : ""}
+
+      ${improvementsHtml ? `
+      <div class="ai-feedback-section">
+        <div class="ai-feedback-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Areas to Improve
+        </div>
+        <div class="ai-feedback-body"><ul>${improvementsHtml}</ul></div>
+      </div>` : ""}
+
+      ${errorsHtml ? `
+      <div class="ai-feedback-section">
+        <div class="ai-feedback-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          Grammar Errors Found
+        </div>
+        <div class="ai-feedback-body"><ul>${errorsHtml}</ul></div>
+      </div>` : ""}
+
+      ${vocabHtml ? `
+      <div class="ai-feedback-section">
+        <div class="ai-feedback-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Vocabulary Tips
+        </div>
+        <div class="ai-feedback-body"><ul>${vocabHtml}</ul></div>
+      </div>` : ""}
+
+      ${sentenceHtml ? `
+      <div class="ai-feedback-section">
+        <div class="ai-feedback-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><line x1="21" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="13" y2="18"/></svg>
+          Sentence Structure Tips
+        </div>
+        <div class="ai-feedback-body"><ul>${sentenceHtml}</ul></div>
+      </div>` : ""}
+    </div>
+  `;
+}
+
 /* ================= APP ================= */
 const app = document.getElementById("app");
 
@@ -941,6 +1231,11 @@ function openInstruction(){
     </div>
     <div class="step-card">
       <div class="step-num">5</div>
+      <div class="step-title">Check Writing with AI</div>
+      <div class="step-body">For <b>Task 1 and Task 2</b> writing homework, tap the <b style="color:#a78bfa;">✦ Check with AI</b> button to get instant IELTS feedback on grammar, vocabulary, and band score.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">6</div>
       <div class="step-title">Confirm Submission</div>
       <div class="step-body">After submitting, check that the status shows <span class="green" style="vertical-align:middle;font-size:12px">Submitted</span>.</div>
     </div>
@@ -991,13 +1286,12 @@ function selectStudent(group){
 
 function showStages(group, student){
   setNav("showStages", { group, student });
-  const icons = ["01","02","03","04","05","06"];
   let h = `
     <button class="back" onclick="selectStudent('${group}')">← Back</button>
     <div class="bc"><span>${group}</span> › <b>${student}</b></div>
     <h3>Select Stage</h3>
   `;
-  Object.keys(STAGES).forEach((stage, i) => {
+  Object.keys(STAGES).forEach((stage) => {
     h += `<div class="card"><button class="primary" onclick="showLessons('${group}','${student}','${stage}')">${stage}</button></div>`;
   });
   app.innerHTML = h;
@@ -1020,9 +1314,7 @@ async function showHomework(group, student, stage, lesson){
   setNav("showHomework", { group, student, stage, lesson });
   app.innerHTML = `<div class="loading">Loading…</div>`;
 
-  const lessonSnap = await db
-    .ref(`submissions/${group}/${student}/${stage}/${lesson}`)
-    .once("value");
+  const lessonSnap = await db.ref(`submissions/${group}/${student}/${stage}/${lesson}`).once("value");
   const lessonData = lessonSnap.val() || {};
 
   let h = `
@@ -1034,33 +1326,37 @@ async function showHomework(group, student, stage, lesson){
   for (const hw of STAGES[stage][lesson]) {
     const d = lessonData[hw];
     const submitted = d && Array.isArray(d.files) && d.files.length > 0;
-    h += `
-      <div class="card hw">
-        <b>${hw}</b>
-        <span class="${submitted ? 'green' : 'red'}">${submitted ? 'Submitted' : 'Not submitted'}</span><br>
-        ${submitted ? d.files.map(url => `<a href="${url}" target="_blank"><img src="${url}" /></a>`).join("") : ''}
-        <br>
-        <label class="primary">
-          Submit photo (max 4)
-          <input type="file" accept="image/*" multiple
-            onchange="submitHW(this,'${group}','${student}','${stage}','${lesson}','${hw}')">
-        </label>
-        ${submitted ? `
-          <label class="danger" style="margin-left:8px;">
-            Replace photos
-            <input type="file" accept="image/*" multiple
-              onchange="replaceHW(this,'${group}','${student}','${stage}','${lesson}','${hw}')">
-          </label>
-        ` : ''}
-      </div>
-    `;
+    const hwId = hw.replace(/[^a-zA-Z0-9]/g, "_");
+    const showAiBtn = isWritingTask(hw);
+
+    let cardHtml = '<div class="card hw"><b>' + hw + '</b>';
+    cardHtml += '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">';
+    cardHtml += submitted ? '<span class="green">Submitted</span>' : '<span class="red">Not submitted</span>';
+    if (showAiBtn) {
+      cardHtml += '<button class="ai-check-btn" onclick="openAiCheckerById('' + hwId + '')">'
+        + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>'
+        + ' Check with AI</button>';
+      window['_hw_' + hwId] = hw;
+    }
+    cardHtml += '</div>';
+    if (submitted) {
+      cardHtml += d.files.map(url => '<a href="' + url + '" target="_blank"><img src="' + url + '" /></a>').join('');
+    }
+    cardHtml += '<br><label class="primary">Submit photo (max 4)'
+      + '<input type="file" accept="image/*" multiple onchange="submitHW(this,'' + group + '','' + student + '','' + stage + '','' + lesson + '','' + hw.replace(/'/g,"\'") + '')">'
+      + '</label>';
+    if (submitted) {
+      cardHtml += '<label class="danger" style="margin-left:8px;">Replace photos'
+        + '<input type="file" accept="image/*" multiple onchange="replaceHW(this,'' + group + '','' + student + '','' + stage + '','' + lesson + '','' + hw.replace(/'/g,"\'") + '')">'
+        + '</label>';
+    }
+    cardHtml += '</div>';
+    h += cardHtml;
   }
   app.innerHTML = h;
 }
 
-function safe(v){
-  return String(v).replace(/[^a-zA-Z0-9_-]/g, "_");
-}
+function safe(v){ return String(v).replace(/[^a-zA-Z0-9_-]/g, "_"); }
 
 async function compressImage(file, maxW=1280, quality=0.75){
   const img = document.createElement("img");
@@ -1081,64 +1377,47 @@ async function compressImage(file, maxW=1280, quality=0.75){
 
 async function deleteFilesByUrls(urls){
   if(!urls || !Array.isArray(urls) || urls.length === 0) return;
-  for(const url of urls){
-    try{ const ref = storage.refFromURL(url); await ref.delete(); }catch(e){}
-  }
+  for(const url of urls){ try{ const ref = storage.refFromURL(url); await ref.delete(); }catch(e){} }
 }
 
 async function submitHW(input, group, student, stage, lesson, hw) {
   const files = Array.from(input.files || []);
   if (files.length === 0) { alert("At least one photo is required."); return; }
   if (files.length > 4) { alert("Max 4 photos allowed."); input.value = ""; return; }
-
   let uploadedUrls = [];
   for (const file of files) {
     const filePath = `submissions/${safe(group)}/${safe(student)}/${safe(stage)}/${safe(lesson)}/${safe(hw)}/${Date.now()}_${safe(file.name)}`;
     const ref = storage.ref(filePath);
     const small = await compressImage(file);
-    try {
-      await ref.put(small);
-      const url = await ref.getDownloadURL();
-      uploadedUrls.push(url);
-    } catch(e) {
-      alert("Upload failed: " + (e.message || e));
-      input.value = ""; return;
-    }
+    try { await ref.put(small); const url = await ref.getDownloadURL(); uploadedUrls.push(url); }
+    catch(e) { alert("Upload failed: " + (e.message || e)); input.value = ""; return; }
   }
   await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).set({ files: uploadedUrls, time: Date.now() });
   input.value = "";
   await showHomework(group, student, stage, lesson);
-  alert("Submitted successfully ");
+  alert("Submitted successfully ✓");
 }
 
 async function replaceHW(input, group, student, stage, lesson, hw) {
   const files = Array.from(input.files || []);
   if (files.length === 0) { alert("At least one photo is required."); return; }
   if (files.length > 4) { alert("Max 4 photos allowed."); input.value = ""; return; }
-
   const snap = await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).once("value");
   const old = snap.val();
   const oldUrls = old && Array.isArray(old.files) ? old.files : [];
   await deleteFilesByUrls(oldUrls);
-
   let uploadedUrls = [];
   for (const file of files) {
     const filePath = `submissions/${safe(group)}/${safe(student)}/${safe(stage)}/${safe(lesson)}/${safe(hw)}/${Date.now()}_${safe(file.name)}`;
     const ref = storage.ref(filePath);
     const small = await compressImage(file);
-    try {
-      await ref.put(small);
-      const url = await ref.getDownloadURL();
-      uploadedUrls.push(url);
-    } catch(e) {
-      alert("Upload failed: " + (e.message || e));
-      input.value = ""; return;
-    }
+    try { await ref.put(small); const url = await ref.getDownloadURL(); uploadedUrls.push(url); }
+    catch(e) { alert("Upload failed: " + (e.message || e)); input.value = ""; return; }
   }
   await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).set({ files: uploadedUrls, time: Date.now() });
   input.value = "";
   await showHomework(group, student, stage, lesson);
-  alert("Replaced successfully ");
+  alert("Replaced successfully ✓");
 }
 
 function login(){
@@ -1183,13 +1462,10 @@ function closeNewGroupModal(e){
 function submitNewGroup(){
   const name = document.getElementById("newGroupName").value.trim();
   const raw  = document.getElementById("newGroupStudents").value.trim();
-
   if(!name){ document.getElementById("newGroupError").textContent = "Group name is required."; return; }
   if(GROUPS[name]){ document.getElementById("newGroupError").textContent = "A group with this name already exists."; return; }
   if(!raw){ document.getElementById("newGroupError").textContent = "Add at least one student."; return; }
-
   const students = raw.split("\n").map(s => s.trim().toUpperCase()).filter(s => s.length > 0);
-
   GROUPS[name] = students;
   document.getElementById("newGroupModal").style.display = "none";
   admin();
@@ -1259,14 +1535,12 @@ function adminStageSelect(group, stage){
 async function adminLessonView(group, stage, lesson){
   setNav("adminLessonView", { group, stage, lesson });
   app.innerHTML = `<div class="loading">Loading results…</div>`;
-
   let h = `
     <button class="back" onclick="adminStageSelect('${group}','${stage}')">← Back</button>
     <div class="bc"><span>${group}</span> › <span>${stage}</span> › <b>${lesson}</b></div>
     <h3>${lesson} — Results</h3>
     <button class="export-btn" onclick="exportLessonCSV('${group}','${stage}','${lesson}')">Export to CSV</button>
   `;
-
   for (const student of GROUPS[group]) {
     h += `<div class="admin-student-card"><div class="admin-student-name">${student}</div>`;
     for (const hw of STAGES[stage][lesson]) {
@@ -1309,21 +1583,14 @@ async function exportLessonCSV(group, stage, lesson){
   const blob = new Blob([csv.join("\n")], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url;
-  a.download = `${group} - ${stage} - ${lesson}.csv`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  a.href = url; a.download = `${group} - ${stage} - ${lesson}.csv`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 restoreNavOrHome();
 
-/* ========================================================
-   SCHEDULE — lesson start times per group (24h format)
-   Edit these to match your real timetable.
-   days: 1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat,0=Sun
-======================================================== */
+/* ========== SCHEDULE ========== */
 const SCHEDULE = {
   "GROUP IELTS 9:00 M/W/F":    { days:[1,3,5], hour:9,  minute:0  },
   "GROUP IELTS 17:00 MWF":     { days:[1,3,5], hour:17, minute:0  },
@@ -1335,55 +1602,36 @@ const SCHEDULE = {
   "GROUP IELTS T/T/S 18:30":   { days:[2,4,6], hour:18, minute:30 }
 };
 
-/* Returns minutes until next lesson for a group.
-   Negative = lesson already started (within same day window of 90 min).
-   null = no schedule found. */
 function minutesUntilLesson(group){
-  const s = SCHEDULE[group];
-  if(!s) return null;
-  const now = new Date();
-  const day = now.getDay();
+  const s = SCHEDULE[group]; if(!s) return null;
+  const now = new Date(); const day = now.getDay();
   const nowMins = now.getHours() * 60 + now.getMinutes();
   const lessonMins = s.hour * 60 + s.minute;
-
-  if(s.days.includes(day)){
-    return lessonMins - nowMins; // positive = upcoming, negative = started
-  }
-  return null; // not a lesson day
+  if(s.days.includes(day)) return lessonMins - nowMins;
+  return null;
 }
 
-/* Is submission currently BLOCKED for this group?
-   Blocked if lesson started less than 90 minutes ago. */
 function isSubmissionBlocked(group){
   const mins = minutesUntilLesson(group);
   if(mins === null) return false;
-  return mins <= 0 && mins >= -90; // lesson started, within 90-min window
+  return mins <= 0 && mins >= -90;
 }
 
-/* ── PATCH showHomework to show warning + block inputs ── */
 const _origShowHomework = showHomework;
 showHomework = async function(group, student, stage, lesson){
   await _origShowHomework(group, student, stage, lesson);
-
   const mins = minutesUntilLesson(group);
   const blocked = isSubmissionBlocked(group);
-
-  // inject banner
   const container = document.getElementById("app");
   if(!container) return;
-
   if(blocked){
     const banner = document.createElement("div");
     banner.className = "schedule-banner blocked-banner";
     banner.textContent = "Lesson has started — homework submission is now closed.";
     container.insertBefore(banner, container.children[2] || container.firstChild);
-
-    // disable all file inputs
     container.querySelectorAll("input[type=file]").forEach(inp => inp.disabled = true);
     container.querySelectorAll("label.primary, label.danger").forEach(lbl => {
-      lbl.style.opacity = "0.35";
-      lbl.style.pointerEvents = "none";
-      lbl.style.cursor = "not-allowed";
+      lbl.style.opacity = "0.35"; lbl.style.pointerEvents = "none"; lbl.style.cursor = "not-allowed";
     });
   } else if(mins !== null && mins > 0 && mins <= 30){
     const banner = document.createElement("div");
@@ -1393,246 +1641,50 @@ showHomework = async function(group, student, stage, lesson){
   }
 };
 
-/* ── PATCH submitHW and replaceHW to double-check block ── */
 const _origSubmitHW = submitHW;
 submitHW = async function(input, group, student, stage, lesson, hw){
-  if(isSubmissionBlocked(group)){
-    alert("Submission is closed — lesson has already started.");
-    input.value = ""; return;
-  }
+  if(isSubmissionBlocked(group)){ alert("Submission is closed — lesson has already started."); input.value = ""; return; }
   return _origSubmitHW(input, group, student, stage, lesson, hw);
 };
 
 const _origReplaceHW = replaceHW;
 replaceHW = async function(input, group, student, stage, lesson, hw){
-  if(isSubmissionBlocked(group)){
-    alert("Submission is closed — lesson has already started.");
-    input.value = ""; return;
-  }
+  if(isSubmissionBlocked(group)){ alert("Submission is closed — lesson has already started."); input.value = ""; return; }
   return _origReplaceHW(input, group, student, stage, lesson, hw);
 };
 
-/* ── NOTIFICATION PANEL UI ── */
-const _notifStore = []; // { id, title, body, type, time, read }
+/* ========== NOTIFICATIONS ========== */
+const _notifStore = [];
 let _notifUnread = 0;
+function _notifTimeStr(){ const now = new Date(); return now.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) + ' · ' + now.toLocaleDateString([], { day:'numeric', month:'short' }); }
+function pushNotif(title, body, type='info'){ const item = { id: Date.now(), title, body, type, time: _notifTimeStr(), read: false }; _notifStore.unshift(item); if(_notifStore.length > 50) _notifStore.pop(); _notifUnread++; _renderBell(); _renderNotifList(); }
+function _renderBell(){ const bell = document.getElementById('notifBell'); const badge = document.getElementById('notifBadge'); if(!bell||!badge) return; if(_notifUnread > 0){ badge.style.display='flex'; badge.textContent=_notifUnread>99?'99+':_notifUnread; bell.classList.add('has-notif'); } else { badge.style.display='none'; bell.classList.remove('has-notif'); } }
+function _renderNotifList(){ const list = document.getElementById('notifList'); if(!list) return; if(_notifStore.length===0){ list.innerHTML='<div class="notif-empty">No notifications yet</div>'; return; } list.innerHTML=_notifStore.map(n=>`<div class="notif-item type-${n.type} ${n.read?'':'unread'}"><div class="notif-title">${n.title}</div><div class="notif-body">${n.body}</div><div class="notif-time">${n.time}</div></div>`).join(''); }
+function toggleNotifPanel(){ const panel=document.getElementById('notifPanel'); const overlay=document.getElementById('notifOverlay'); const isOpen=panel.style.display!=='none'; if(isOpen){ closeNotifPanel(); } else { _notifStore.forEach(n=>n.read=true); _notifUnread=0; _renderBell(); _renderNotifList(); panel.style.display='flex'; overlay.style.display='block'; } }
+function closeNotifPanel(){ document.getElementById('notifPanel').style.display='none'; document.getElementById('notifOverlay').style.display='none'; }
+function clearAllNotifs(){ _notifStore.length=0; _notifUnread=0; _renderBell(); _renderNotifList(); }
 
-function _notifTimeStr(){
-  const now = new Date();
-  return now.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) +
-         ' · ' + now.toLocaleDateString([], { day:'numeric', month:'short' });
-}
-
-function pushNotif(title, body, type = 'info'){
-  const item = { id: Date.now(), title, body, type, time: _notifTimeStr(), read: false };
-  _notifStore.unshift(item);
-  if(_notifStore.length > 50) _notifStore.pop();
-  _notifUnread++;
-  _renderBell();
-  _renderNotifList();
-}
-
-function _renderBell(){
-  const bell  = document.getElementById('notifBell');
-  const badge = document.getElementById('notifBadge');
-  if(!bell || !badge) return;
-  if(_notifUnread > 0){
-    badge.style.display = 'flex';
-    badge.textContent = _notifUnread > 99 ? '99+' : _notifUnread;
-    bell.classList.add('has-notif');
-  } else {
-    badge.style.display = 'none';
-    bell.classList.remove('has-notif');
-  }
-}
-
-function _renderNotifList(){
-  const list = document.getElementById('notifList');
-  if(!list) return;
-  if(_notifStore.length === 0){
-    list.innerHTML = '<div class="notif-empty">No notifications yet</div>';
-    return;
-  }
-  list.innerHTML = _notifStore.map(n => `
-    <div class="notif-item type-${n.type} ${n.read ? '' : 'unread'}">
-      <div class="notif-title">${n.title}</div>
-      <div class="notif-body">${n.body}</div>
-      <div class="notif-time">${n.time}</div>
-    </div>
-  `).join('');
-}
-
-function toggleNotifPanel(){
-  const panel   = document.getElementById('notifPanel');
-  const overlay = document.getElementById('notifOverlay');
-  const isOpen  = panel.style.display !== 'none';
-  if(isOpen){
-    closeNotifPanel();
-  } else {
-    // Mark all as read
-    _notifStore.forEach(n => n.read = true);
-    _notifUnread = 0;
-    _renderBell();
-    _renderNotifList();
-    panel.style.display   = 'flex';
-    overlay.style.display = 'block';
-  }
-}
-
-function closeNotifPanel(){
-  document.getElementById('notifPanel').style.display   = 'none';
-  document.getElementById('notifOverlay').style.display = 'none';
-}
-
-function clearAllNotifs(){
-  _notifStore.length = 0;
-  _notifUnread = 0;
-  _renderBell();
-  _renderNotifList();
-}
-
-/* ── SERVICE WORKER + BROWSER NOTIFICATIONS ── */
 (function initNotifications(){
-  if(!("Notification" in window) || !("serviceWorker" in navigator)) return;
-
-  const swCode = `
-    self.addEventListener('message', e => {
-      if(e.data && e.data.type === 'NOTIFY'){
-        self.registration.showNotification(e.data.title, {
-          body: e.data.body,
-          vibrate: [200, 100, 200],
-          tag: e.data.tag || 'statista',
-          requireInteraction: true
-        });
-      }
-    });
-    self.addEventListener('notificationclick', e => {
-      e.notification.close();
-      e.waitUntil(clients.matchAll({type:'window'}).then(list => {
-        if(list.length) return list[0].focus();
-        return clients.openWindow('/');
-      }));
-    });
-  `;
-
-  let swReg = null;
-  const blob = new Blob([swCode], { type: 'application/javascript' });
-  navigator.serviceWorker.register(URL.createObjectURL(blob))
-    .then(reg => { swReg = reg; }).catch(() => {});
-
-  function askPermission(){
-    if(Notification.permission === 'default'){
-      Notification.requestPermission().then(p => {
-        if(p === 'granted'){
-          sendNotif('Statista — Notifications On',
-            'You will be reminded 30 min before lessons.', 'info', 'welcome');
-        }
-      });
-    }
-  }
-  document.addEventListener('click', askPermission, { once: true });
-
-  function sendNotif(title, body, type, tag){
-    // Always add to panel
-    pushNotif(title, body, type || 'info');
-    // Browser push if permitted
-    if(Notification.permission === 'granted'){
-      if(swReg && swReg.active){
-        swReg.active.postMessage({ type:'NOTIFY', title, body, tag });
-      } else {
-        new Notification(title, { body });
-      }
-    }
-  }
-
-  const _sent = {};
-  setInterval(() => {
-    Object.keys(SCHEDULE).forEach(group => {
-      const mins = minutesUntilLesson(group);
-      if(mins === null) return;
-      const dateKey = new Date().toDateString();
-
-      if(mins >= 29 && mins <= 31){
-        const k = `warn_${group}_${dateKey}`;
-        if(!_sent[k]){ _sent[k] = true;
-          sendNotif('Homework Reminder',
-            `${group}: lesson in 30 min. Submit missing homework now!`,
-            'reminder', 'r_' + group);
-        }
-      }
-      if(mins >= -1 && mins <= 1){
-        const k = `start_${group}_${dateKey}`;
-        if(!_sent[k]){ _sent[k] = true;
-          sendNotif('Lesson Started',
-            `${group}: lesson begun. Submissions are now closed.`,
-            'blocked', 's_' + group);
-        }
-      }
-    });
-  }, 60000);
-
-  window._sendTestNotif = function(){
-    if(Notification.permission !== 'granted'){
-      Notification.requestPermission().then(p => {
-        if(p === 'granted') sendNotif('Test', 'Notifications are working!', 'success', 'test');
-      });
-      return;
-    }
-    sendNotif('Test Notification', 'Notifications are working correctly!', 'success', 'test');
-  };
+  if(!("Notification" in window)||!("serviceWorker" in navigator)) return;
+  const swCode=`self.addEventListener('message',e=>{if(e.data&&e.data.type==='NOTIFY'){self.registration.showNotification(e.data.title,{body:e.data.body,vibrate:[200,100,200],tag:e.data.tag||'statista',requireInteraction:true});}});self.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil(clients.matchAll({type:'window'}).then(list=>{if(list.length)return list[0].focus();return clients.openWindow('/');}));});`;
+  let swReg=null;
+  const blob=new Blob([swCode],{type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob)).then(reg=>{swReg=reg;}).catch(()=>{});
+  function askPermission(){ if(Notification.permission==='default'){ Notification.requestPermission().then(p=>{ if(p==='granted') sendNotif('Statista — Notifications On','You will be reminded 30 min before lessons.','info','welcome'); }); } }
+  document.addEventListener('click',askPermission,{once:true});
+  function sendNotif(title,body,type,tag){ pushNotif(title,body,type||'info'); if(Notification.permission==='granted'){ if(swReg&&swReg.active){ swReg.active.postMessage({type:'NOTIFY',title,body,tag}); } else { new Notification(title,{body}); } } }
+  const _sent={};
+  setInterval(()=>{ Object.keys(SCHEDULE).forEach(group=>{ const mins=minutesUntilLesson(group); if(mins===null) return; const dateKey=new Date().toDateString(); if(mins>=29&&mins<=31){ const k=`warn_${group}_${dateKey}`; if(!_sent[k]){_sent[k]=true; sendNotif('Homework Reminder',`${group}: lesson in 30 min. Submit missing homework now!`,'reminder','r_'+group);} } if(mins>=-1&&mins<=1){ const k=`start_${group}_${dateKey}`; if(!_sent[k]){_sent[k]=true; sendNotif('Lesson Started',`${group}: lesson begun. Submissions are now closed.`,'blocked','s_'+group);} } }); },60000);
+  window._sendTestNotif=function(){ if(Notification.permission!=='granted'){ Notification.requestPermission().then(p=>{if(p==='granted') sendNotif('Test','Notifications are working!','success','test');}); return; } sendNotif('Test Notification','Notifications are working correctly!','success','test'); };
 })();
 
-/* ========================================================
-   DEVTOOLS PROTECTION
-   — Disables right-click context menu
-   — Blocks F12, Ctrl+Shift+I/J/U, Ctrl+U
-   — Detects DevTools open via window size diff
-   — Clears console periodically
-======================================================== */
+/* ========== DEVTOOLS PROTECTION ========== */
 (function devtoolsProtect(){
-  // Disable right-click
-  document.addEventListener("contextmenu", e => e.preventDefault());
-
-  // Block keyboard shortcuts
-  document.addEventListener("keydown", e => {
-    const k = e.key;
-    const ctrl = e.ctrlKey || e.metaKey;
-    const shift = e.shiftKey;
-
-    if(
-      k === "F12" ||
-      (ctrl && shift && ["I","i","J","j","C","c"].includes(k)) ||
-      (ctrl && ["U","u"].includes(k)) ||
-      (ctrl && shift && k === "C")
-    ){
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
-    }
-  }, true);
-
-  // Detect DevTools via window size
-  const threshold = 160;
-  setInterval(() => {
-    const widthDiff  = window.outerWidth  - window.innerWidth;
-    const heightDiff = window.outerHeight - window.innerHeight;
-    if(widthDiff > threshold || heightDiff > threshold){
-      document.body.innerHTML = `
-        <div style="display:flex;align-items:center;justify-content:center;
-                    height:100vh;background:#0d0f14;flex-direction:column;gap:16px;">
-          <div style="color:#f7556a;font-size:20px;font-weight:800;font-family:sans-serif;">
-            Access Denied
-          </div>
-          <div style="color:#7a8499;font-size:14px;font-family:sans-serif;">
-            Developer tools are not allowed on this page.
-          </div>
-        </div>`;
-    }
-  }, 1000);
-
-  // Clear console periodically
-  setInterval(() => {
-    try{ console.clear(); }catch(e){}
-  }, 2000);
+  document.addEventListener("contextmenu",e=>e.preventDefault());
+  document.addEventListener("keydown",e=>{ const k=e.key; const ctrl=e.ctrlKey||e.metaKey; const shift=e.shiftKey; if(k==="F12"||(ctrl&&shift&&["I","i","J","j","C","c"].includes(k))||(ctrl&&["U","u"].includes(k))||(ctrl&&shift&&k==="C")){ e.preventDefault(); e.stopPropagation(); return false; } },true);
+  const threshold=160;
+  setInterval(()=>{ const widthDiff=window.outerWidth-window.innerWidth; const heightDiff=window.outerHeight-window.innerHeight; if(widthDiff>threshold||heightDiff>threshold){ document.body.innerHTML=`<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0d0f14;flex-direction:column;gap:16px;"><div style="color:#f7556a;font-size:20px;font-weight:800;font-family:sans-serif;">Access Denied</div><div style="color:#7a8499;font-size:14px;font-family:sans-serif;">Developer tools are not allowed on this page.</div></div>`; } },1000);
+  setInterval(()=>{ try{console.clear();}catch(e){} },2000);
 })();
 </script>
 </body>
