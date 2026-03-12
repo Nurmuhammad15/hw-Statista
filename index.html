@@ -4,933 +4,283 @@
 <meta charset="UTF-8">
 <title>Statista</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
-
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
-
 <style>
-  :root {
-    --bg:       #0d0f14;
-    --surface:  #161b25;
-    --surface2: #1e2538;
-    --border:   #2a3347;
-    --accent:   #4f8ef7;
-    --accent2:  #7b5cf5;
-    --green:    #22c887;
-    --red:      #f7556a;
-    --amber:    #f5a623;
-    --text:     #e8edf5;
-    --muted:    #7a8499;
-    --white:    #ffffff;
-    --r:        14px;
-    --rsm:      8px;
-  }
+:root{--bg:#0d0f14;--surface:#161b25;--surface2:#1e2538;--border:#2a3347;--accent:#4f8ef7;--accent2:#7b5cf5;--green:#22c887;--red:#f7556a;--amber:#f5a623;--text:#e8edf5;--muted:#7a8499;--white:#ffffff;--r:14px;--rsm:8px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+header{background:rgba(22,27,37,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+header b{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+#webviewWarning{display:none;background:#2a1f08;color:var(--amber);border-bottom:1px solid #4a3510;padding:10px 16px;font-size:13px;text-align:center;font-weight:500}
+#helpBtn{background:rgba(79,142,247,.1);color:var(--accent);border:1px solid rgba(79,142,247,.3);padding:7px 13px;border-radius:var(--rsm);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
+#helpBtn:hover{background:var(--accent);color:#fff}
+.container{max-width:600px;margin:0 auto;padding:28px 16px 80px}
+h2{font-size:20px;font-weight:800;color:var(--white);margin-bottom:20px}
+h3{font-size:17px;font-weight:700;color:var(--white);margin-bottom:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
+button{font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:14px;border:none;border-radius:var(--rsm);cursor:pointer;padding:12px 16px;transition:all .18s;display:inline-flex;align-items:center;gap:7px;line-height:1}
+.primary{background:linear-gradient(135deg,var(--accent),#3a7ef5);color:#fff;width:100%;justify-content:flex-start;box-shadow:0 2px 10px rgba(79,142,247,.2)}
+.primary:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(79,142,247,.35)}
+.secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);width:100%;justify-content:flex-start}
+.secondary:hover{border-color:var(--accent);color:var(--white)}
+.danger{background:rgba(247,85,106,.1);color:var(--red);border:1px solid rgba(247,85,106,.3);padding:10px 14px}
+.danger:hover{background:var(--red);color:#fff}
+.back{background:transparent;color:var(--muted);border:1px solid var(--border);padding:8px 13px;margin-bottom:18px;font-size:13px;width:auto}
+.back:hover{background:var(--surface2);color:var(--text)}
+.green{display:inline-flex;align-items:center;gap:4px;color:var(--green);font-weight:700;font-size:13px;background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.25);padding:3px 10px;border-radius:20px}
+.red{display:inline-flex;align-items:center;gap:4px;color:var(--red);font-weight:700;font-size:13px;background:rgba(247,85,106,.08);border:1px solid rgba(247,85,106,.2);padding:3px 10px;border-radius:20px}
+img{width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border);margin:8px 6px 0 0}
+label.primary,label.danger{display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:13px;border-radius:var(--rsm);padding:9px 14px;margin-top:10px;transition:all .18s;line-height:1}
+label.primary{background:linear-gradient(135deg,var(--accent),#3a7ef5);color:#fff;box-shadow:0 2px 10px rgba(79,142,247,.2)}
+label.primary:hover{transform:translateY(-1px)}
+label.danger{background:rgba(247,85,106,.1);color:var(--red);border:1px solid rgba(247,85,106,.3)}
+label.danger:hover{background:var(--red);color:#fff}
+input[type=file]{display:none}
+.hw{background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;margin-bottom:8px}
+.hw b{font-size:14px;color:var(--text);display:block;margin-bottom:8px}
+.home-wrap{padding-top:40px;text-align:center}
+.home-title{font-size:32px;font-weight:800;font-family:'Space Mono',monospace;background:linear-gradient(135deg,#fff 0%,var(--muted) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.home-sub{color:var(--muted);font-size:14px;margin-bottom:36px}
+.home-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:380px;margin:0 auto}
+.home-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px 16px;cursor:pointer;transition:all .2s;text-align:center}
+.home-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.3)}
+.home-card.student{border-top:3px solid var(--accent)}
+.home-card.teacher{border-top:3px solid var(--accent2)}
+.home-card .label{font-weight:700;font-size:15px;color:var(--white)}
+.home-card .sub{font-size:12px;color:var(--muted);margin-top:4px}
+.bc{font-size:12px;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.bc b{color:var(--accent)}
+.loading{text-align:center;padding:50px 20px;color:var(--muted);font-size:14px}
+.loading::before{content:'';display:block;width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;margin:0 auto 16px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.admin-group-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
+.admin-group-name{font-weight:700;font-size:14px;color:var(--white);margin-bottom:12px}
+.admin-group-actions{display:flex;gap:8px;flex-wrap:wrap}
+.admin-group-actions .primary{width:auto;flex:1}
+.admin-student-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:8px}
+.admin-student-name{font-weight:700;font-size:14px;color:var(--white);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.hw-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;gap:8px}
+.hw-row:last-child{border-bottom:none}
+.hw-row-name{color:var(--muted);flex:1}
+.export-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(34,200,135,.1);color:var(--green);border:1px solid rgba(34,200,135,.3);padding:9px 16px;border-radius:var(--rsm);font-size:13px;font-weight:600;cursor:pointer;margin-bottom:18px;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;width:auto}
+.export-btn:hover{background:var(--green);color:var(--bg)}
+.step-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 18px 18px 64px;margin-bottom:10px;position:relative}
+.step-num{position:absolute;left:16px;top:16px;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace}
+.step-title{font-weight:700;color:var(--white);margin-bottom:5px;font-size:15px}
+.step-body{font-size:13px;color:var(--muted);line-height:1.7}
+.step-body ul{padding-left:16px;margin-top:6px}
+.step-body b{color:var(--text)}
+.alert-card{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.3);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;font-size:13px;color:var(--amber);line-height:1.7}
+.alert-card ul{padding-left:16px;margin-top:6px}
+.btn-new-group{background:rgba(34,200,135,.1);color:var(--green);border:1px solid rgba(34,200,135,.3);padding:9px 16px;border-radius:var(--rsm);font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:all .18s;white-space:nowrap;width:auto}
+.btn-new-group:hover{background:var(--green);color:var(--bg)}
+.btn-delete-group{background:transparent;color:var(--muted);border:1px solid var(--border);padding:10px 14px;border-radius:var(--rsm);font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;transition:all .18s;white-space:nowrap;width:auto}
+.btn-delete-group:hover{background:var(--red);color:#fff;border-color:var(--red)}
+#notifBell{position:relative;width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);cursor:pointer;color:var(--muted);transition:all .2s;flex-shrink:0}
+#notifBell:hover{border-color:var(--accent);color:var(--accent)}
+#notifBadge{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:20px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-family:'Space Mono',monospace;pointer-events:none}
+#notifOverlay{position:fixed;inset:0;z-index:199}
+#notifPanel{position:fixed;top:68px;right:16px;width:320px;max-height:440px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:0 20px 50px rgba(0,0,0,.5);z-index:200;overflow:hidden;display:flex;flex-direction:column}
+#notifPanelHeader{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+#notifClearBtn{background:transparent;color:var(--muted);border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;padding:4px 8px;border-radius:4px;width:auto;transition:color .15s}
+#notifClearBtn:hover{color:var(--red)}
+#notifList{overflow-y:auto;flex:1;padding:8px}
+.notif-empty{text-align:center;color:var(--muted);font-size:13px;padding:28px 16px}
+.notif-item{padding:12px 14px;border-radius:var(--rsm);margin-bottom:6px;border-left:3px solid transparent;background:var(--bg)}
+.notif-item.unread{background:rgba(79,142,247,.06)}
+.notif-item.type-reminder{border-left-color:var(--amber)}
+.notif-item.type-blocked{border-left-color:var(--red)}
+.notif-item.type-info{border-left-color:var(--accent)}
+.notif-item.type-success{border-left-color:var(--green)}
+.notif-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:3px}
+.notif-body{font-size:12px;color:var(--muted);line-height:1.5}
+.notif-time{font-size:11px;color:var(--border);margin-top:5px;font-family:'Space Mono',monospace}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:999}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:32px 28px;width:100%;max-width:360px;margin:16px;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.modal-title{font-size:18px;font-weight:800;color:var(--white);margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.modal-field{margin-bottom:14px}
+.modal-field label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.modal-field input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px;font-size:14px;font-family:inherit;color:var(--text);outline:none;transition:border-color .2s}
+.modal-field input:focus{border-color:var(--accent)}
+.modal-error{font-size:13px;color:var(--red);margin-bottom:14px;min-height:18px}
+.modal-actions{display:flex;gap:10px;margin-top:6px}
+.modal-actions .primary{flex:1;justify-content:center}
+.modal-actions .btn-cancel{background:transparent;color:var(--muted);border:1px solid var(--border);padding:12px 18px;border-radius:var(--rsm);font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;transition:all .18s}
+.modal-actions .btn-cancel:hover{background:var(--surface2);color:var(--text)}
+.schedule-banner{border-radius:var(--rsm);padding:12px 16px;font-size:13px;font-weight:600;margin-bottom:14px;text-align:center}
+.warning-banner{background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.4);color:var(--amber)}
+.blocked-banner{background:rgba(247,85,106,.1);border:1px solid rgba(247,85,106,.35);color:var(--red)}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* === AI CHECKER === */
+.ai-check-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(123,92,245,.15),rgba(79,142,247,.15));color:#a78bfa;border:1px solid rgba(123,92,245,.4);padding:7px 12px;border-radius:var(--rsm);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.ai-check-btn:hover{background:linear-gradient(135deg,rgba(123,92,245,.35),rgba(79,142,247,.25));color:#c4b5fd;transform:translateY(-1px)}
+.ai-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;z-index:1000}
+@media(min-height:600px){.ai-overlay{align-items:center}}
+.ai-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:640px;max-height:92vh;overflow-y:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6);position:relative}
+@media(min-height:600px){.ai-modal{border-radius:20px;max-height:88vh;margin:16px}}
+.ai-modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.ai-modal-title{font-size:17px;font-weight:800;color:var(--white);display:flex;align-items:center;gap:8px}
+.ai-modal-title span{background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ai-close-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;transition:all .15s}
+.ai-close-btn:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.ai-hw-badge{font-size:12px;color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;background:rgba(123,92,245,.1);border:1px solid rgba(123,92,245,.2);padding:5px 12px;border-radius:20px;display:inline-block}
+.ai-textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:14px;font-family:inherit;color:var(--text);outline:none;resize:vertical;min-height:160px;line-height:1.7;transition:border-color .2s;margin-bottom:6px}
+.ai-textarea:focus{border-color:var(--accent2)}
+.ai-word-count{font-size:11px;color:var(--muted);text-align:right;margin-bottom:12px;font-family:'Space Mono',monospace}
+.ai-submit-btn{width:100%;background:linear-gradient(135deg,var(--accent2),#6d4fe5);color:#fff;border:none;border-radius:var(--rsm);padding:13px 20px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(123,92,245,.3)}
+.ai-submit-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 22px rgba(123,92,245,.45)}
+.ai-submit-btn:disabled{opacity:.6;cursor:not-allowed}
+.ai-loading{text-align:center;padding:30px 20px;color:var(--muted);font-size:13px}
+.ai-dots{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:14px}
+.ai-dots span{width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:dotPulse 1.2s infinite ease-in-out}
+.ai-dots span:nth-child(2){animation-delay:.2s}
+.ai-dots span:nth-child(3){animation-delay:.4s}
+@keyframes dotPulse{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+.ai-result{margin-top:20px;border-top:1px solid var(--border);padding-top:20px}
+.ai-overall{background:linear-gradient(135deg,rgba(123,92,245,.15),rgba(79,142,247,.1));border:1px solid rgba(123,92,245,.35);border-radius:var(--rsm);padding:16px;text-align:center;margin-bottom:18px}
+.ai-overall-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.ai-overall-num{font-size:48px;font-weight:800;font-family:'Space Mono',monospace;background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.ai-overall-desc{font-size:13px;color:var(--muted);margin-top:4px}
+.ai-scores{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.ai-score{background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px;text-align:center;position:relative;overflow:hidden}
+.ai-score::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.ai-score.ta::before{background:var(--accent)}
+.ai-score.cc::before{background:var(--green)}
+.ai-score.lr::before{background:var(--amber)}
+.ai-score.gra::before{background:var(--accent2)}
+.ai-score-lbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.ai-score-num{font-size:28px;font-weight:800;font-family:'Space Mono',monospace;line-height:1}
+.ai-score.ta .ai-score-num{color:var(--accent)}
+.ai-score.cc .ai-score-num{color:var(--green)}
+.ai-score.lr .ai-score-num{color:var(--amber)}
+.ai-score.gra .ai-score-num{color:var(--accent2)}
+.ai-section{margin-bottom:16px}
+.ai-section-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.ai-section-body{font-size:13px;color:var(--muted);line-height:1.7;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px}
+.ai-section-body ul{padding-left:18px}
+.ai-section-body li{margin-bottom:5px}
+.ai-error{background:rgba(247,85,106,.08);border:1px solid rgba(247,85,106,.25);border-radius:var(--rsm);padding:14px;color:var(--red);font-size:13px;margin-top:14px;text-align:center}
 
-  body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    line-height: 1.6;
-  }
-
-  header {
-    background: rgba(22, 27, 37, 0.85);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 20px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  header b {
-    font-family: 'Space Mono', monospace;
-    font-size: 18px;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  #webviewWarning {
-    display: none;
-    background: #2a1f08;
-    color: var(--amber);
-    border-bottom: 1px solid #4a3510;
-    padding: 10px 16px;
-    font-size: 13px;
-    text-align: center;
-    font-weight: 500;
-  }
-
-  #helpBtn {
-    background: rgba(79,142,247,0.1);
-    color: var(--accent);
-    border: 1px solid rgba(79,142,247,0.3);
-    padding: 7px 13px;
-    border-radius: var(--rsm);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-  #helpBtn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 28px 16px 80px;
-  }
-
-  h2 { font-size: 20px; font-weight: 800; color: var(--white); margin-bottom: 20px; }
-  h3 { font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 16px; }
-  h4 { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r);
-    padding: 16px;
-    margin-bottom: 10px;
-    transition: border-color 0.2s;
-  }
-
-  button {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    border: none;
-    border-radius: var(--rsm);
-    cursor: pointer;
-    padding: 12px 16px;
-    transition: all 0.18s;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    line-height: 1;
-  }
-
-  .primary {
-    background: linear-gradient(135deg, var(--accent), #3a7ef5);
-    color: #fff;
-    width: 100%;
-    justify-content: flex-start;
-    box-shadow: 0 2px 10px rgba(79,142,247,0.2);
-  }
-  .primary:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(79,142,247,0.35); }
-  .primary:active { transform: translateY(0); }
-
-  .secondary {
-    background: var(--surface2);
-    color: var(--text);
-    border: 1px solid var(--border);
-    width: 100%;
-    justify-content: flex-start;
-  }
-  .secondary:hover { border-color: var(--accent); color: var(--white); background: var(--border); }
-
-  .danger {
-    background: rgba(247,85,106,0.1);
-    color: var(--red);
-    border: 1px solid rgba(247,85,106,0.3);
-    padding: 10px 14px;
-  }
-  .danger:hover { background: var(--red); color: #fff; border-color: var(--red); }
-
-  .back {
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    padding: 8px 13px;
-    margin-bottom: 18px;
-    font-size: 13px;
-    width: auto;
-  }
-  .back:hover { background: var(--surface2); color: var(--text); }
-
-  .green {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    color: var(--green);
-    font-weight: 700;
-    font-size: 13px;
-    background: rgba(34,200,135,0.1);
-    border: 1px solid rgba(34,200,135,0.25);
-    padding: 3px 10px;
-    border-radius: 20px;
-  }
-
-  .red {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    color: var(--red);
-    font-weight: 700;
-    font-size: 13px;
-    background: rgba(247,85,106,0.08);
-    border: 1px solid rgba(247,85,106,0.2);
-    padding: 3px 10px;
-    border-radius: 20px;
-  }
-
-  img {
-    width: 90px;
-    height: 90px;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    margin: 8px 6px 0 0;
-  }
-
-  label.primary, label.danger {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    cursor: pointer;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 600;
-    font-size: 13px;
-    border-radius: var(--rsm);
-    padding: 9px 14px;
-    margin-top: 10px;
-    transition: all 0.18s;
-    line-height: 1;
-  }
-  label.primary {
-    background: linear-gradient(135deg, var(--accent), #3a7ef5);
-    color: #fff;
-    box-shadow: 0 2px 10px rgba(79,142,247,0.2);
-  }
-  label.primary:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(79,142,247,0.35); }
-  label.danger {
-    background: rgba(247,85,106,0.1);
-    color: var(--red);
-    border: 1px solid rgba(247,85,106,0.3);
-  }
-  label.danger:hover { background: var(--red); color: #fff; }
-
-  input[type=file] { display: none; }
-
-  .hw {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--rsm);
-    padding: 14px;
-    margin-bottom: 8px;
-  }
-  .hw b { font-size: 14px; color: var(--text); display: block; margin-bottom: 8px; }
-
-  .home-wrap { padding-top: 40px; text-align: center; }
-  .home-title {
-    font-size: 32px;
-    font-weight: 800;
-    font-family: 'Space Mono', monospace;
-    background: linear-gradient(135deg, #fff 0%, var(--muted) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 6px;
-  }
-  .home-sub { color: var(--muted); font-size: 14px; margin-bottom: 36px; }
-  .home-cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    max-width: 380px;
-    margin: 0 auto;
-  }
-  .home-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r);
-    padding: 28px 16px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-  }
-  .home-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.3); }
-  .home-card.student { border-top: 3px solid var(--accent); }
-  .home-card.teacher { border-top: 3px solid var(--accent2); }
-  .home-card .label { font-weight: 700; font-size: 15px; color: var(--white); }
-  .home-card .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
-
-  .admin-group-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r);
-    padding: 16px;
-    margin-bottom: 10px;
-  }
-  .admin-group-name { font-weight: 700; font-size: 14px; color: var(--white); margin-bottom: 12px; }
-  .admin-group-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-  .admin-group-actions .primary { width: auto; flex: 1; }
-
-  .admin-student-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r);
-    padding: 14px 16px;
-    margin-bottom: 8px;
-  }
-  .admin-student-name {
-    font-weight: 700; font-size: 14px; color: var(--white);
-    margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
-  }
-  .hw-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; gap: 8px;
-  }
-  .hw-row:last-child { border-bottom: none; }
-  .hw-row-name { color: var(--muted); flex: 1; }
-
-  .export-btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(34,200,135,0.1); color: var(--green);
-    border: 1px solid rgba(34,200,135,0.3);
-    padding: 9px 16px; border-radius: var(--rsm);
-    font-size: 13px; font-weight: 600; cursor: pointer;
-    margin-bottom: 18px; font-family: 'Plus Jakarta Sans', sans-serif;
-    transition: all 0.2s; width: auto;
-  }
-  .export-btn:hover { background: var(--green); color: var(--bg); }
-
-  .step-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--r); padding: 18px 18px 18px 64px;
-    margin-bottom: 10px; position: relative;
-  }
-  .step-num {
-    position: absolute; left: 16px; top: 16px;
-    width: 34px; height: 34px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff; font-weight: 800; font-size: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Space Mono', monospace;
-  }
-  .step-title { font-weight: 700; color: var(--white); margin-bottom: 5px; font-size: 15px; }
-  .step-body { font-size: 13px; color: var(--muted); line-height: 1.7; }
-  .step-body ul { padding-left: 16px; margin-top: 6px; }
-  .step-body b { color: var(--text); }
-
-  .alert-card {
-    background: rgba(245,166,35,0.08); border: 1px solid rgba(245,166,35,0.3);
-    border-radius: var(--r); padding: 14px 16px; margin-bottom: 10px;
-    font-size: 13px; color: var(--amber); line-height: 1.7;
-  }
-  .alert-card ul { padding-left: 16px; margin-top: 6px; }
-  .alert-card b { color: #ffc542; }
-
-  .bc {
-    font-size: 12px; color: var(--muted); margin-bottom: 14px;
-    display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
-  }
-  .bc b { color: var(--accent); }
-
-  .loading {
-    text-align: center; padding: 50px 20px;
-    color: var(--muted); font-size: 14px;
-  }
-  .loading::before {
-    content: ''; display: block; width: 30px; height: 30px;
-    border: 3px solid var(--border); border-top-color: var(--accent);
-    border-radius: 50%; margin: 0 auto 16px;
-    animation: spin 0.8s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-  .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(6px);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 999;
-    animation: fadeIn 0.15s ease;
-  }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 32px 28px;
-    width: 100%;
-    max-width: 360px;
-    margin: 16px;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
-    animation: slideUp 0.2s ease;
-  }
-  @keyframes slideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-
-  .modal-title { font-size: 18px; font-weight: 800; color: var(--white); margin-bottom: 6px; }
-  .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
-  .modal-field { margin-bottom: 14px; }
-  .modal-field label {
-    display: block; font-size: 12px; font-weight: 600; color: var(--muted);
-    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
-  }
-  .modal-field input {
-    width: 100%; background: var(--bg); border: 1px solid var(--border);
-    border-radius: var(--rsm); padding: 12px 14px; font-size: 14px;
-    font-family: inherit; color: var(--text); outline: none; transition: border-color 0.2s;
-  }
-  .modal-field input:focus { border-color: var(--accent); }
-  .modal-error { font-size: 13px; color: var(--red); margin-bottom: 14px; min-height: 18px; }
-  .modal-actions { display: flex; gap: 10px; margin-top: 6px; }
-  .modal-actions .primary { flex: 1; justify-content: center; }
-  .modal-actions .btn-cancel {
-    background: transparent; color: var(--muted); border: 1px solid var(--border);
-    padding: 12px 18px; border-radius: var(--rsm); font-family: inherit;
-    font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.18s;
-  }
-  .modal-actions .btn-cancel:hover { background: var(--surface2); color: var(--text); }
-
-  .btn-new-group {
-    background: rgba(34,200,135,0.1); color: var(--green);
-    border: 1px solid rgba(34,200,135,0.3); padding: 9px 16px;
-    border-radius: var(--rsm); font-family: inherit; font-weight: 700;
-    font-size: 13px; cursor: pointer; transition: all 0.18s; white-space: nowrap; width: auto;
-  }
-  .btn-new-group:hover { background: var(--green); color: var(--bg); }
-
-  .btn-delete-group {
-    background: transparent; color: var(--muted); border: 1px solid var(--border);
-    padding: 10px 14px; border-radius: var(--rsm); font-family: inherit;
-    font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.18s; white-space: nowrap; width: auto;
-  }
-  .btn-delete-group:hover { background: var(--red); color: #fff; border-color: var(--red); }
-
-  #notifBell {
-    position: relative; width: 38px; height: 38px;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--rsm); cursor: pointer; color: var(--muted);
-    transition: all 0.2s; flex-shrink: 0;
-  }
-  #notifBell:hover { border-color: var(--accent); color: var(--accent); }
-  #notifBell.has-notif { color: var(--accent); border-color: rgba(79,142,247,0.4); }
-
-  #notifBadge {
-    position: absolute; top: -5px; right: -5px;
-    background: var(--red); color: #fff; font-size: 10px; font-weight: 800;
-    min-width: 18px; height: 18px; border-radius: 20px;
-    display: flex; align-items: center; justify-content: center;
-    padding: 0 4px; font-family: 'Space Mono', monospace; pointer-events: none;
-  }
-
-  #notifOverlay { position: fixed; inset: 0; z-index: 199; }
-  #notifPanel {
-    position: fixed; top: 68px; right: 16px; width: 320px; max-height: 440px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--r); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    z-index: 200; overflow: hidden; display: flex; flex-direction: column;
-    animation: slideDown 0.18s ease;
-  }
-  @keyframes slideDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
-
-  #notifPanelHeader {
-    padding: 14px 16px; border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
-  }
-  #notifClearBtn {
-    background: transparent; color: var(--muted); border: none; font-size: 12px;
-    font-weight: 600; cursor: pointer; font-family: inherit; padding: 4px 8px;
-    border-radius: 4px; width: auto; transition: color 0.15s;
-  }
-  #notifClearBtn:hover { color: var(--red); }
-  #notifList { overflow-y: auto; flex: 1; padding: 8px; }
-  .notif-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 28px 16px; }
-  .notif-item {
-    padding: 12px 14px; border-radius: var(--rsm); margin-bottom: 6px;
-    border-left: 3px solid transparent; background: var(--bg); transition: background 0.15s; cursor: default;
-  }
-  .notif-item:last-child { margin-bottom: 0; }
-  .notif-item.unread { background: rgba(79,142,247,0.06); }
-  .notif-item.type-reminder { border-left-color: var(--amber); }
-  .notif-item.type-blocked  { border-left-color: var(--red); }
-  .notif-item.type-info     { border-left-color: var(--accent); }
-  .notif-item.type-success  { border-left-color: var(--green); }
-  .notif-title { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
-  .notif-body { font-size: 12px; color: var(--muted); line-height: 1.5; }
-  .notif-time { font-size: 11px; color: var(--border); margin-top: 5px; font-family: 'Space Mono', monospace; }
-
-  .schedule-banner {
-    border-radius: var(--rsm); padding: 12px 16px; font-size: 13px;
-    font-weight: 600; margin-bottom: 14px; text-align: center;
-  }
-  .warning-banner { background: rgba(245,166,35,0.12); border: 1px solid rgba(245,166,35,0.4); color: var(--amber); }
-  .blocked-banner { background: rgba(247,85,106,0.1); border: 1px solid rgba(247,85,106,0.35); color: var(--red); }
-
-  /* AI DETECTION */
-  .ai-detect-card {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--rsm);
-    padding: 14px 16px;
-    margin-bottom: 18px;
-  }
-  .ai-detect-title {
-    font-size: 12px; font-weight: 700; color: var(--muted);
-    text-transform: uppercase; letter-spacing: 0.5px;
-    margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
-  }
-  .ai-detect-bar-wrap {
-    position: relative;
-    height: 28px;
-    border-radius: 20px;
-    overflow: hidden;
-    background: var(--surface2);
-    margin-bottom: 10px;
-  }
-  .ai-detect-bar-human {
-    position: absolute; left: 0; top: 0; bottom: 0;
-    background: linear-gradient(90deg, var(--green), #1aad74);
-    border-radius: 20px 0 0 20px;
-    display: flex; align-items: center; justify-content: flex-start;
-    padding-left: 12px;
-    font-size: 12px; font-weight: 800; color: #fff;
-    font-family: 'Space Mono', monospace;
-    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-    min-width: 50px;
-  }
-  .ai-detect-bar-ai {
-    position: absolute; right: 0; top: 0; bottom: 0;
-    background: linear-gradient(90deg, #7c3aed, var(--accent2));
-    border-radius: 0 20px 20px 0;
-    display: flex; align-items: center; justify-content: flex-end;
-    padding-right: 12px;
-    font-size: 12px; font-weight: 800; color: #fff;
-    font-family: 'Space Mono', monospace;
-    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-    min-width: 50px;
-  }
-  .ai-detect-labels {
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .ai-detect-label-human {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 12px; font-weight: 700; color: var(--green);
-  }
-  .ai-detect-label-ai {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 12px; font-weight: 700; color: var(--accent2);
-  }
-  .ai-detect-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-  }
-  .ai-detect-note {
-    font-size: 12px; color: var(--muted); margin-top: 10px;
-    padding-top: 10px; border-top: 1px solid var(--border);
-    line-height: 1.5; font-style: italic;
-  }
-
-  /* ========== AI CHECKER STYLES ========== */
-  .ai-check-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: linear-gradient(135deg, rgba(123,92,245,0.15), rgba(79,142,247,0.15));
-    color: #a78bfa;
-    border: 1px solid rgba(123,92,245,0.4);
-    padding: 8px 13px;
-    border-radius: var(--rsm);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 700;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 10px;
-    width: auto;
-    white-space: nowrap;
-  }
-  .ai-check-btn:hover {
-    background: linear-gradient(135deg, rgba(123,92,245,0.35), rgba(79,142,247,0.25));
-    border-color: rgba(123,92,245,0.7);
-    color: #c4b5fd;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(123,92,245,0.25);
-  }
-  .ai-check-btn svg { flex-shrink: 0; }
-
-  /* AI Checker Modal */
-  .ai-modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(8px);
-    display: flex; align-items: flex-end;
-    justify-content: center;
-    z-index: 1000;
-    animation: fadeIn 0.15s ease;
-  }
-
-  @media (min-height: 600px) {
-    .ai-modal-overlay { align-items: center; }
-  }
-
-  .ai-modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px 20px 0 0;
-    padding: 24px 20px 32px;
-    width: 100%;
-    max-width: 640px;
-    max-height: 92vh;
-    overflow-y: auto;
-    box-shadow: 0 -20px 60px rgba(0,0,0,0.6);
-    animation: slideUpModal 0.25s ease;
-    position: relative;
-  }
-
-  @media (min-height: 600px) {
-    .ai-modal {
-      border-radius: 20px;
-      max-height: 88vh;
-      margin: 16px;
-    }
-  }
-
-  @keyframes slideUpModal {
-    from { opacity:0; transform:translateY(30px); }
-    to   { opacity:1; transform:translateY(0); }
-  }
-
-  .ai-modal-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 16px;
-  }
-  .ai-modal-title {
-    font-size: 17px; font-weight: 800; color: var(--white);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .ai-modal-title span {
-    background: linear-gradient(135deg, var(--accent2), var(--accent));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .ai-modal-close {
-    background: var(--surface2); border: 1px solid var(--border);
-    color: var(--muted); width: 32px; height: 32px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; padding: 0; flex-shrink: 0; font-size: 20px;
-    line-height: 1; font-family: Arial, sans-serif; font-weight: 300;
-    transition: all 0.15s;
-  }
-  .ai-modal-close:hover { background: var(--red); color: #fff; border-color: var(--red); }
-
-  .ai-modal-hw-name {
-    font-size: 12px; color: var(--accent2); font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px;
-    background: rgba(123,92,245,0.1); border: 1px solid rgba(123,92,245,0.2);
-    padding: 5px 12px; border-radius: 20px; display: inline-block;
-  }
-
-  .ai-textarea-wrap { position: relative; margin-bottom: 14px; }
-  .ai-textarea {
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--rsm);
-    padding: 14px;
-    font-size: 14px;
-    font-family: inherit;
-    color: var(--text);
-    outline: none;
-    resize: vertical;
-    min-height: 160px;
-    line-height: 1.7;
-    transition: border-color 0.2s;
-  }
-  .ai-textarea:focus { border-color: var(--accent2); }
-  .ai-textarea::placeholder { color: var(--muted); }
-
-  .ai-char-count {
-    font-size: 11px; color: var(--muted); text-align: right;
-    margin-top: 4px; font-family: 'Space Mono', monospace;
-  }
-
-  .ai-submit-btn {
-    width: 100%; background: linear-gradient(135deg, var(--accent2), #6d4fe5);
-    color: #fff; border: none; border-radius: var(--rsm);
-    padding: 13px 20px; font-family: inherit; font-weight: 700;
-    font-size: 15px; cursor: pointer; transition: all 0.2s;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    box-shadow: 0 4px 16px rgba(123,92,245,0.3);
-  }
-  .ai-submit-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(123,92,245,0.45); }
-  .ai-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-  /* AI Result */
-  .ai-result {
-    margin-top: 20px;
-    border-top: 1px solid var(--border);
-    padding-top: 20px;
-    animation: fadeIn 0.3s ease;
-  }
-
-  .ai-scores-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 18px;
-  }
-
-  .ai-score-card {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--rsm);
-    padding: 12px 14px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .ai-score-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  }
-  .ai-score-card.ta::before { background: var(--accent); }
-  .ai-score-card.cc::before { background: var(--green); }
-  .ai-score-card.lr::before { background: var(--amber); }
-  .ai-score-card.gra::before { background: var(--accent2); }
-
-  .ai-score-label {
-    font-size: 10px; font-weight: 700; color: var(--muted);
-    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
-  }
-  .ai-score-num {
-    font-size: 28px; font-weight: 800; font-family: 'Space Mono', monospace;
-    line-height: 1;
-  }
-  .ai-score-card.ta .ai-score-num { color: var(--accent); }
-  .ai-score-card.cc .ai-score-num { color: var(--green); }
-  .ai-score-card.lr .ai-score-num { color: var(--amber); }
-  .ai-score-card.gra .ai-score-num { color: var(--accent2); }
-
-  .ai-overall-band {
-    background: linear-gradient(135deg, rgba(123,92,245,0.15), rgba(79,142,247,0.1));
-    border: 1px solid rgba(123,92,245,0.35);
-    border-radius: var(--rsm);
-    padding: 16px;
-    text-align: center;
-    margin-bottom: 18px;
-  }
-  .ai-overall-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-  .ai-overall-num {
-    font-size: 48px; font-weight: 800; font-family: 'Space Mono', monospace;
-    background: linear-gradient(135deg, var(--accent2), var(--accent));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    line-height: 1;
-  }
-  .ai-overall-desc { font-size: 13px; color: var(--muted); margin-top: 4px; }
-
-  .ai-feedback-section { margin-bottom: 16px; }
-  .ai-feedback-title {
-    font-size: 13px; font-weight: 700; color: var(--white);
-    margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
-  }
-  .ai-feedback-body {
-    font-size: 13px; color: var(--muted); line-height: 1.7;
-    background: var(--bg); border: 1px solid var(--border);
-    border-radius: var(--rsm); padding: 12px 14px;
-  }
-  .ai-feedback-body ul { padding-left: 18px; }
-  .ai-feedback-body li { margin-bottom: 5px; }
-  .ai-feedback-body strong { color: var(--text); }
-
-  .ai-error-box {
-    background: rgba(247,85,106,0.08); border: 1px solid rgba(247,85,106,0.25);
-    border-radius: var(--rsm); padding: 14px; color: var(--red);
-    font-size: 13px; margin-top: 14px; text-align: center;
-  }
-
-  .ai-loading {
-    text-align: center; padding: 30px 20px; color: var(--muted); font-size: 13px;
-  }
-  .ai-loading-dots {
-    display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 14px;
-  }
-  .ai-loading-dots span {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--accent2); animation: dotPulse 1.2s infinite ease-in-out;
-  }
-  .ai-loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-  .ai-loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes dotPulse { 0%,80%,100% { transform: scale(0.6); opacity:0.4; } 40% { transform: scale(1); opacity:1; } }
+/* AI Detection bar */
+.ai-detect{background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px 16px;margin-bottom:18px}
+.ai-detect-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.ai-detect-bar{position:relative;height:28px;border-radius:20px;overflow:hidden;background:var(--surface2);margin-bottom:10px}
+.ai-detect-human{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--green),#1aad74);display:flex;align-items:center;padding-left:12px;font-size:12px;font-weight:800;color:#fff;font-family:'Space Mono',monospace;border-radius:20px 0 0 20px;min-width:48px}
+.ai-detect-ai{position:absolute;right:0;top:0;bottom:0;background:linear-gradient(90deg,#7c3aed,var(--accent2));display:flex;align-items:center;justify-content:flex-end;padding-right:12px;font-size:12px;font-weight:800;color:#fff;font-family:'Space Mono',monospace;border-radius:0 20px 20px 0;min-width:48px}
+.ai-detect-labels{display:flex;justify-content:space-between}
+.ai-detect-lbl{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700}
+.ai-detect-dot{width:8px;height:8px;border-radius:50%}
+.ai-detect-note{font-size:12px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);line-height:1.5;font-style:italic}
 </style>
 </head>
-
 <body>
 
 <header>
   <b>Statista</b>
-  <div style="display:flex;align-items:center;gap:10px;">
-    <div id="notifBell" onclick="toggleNotifPanel()" title="Notifications">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div id="notifBell" onclick="toggleNotifPanel()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      <span id="notifBadge" style="display:none;">0</span>
+      <span id="notifBadge" style="display:none">0</span>
     </div>
     <div id="helpBtn" onclick="openInstruction()">Instructions</div>
   </div>
 </header>
 
-<div id="notifPanel" style="display:none;">
+<div id="notifPanel" style="display:none">
   <div id="notifPanelHeader">
-    <span style="font-weight:700;font-size:15px;color:var(--white);">Notifications</span>
+    <span style="font-weight:700;font-size:15px;color:var(--white)">Notifications</span>
     <button onclick="clearAllNotifs()" id="notifClearBtn">Clear all</button>
   </div>
-  <div id="notifList">
-    <div class="notif-empty">No notifications yet</div>
-  </div>
+  <div id="notifList"><div class="notif-empty">No notifications yet</div></div>
 </div>
-<div id="notifOverlay" onclick="closeNotifPanel()" style="display:none;"></div>
-
-<div id="webviewWarning">
-  For stable photo upload, open in browser: <b>⋮ → Open in Chrome / Safari</b>
-</div>
+<div id="notifOverlay" onclick="closeNotifPanel()" style="display:none"></div>
+<div id="webviewWarning">For stable photo upload, open in browser: <b>⋮ → Open in Chrome / Safari</b></div>
 
 <div class="container" id="app"></div>
 
 <!-- LOGIN MODAL -->
-<div id="loginModal" class="modal-overlay" style="display:none;" onclick="closeLoginModal(event)">
+<div id="loginModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal">
     <div class="modal-title">Admin Access</div>
     <div class="modal-sub">Enter your credentials to continue</div>
-    <div class="modal-field">
-      <label>Login</label>
-      <input type="text" id="modalLogin" placeholder="Enter login" autocomplete="off">
-    </div>
-    <div class="modal-field">
-      <label>Password</label>
-      <input type="password" id="modalPassword" placeholder="Enter password"
-        onkeydown="if(event.key==='Enter') submitLogin()">
-    </div>
+    <div class="modal-field"><label>Login</label><input type="text" id="modalLogin" placeholder="Enter login" autocomplete="off"></div>
+    <div class="modal-field"><label>Password</label><input type="password" id="modalPassword" placeholder="Enter password" onkeydown="if(event.key==='Enter')submitLogin()"></div>
     <div class="modal-error" id="modalError"></div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeLoginModal()">Cancel</button>
+      <button class="btn-cancel" onclick="document.getElementById('loginModal').style.display='none'">Cancel</button>
       <button class="primary" onclick="submitLogin()">Sign In</button>
     </div>
   </div>
 </div>
 
 <!-- NEW GROUP MODAL -->
-<div id="newGroupModal" class="modal-overlay" style="display:none;" onclick="closeNewGroupModal(event)">
+<div id="newGroupModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal">
     <div class="modal-title">Create New Group</div>
     <div class="modal-sub">Add a group name and student list</div>
-    <div class="modal-field">
-      <label>Group Name</label>
-      <input type="text" id="newGroupName" placeholder="e.g. GROUP IELTS 11:00 MWF" autocomplete="off">
-    </div>
-    <div class="modal-field">
-      <label>Students — one per line</label>
-      <textarea id="newGroupStudents" placeholder="LASTNAME FIRSTNAME&#10;LASTNAME FIRSTNAME&#10;..."
-        style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);
-               padding:12px 14px;font-size:13px;font-family:inherit;color:var(--text);
-               outline:none;resize:vertical;min-height:130px;line-height:1.6;
-               transition:border-color 0.2s;"
-        onfocus="this.style.borderColor='var(--accent)'"
-        onblur="this.style.borderColor='var(--border)'"></textarea>
+    <div class="modal-field"><label>Group Name</label><input type="text" id="newGroupName" placeholder="e.g. GROUP IELTS 11:00 MWF" autocomplete="off"></div>
+    <div class="modal-field"><label>Students — one per line</label>
+      <textarea id="newGroupStudents" placeholder="LASTNAME FIRSTNAME&#10;..." style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px;font-size:13px;font-family:inherit;color:var(--text);outline:none;resize:vertical;min-height:130px;line-height:1.6"></textarea>
     </div>
     <div class="modal-error" id="newGroupError"></div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeNewGroupModal()">Cancel</button>
+      <button class="btn-cancel" onclick="document.getElementById('newGroupModal').style.display='none'">Cancel</button>
       <button class="primary" onclick="submitNewGroup()">Create Group</button>
     </div>
   </div>
 </div>
 
 <!-- AI CHECKER MODAL -->
-<div id="aiCheckerModal" style="display:none;">
-  <div class="ai-modal-overlay" onclick="closeAiChecker(event)">
-    <div class="ai-modal" id="aiModalInner">
+<div id="aiModal" style="display:none">
+  <div class="ai-overlay" onclick="if(event.target.classList.contains('ai-overlay'))closeAI()">
+    <div class="ai-modal">
       <div class="ai-modal-header">
         <div class="ai-modal-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 8v4l3 3"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
           <span>AI Essay Checker</span>
         </div>
-        <button class="ai-modal-close" onclick="closeAiChecker()">
+        <button class="ai-close-btn" onclick="closeAI()">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
         </button>
       </div>
-      <div id="aiHwNameBadge" class="ai-modal-hw-name"></div>
-      <div id="aiCheckerBody">
-        <div class="ai-textarea-wrap">
-          <textarea
-            class="ai-textarea"
-            id="aiEssayText"
-            placeholder="Paste your essay or writing here…"
-            oninput="updateCharCount()"
-          ></textarea>
-        </div>
-        <div class="ai-char-count" id="aiCharCount">0 words</div>
-        <button class="ai-submit-btn" id="aiSubmitBtn" onclick="runAiCheck()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          Check my writing
-        </button>
-        <div id="aiResultArea"></div>
-      </div>
+      <div id="aiHwBadge" class="ai-hw-badge"></div>
+      <textarea class="ai-textarea" id="aiText" placeholder="Paste your essay or writing here…" oninput="updateWordCount()"></textarea>
+      <div class="ai-word-count" id="aiWordCount">0 words</div>
+      <button class="ai-submit-btn" id="aiBtn" onclick="runCheck()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Check my writing
+      </button>
+      <div id="aiResult"></div>
     </div>
   </div>
 </div>
 
 <script>
-/* ================= FIREBASE ================= */
+// ===== FIREBASE =====
 firebase.initializeApp({
-  apiKey: "AIzaSyDJDVZazGiEUshVicJX8ObvxIjDPgA5rTo",
-  authDomain: "studentstatista.firebaseapp.com",
-  databaseURL: "https://studentstatista-default-rtdb.firebaseio.com",
-  projectId: "studentstatista",
-  storageBucket: "studentstatista.firebasestorage.app"
+  apiKey:"AIzaSyDJDVZazGiEUshVicJX8ObvxIjDPgA5rTo",
+  authDomain:"studentstatista.firebaseapp.com",
+  databaseURL:"https://studentstatista-default-rtdb.firebaseio.com",
+  projectId:"studentstatista",
+  storageBucket:"studentstatista.firebasestorage.app"
 });
-const db = firebase.database();
-const storage = firebase.storage();
+var db = firebase.database();
+var storage = firebase.storage();
 
-(function detectWebView(){
-  const ua = navigator.userAgent.toLowerCase();
-  const isWebView = ua.includes("wv") || ua.includes("telegram") || ua.includes("instagram") || (ua.includes("android") && !ua.includes("chrome"));
-  if(isWebView){ const bar = document.getElementById("webviewWarning"); if(bar) bar.style.display = "block"; }
+// Detect webview
+(function(){
+  var ua = navigator.userAgent.toLowerCase();
+  if(ua.includes("wv")||ua.includes("telegram")||ua.includes("instagram")||(ua.includes("android")&&!ua.includes("chrome"))){
+    document.getElementById("webviewWarning").style.display="block";
+  }
 })();
 
-/* ================= NAV STATE ================= */
-const NAV_KEY = "statista_nav_v1";
-function setNav(view, payload){ try{ localStorage.setItem(NAV_KEY, JSON.stringify({ view, payload, t: Date.now() })); }catch(e){} }
-function getNav(){ try{ const raw = localStorage.getItem(NAV_KEY); return raw ? JSON.parse(raw) : null; }catch(e){ return null; } }
-function clearNav(){ try{ localStorage.removeItem(NAV_KEY); }catch(e){} }
-function restoreNavOrHome(){
-  const nav = getNav();
-  if(!nav || !nav.view){ home(); return; }
-  try{
-    if(nav.view === "home") return home();
-    if(nav.view === "enterStudent") return enterStudent();
-    if(nav.view === "selectStudent") return selectStudent(nav.payload.group);
-    if(nav.view === "showStages") return showStages(nav.payload.group, nav.payload.student);
-    if(nav.view === "showLessons") return showLessons(nav.payload.group, nav.payload.student, nav.payload.stage);
-    if(nav.view === "showHomework") return showHomework(nav.payload.group, nav.payload.student, nav.payload.stage, nav.payload.lesson);
-    if(nav.view === "instructions") return openInstruction();
-    if(nav.view === "admin") return admin();
-    if(nav.view === "adminGroup") return adminGroup(nav.payload.group);
-    if(nav.view === "adminStageSelect") return adminStageSelect(nav.payload.group, nav.payload.stage);
-    if(nav.view === "adminLessonView") return adminLessonView(nav.payload.group, nav.payload.stage, nav.payload.lesson);
-    home();
-  }catch(e){ home(); }
-}
-
-/* ================= GROUPS ================= */
-const GROUPS = {
+// ===== GROUPS =====
+var GROUPS = {
   "GROUP IELTS 9:00 M/W/F":["HOSHIMOVA NILUFAR","JURAYEVA AZIZA","MAHMUDOV SUNNAT","MUHIDDINOVA MAHBUBA","NORBOYEV SHOHJAXON","OCHILOV LOCHINBEK","ORALOVA SHOHINUR","RAVSHANOVA ZAYNAB","TOSHPULATOV ABBOS"],
   "GROUP IELTS 17:00 MWF":["ABDURAHIMOVA ZILOLA","ALIMOV BEHRUZ","ANVAROVA RUXSHONA","ASADOV SARDOR","BAXRONOVA FAYRUZA","GAFURJONOV ULUGBEK","ISMOILOV ISMOIL","JULIBOYEVA ZEBO","KOZIMJONOVA DURDONA","MELIKUZIYEVA RUXSHONA","NIGMATOV ABDURAHIM","RAHMATULLAYEV BEXRUZ","TALABOV SAUD","XISLATULLAYEV JAVOXIR","XODJAYEVA LAZIZA","YORMATOV MIRABROR"],
   "GROUP IELTS M/W/F 14:00":["RASHIDJANOVA FARANGIZ","RUZIYEVA GAVHAR","YADGARALIYEVA GULHAYO","MUHAMMADIYEVA SEVINCH","KHUDOYBERDIYEVA LAZIZA","ODIL RAZZOQOV","SOBIRJONOVA FOTIMA"],
@@ -941,27 +291,27 @@ const GROUPS = {
   "GROUP IELTS T/T/S 18:30":["GANIJONOV AZIZBEK","HAMIDJONOV ABDULMALIK","IBROHIMOV JASURBEK","OLIMJONOV ABDUGAFFOR","RAXMATULAYEVA ROZITYA","SHOKIROV ABDURAZZOQ","ULMASOV DALER","ZAHRIDDINOV FAZLIDDIN","MIRZABOYEVA ROZYA","XUSHNAZAROV TEMUR","DAYNOVOVA ZEBINISO","JURAYEV KAMRON","TIMUR ABDUSADIKOV","SALOHIDDINOV BUNYOD","GANISHEROVA ZARIFA"]
 };
 
-/* ================= STAGES ================= */
-const STAGES = {
-  "STAGE 1 - WRITING TASK 1": {
-    "LESSON 1": ["Dictation 1-3","Reading Test Bank Updated 1-3","New Podcasts 1-4","Writing Task 1 (3 graphs - introduction & overview)","Vocabulary for Test Bank (Learn)","Speaking: Work or Study"],
-    "LESSON 2": ["Dictation 4-6","Reading Test Bank Updated 4-6","New Podcasts 5-8","Writing Task 1 (Full report)","Vocabulary for Test Bank (Learn)","Speaking: Hometown"],
-    "LESSON 3": ["Dictation 7-9","Reading Test Bank Updated 7-9","New Podcasts 9-12","Writing Task 1 (Full report)","Vocabulary for Test Bank (Learn)","Speaking: Home"],
-    "LESSON 4": ["Dictation 10-12","Reading Test Bank Updated 10-12","New Podcasts 13-16","Writing Task 1 (Report 5-6 full)","Vocabulary for Test Bank (Learn)","Speaking: Social Media"],
-    "LESSON 5": ["Dictation 13-15","Reading Test Bank Updated 13-15","New Podcasts 17-20","Writing Task 1 (Report 7-8 full)","Vocabulary for Test Bank (Learn)","Speaking: Colors"],
-    "LESSON 6": ["Dictation 16-18","Reading Test Bank Updated 16-18","New Podcasts 21-24","Writing Task 1 (Full report)","Vocabulary for Test Bank (Learn)","Speaking: Music"],
-    "LESSON 7": ["Dictation 19-21","Reading Test Bank Updated 19-21","New Podcasts 25-28","Writing Task 1 (Full report)","Vocabulary for Test Bank (Learn)","Speaking: Food"],
-    "LESSON 8": ["Dictation 22-24","Reading Test Bank Updated 22-24","New Podcasts 29-32","Vocabulary for Test Bank (Learn)","Writing Report","Speaking: Shopping"],
-    "LESSON 9": ["Dictation 25-27","Reading Test Bank Updated 25-27","New Podcasts 33-36","Vocabulary for Test Bank (Learn)","Writing Task 1","Speaking: Sport"]
+// ===== STAGES =====
+var STAGES = {
+  "STAGE 1 - WRITING TASK 1":{
+    "LESSON 1":["Dictation 1-3","Reading Test Bank Updated 1-3","New Podcasts 1-4","Writing Task 1 (3 graphs - introduction & overview)","Vocabulary for Test Bank (Learn)","Speaking: Work or Study"],
+    "LESSON 2":["Dictation 4-6","Reading Test Bank Updated 4-6","New Podcasts 5-8","Writing Task 1 (Full report)","Vocabulary for Test Bank (Learn)","Speaking: Hometown"],
+    "LESSON 3":["Dictation 7-9","Reading Test Bank Updated 7-9","New Podcasts 9-12","Writing Task 1 (Full report)","Vocabulary for Test Bank (Learn)","Speaking: Home"],
+    "LESSON 4":["Dictation 10-12","Reading Test Bank Updated 10-12","New Podcasts 13-16","Writing Task 1 (Report 5-6 full)","Vocabulary for Test Bank (Learn)","Speaking: Social Media"],
+    "LESSON 5":["Dictation 13-15","Reading Test Bank Updated 13-15","New Podcasts 17-20","Writing Task 1 (Report 7-8 full)","Vocabulary for Test Bank (Learn)","Speaking: Colors"],
+    "LESSON 6":["Dictation 16-18","Reading Test Bank Updated 16-18","New Podcasts 21-24","Writing Task 1 (Full report)","Vocabulary for Test Bank (Learn)","Speaking: Music"],
+    "LESSON 7":["Dictation 19-21","Reading Test Bank Updated 19-21","New Podcasts 25-28","Writing Task 1 (Full report)","Vocabulary for Test Bank (Learn)","Speaking: Food"],
+    "LESSON 8":["Dictation 22-24","Reading Test Bank Updated 22-24","New Podcasts 29-32","Vocabulary for Test Bank (Learn)","Writing Report","Speaking: Shopping"],
+    "LESSON 9":["Dictation 25-27","Reading Test Bank Updated 25-27","New Podcasts 33-36","Vocabulary for Test Bank (Learn)","Writing Task 1","Speaking: Sport"]
   },
-  "STAGE 2 - LISTENING": {
+  "STAGE 2 - LISTENING":{
     "LESSON 1":["Listening Strategies Unit 1","Listening Practice Lesson 1","Reading Practice Lesson 1","Spelling Dictation (Pages 2-3)","Task 1 Editing (Rewriting)","Speaking: Shopping"],
     "LESSON 2":["Listening Strategies Unit 2","Listening Practice Lesson 2","Reading Practice Lesson 2","Spelling Dictation (All pages)","Listening Made Easy","Task 1 (Rewriting)","Speaking: Morning routine"],
     "LESSON 3":["Listening Strategies Unit 3","Listening Practice Lesson 3","Reading Practice Lesson 3","Spelling Dictation","Listening Made Easy","Task 1 (Rewriting)","Speaking: News"],
     "LESSON 4":["Listening Strategies Unit 4","Listening Practice Lesson 4","Reading Practice Lesson 4","Spelling Dictation","Listening Made Easy","Task 1 (Rewriting)","Speaking: Sharing things"],
     "LESSON 5":["Listening Strategies Unit 5","Listening Practice Lesson 5","Reading Practice Lesson 5","Spelling Dictation"]
   },
-  "STAGE 3 - READING": {
+  "STAGE 3 - READING":{
     "LESSON 1":["Cambridge 10 Test 1 (L/R) + deep analysis","TED Radio Hour (Where Joy Hides?) Part 1","Shadowing Video","Articles"],
     "LESSON 2":["Cambridge 10 Test 2 (L/R) + deep analysis","TED Radio Hour (Where Joy Hides?) Part 2","Task 1 report review","Articles"],
     "LESSON 3":["Cambridge 10 Test 3 (L/R) + deep analysis","TED Radio Hour (Quiet) Part 1","Shadowing Video","Articles"],
@@ -973,7 +323,7 @@ const STAGES = {
     "LESSON 9":["Cambridge 12 Test 1 (L/R) + deep analysis","TED Radio Hour (The Power Of Design) Part 1","Shadowing Video","Articles"],
     "LESSON 10":["Cambridge 12 Test 2 (L/R) + deep analysis","TED Radio Hour (The Power Of Design) Part 2","Task 1 new report","Articles"]
   },
-  "STAGE 4 - WRITING TASK 2 AND SPEAKING": {
+  "STAGE 4 - WRITING TASK 2 AND SPEAKING":{
     "LESSON 1":["Cambridge 12 Test 3 (L/R) + deep analysis","TED Radio Hour (Making Mistakes) Part 1","Speaking Part 2 + Part 3","Articles"],
     "LESSON 2":["Cambridge 12 Test 4 (L/R) + deep analysis","TED Radio Hour (Making Mistakes) Part 2","Speaking Part 2 + Part 3","Articles","Opinion Essay"],
     "LESSON 3":["Cambridge 13 Test 1 (L/R) + deep analysis","TED Radio Hour (Rethinking School) Part 1","Speaking Part 2 + Part 3","Articles","Discussion Essay"],
@@ -987,7 +337,7 @@ const STAGES = {
     "LESSON 11":["Cambridge 15 Test 1 (L/R/W) + deep analysis","TED Radio Hour (Comfort Zone) Part 2","Speaking Part 2 + Part 3","Articles"],
     "LESSON 12":["Cambridge 15 Test 2 (L/R/W) + deep analysis","TED Radio Hour (Money Paradox) Part 1","Speaking Part 2 + Part 3","Articles"]
   },
-  "STAGE 5 - POLISHING SKILLS": {
+  "STAGE 5 - POLISHING SKILLS":{
     "LESSON 1":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 1","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
     "LESSON 2":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 2","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
     "LESSON 3":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 1","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
@@ -1001,7 +351,7 @@ const STAGES = {
     "LESSON 11":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 1","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"],
     "LESSON 12":["Full Listening x1","Full Reading x1","Article reading","1 hour podcast","Writing Task 2","Speaking Practice","Vocabulary for IELTS","ELS Upper Intermediate"]
   },
-  "STAGE 6 - FINAL PRACTICE": {
+  "STAGE 6 - FINAL PRACTICE":{
     "LESSON 1":["Listening full","Reading full","Article - new words","Article ELS (pages 312-315)","Task 1","Speaking","Cambridge 19 - test 1","Longer Article","Grammar revision lesson 1"],
     "LESSON 2":["Listening full","Reading full","Article - new words","Article ELS (pages 316-319)","Task 2","Speaking","Cambridge 19 - test 2","Longer Article","Grammar revision lesson 2"],
     "LESSON 3":["Listening full","Reading full","Article - new words","Article ELS (pages 320-323)","Task 1","Speaking","Cambridge 19 - test 3","Longer Article","Grammar revision lesson 3"],
@@ -1017,827 +367,537 @@ const STAGES = {
   }
 };
 
-/* ================= AI CHECKER ================= */
-function isWritingTask(hwName) {
-  const name = hwName.toLowerCase();
-  return (
-    name.includes("writing task 1") ||
-    name.includes("writing task 2") ||
-    name.includes("writing report") ||
-    name.includes("task 1") ||
-    name.includes("task 2") ||
-    name.includes("essay") ||
-    name.includes("report")
-  );
+// ===== SCHEDULE =====
+var SCHEDULE = {
+  "GROUP IELTS 9:00 M/W/F":{days:[1,3,5],hour:9,minute:0},
+  "GROUP IELTS 17:00 MWF":{days:[1,3,5],hour:17,minute:0},
+  "GROUP IELTS M/W/F 14:00":{days:[1,3,5],hour:14,minute:0},
+  "GROUP IELTS T/T/S 9:00":{days:[2,4,6],hour:9,minute:0},
+  "GROUP IELTS 10:30 TTS":{days:[2,4,6],hour:10,minute:30},
+  "GROUP IELTS T/T/S 14:00":{days:[2,4,6],hour:14,minute:0},
+  "GROUP IELTS 15:30 TTS":{days:[2,4,6],hour:15,minute:30},
+  "GROUP IELTS T/T/S 18:30":{days:[2,4,6],hour:18,minute:30}
+};
+
+function minutesUntilLesson(group){
+  var s=SCHEDULE[group]; if(!s) return null;
+  var now=new Date(), day=now.getDay();
+  var nowMins=now.getHours()*60+now.getMinutes();
+  var lessonMins=s.hour*60+s.minute;
+  if(s.days.indexOf(day)!==-1) return lessonMins-nowMins;
+  return null;
+}
+function isBlocked(group){
+  var m=minutesUntilLesson(group);
+  return m!==null && m<=0 && m>=-90;
 }
 
-function openAiCheckerById(hwId) {
-  const hwName = (window._hwRegistry && window._hwRegistry[hwId]) || hwId.replace(/^hw_/, '').replace(/_/g, ' ');
-  openAiChecker(hwName);
-}
+// ===== NAV =====
+var NAV_KEY="statista_nav_v1";
+function setNav(v,p){try{localStorage.setItem(NAV_KEY,JSON.stringify({view:v,payload:p}));}catch(e){}}
+function getNav(){try{var r=localStorage.getItem(NAV_KEY);return r?JSON.parse(r):null;}catch(e){return null;}}
 
-function openAiChecker(hwName) {
-  document.getElementById("aiHwNameBadge").textContent = hwName;
-  document.getElementById("aiEssayText").value = "";
-  document.getElementById("aiResultArea").innerHTML = "";
-  document.getElementById("aiCharCount").textContent = "0 words";
-  document.getElementById("aiSubmitBtn").disabled = false;
-  document.getElementById("aiCheckerModal").style.display = "block";
-  setTimeout(() => document.getElementById("aiEssayText").focus(), 200);
-}
-
-function closeAiChecker(event) {
-  if (event && event.target !== document.querySelector(".ai-modal-overlay")) return;
-  document.getElementById("aiCheckerModal").style.display = "none";
-}
-
-function updateCharCount() {
-  const text = document.getElementById("aiEssayText").value.trim();
-  const words = text ? text.split(/\s+/).filter(w => w.length > 0).length : 0;
-  document.getElementById("aiCharCount").textContent = words + " word" + (words !== 1 ? "s" : "");
-}
-
-function getTaskType(hwName) {
-  const name = hwName.toLowerCase();
-  if (name.includes("task 2") || name.includes("essay")) return "task2";
-  return "task1";
-}
-
-async function runAiCheck() {
-  const essayText = document.getElementById("aiEssayText").value.trim();
-  const hwName = document.getElementById("aiHwNameBadge").textContent;
-
-  if (!essayText || essayText.split(/\s+/).length < 10) {
-    document.getElementById("aiResultArea").innerHTML = `
-      <div class="ai-error-box">Please paste at least 10 words of your writing to check.</div>`;
-    return;
-  }
-
-  const taskType = getTaskType(hwName);
-  const taskLabel = taskType === "task2" ? "IELTS Writing Task 2 (essay)" : "IELTS Writing Task 1 (report/graph description)";
-
-  document.getElementById("aiSubmitBtn").disabled = true;
-  document.getElementById("aiResultArea").innerHTML = `
-    <div class="ai-loading">
-      <div class="ai-loading-dots">
-        <span></span><span></span><span></span>
-      </div>
-      Analysing your writing…
-    </div>`;
-
-  const systemPrompt = `You are an expert IELTS examiner and English writing coach. Analyse the student's ${taskLabel} in detail, like Grammarly + IELTS examiner combined. Respond ONLY with a valid JSON object — no markdown, no backticks, no extra text before or after.
-
-JSON format (all fields required):
-{
-  "overall": 6.5,
-  "ta": 6.5,
-  "cc": 6.0,
-  "lr": 7.0,
-  "gra": 6.5,
-  "human_percent": 78,
-  "ai_percent": 22,
-  "ai_detection_note": "One sentence explaining what patterns suggest AI involvement, or confirming it looks human-written.",
-  "summary": "2-3 sentence overall summary of the writing quality.",
-  "strengths": ["strength 1", "strength 2", "strength 3"],
-  "improvements": ["specific actionable improvement 1", "specific actionable improvement 2", "specific actionable improvement 3"],
-  "grammar_errors": [
-    "ERROR: [quote exact wrong phrase] → FIX: [corrected version] — REASON: [brief explanation]",
-    "ERROR: [quote exact wrong phrase] → FIX: [corrected version] — REASON: [brief explanation]"
-  ],
-  "vocabulary_tips": [
-    "WEAK: [word/phrase used] → BETTER: [stronger alternative] — WHY: [explanation]",
-    "WEAK: [word/phrase used] → BETTER: [stronger alternative] — WHY: [explanation]"
-  ],
-  "sentence_structure": ["tip about sentence variety", "tip about sentence length"],
-  "band_description": "One sentence describing what this band score means for IELTS."
-}
-
-IELTS scoring criteria:
-- TA: Task Achievement — did they fully answer the task, cover all bullet points, meet word count?
-- CC: Coherence & Cohesion — logical flow, paragraphing, linking words, topic sentences
-- LR: Lexical Resource — vocabulary range, collocations, avoiding repetition, precision
-- GRA: Grammatical Range & Accuracy — tense accuracy, complex sentences, punctuation, articles
-- overall: average of the four scores, rounded to nearest 0.5
-
-AI Detection criteria (human_percent + ai_percent must equal 100):
-- Look for: unnaturally perfect grammar, overly formal tone, repetitive sentence structures, lack of personal voice, generic transitions (furthermore, moreover, in conclusion), perfect paragraph balance, no contractions or colloquialisms.
-- More AI signs = lower human_percent. Natural mistakes, personal voice, varied flow = higher human_percent.
-- Be strict and realistic. Most students write 60-90% human content.
-
-Valid IELTS bands only: 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0
-Be honest and specific. Quote actual text from the student when pointing out errors.`;
-
-  try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer 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"
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        max_tokens: 1200,
-        temperature: 0.3,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: essayText }
-        ]
-      })
-    });
-
-    if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      throw new Error(errData.error?.message || "API error: " + response.status);
-    }
-
-    const data = await response.json();
-    let raw = data.choices[0].message.content.trim();
-    raw = raw.replace(/```json|```/g, "").trim();
-    const result = JSON.parse(raw);
-
-    renderAiResult(result);
-  } catch (err) {
-    document.getElementById("aiResultArea").innerHTML = `
-      <div class="ai-error-box">
-        Something went wrong. Please try again.<br>
-        <span style="font-size:11px;opacity:0.7;">${err.message || err}</span>
-      </div>`;
-  } finally {
-    document.getElementById("aiSubmitBtn").disabled = false;
-  }
-}
-
-function bandColor(score) {
-  if (score >= 7.5) return "var(--green)";
-  if (score >= 6.5) return "var(--accent)";
-  if (score >= 5.5) return "var(--amber)";
-  return "var(--red)";
-}
-
-function renderAiResult(r) {
-  const strengthsHtml = (r.strengths || []).map(s => `<li>${s}</li>`).join("");
-  const improvementsHtml = (r.improvements || []).map(s => `<li>${s}</li>`).join("");
-  const errorsHtml = (r.grammar_errors || []).map(s => `<li style="margin-bottom:8px;">${s}</li>`).join("");
-  const vocabHtml = (r.vocabulary_tips || []).map(s => `<li style="margin-bottom:8px;">${s}</li>`).join("");
-  const sentenceHtml = (r.sentence_structure || []).map(s => `<li>${s}</li>`).join("");
-
-  const humanPct = r.human_percent || 80;
-  const aiPct = r.ai_percent || (100 - humanPct);
-  const aiNote = r.ai_detection_note || "";
-
-  // Pick warning color for AI bar label
-  const aiWarning = aiPct >= 50 ? "var(--red)" : aiPct >= 30 ? "var(--amber)" : "var(--accent2)";
-
-  document.getElementById("aiResultArea").innerHTML = `
-    <div class="ai-result">
-      <div class="ai-overall-band">
-        <div class="ai-overall-label">Estimated IELTS Band</div>
-        <div class="ai-overall-num">${r.overall}</div>
-        <div class="ai-overall-desc">${r.band_description || ""}</div>
-      </div>
-
-      <div class="ai-detect-card">
-        <div class="ai-detect-title">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          AI Detection Analysis
-        </div>
-        <div class="ai-detect-bar-wrap" id="aiDetectBarWrap">
-          <div class="ai-detect-bar-human" id="aiBarHuman" style="width:${humanPct}%">${humanPct}%</div>
-          <div class="ai-detect-bar-ai" id="aiBarAI" style="width:${aiPct}%">${aiPct}%</div>
-        </div>
-        <div class="ai-detect-labels">
-          <div class="ai-detect-label-human">
-            <div class="ai-detect-dot" style="background:var(--green)"></div>
-            Human written — ${humanPct}%
-          </div>
-          <div class="ai-detect-label-ai" style="color:${aiWarning}">
-            <div class="ai-detect-dot" style="background:${aiWarning}"></div>
-            AI generated — ${aiPct}%
-          </div>
-        </div>
-        ${aiNote ? `<div class="ai-detect-note">💡 ${aiNote}</div>` : ""}
-      </div>
-
-      <div class="ai-scores-grid">
-        <div class="ai-score-card ta">
-          <div class="ai-score-label">Task Achievement</div>
-          <div class="ai-score-num">${r.ta}</div>
-        </div>
-        <div class="ai-score-card cc">
-          <div class="ai-score-label">Coherence & Cohesion</div>
-          <div class="ai-score-num">${r.cc}</div>
-        </div>
-        <div class="ai-score-card lr">
-          <div class="ai-score-label">Lexical Resource</div>
-          <div class="ai-score-num">${r.lr}</div>
-        </div>
-        <div class="ai-score-card gra">
-          <div class="ai-score-label">Grammar & Accuracy</div>
-          <div class="ai-score-num">${r.gra}</div>
-        </div>
-      </div>
-
-      <div class="ai-feedback-section">
-        <div class="ai-feedback-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          Summary
-        </div>
-        <div class="ai-feedback-body">${r.summary || ""}</div>
-      </div>
-
-      ${strengthsHtml ? `
-      <div class="ai-feedback-section">
-        <div class="ai-feedback-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Strengths
-        </div>
-        <div class="ai-feedback-body"><ul>${strengthsHtml}</ul></div>
-      </div>` : ""}
-
-      ${improvementsHtml ? `
-      <div class="ai-feedback-section">
-        <div class="ai-feedback-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Areas to Improve
-        </div>
-        <div class="ai-feedback-body"><ul>${improvementsHtml}</ul></div>
-      </div>` : ""}
-
-      ${errorsHtml ? `
-      <div class="ai-feedback-section">
-        <div class="ai-feedback-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-          Grammar Errors Found
-        </div>
-        <div class="ai-feedback-body"><ul>${errorsHtml}</ul></div>
-      </div>` : ""}
-
-      ${vocabHtml ? `
-      <div class="ai-feedback-section">
-        <div class="ai-feedback-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-          Vocabulary Tips
-        </div>
-        <div class="ai-feedback-body"><ul>${vocabHtml}</ul></div>
-      </div>` : ""}
-
-      ${sentenceHtml ? `
-      <div class="ai-feedback-section">
-        <div class="ai-feedback-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><line x1="21" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="13" y2="18"/></svg>
-          Sentence Structure Tips
-        </div>
-        <div class="ai-feedback-body"><ul>${sentenceHtml}</ul></div>
-      </div>` : ""}
-    </div>
-  `;
-}
-
-/* ================= APP ================= */
-const app = document.getElementById("app");
-
-function openInstruction(){
-  setNav("instructions", {});
-  app.innerHTML = `
-    <button class="back" onclick="home()">← Back</button>
-    <h2>How to Use Statista</h2>
-    <div class="step-card">
-      <div class="step-num">1</div>
-      <div class="step-title">Open the App</div>
-      <div class="step-body">On the home screen, tap <b>"Enter as Student"</b>.</div>
-    </div>
-    <div class="step-card">
-      <div class="step-num">2</div>
-      <div class="step-title">Find Yourself</div>
-      <div class="step-body">Select your <b>group</b>, then find your <b>full name</b> in the list.</div>
-    </div>
-    <div class="step-card">
-      <div class="step-num">3</div>
-      <div class="step-title">Choose Your Homework</div>
-      <div class="step-body">You will see <b>6 stages</b>. Tap your current stage, then choose the <b>lesson</b> and the <b>homework task</b>.</div>
-    </div>
-    <div class="step-card">
-      <div class="step-num">4</div>
-      <div class="step-title">Submit a Photo</div>
-      <div class="step-body">Attach <b>at least one photo</b> of your completed homework.<br><br><b>Without a photo, the homework will NOT be saved.</b></div>
-    </div>
-    <div class="alert-card">
-      <b>Speaking homework:</b>
-      <ul>
-        <li>Send your speaking to the group as usual</li>
-        <li>Take a screenshot of it</li>
-        <li>Upload the screenshot here</li>
-      </ul>
-    </div>
-    <div class="step-card">
-      <div class="step-num">5</div>
-      <div class="step-title">Check Writing with AI</div>
-      <div class="step-body">For <b>Task 1 and Task 2</b> writing homework, tap the <b style="color:#a78bfa;">✦ Check with AI</b> button to get instant IELTS feedback on grammar, vocabulary, and band score.</div>
-    </div>
-    <div class="step-card">
-      <div class="step-num">6</div>
-      <div class="step-title">Confirm Submission</div>
-      <div class="step-body">After submitting, check that the status shows <span class="green" style="vertical-align:middle;font-size:12px">Submitted</span>.</div>
-    </div>
-  `;
-}
+var app=document.getElementById("app");
 
 function home(){
-  setNav("home", {});
-  app.innerHTML = `
-    <div class="home-wrap">
-      <div class="home-title">Statista</div>
-      <div class="home-sub">IELTS Homework Tracker</div>
-      <div class="home-cards">
-        <div class="home-card student" onclick="enterStudent()">
-          <div class="label">Student</div>
-          <div class="sub">Submit homework</div>
-        </div>
-        <div class="home-card teacher" onclick="login()">
-          <div class="label">Teacher</div>
-          <div class="sub">Admin panel</div>
-        </div>
-      </div>
-    </div>
-  `;
+  setNav("home",{});
+  app.innerHTML='<div class="home-wrap"><div class="home-title">Statista</div><div class="home-sub">IELTS Homework Tracker</div><div class="home-cards"><div class="home-card student" onclick="enterStudent()"><div class="label">Student</div><div class="sub">Submit homework</div></div><div class="home-card teacher" onclick="loginAdmin()"><div class="label">Teacher</div><div class="sub">Admin panel</div></div></div></div>';
 }
 
 function enterStudent(){
-  setNav("enterStudent", {});
-  let h = `<button class="back" onclick="home()">← Back</button><h3>Select Group</h3>`;
-  Object.keys(GROUPS).forEach(g => {
-    h += `<div class="card"><button class="primary" onclick="selectStudent('${g}')">${g}</button></div>`;
+  setNav("enterStudent",{});
+  var h='<button class="back" onclick="home()">← Back</button><h3>Select Group</h3>';
+  Object.keys(GROUPS).forEach(function(g){
+    h+='<div class="card"><button class="primary" onclick="selectStudent(\''+g.replace(/'/g,"\\'")+'\'">'+g+'</button></div>';
   });
-  app.innerHTML = h;
+  app.innerHTML=h;
 }
 
 function selectStudent(group){
-  setNav("selectStudent", { group });
-  let h = `
-    <button class="back" onclick="enterStudent()">← Back</button>
-    <div class="bc"><span>${group}</span></div>
-    <h3>Select Your Name</h3>
-  `;
-  GROUPS[group].forEach(s => {
-    h += `<div class="card"><button class="primary" onclick="showStages('${group}','${s}')">${s}</button></div>`;
+  setNav("selectStudent",{group:group});
+  var h='<button class="back" onclick="enterStudent()">← Back</button><div class="bc">'+group+'</div><h3>Select Your Name</h3>';
+  GROUPS[group].forEach(function(s){
+    h+='<div class="card"><button class="primary" onclick="showStages(\''+group.replace(/'/g,"\\'")+'_SEP_\'+ \''+s.replace(/'/g,"\\'")+'\')">'+s+'</button></div>';
   });
-  app.innerHTML = h;
+  // Use data approach instead
+  app.innerHTML='<button class="back" onclick="enterStudent()">← Back</button><div class="bc">'+group+'</div><h3>Select Your Name</h3><div id="studentList"></div>';
+  var list=document.getElementById("studentList");
+  GROUPS[group].forEach(function(s){
+    var div=document.createElement("div"); div.className="card";
+    var btn=document.createElement("button"); btn.className="primary"; btn.textContent=s;
+    btn.addEventListener("click",function(){ showStages(group,s); });
+    div.appendChild(btn); list.appendChild(div);
+  });
 }
 
-function showStages(group, student){
-  setNav("showStages", { group, student });
-  let h = `
-    <button class="back" onclick="selectStudent('${group}')">← Back</button>
-    <div class="bc"><span>${group}</span> › <b>${student}</b></div>
-    <h3>Select Stage</h3>
-  `;
-  Object.keys(STAGES).forEach((stage) => {
-    h += `<div class="card"><button class="primary" onclick="showLessons('${group}','${student}','${stage}')">${stage}</button></div>`;
+function showStages(group,student){
+  setNav("showStages",{group:group,student:student});
+  app.innerHTML='<button class="back" onclick="selectStudent(\''+group.replace(/'/g,"\\'")+'\')">← Back</button><div class="bc">'+group+' › <b>'+student+'</b></div><h3>Select Stage</h3><div id="stageList"></div>';
+  var list=document.getElementById("stageList");
+  Object.keys(STAGES).forEach(function(stage){
+    var div=document.createElement("div"); div.className="card";
+    var btn=document.createElement("button"); btn.className="primary"; btn.textContent=stage;
+    btn.addEventListener("click",function(){ showLessons(group,student,stage); });
+    div.appendChild(btn); list.appendChild(div);
   });
-  app.innerHTML = h;
 }
 
-function showLessons(group, student, stage){
-  setNav("showLessons", { group, student, stage });
-  let h = `
-    <button class="back" onclick="showStages('${group}','${student}')">← Back</button>
-    <div class="bc"><b>${student}</b> › <span>${stage}</span></div>
-    <h3>Select Lesson</h3>
-  `;
-  Object.keys(STAGES[stage]).forEach(lesson => {
-    h += `<div class="card"><button class="secondary" onclick="showHomework('${group}','${student}','${stage}','${lesson}')">${lesson}</button></div>`;
+function showLessons(group,student,stage){
+  setNav("showLessons",{group:group,student:student,stage:stage});
+  app.innerHTML='<button class="back" onclick="showStages(\''+group.replace(/'/g,"\\'")+'\',\''+student.replace(/'/g,"\\'")+'\')">← Back</button><div class="bc"><b>'+student+'</b> › '+stage+'</div><h3>Select Lesson</h3><div id="lessonList"></div>';
+  var list=document.getElementById("lessonList");
+  Object.keys(STAGES[stage]).forEach(function(lesson){
+    var div=document.createElement("div"); div.className="card";
+    var btn=document.createElement("button"); btn.className="secondary"; btn.textContent=lesson;
+    btn.addEventListener("click",function(){ showHomework(group,student,stage,lesson); });
+    div.appendChild(btn); list.appendChild(div);
   });
-  app.innerHTML = h;
 }
 
-async function showHomework(group, student, stage, lesson){
-  setNav("showHomework", { group, student, stage, lesson });
-  app.innerHTML = '<div class="loading">Loading…</div>';
+async function showHomework(group,student,stage,lesson){
+  setNav("showHomework",{group:group,student:student,stage:stage,lesson:lesson});
+  app.innerHTML='<div class="loading">Loading…</div>';
+  var snap=await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson).once("value");
+  var data=snap.val()||{};
 
-  const lessonSnap = await db.ref("submissions/" + group + "/" + student + "/" + stage + "/" + lesson).once("value");
-  const lessonData = lessonSnap.val() || {};
+  app.innerHTML='';
 
-  window._hwRegistry = window._hwRegistry || {};
+  var backBtn=document.createElement("button"); backBtn.className="back"; backBtn.textContent="← Back";
+  backBtn.addEventListener("click",function(){ showLessons(group,student,stage); });
+  app.appendChild(backBtn);
 
-  let cards = [];
+  var bc=document.createElement("div"); bc.className="bc";
+  bc.innerHTML="<b>"+student+"</b> › "+stage+" › <b>"+lesson+"</b>";
+  app.appendChild(bc);
 
-  for (const hw of STAGES[stage][lesson]) {
-    const d = lessonData[hw];
-    const submitted = d && Array.isArray(d.files) && d.files.length > 0;
-    const hwId = "hw_" + hw.replace(/[^a-zA-Z0-9]/g, "_");
-    window._hwRegistry[hwId] = hw;
+  // Schedule banner
+  var mins=minutesUntilLesson(group);
+  var blocked=isBlocked(group);
+  if(blocked){
+    var b=document.createElement("div"); b.className="schedule-banner blocked-banner";
+    b.textContent="Lesson has started — homework submission is now closed.";
+    app.appendChild(b);
+  } else if(mins!==null && mins>0 && mins<=30){
+    var b=document.createElement("div"); b.className="schedule-banner warning-banner";
+    b.textContent="Lesson starts in "+mins+" minute"+(mins===1?"":"s")+" — submit any missing homework now!";
+    app.appendChild(b);
+  }
 
-    let card = document.createElement("div");
-    card.className = "card hw";
+  var h3=document.createElement("h3"); h3.textContent="Homework Tasks"; app.appendChild(h3);
 
-    let title = document.createElement("b");
-    title.textContent = hw;
-    card.appendChild(title);
+  STAGES[stage][lesson].forEach(function(hw){
+    var d=data[hw];
+    var submitted=d&&Array.isArray(d.files)&&d.files.length>0;
+    var isWriting=isWritingTask(hw);
 
-    let statusRow = document.createElement("div");
-    statusRow.style.cssText = "display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;";
+    var card=document.createElement("div"); card.className="card hw";
 
-    let badge = document.createElement("span");
-    badge.className = submitted ? "green" : "red";
-    badge.textContent = submitted ? "Submitted" : "Not submitted";
-    statusRow.appendChild(badge);
+    var title=document.createElement("b"); title.textContent=hw; card.appendChild(title);
 
-    if (isWritingTask(hw)) {
-      let aiBtn = document.createElement("button");
-      aiBtn.className = "ai-check-btn";
-      aiBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Check with AI';
-      aiBtn.addEventListener("click", (function(id){ return function(){ openAiCheckerById(id); }; })(hwId));
-      statusRow.appendChild(aiBtn);
+    var row=document.createElement("div");
+    row.style.cssText="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;";
+
+    var badge=document.createElement("span");
+    badge.className=submitted?"green":"red";
+    badge.textContent=submitted?"Submitted":"Not submitted";
+    row.appendChild(badge);
+
+    if(isWriting){
+      var aiBtn=document.createElement("button");
+      aiBtn.className="ai-check-btn";
+      aiBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Check with AI';
+      (function(hwName){ aiBtn.addEventListener("click",function(){ openAI(hwName); }); })(hw);
+      row.appendChild(aiBtn);
     }
+    card.appendChild(row);
 
-    card.appendChild(statusRow);
-
-    if (submitted) {
-      d.files.forEach(function(url) {
-        let a = document.createElement("a");
-        a.href = url; a.target = "_blank";
-        let img = document.createElement("img");
-        img.src = url;
-        a.appendChild(img);
+    if(submitted){
+      d.files.forEach(function(url){
+        var a=document.createElement("a"); a.href=url; a.target="_blank";
+        var img=document.createElement("img"); img.src=url; a.appendChild(img);
         card.appendChild(a);
       });
     }
 
     card.appendChild(document.createElement("br"));
 
-    let submitLabel = document.createElement("label");
-    submitLabel.className = "primary";
-    submitLabel.textContent = "Submit photo (max 4)";
-    let submitInput = document.createElement("input");
-    submitInput.type = "file"; submitInput.accept = "image/*"; submitInput.multiple = true;
-    submitInput.addEventListener("change", (function(g,st,sg,ls,h){ return function(){ submitHW(this,g,st,sg,ls,h); }; })(group,student,stage,lesson,hw));
-    submitLabel.appendChild(submitInput);
-    card.appendChild(submitLabel);
+    var lbl=document.createElement("label"); lbl.className="primary"; lbl.textContent="Submit photo (max 4)";
+    var inp=document.createElement("input"); inp.type="file"; inp.accept="image/*"; inp.multiple=true;
+    if(blocked){ lbl.style.opacity="0.35"; lbl.style.pointerEvents="none"; }
+    (function(g,st,sg,ls,h){ inp.addEventListener("change",function(){ submitHW(this,g,st,sg,ls,h); }); })(group,student,stage,lesson,hw);
+    lbl.appendChild(inp); card.appendChild(lbl);
 
-    if (submitted) {
-      let replaceLabel = document.createElement("label");
-      replaceLabel.className = "danger";
-      replaceLabel.style.marginLeft = "8px";
-      replaceLabel.textContent = "Replace photos";
-      let replaceInput = document.createElement("input");
-      replaceInput.type = "file"; replaceInput.accept = "image/*"; replaceInput.multiple = true;
-      replaceInput.addEventListener("change", (function(g,st,sg,ls,h){ return function(){ replaceHW(this,g,st,sg,ls,h); }; })(group,student,stage,lesson,hw));
-      replaceLabel.appendChild(replaceInput);
-      card.appendChild(replaceLabel);
+    if(submitted){
+      var lbl2=document.createElement("label"); lbl2.className="danger"; lbl2.style.marginLeft="8px"; lbl2.textContent="Replace photos";
+      var inp2=document.createElement("input"); inp2.type="file"; inp2.accept="image/*"; inp2.multiple=true;
+      if(blocked){ lbl2.style.opacity="0.35"; lbl2.style.pointerEvents="none"; }
+      (function(g,st,sg,ls,h){ inp2.addEventListener("change",function(){ replaceHW(this,g,st,sg,ls,h); }); })(group,student,stage,lesson,hw);
+      lbl2.appendChild(inp2); card.appendChild(lbl2);
     }
 
-    cards.push(card);
-  }
-
-  app.innerHTML = "";
-  let backBtn = document.createElement("button");
-  backBtn.className = "back";
-  backBtn.textContent = "← Back";
-  backBtn.addEventListener("click", function(){ showLessons(group, student, stage); });
-  app.appendChild(backBtn);
-
-  let bc = document.createElement("div");
-  bc.className = "bc";
-  bc.innerHTML = "<b>" + student + "</b> › <span>" + stage + "</span> › <b>" + lesson + "</b>";
-  app.appendChild(bc);
-
-  let h3 = document.createElement("h3");
-  h3.textContent = "Homework Tasks";
-  app.appendChild(h3);
-
-  cards.forEach(function(c){ app.appendChild(c); });
+    app.appendChild(card);
+  });
 }
 
-function safe(v){ return String(v).replace(/[^a-zA-Z0-9_-]/g, "_"); }
+// ===== WRITING TASK DETECTION =====
+function isWritingTask(hw){
+  var n=hw.toLowerCase();
+  return n.includes("writing task")||n.includes("writing report")||
+         n.includes("task 1")||n.includes("task 2")||
+         n.includes("essay")||n.includes("report");
+}
 
-async function compressImage(file, maxW=1280, quality=0.75){
-  const img = document.createElement("img");
-  const url = URL.createObjectURL(file);
-  img.src = url;
-  await new Promise(res => img.onload = res);
-  const scale = Math.min(1, maxW / img.width);
-  const w = Math.round(img.width * scale);
-  const h = Math.round(img.height * scale);
-  const canvas = document.createElement("canvas");
-  canvas.width = w; canvas.height = h;
-  canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+// ===== UPLOAD =====
+function safe(v){return String(v).replace(/[^a-zA-Z0-9_-]/g,"_");}
+
+async function compressImage(file){
+  var img=document.createElement("img");
+  var url=URL.createObjectURL(file); img.src=url;
+  await new Promise(function(res){img.onload=res;});
+  var scale=Math.min(1,1280/img.width);
+  var w=Math.round(img.width*scale), h=Math.round(img.height*scale);
+  var canvas=document.createElement("canvas"); canvas.width=w; canvas.height=h;
+  canvas.getContext("2d").drawImage(img,0,0,w,h);
   URL.revokeObjectURL(url);
-  const blob = await new Promise(res => canvas.toBlob(res, "image/jpeg", quality));
-  if (!blob) return file;
-  return new File([blob], file.name.replace(/\.\w+$/, ".jpg"), { type:"image/jpeg" });
+  var blob=await new Promise(function(res){canvas.toBlob(res,"image/jpeg",0.75);});
+  return blob?new File([blob],file.name.replace(/\.\w+$/,".jpg"),{type:"image/jpeg"}):file;
 }
 
-async function deleteFilesByUrls(urls){
-  if(!urls || !Array.isArray(urls) || urls.length === 0) return;
-  for(const url of urls){ try{ const ref = storage.refFromURL(url); await ref.delete(); }catch(e){} }
-}
-
-async function submitHW(input, group, student, stage, lesson, hw) {
-  const files = Array.from(input.files || []);
-  if (files.length === 0) { alert("At least one photo is required."); return; }
-  if (files.length > 4) { alert("Max 4 photos allowed."); input.value = ""; return; }
-  let uploadedUrls = [];
-  for (const file of files) {
-    const filePath = `submissions/${safe(group)}/${safe(student)}/${safe(stage)}/${safe(lesson)}/${safe(hw)}/${Date.now()}_${safe(file.name)}`;
-    const ref = storage.ref(filePath);
-    const small = await compressImage(file);
-    try { await ref.put(small); const url = await ref.getDownloadURL(); uploadedUrls.push(url); }
-    catch(e) { alert("Upload failed: " + (e.message || e)); input.value = ""; return; }
+async function submitHW(input,group,student,stage,lesson,hw){
+  var files=Array.from(input.files||[]);
+  if(!files.length){alert("At least one photo is required.");return;}
+  if(files.length>4){alert("Max 4 photos allowed.");input.value="";return;}
+  var urls=[];
+  for(var i=0;i<files.length;i++){
+    var path="submissions/"+safe(group)+"/"+safe(student)+"/"+safe(stage)+"/"+safe(lesson)+"/"+safe(hw)+"/"+Date.now()+"_"+safe(files[i].name);
+    var ref=storage.ref(path);
+    var small=await compressImage(files[i]);
+    try{await ref.put(small);urls.push(await ref.getDownloadURL());}
+    catch(e){alert("Upload failed: "+(e.message||e));input.value="";return;}
   }
-  await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).set({ files: uploadedUrls, time: Date.now() });
-  input.value = "";
-  await showHomework(group, student, stage, lesson);
+  await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).set({files:urls,time:Date.now()});
+  input.value="";
+  await showHomework(group,student,stage,lesson);
   alert("Submitted successfully ✓");
 }
 
-async function replaceHW(input, group, student, stage, lesson, hw) {
-  const files = Array.from(input.files || []);
-  if (files.length === 0) { alert("At least one photo is required."); return; }
-  if (files.length > 4) { alert("Max 4 photos allowed."); input.value = ""; return; }
-  const snap = await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).once("value");
-  const old = snap.val();
-  const oldUrls = old && Array.isArray(old.files) ? old.files : [];
-  await deleteFilesByUrls(oldUrls);
-  let uploadedUrls = [];
-  for (const file of files) {
-    const filePath = `submissions/${safe(group)}/${safe(student)}/${safe(stage)}/${safe(lesson)}/${safe(hw)}/${Date.now()}_${safe(file.name)}`;
-    const ref = storage.ref(filePath);
-    const small = await compressImage(file);
-    try { await ref.put(small); const url = await ref.getDownloadURL(); uploadedUrls.push(url); }
-    catch(e) { alert("Upload failed: " + (e.message || e)); input.value = ""; return; }
+async function replaceHW(input,group,student,stage,lesson,hw){
+  var files=Array.from(input.files||[]);
+  if(!files.length){alert("At least one photo is required.");return;}
+  if(files.length>4){alert("Max 4 photos allowed.");input.value="";return;}
+  var snap=await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).once("value");
+  var old=snap.val();
+  if(old&&Array.isArray(old.files)){
+    for(var j=0;j<old.files.length;j++){try{await storage.refFromURL(old.files[j]).delete();}catch(e){}}
   }
-  await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).set({ files: uploadedUrls, time: Date.now() });
-  input.value = "";
-  await showHomework(group, student, stage, lesson);
+  var urls=[];
+  for(var i=0;i<files.length;i++){
+    var path="submissions/"+safe(group)+"/"+safe(student)+"/"+safe(stage)+"/"+safe(lesson)+"/"+safe(hw)+"/"+Date.now()+"_"+safe(files[i].name);
+    var ref=storage.ref(path);
+    var small=await compressImage(files[i]);
+    try{await ref.put(small);urls.push(await ref.getDownloadURL());}
+    catch(e){alert("Upload failed: "+(e.message||e));input.value="";return;}
+  }
+  await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).set({files:urls,time:Date.now()});
+  input.value="";
+  await showHomework(group,student,stage,lesson);
   alert("Replaced successfully ✓");
 }
 
-function login(){
-  document.getElementById("modalLogin").value = "";
-  document.getElementById("modalPassword").value = "";
-  document.getElementById("modalError").textContent = "";
-  document.getElementById("loginModal").style.display = "flex";
-  setTimeout(() => document.getElementById("modalLogin").focus(), 100);
+// ===== ADMIN =====
+function loginAdmin(){
+  document.getElementById("modalLogin").value="";
+  document.getElementById("modalPassword").value="";
+  document.getElementById("modalError").textContent="";
+  document.getElementById("loginModal").style.display="flex";
+  setTimeout(function(){document.getElementById("modalLogin").focus();},100);
 }
-
-function closeLoginModal(e){
-  if(e && e.target !== document.getElementById("loginModal")) return;
-  document.getElementById("loginModal").style.display = "none";
-}
-
 function submitLogin(){
-  const u = document.getElementById("modalLogin").value.trim();
-  const p = document.getElementById("modalPassword").value;
+  var u=document.getElementById("modalLogin").value.trim();
+  var p=document.getElementById("modalPassword").value;
   if((u==="Teacher1"&&p==="Admin1")||(u==="Assistant1"&&p==="Admin2")){
-    document.getElementById("loginModal").style.display = "none";
+    document.getElementById("loginModal").style.display="none";
     admin();
   } else {
-    document.getElementById("modalError").textContent = "Incorrect login or password.";
-    document.getElementById("modalPassword").value = "";
-    document.getElementById("modalPassword").focus();
+    document.getElementById("modalError").textContent="Incorrect login or password.";
+    document.getElementById("modalPassword").value="";
   }
 }
-
-function openNewGroupModal(){
-  document.getElementById("newGroupName").value = "";
-  document.getElementById("newGroupStudents").value = "";
-  document.getElementById("newGroupError").textContent = "";
-  document.getElementById("newGroupModal").style.display = "flex";
-  setTimeout(() => document.getElementById("newGroupName").focus(), 100);
-}
-
-function closeNewGroupModal(e){
-  if(e && e.target !== document.getElementById("newGroupModal")) return;
-  document.getElementById("newGroupModal").style.display = "none";
-}
-
-function submitNewGroup(){
-  const name = document.getElementById("newGroupName").value.trim();
-  const raw  = document.getElementById("newGroupStudents").value.trim();
-  if(!name){ document.getElementById("newGroupError").textContent = "Group name is required."; return; }
-  if(GROUPS[name]){ document.getElementById("newGroupError").textContent = "A group with this name already exists."; return; }
-  if(!raw){ document.getElementById("newGroupError").textContent = "Add at least one student."; return; }
-  const students = raw.split("\n").map(s => s.trim().toUpperCase()).filter(s => s.length > 0);
-  GROUPS[name] = students;
-  document.getElementById("newGroupModal").style.display = "none";
-  admin();
-}
-
 function admin(){
-  setNav("admin", {});
-  let h = `
-    <button class="back" onclick="home()">← Back</button>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-      <h3 style="margin-bottom:0">Admin Panel</h3>
-      <button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button>
-    </div>
-    <button onclick="window._sendTestNotif&&window._sendTestNotif()" style="width:100%;background:rgba(79,142,247,0.1);color:var(--accent);border:1px solid rgba(79,142,247,0.3);padding:11px;border-radius:var(--rsm);font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;margin-bottom:18px;justify-content:center;">
-      Send Test Notification
-    </button>
-  `;
-  Object.keys(GROUPS).forEach(g => {
-    const gKey = g.replace(/'/g, "\\'");
-    h += `
-      <div class="admin-group-card">
-        <div class="admin-group-name">${g}</div>
-        <div class="admin-group-actions">
-          <button class="primary" onclick="adminGroup('${gKey}')">Open Group</button>
-          <button class="danger" onclick="clearGroup('${gKey}')">Clear Files</button>
-          <button class="btn-delete-group" onclick="deleteGroup('${gKey}')">Delete</button>
-        </div>
-      </div>
-    `;
+  setNav("admin",{});
+  app.innerHTML='<button class="back" onclick="home()">← Back</button><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin-bottom:0">Admin Panel</h3><button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button></div><div id="groupList"></div>';
+  var list=document.getElementById("groupList");
+  Object.keys(GROUPS).forEach(function(g){
+    var div=document.createElement("div"); div.className="admin-group-card";
+    var name=document.createElement("div"); name.className="admin-group-name"; name.textContent=g; div.appendChild(name);
+    var actions=document.createElement("div"); actions.className="admin-group-actions";
+    var btnOpen=document.createElement("button"); btnOpen.className="primary"; btnOpen.textContent="Open Group";
+    btnOpen.addEventListener("click",function(){adminGroup(g);}); actions.appendChild(btnOpen);
+    var btnClear=document.createElement("button"); btnClear.className="danger"; btnClear.textContent="Clear Files";
+    btnClear.addEventListener("click",function(){if(confirm("Clear ALL files?"))db.ref("submissions/"+g).remove().then(function(){alert("Cleared");});}); actions.appendChild(btnClear);
+    var btnDel=document.createElement("button"); btnDel.className="btn-delete-group"; btnDel.textContent="Delete";
+    btnDel.addEventListener("click",function(){if(confirm("Delete group and all data?")){db.ref("submissions/"+g).remove();delete GROUPS[g];admin();}}); actions.appendChild(btnDel);
+    div.appendChild(actions); list.appendChild(div);
   });
-  app.innerHTML = h;
 }
-
-function deleteGroup(group){
-  if(!confirm(`Delete group "${group}" and all its data?\n\nThis cannot be undone.`)) return;
-  db.ref(`submissions/${group}`).remove();
-  delete GROUPS[group];
+function adminGroup(group){
+  setNav("adminGroup",{group:group});
+  app.innerHTML='<button class="back" onclick="admin()">← Admin</button><div class="bc"><b>'+group+'</b></div><h3>Select Stage</h3><div id="stageList2"></div>';
+  var list=document.getElementById("stageList2");
+  Object.keys(STAGES).forEach(function(stage){
+    var div=document.createElement("div"); div.className="card";
+    var btn=document.createElement("button"); btn.className="primary"; btn.textContent=stage;
+    btn.addEventListener("click",function(){adminStageSelect(group,stage);}); div.appendChild(btn); list.appendChild(div);
+  });
+}
+function adminStageSelect(group,stage){
+  setNav("adminStageSelect",{group:group,stage:stage});
+  app.innerHTML='<button class="back" onclick="adminGroup(\''+group.replace(/'/g,"\\'")+'\')">← Back</button><div class="bc">'+group+' › <b>'+stage+'</b></div><h3>Select Lesson</h3><div id="lessonList2"></div>';
+  var list=document.getElementById("lessonList2");
+  Object.keys(STAGES[stage]).forEach(function(lesson){
+    var div=document.createElement("div"); div.className="card";
+    var btn=document.createElement("button"); btn.className="secondary"; btn.textContent=lesson;
+    btn.addEventListener("click",function(){adminLessonView(group,stage,lesson);}); div.appendChild(btn); list.appendChild(div);
+  });
+}
+async function adminLessonView(group,stage,lesson){
+  setNav("adminLessonView",{group:group,stage:stage,lesson:lesson});
+  app.innerHTML='<div class="loading">Loading…</div>';
+  var h='<button class="back" onclick="adminStageSelect(\''+group.replace(/'/g,"\\'")+'\',\''+stage.replace(/'/g,"\\'")+'\')">← Back</button>';
+  h+='<div class="bc">'+group+' › '+stage+' › <b>'+lesson+'</b></div>';
+  h+='<h3>'+lesson+' — Results</h3>';
+  h+='<button class="export-btn" onclick="exportCSV(\''+group.replace(/'/g,"\\'")+'\',\''+stage.replace(/'/g,"\\'")+'\',\''+lesson.replace(/'/g,"\\'")+'\')">Export CSV</button>';
+  for(var i=0;i<GROUPS[group].length;i++){
+    var student=GROUPS[group][i];
+    h+='<div class="admin-student-card"><div class="admin-student-name">'+student+'</div>';
+    for(var j=0;j<STAGES[stage][lesson].length;j++){
+      var hw=STAGES[stage][lesson][j];
+      var snap=await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).once("value");
+      var d=snap.val(); var ok=d&&Array.isArray(d.files)&&d.files.length>0;
+      h+='<div class="hw-row"><div class="hw-row-name">'+hw+'</div><div style="display:flex;align-items:center;gap:8px">';
+      h+='<span class="'+(ok?"green":"red")+'">'+(ok?"Yes":"No")+'</span>';
+      if(ok) d.files.forEach(function(url){h+='<a href="'+url+'" target="_blank" style="color:var(--accent);font-size:12px;font-weight:600;text-decoration:none">view</a>';});
+      h+='</div></div>';
+    }
+    h+='</div>';
+  }
+  app.innerHTML=h;
+}
+async function exportCSV(group,stage,lesson){
+  var rows=[["Student",...STAGES[stage][lesson]]];
+  for(var i=0;i<GROUPS[group].length;i++){
+    var row=[GROUPS[group][i]];
+    for(var j=0;j<STAGES[stage][lesson].length;j++){
+      var snap=await db.ref("submissions/"+group+"/"+GROUPS[group][i]+"/"+stage+"/"+lesson+"/"+STAGES[stage][lesson][j]).once("value");
+      var d=snap.val(); row.push(d&&Array.isArray(d.files)&&d.files.length>0?"Yes":"No");
+    }
+    rows.push(row);
+  }
+  var blob=new Blob([rows.map(function(r){return r.join(",");}).join("\n")],{type:"text/csv"});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a"); a.href=url; a.download=group+" - "+stage+" - "+lesson+".csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(url);},1000);
+}
+function openNewGroupModal(){
+  document.getElementById("newGroupName").value="";
+  document.getElementById("newGroupStudents").value="";
+  document.getElementById("newGroupError").textContent="";
+  document.getElementById("newGroupModal").style.display="flex";
+}
+function submitNewGroup(){
+  var name=document.getElementById("newGroupName").value.trim();
+  var raw=document.getElementById("newGroupStudents").value.trim();
+  if(!name){document.getElementById("newGroupError").textContent="Group name required.";return;}
+  if(GROUPS[name]){document.getElementById("newGroupError").textContent="Group already exists.";return;}
+  if(!raw){document.getElementById("newGroupError").textContent="Add at least one student.";return;}
+  GROUPS[name]=raw.split("\n").map(function(s){return s.trim().toUpperCase();}).filter(function(s){return s;});
+  document.getElementById("newGroupModal").style.display="none";
   admin();
 }
 
-function adminGroup(group){
-  setNav("adminGroup", { group });
-  let h = `
-    <button class="back" onclick="admin()">← Admin</button>
-    <div class="bc"><b>${group}</b></div>
-    <h3>Select Stage</h3>
-  `;
-  Object.keys(STAGES).forEach(stage => {
-    h += `<div class="card"><button class="primary" onclick="adminStageSelect('${group}','${stage}')">${stage}</button></div>`;
-  });
-  app.innerHTML = h;
+// ===== INSTRUCTIONS =====
+function openInstruction(){
+  setNav("instructions",{});
+  app.innerHTML='<button class="back" onclick="home()">← Back</button><h2>How to Use Statista</h2>'
+    +'<div class="step-card"><div class="step-num">1</div><div class="step-title">Open the App</div><div class="step-body">Tap <b>"Enter as Student"</b>.</div></div>'
+    +'<div class="step-card"><div class="step-num">2</div><div class="step-title">Find Yourself</div><div class="step-body">Select your <b>group</b>, then find your <b>full name</b>.</div></div>'
+    +'<div class="step-card"><div class="step-num">3</div><div class="step-title">Choose Homework</div><div class="step-body">Tap your stage → lesson → task.</div></div>'
+    +'<div class="step-card"><div class="step-num">4</div><div class="step-title">Submit Photo</div><div class="step-body">Attach <b>at least one photo</b>. Without a photo homework is NOT saved.</div></div>'
+    +'<div class="step-card"><div class="step-num">5</div><div class="step-title">Check Writing with AI</div><div class="step-body">For Task 1/2 tasks tap <b style="color:#a78bfa">Check with AI</b> to get IELTS band score and grammar feedback.</div></div>'
+    +'<div class="alert-card"><b>Speaking:</b> screenshot your message in the group chat and upload the screenshot.</div>';
 }
 
-function adminStageSelect(group, stage){
-  setNav("adminStageSelect", { group, stage });
-  let h = `
-    <button class="back" onclick="adminGroup('${group}')">← Back</button>
-    <div class="bc"><span>${group}</span> › <b>${stage}</b></div>
-    <h3>Select Lesson</h3>
-  `;
-  Object.keys(STAGES[stage]).forEach(lesson => {
-    h += `<div class="card"><button class="secondary" onclick="adminLessonView('${group}','${stage}','${lesson}')">${lesson}</button></div>`;
-  });
-  app.innerHTML = h;
+// ===== AI CHECKER =====
+var _aiCurrentHw="";
+
+function openAI(hwName){
+  _aiCurrentHw=hwName;
+  document.getElementById("aiHwBadge").textContent=hwName;
+  document.getElementById("aiText").value="";
+  document.getElementById("aiResult").innerHTML="";
+  document.getElementById("aiWordCount").textContent="0 words";
+  document.getElementById("aiBtn").disabled=false;
+  document.getElementById("aiModal").style.display="block";
+  setTimeout(function(){document.getElementById("aiText").focus();},200);
 }
 
-async function adminLessonView(group, stage, lesson){
-  setNav("adminLessonView", { group, stage, lesson });
-  app.innerHTML = `<div class="loading">Loading results…</div>`;
-  let h = `
-    <button class="back" onclick="adminStageSelect('${group}','${stage}')">← Back</button>
-    <div class="bc"><span>${group}</span> › <span>${stage}</span> › <b>${lesson}</b></div>
-    <h3>${lesson} — Results</h3>
-    <button class="export-btn" onclick="exportLessonCSV('${group}','${stage}','${lesson}')">Export to CSV</button>
-  `;
-  for (const student of GROUPS[group]) {
-    h += `<div class="admin-student-card"><div class="admin-student-name">${student}</div>`;
-    for (const hw of STAGES[stage][lesson]) {
-      const snap = await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).once("value");
-      const d = snap.val();
-      const ok = d && Array.isArray(d.files) && d.files.length > 0;
-      h += `
-        <div class="hw-row">
-          <div class="hw-row-name">${hw}</div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span class="${ok ? 'green' : 'red'}">${ok ? 'Yes' : 'No'}</span>
-            ${ok ? d.files.map(url => `<a href="${url}" target="_blank" style="color:var(--accent);font-size:12px;font-weight:600;text-decoration:none;">view</a>`).join("") : ''}
-          </div>
-        </div>
-      `;
-    }
-    h += `</div>`;
+function closeAI(){
+  document.getElementById("aiModal").style.display="none";
+}
+
+function updateWordCount(){
+  var t=document.getElementById("aiText").value.trim();
+  var w=t?t.split(/\s+/).filter(function(x){return x;}).length:0;
+  document.getElementById("aiWordCount").textContent=w+" word"+(w!==1?"s":"");
+}
+
+async function runCheck(){
+  var text=document.getElementById("aiText").value.trim();
+  if(!text||text.split(/\s+/).length<10){
+    document.getElementById("aiResult").innerHTML='<div class="ai-error">Please paste at least 10 words of your writing.</div>';
+    return;
   }
-  app.innerHTML = h;
-}
+  var isTask2=_aiCurrentHw.toLowerCase().includes("task 2")||_aiCurrentHw.toLowerCase().includes("essay");
+  var taskLabel=isTask2?"IELTS Writing Task 2 (essay)":"IELTS Writing Task 1 (report/graph description)";
 
-function clearGroup(group){
-  if(!confirm("Clear ALL files for this group?")) return;
-  db.ref(`submissions/${group}`).remove().then(() => alert("Cleared"));
-}
+  document.getElementById("aiBtn").disabled=true;
+  document.getElementById("aiResult").innerHTML='<div class="ai-loading"><div class="ai-dots"><span></span><span></span><span></span></div>Analysing your writing…</div>';
 
-async function exportLessonCSV(group, stage, lesson){
-  const students = GROUPS[group];
-  const homeworks = STAGES[stage][lesson];
-  let csv = [["Student Name", ...homeworks].join(",")];
-  for (const student of students) {
-    let row = [student];
-    for (const hw of homeworks) {
-      const snap = await db.ref(`submissions/${group}/${student}/${stage}/${lesson}/${hw}`).once("value");
-      const d = snap.val();
-      row.push(d && Array.isArray(d.files) && d.files.length > 0 ? "Yes" : "No");
-    }
-    csv.push(row.join(","));
-  }
-  const blob = new Blob([csv.join("\n")], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = `${group} - ${stage} - ${lesson}.csv`;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
+  var sysPrompt="You are an expert IELTS examiner. Analyse this "+taskLabel+" and respond ONLY with valid JSON, no markdown, no extra text.\n"
+    +"{\n"
+    +"  \"overall\": 6.5,\n"
+    +"  \"ta\": 6.5,\n"
+    +"  \"cc\": 6.0,\n"
+    +"  \"lr\": 7.0,\n"
+    +"  \"gra\": 6.5,\n"
+    +"  \"human_percent\": 78,\n"
+    +"  \"ai_percent\": 22,\n"
+    +"  \"ai_note\": \"Short sentence about AI patterns detected or confirming human writing.\",\n"
+    +"  \"summary\": \"2-3 sentences about overall quality.\",\n"
+    +"  \"strengths\": [\"strength 1\",\"strength 2\",\"strength 3\"],\n"
+    +"  \"improvements\": [\"improvement 1\",\"improvement 2\",\"improvement 3\"],\n"
+    +"  \"grammar_errors\": [\"ERROR: wrong phrase → FIX: correction — REASON: why\"],\n"
+    +"  \"vocab_tips\": [\"WEAK: word used → BETTER: alternative — WHY: reason\"],\n"
+    +"  \"band_desc\": \"What this band score means.\"\n"
+    +"}\n"
+    +"Bands: 4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,8.5,9.0. human_percent+ai_percent=100. Be strict and honest.";
 
-restoreNavOrHome();
-
-/* ========== SCHEDULE ========== */
-const SCHEDULE = {
-  "GROUP IELTS 9:00 M/W/F":    { days:[1,3,5], hour:9,  minute:0  },
-  "GROUP IELTS 17:00 MWF":     { days:[1,3,5], hour:17, minute:0  },
-  "GROUP IELTS M/W/F 14:00":   { days:[1,3,5], hour:14, minute:0  },
-  "GROUP IELTS T/T/S 9:00":    { days:[2,4,6], hour:9,  minute:0  },
-  "GROUP IELTS 10:30 TTS":     { days:[2,4,6], hour:10, minute:30 },
-  "GROUP IELTS T/T/S 14:00":   { days:[2,4,6], hour:14, minute:0  },
-  "GROUP IELTS 15:30 TTS":     { days:[2,4,6], hour:15, minute:30 },
-  "GROUP IELTS T/T/S 18:30":   { days:[2,4,6], hour:18, minute:30 }
-};
-
-function minutesUntilLesson(group){
-  const s = SCHEDULE[group]; if(!s) return null;
-  const now = new Date(); const day = now.getDay();
-  const nowMins = now.getHours() * 60 + now.getMinutes();
-  const lessonMins = s.hour * 60 + s.minute;
-  if(s.days.includes(day)) return lessonMins - nowMins;
-  return null;
-}
-
-function isSubmissionBlocked(group){
-  const mins = minutesUntilLesson(group);
-  if(mins === null) return false;
-  return mins <= 0 && mins >= -90;
-}
-
-const _origShowHomework = showHomework;
-showHomework = async function(group, student, stage, lesson){
-  await _origShowHomework(group, student, stage, lesson);
-  const mins = minutesUntilLesson(group);
-  const blocked = isSubmissionBlocked(group);
-  const container = document.getElementById("app");
-  if(!container) return;
-  if(blocked){
-    const banner = document.createElement("div");
-    banner.className = "schedule-banner blocked-banner";
-    banner.textContent = "Lesson has started — homework submission is now closed.";
-    container.insertBefore(banner, container.children[2] || container.firstChild);
-    container.querySelectorAll("input[type=file]").forEach(inp => inp.disabled = true);
-    container.querySelectorAll("label.primary, label.danger").forEach(lbl => {
-      lbl.style.opacity = "0.35"; lbl.style.pointerEvents = "none"; lbl.style.cursor = "not-allowed";
+  try {
+    var resp=await fetch("https://api.groq.com/openai/v1/chat/completions",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer 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"},
+      body:JSON.stringify({model:"llama-3.3-70b-versatile",max_tokens:1200,temperature:0.3,messages:[{role:"system",content:sysPrompt},{role:"user",content:text}]})
     });
-  } else if(mins !== null && mins > 0 && mins <= 30){
-    const banner = document.createElement("div");
-    banner.className = "schedule-banner warning-banner";
-    banner.textContent = `Lesson starts in ${mins} minute${mins===1?'':'s'} — submit any missing homework now!`;
-    container.insertBefore(banner, container.children[2] || container.firstChild);
+    if(!resp.ok){var e=await resp.json().catch(function(){return {};});throw new Error(e.error&&e.error.message?e.error.message:"API error "+resp.status);}
+    var data=await resp.json();
+    var raw=data.choices[0].message.content.trim().replace(/```json|```/g,"").trim();
+    var r=JSON.parse(raw);
+    renderResult(r);
+  } catch(err){
+    document.getElementById("aiResult").innerHTML='<div class="ai-error">Something went wrong.<br><span style="font-size:11px;opacity:.7">'+err.message+'</span></div>';
+  } finally {
+    document.getElementById("aiBtn").disabled=false;
   }
-};
+}
 
-const _origSubmitHW = submitHW;
-submitHW = async function(input, group, student, stage, lesson, hw){
-  if(isSubmissionBlocked(group)){ alert("Submission is closed — lesson has already started."); input.value = ""; return; }
-  return _origSubmitHW(input, group, student, stage, lesson, hw);
-};
+function renderResult(r){
+  var hp=r.human_percent||80, ap=r.ai_percent||(100-hp);
+  var aiColor=ap>=50?"var(--red)":ap>=30?"var(--amber)":"var(--accent2)";
 
-const _origReplaceHW = replaceHW;
-replaceHW = async function(input, group, student, stage, lesson, hw){
-  if(isSubmissionBlocked(group)){ alert("Submission is closed — lesson has already started."); input.value = ""; return; }
-  return _origReplaceHW(input, group, student, stage, lesson, hw);
-};
+  var s='<div class="ai-result">';
 
-/* ========== NOTIFICATIONS ========== */
-const _notifStore = [];
-let _notifUnread = 0;
-function _notifTimeStr(){ const now = new Date(); return now.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) + ' · ' + now.toLocaleDateString([], { day:'numeric', month:'short' }); }
-function pushNotif(title, body, type='info'){ const item = { id: Date.now(), title, body, type, time: _notifTimeStr(), read: false }; _notifStore.unshift(item); if(_notifStore.length > 50) _notifStore.pop(); _notifUnread++; _renderBell(); _renderNotifList(); }
-function _renderBell(){ const bell = document.getElementById('notifBell'); const badge = document.getElementById('notifBadge'); if(!bell||!badge) return; if(_notifUnread > 0){ badge.style.display='flex'; badge.textContent=_notifUnread>99?'99+':_notifUnread; bell.classList.add('has-notif'); } else { badge.style.display='none'; bell.classList.remove('has-notif'); } }
-function _renderNotifList(){ const list = document.getElementById('notifList'); if(!list) return; if(_notifStore.length===0){ list.innerHTML='<div class="notif-empty">No notifications yet</div>'; return; } list.innerHTML=_notifStore.map(n=>`<div class="notif-item type-${n.type} ${n.read?'':'unread'}"><div class="notif-title">${n.title}</div><div class="notif-body">${n.body}</div><div class="notif-time">${n.time}</div></div>`).join(''); }
-function toggleNotifPanel(){ const panel=document.getElementById('notifPanel'); const overlay=document.getElementById('notifOverlay'); const isOpen=panel.style.display!=='none'; if(isOpen){ closeNotifPanel(); } else { _notifStore.forEach(n=>n.read=true); _notifUnread=0; _renderBell(); _renderNotifList(); panel.style.display='flex'; overlay.style.display='block'; } }
-function closeNotifPanel(){ document.getElementById('notifPanel').style.display='none'; document.getElementById('notifOverlay').style.display='none'; }
-function clearAllNotifs(){ _notifStore.length=0; _notifUnread=0; _renderBell(); _renderNotifList(); }
+  // Overall band
+  s+='<div class="ai-overall"><div class="ai-overall-label">Estimated IELTS Band</div>';
+  s+='<div class="ai-overall-num">'+r.overall+'</div>';
+  s+='<div class="ai-overall-desc">'+(r.band_desc||"")+'</div></div>';
 
-(function initNotifications(){
-  if(!("Notification" in window)||!("serviceWorker" in navigator)) return;
-  const swCode=`self.addEventListener('message',e=>{if(e.data&&e.data.type==='NOTIFY'){self.registration.showNotification(e.data.title,{body:e.data.body,vibrate:[200,100,200],tag:e.data.tag||'statista',requireInteraction:true});}});self.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil(clients.matchAll({type:'window'}).then(list=>{if(list.length)return list[0].focus();return clients.openWindow('/');}));});`;
-  let swReg=null;
-  const blob=new Blob([swCode],{type:'application/javascript'});
-  navigator.serviceWorker.register(URL.createObjectURL(blob)).then(reg=>{swReg=reg;}).catch(()=>{});
-  function askPermission(){ if(Notification.permission==='default'){ Notification.requestPermission().then(p=>{ if(p==='granted') sendNotif('Statista — Notifications On','You will be reminded 30 min before lessons.','info','welcome'); }); } }
-  document.addEventListener('click',askPermission,{once:true});
-  function sendNotif(title,body,type,tag){ pushNotif(title,body,type||'info'); if(Notification.permission==='granted'){ if(swReg&&swReg.active){ swReg.active.postMessage({type:'NOTIFY',title,body,tag}); } else { new Notification(title,{body}); } } }
-  const _sent={};
-  setInterval(()=>{ Object.keys(SCHEDULE).forEach(group=>{ const mins=minutesUntilLesson(group); if(mins===null) return; const dateKey=new Date().toDateString(); if(mins>=29&&mins<=31){ const k=`warn_${group}_${dateKey}`; if(!_sent[k]){_sent[k]=true; sendNotif('Homework Reminder',`${group}: lesson in 30 min. Submit missing homework now!`,'reminder','r_'+group);} } if(mins>=-1&&mins<=1){ const k=`start_${group}_${dateKey}`; if(!_sent[k]){_sent[k]=true; sendNotif('Lesson Started',`${group}: lesson begun. Submissions are now closed.`,'blocked','s_'+group);} } }); },60000);
-  window._sendTestNotif=function(){ if(Notification.permission!=='granted'){ Notification.requestPermission().then(p=>{if(p==='granted') sendNotif('Test','Notifications are working!','success','test');}); return; } sendNotif('Test Notification','Notifications are working correctly!','success','test'); };
-})();
+  // 4 scores
+  s+='<div class="ai-scores">';
+  s+='<div class="ai-score ta"><div class="ai-score-lbl">Task Achievement</div><div class="ai-score-num">'+r.ta+'</div></div>';
+  s+='<div class="ai-score cc"><div class="ai-score-lbl">Coherence & Cohesion</div><div class="ai-score-num">'+r.cc+'</div></div>';
+  s+='<div class="ai-score lr"><div class="ai-score-lbl">Lexical Resource</div><div class="ai-score-num">'+r.lr+'</div></div>';
+  s+='<div class="ai-score gra"><div class="ai-score-lbl">Grammar & Accuracy</div><div class="ai-score-num">'+r.gra+'</div></div>';
+  s+='</div>';
 
-/* ========== DEVTOOLS PROTECTION ========== */
-(function devtoolsProtect(){
-  document.addEventListener("contextmenu",e=>e.preventDefault());
-  document.addEventListener("keydown",e=>{ const k=e.key; const ctrl=e.ctrlKey||e.metaKey; const shift=e.shiftKey; if(k==="F12"||(ctrl&&shift&&["I","i","J","j","C","c"].includes(k))||(ctrl&&["U","u"].includes(k))||(ctrl&&shift&&k==="C")){ e.preventDefault(); e.stopPropagation(); return false; } },true);
-  const threshold=160;
-  setInterval(()=>{ const widthDiff=window.outerWidth-window.innerWidth; const heightDiff=window.outerHeight-window.innerHeight; if(widthDiff>threshold||heightDiff>threshold){ document.body.innerHTML=`<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0d0f14;flex-direction:column;gap:16px;"><div style="color:#f7556a;font-size:20px;font-weight:800;font-family:sans-serif;">Access Denied</div><div style="color:#7a8499;font-size:14px;font-family:sans-serif;">Developer tools are not allowed on this page.</div></div>`; } },1000);
-  setInterval(()=>{ try{console.clear();}catch(e){} },2000);
-})();
+  // AI Detection bar
+  s+='<div class="ai-detect">';
+  s+='<div class="ai-detect-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>AI Detection Analysis</div>';
+  s+='<div class="ai-detect-bar">';
+  s+='<div class="ai-detect-human" style="width:'+hp+'%">'+hp+'%</div>';
+  s+='<div class="ai-detect-ai" style="width:'+ap+'%;background:linear-gradient(90deg,#7c3aed,'+aiColor+')">'+ap+'%</div>';
+  s+='</div>';
+  s+='<div class="ai-detect-labels">';
+  s+='<div class="ai-detect-lbl" style="color:var(--green)"><div class="ai-detect-dot" style="background:var(--green)"></div>Human — '+hp+'%</div>';
+  s+='<div class="ai-detect-lbl" style="color:'+aiColor+'"><div class="ai-detect-dot" style="background:'+aiColor+'"></div>AI — '+ap+'%</div>';
+  s+='</div>';
+  if(r.ai_note) s+='<div class="ai-detect-note">💡 '+r.ai_note+'</div>';
+  s+='</div>';
+
+  // Summary
+  s+=sect("📝 Summary",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',r.summary||"");
+
+  // Strengths
+  if(r.strengths&&r.strengths.length) s+=sectList("✅ Strengths",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',r.strengths);
+
+  // Improvements
+  if(r.improvements&&r.improvements.length) s+=sectList("⚠️ Areas to Improve",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',r.improvements);
+
+  // Grammar errors
+  if(r.grammar_errors&&r.grammar_errors.length) s+=sectList("❌ Grammar Errors",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',r.grammar_errors);
+
+  // Vocab tips
+  if(r.vocab_tips&&r.vocab_tips.length) s+=sectList("📚 Vocabulary Tips",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',r.vocab_tips);
+
+  s+='</div>';
+  document.getElementById("aiResult").innerHTML=s;
+}
+
+function sect(title,icon,body){
+  return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div><div class="ai-section-body">'+body+'</div></div>';
+}
+function sectList(title,icon,items){
+  var li=items.map(function(x){return '<li style="margin-bottom:6px">'+x+'</li>';}).join("");
+  return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div><div class="ai-section-body"><ul>'+li+'</ul></div></div>';
+}
+
+// ===== NOTIFICATIONS =====
+var _notifs=[]; var _unread=0;
+function _tstr(){var n=new Date();return n.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" · "+n.toLocaleDateString([],{day:"numeric",month:"short"});}
+function pushNotif(title,body,type){
+  _notifs.unshift({id:Date.now(),title:title,body:body,type:type||"info",time:_tstr(),read:false});
+  if(_notifs.length>50)_notifs.pop();
+  _unread++;_renderBell();_renderNotifs();
+}
+function _renderBell(){
+  var bell=document.getElementById("notifBell"),badge=document.getElementById("notifBadge");
+  if(!bell||!badge)return;
+  if(_unread>0){badge.style.display="flex";badge.textContent=_unread>99?"99+":_unread;bell.style.color="var(--accent)";}
+  else{badge.style.display="none";bell.style.color="";}
+}
+function _renderNotifs(){
+  var list=document.getElementById("notifList");if(!list)return;
+  if(!_notifs.length){list.innerHTML='<div class="notif-empty">No notifications yet</div>';return;}
+  list.innerHTML=_notifs.map(function(n){return '<div class="notif-item type-'+n.type+(n.read?"":" unread")+'"><div class="notif-title">'+n.title+'</div><div class="notif-body">'+n.body+'</div><div class="notif-time">'+n.time+'</div></div>';}).join("");
+}
+function toggleNotifPanel(){
+  var p=document.getElementById("notifPanel"),o=document.getElementById("notifOverlay");
+  if(p.style.display!=="none"){closeNotifPanel();}
+  else{_notifs.forEach(function(n){n.read=true;});_unread=0;_renderBell();_renderNotifs();p.style.display="flex";o.style.display="block";}
+}
+function closeNotifPanel(){document.getElementById("notifPanel").style.display="none";document.getElementById("notifOverlay").style.display="none";}
+function clearAllNotifs(){_notifs.length=0;_unread=0;_renderBell();_renderNotifs();}
+
+// ===== DEVTOOLS PROTECTION =====
+document.addEventListener("contextmenu",function(e){e.preventDefault();});
+document.addEventListener("keydown",function(e){
+  if(e.key==="F12"||(e.ctrlKey&&e.shiftKey&&["I","i","J","j","C","c"].includes(e.key))||(e.ctrlKey&&["U","u"].includes(e.key))){
+    e.preventDefault();e.stopPropagation();return false;
+  }
+},true);
+
+// ===== INIT =====
+home();
 </script>
 </body>
 </html>
