@@ -711,6 +711,21 @@ async function exportCSV(group,stage,lesson){
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(function(){URL.revokeObjectURL(url);},1000);
 }
+var _CG_KEY="statista_custom_groups_v1";
+function _saveCustomGroups(){
+  try{
+    var custom={};
+    var builtin=["GROUP IELTS 9:00 M/W/F","GROUP IELTS 17:00 MWF","GROUP IELTS M/W/F 14:00","GROUP IELTS T/T/S 9:00","GROUP IELTS 10:30 TTS","GROUP IELTS T/T/S 14:00","GROUP IELTS 15:30 TTS","GROUP IELTS T/T/S 18:30"];
+    Object.keys(GROUPS).forEach(function(n){if(builtin.indexOf(n)===-1)custom[n]=GROUPS[n];});
+    localStorage.setItem(_CG_KEY,JSON.stringify(custom));
+  }catch(e){}
+}
+function _loadCustomGroups(){
+  try{
+    var saved=localStorage.getItem(_CG_KEY);
+    if(saved){var c=JSON.parse(saved);Object.keys(c).forEach(function(n){GROUPS[n]=c[n];});}
+  }catch(e){}
+}
 function openNewGroupModal(){
   document.getElementById("newGroupName").value="";
   document.getElementById("newGroupStudents").value="";
@@ -723,23 +738,16 @@ function submitNewGroup(){
   if(!name){document.getElementById("newGroupError").textContent="Group name required.";return;}
   if(GROUPS[name]){document.getElementById("newGroupError").textContent="Group already exists.";return;}
   if(!raw){document.getElementById("newGroupError").textContent="Add at least one student.";return;}
-  var students=raw.split("\n").map(function(s){return s.trim().toUpperCase();}).filter(function(s){return s;});
-  var safeKey=name.replace(/[.#$[\]]/g,"_");
-  GROUPS[name]=students;
-  db.ref("custom_groups/"+safeKey).set({name:name,students:students}).then(function(){
-    document.getElementById("newGroupModal").style.display="none";
-    admin();
-  }).catch(function(e){
-    delete GROUPS[name];
-    document.getElementById("newGroupError").textContent="Save error: "+(e.message||e);
-  });
+  GROUPS[name]=raw.split("\n").map(function(s){return s.trim().toUpperCase();}).filter(function(s){return s;});
+  _saveCustomGroups();
+  document.getElementById("newGroupModal").style.display="none";
+  admin();
 }
 function deleteCustomGroup(g){
   if(!confirm("Delete group and all data?")) return;
-  var safeKey=g.replace(/[.#$[\]]/g,"_");
   db.ref("submissions/"+g).remove();
-  db.ref("custom_groups/"+safeKey).remove();
   delete GROUPS[g];
+  _saveCustomGroups();
   admin();
 }
 
@@ -928,18 +936,8 @@ document.addEventListener("keydown",function(e){
 },true);
 
 // ===== INIT =====
-app.innerHTML='<div class="loading">Loading…</div>';
-db.ref("custom_groups").once("value").then(function(snap){
-  var data=snap.val();
-  if(data){
-    Object.keys(data).forEach(function(name){
-      var entry=data[name];
-      if(Array.isArray(entry)) GROUPS[name]=entry;
-      else if(entry&&Array.isArray(entry.students)) GROUPS[entry.name||name]=entry.students;
-    });
-  }
-  home();
-}).catch(function(){ home(); });
+_loadCustomGroups();
+home();
 </script>
 </body>
 </html>
