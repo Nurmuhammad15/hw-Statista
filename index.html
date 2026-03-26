@@ -638,7 +638,7 @@ function admin(){
     var btnClear=document.createElement("button"); btnClear.className="danger"; btnClear.textContent="Clear Files";
     btnClear.addEventListener("click",function(){if(confirm("Clear ALL files?"))db.ref("submissions/"+g).remove().then(function(){alert("Cleared");});}); actions.appendChild(btnClear);
     var btnDel=document.createElement("button"); btnDel.className="btn-delete-group"; btnDel.textContent="Delete";
-    btnDel.addEventListener("click",function(){if(confirm("Delete group and all data?")){db.ref("submissions/"+g).remove();delete GROUPS[g];admin();}}); actions.appendChild(btnDel);
+    btnDel.addEventListener("click",function(){if(confirm("Delete group and all data?")){db.ref("submissions/"+g).remove();delete GROUPS[g];saveCustomGroups();admin();}}); actions.appendChild(btnDel);
     div.appendChild(actions); list.appendChild(div);
   });
 }
@@ -701,6 +701,21 @@ async function exportCSV(group,stage,lesson){
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(function(){URL.revokeObjectURL(url);},1000);
 }
+var CUSTOM_GROUPS_KEY="statista_custom_groups_v1";
+var BUILTIN_GROUPS=["GROUP IELTS 9:00 M/W/F","GROUP IELTS 17:00 MWF","GROUP IELTS M/W/F 14:00","GROUP IELTS T/T/S 9:00","GROUP IELTS 10:30 TTS","GROUP IELTS T/T/S 14:00","GROUP IELTS 15:30 TTS","GROUP IELTS T/T/S 18:30"];
+function loadCustomGroups(){
+  try{
+    var saved=localStorage.getItem(CUSTOM_GROUPS_KEY);
+    if(saved){var custom=JSON.parse(saved);Object.keys(custom).forEach(function(n){GROUPS[n]=custom[n];});}
+  }catch(e){}
+}
+function saveCustomGroups(){
+  try{
+    var custom={};
+    Object.keys(GROUPS).forEach(function(n){if(BUILTIN_GROUPS.indexOf(n)===-1)custom[n]=GROUPS[n];});
+    localStorage.setItem(CUSTOM_GROUPS_KEY,JSON.stringify(custom));
+  }catch(e){}
+}
 function openNewGroupModal(){
   document.getElementById("newGroupName").value="";
   document.getElementById("newGroupStudents").value="";
@@ -714,6 +729,7 @@ function submitNewGroup(){
   if(GROUPS[name]){document.getElementById("newGroupError").textContent="Group already exists.";return;}
   if(!raw){document.getElementById("newGroupError").textContent="Add at least one student.";return;}
   GROUPS[name]=raw.split("\n").map(function(s){return s.trim().toUpperCase();}).filter(function(s){return s;});
+  saveCustomGroups();
   document.getElementById("newGroupModal").style.display="none";
   admin();
 }
@@ -899,6 +915,7 @@ document.addEventListener("keydown",function(e){
 },true);
 
 // ===== INIT =====
+loadCustomGroups();
 home();
 </script>
 </body>
