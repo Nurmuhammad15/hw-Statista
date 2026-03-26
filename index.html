@@ -234,6 +234,16 @@ input[type=file]{display:none}
   </div>
 </div>
 
+<!-- COMING SOON MODAL -->
+<div id="comingSoonModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal" style="text-align:center">
+    <div style="font-size:48px;margin-bottom:12px">🚀</div>
+    <div class="modal-title" style="justify-content:center;text-align:center">Coming Soon</div>
+    <div class="modal-sub" style="margin-bottom:28px">AI Essay Checker is currently under development. Stay tuned!</div>
+    <button class="primary" style="justify-content:center" onclick="document.getElementById('comingSoonModal').style.display='none'">Got it</button>
+  </div>
+</div>
+
 <!-- AI CHECKER MODAL -->
 <div id="aiModal" style="display:none">
   <div class="ai-overlay" onclick="if(event.target.classList.contains('ai-overlay'))closeAI()">
@@ -508,7 +518,7 @@ async function showHomework(group,student,stage,lesson){
       var aiBtn=document.createElement("button");
       aiBtn.className="ai-check-btn";
       aiBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Check with AI';
-      (function(hwName){ aiBtn.addEventListener("click",function(){ openAI(hwName); }); })(hw);
+      (function(hwName){ aiBtn.addEventListener("click",function(){ showComingSoon(); }); })(hw);
       row.appendChild(aiBtn);
     }
     card.appendChild(row);
@@ -747,6 +757,10 @@ function openInstruction(){
 
 // ===== AI CHECKER =====
 var _aiCurrentHw="";
+
+function showComingSoon(){
+  document.getElementById("comingSoonModal").style.display="flex";
+}
 
 function openAI(hwName){
   _aiCurrentHw=hwName;
