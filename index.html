@@ -591,6 +591,8 @@ async function submitHW(input,group,student,stage,lesson,hw){
   }
   await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).set({files:urls,time:Date.now()});
   input.value="";
+  pushNotif("Homework Submitted", hw + " — submitted successfully.", "success");
+  sendPushNotif("✅ Homework Submitted!", hw + " — submitted successfully.");
   await showHomework(group,student,stage,lesson);
   alert("Submitted successfully ✓");
 }
@@ -614,6 +616,8 @@ async function replaceHW(input,group,student,stage,lesson,hw){
   }
   await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).set({files:urls,time:Date.now()});
   input.value="";
+  pushNotif("Photos Replaced", hw + " — photos updated successfully.", "success");
+  sendPushNotif("🔄 Photos Replaced!", hw + " — photos updated successfully.");
   await showHomework(group,student,stage,lesson);
   alert("Replaced successfully ✓");
 }
@@ -648,7 +652,7 @@ function admin(){
     var btnOpen=document.createElement("button"); btnOpen.className="primary"; btnOpen.textContent="Open Group";
     btnOpen.addEventListener("click",function(){adminGroup(g);}); actions.appendChild(btnOpen);
     var btnClear=document.createElement("button"); btnClear.className="danger"; btnClear.textContent="Clear Files";
-    btnClear.addEventListener("click",function(){if(confirm("Clear ALL files?"))db.ref("submissions/"+g).remove().then(function(){alert("Cleared");});}); actions.appendChild(btnClear);
+    btnClear.addEventListener("click",function(){if(confirm("Clear ALL files?"))db.ref("submissions/"+g).remove().then(function(){pushNotif("Files Cleared",g+" — all files have been cleared.","info");alert("Cleared");});}); actions.appendChild(btnClear);
     var btnDel=document.createElement("button"); btnDel.className="btn-delete-group"; btnDel.textContent="Delete";
     btnDel.addEventListener("click",function(){deleteCustomGroup(g);}); actions.appendChild(btnDel);
     div.appendChild(actions); list.appendChild(div);
@@ -742,6 +746,7 @@ function submitNewGroup(){
   if(!raw){document.getElementById("newGroupError").textContent="Add at least one student.";return;}
   GROUPS[name]=raw.split("\n").map(function(s){return s.trim().toUpperCase();}).filter(function(s){return s;});
   _saveCustomGroups();
+  pushNotif("Group Created",name+" has been created.","success");
   document.getElementById("newGroupModal").style.display="none";
   admin();
 }
@@ -750,6 +755,7 @@ function deleteCustomGroup(g){
   db.ref("submissions/"+g).remove();
   delete GROUPS[g];
   _saveCustomGroups();
+  pushNotif("Group Deleted",g+" has been deleted.","blocked");
   admin();
 }
 
@@ -937,9 +943,70 @@ document.addEventListener("keydown",function(e){
   }
 },true);
 
+// ===== PUSH NOTIFICATIONS =====
+function requestPushPermission(){
+  if(!("Notification" in window)) return;
+  if(Notification.permission==="default"){
+    Notification.requestPermission();
+  }
+}
+
+function sendPushNotif(title, body){
+  if(!("Notification" in window)) return;
+  if(Notification.permission!=="granted") return;
+  try {
+    var n = new Notification(title, {
+      body: body,
+      icon: "https://cdn-icons-png.flaticon.com/512/2232/2232688.png",
+      badge: "https://cdn-icons-png.flaticon.com/512/2232/2232688.png",
+      vibrate: [200, 100, 200]
+    });
+    setTimeout(function(){ n.close(); }, 6000);
+  } catch(e) {}
+}
+
+// ===== SCHEDULE WATCHER =====
+var _notifSent = {}; // track already-sent notifs to avoid duplicates
+
+function checkScheduleNotifs(){
+  var now = new Date();
+  Object.keys(SCHEDULE).forEach(function(group){
+    var m = minutesUntilLesson(group);
+    if(m === null) return;
+
+    var key30  = group + "_warn_"  + now.toDateString();
+    var keyNow = group + "_start_" + now.toDateString();
+
+    // 1 hour warning (between 60 and 58 min left)
+    if(m <= 60 && m >= 58 && !_notifSent[key30]){
+      _notifSent[key30] = true;
+      pushNotif("Lesson Soon", group + " starts in 1 hour — submit homework now!", "reminder");
+      sendPushNotif("Lesson Soon", group + " starts in 1 hour — submit homework now!");
+    }
+
+    // 20-minute warning (between 20 and 18 min left)
+    var key20 = group + "_warn20_" + now.toDateString();
+    if(m <= 20 && m >= 18 && !_notifSent[key20]){
+      _notifSent[key20] = true;
+      pushNotif("Lesson Very Soon", group + " starts in 20 minutes — last chance to submit!", "reminder");
+      sendPushNotif("Lesson Very Soon", group + " starts in 20 minutes — last chance to submit!");
+    }
+
+    // Lesson started (between 0 and -2 min)
+    if(m <= 0 && m >= -2 && !_notifSent[keyNow]){
+      _notifSent[keyNow] = true;
+      pushNotif("Lesson Started", group + " has started — homework submission is now closed.", "blocked");
+      sendPushNotif("Lesson Started", group + " has started — homework submission is now closed.");
+    }
+  });
+}
+
 // ===== INIT =====
 _loadCustomGroups();
 home();
+requestPushPermission();
+setInterval(checkScheduleNotifs, 60000); // check every minute
+checkScheduleNotifs(); // check immediately on load
 </script>
 </body>
 </html>
