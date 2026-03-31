@@ -213,6 +213,16 @@ input[type=file]{display:none}
 .speak-audio-player{width:100%;border-radius:var(--rsm);outline:none;accent-color:var(--green)}
 .speak-video-player{width:100%;border-radius:var(--rsm);max-height:200px;background:#000}
 .speak-min-warn{font-size:12px;color:var(--amber);text-align:center;margin-top:8px}
+/* Transcription */
+.transcript-wrap{margin-top:16px;border-top:1px solid var(--border);padding-top:16px}
+.transcript-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.transcript-title{font-size:13px;font-weight:700;color:var(--white);display:flex;align-items:center;gap:6px}
+.transcript-copy-btn{background:rgba(79,142,247,.1);color:var(--accent);border:1px solid rgba(79,142,247,.3);padding:5px 12px;border-radius:var(--rsm);font-family:inherit;font-weight:600;font-size:12px;cursor:pointer;transition:all .18s;width:auto}
+.transcript-copy-btn:hover{background:var(--accent);color:#fff}
+.transcript-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:13px;color:var(--text);line-height:1.8;max-height:220px;overflow-y:auto;white-space:pre-wrap;word-break:break-word}
+.transcript-loading{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;padding:14px}
+.transcript-stats{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+.transcript-stat{font-size:11px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);padding:3px 10px;border-radius:20px;font-family:'Space Mono',monospace}
 
 /* Error banner */
 .error-banner{background:rgba(247,85,106,.1);border:1px solid rgba(247,85,106,.3);border-radius:var(--r);padding:20px;margin:20px 0;color:var(--red);font-size:13px;line-height:1.7}
@@ -358,6 +368,18 @@ input[type=file]{display:none}
           <div class="speak-preview-label">Preview your recording:</div>
           <div id="speakPreviewPlayer"></div>
           <div id="speakUploadStatus" style="margin-top:12px;text-align:center;font-size:13px;color:var(--muted)"></div>
+          <!-- TRANSCRIPTION -->
+          <div class="transcript-wrap" id="transcriptWrap" style="display:none">
+            <div class="transcript-header">
+              <div class="transcript-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Speech Transcript (Whisper AI)
+              </div>
+              <button class="transcript-copy-btn" onclick="copyTranscript()">Copy</button>
+            </div>
+            <div id="transcriptContent"></div>
+            <div class="transcript-stats" id="transcriptStats"></div>
+          </div>
         </div>
       </div>
 
@@ -862,6 +884,9 @@ function openSpeakModal(group,student,stage,lesson,hw){
   document.getElementById("speakPreviewPlayer").innerHTML="";
   document.getElementById("speakUploadStatus").innerHTML="";
   document.getElementById("speakMinWarn").style.display="block";
+  document.getElementById("transcriptWrap").style.display="none";
+  document.getElementById("transcriptContent").innerHTML="";
+  document.getElementById("transcriptStats").innerHTML="";
   // Reset video upload UI
   document.getElementById("videoUploadStatus").innerHTML="";
   document.getElementById("videoPreviewWrap").style.display="none";
@@ -1001,25 +1026,137 @@ function onSpeakStop(){
   document.getElementById("speakPreview").style.display="block";
   document.getElementById("speakStatus").className="speak-status uploading";
   document.getElementById("speakStatus").textContent="Uploading to server…";
-  document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--amber)">⏳ Uploading… please wait</span>';
+  document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--amber)">⏳ Step 1/2: Uploading audio…</span>';
 
+  // Show transcript section with loading
+  document.getElementById("transcriptWrap").style.display="block";
+  document.getElementById("transcriptContent").innerHTML='<div class="transcript-loading"><div class="ai-dots"><span></span><span></span><span></span></div>Waiting for upload to finish…</div>';
+  document.getElementById("transcriptStats").innerHTML="";
+
+  var savedBlob=blob; // keep reference for transcription
   var path="speaking/"+safe(_spkGroup)+"/"+safe(_spkStudent)+"/"+safe(_spkStage)+"/"+safe(_spkLesson)+"/"+safe(_spkHw)+"/"+Date.now()+".webm";
   var ref=storage.ref(path);
+
   ref.put(blob).then(function(){ return ref.getDownloadURL(); }).then(function(url){
     return db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw).set({
       recordingUrl:url, recordingType:"audio", duration:_spkRecordedSecs, time:Date.now()
     });
   }).then(function(){
     document.getElementById("speakStatus").className="speak-status done";
-    document.getElementById("speakStatus").textContent="✅ Submitted successfully!";
-    document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--green);font-weight:700">✅ Saved! You can close this window.</span>';
+    document.getElementById("speakStatus").textContent="✅ Audio uploaded!";
+    document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--green);font-weight:700">✅ Saved! Transcribing your speech…</span>';
     pushNotif("Speaking Submitted","Your recording for \""+_spkHw+"\" was uploaded.","success");
     _spkChunks=[];
+    // Start transcription
+    transcribeAudio(savedBlob);
   }).catch(function(err){
     document.getElementById("speakStatus").className="speak-status";
     document.getElementById("speakStatus").textContent="❌ Upload failed. Try again.";
     document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--red)">Upload error: '+(err.message||err)+'</span>';
+    document.getElementById("transcriptContent").innerHTML='<div style="color:var(--red);font-size:13px;padding:10px">⚠️ Upload failed — transcription skipped.</div>';
     _spkChunks=[];
+  });
+}
+
+// ===== GROQ WHISPER TRANSCRIPTION =====
+var GROQ_KEY="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";
+
+async function transcribeAudio(blob){
+  document.getElementById("transcriptContent").innerHTML=
+    '<div class="transcript-loading"><div class="ai-dots"><span></span><span></span><span></span></div>Step 2/2: Transcribing with Whisper AI… this may take 30–60 seconds</div>';
+
+  try {
+    // Groq Whisper accepts: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, webm — max 25MB
+    var sizeMB = blob.size / 1024 / 1024;
+
+    // If over 24MB, we need to warn (very rare for 20min audio at low bitrate)
+    if(sizeMB > 24){
+      document.getElementById("transcriptContent").innerHTML=
+        '<div style="color:var(--amber);font-size:13px;padding:12px;background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.25);border-radius:var(--rsm);">'
+        +'⚠️ Audio file is too large for transcription ('+Math.round(sizeMB)+'MB, max 24MB).<br>Recording was saved successfully — transcription skipped.</div>';
+      return;
+    }
+
+    var formData = new FormData();
+    // Use .webm extension so Groq recognizes the format
+    formData.append("file", blob, "recording.webm");
+    formData.append("model", "whisper-large-v3");
+    formData.append("language", "en"); // English for IELTS
+    formData.append("response_format", "verbose_json"); // get word count etc
+    formData.append("temperature", "0");
+
+    var resp = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", {
+      method: "POST",
+      headers: { "Authorization": "Bearer "+GROQ_KEY },
+      body: formData
+    });
+
+    if(!resp.ok){
+      var errData = await resp.json().catch(function(){return{};});
+      throw new Error(errData.error&&errData.error.message ? errData.error.message : "Whisper API error "+resp.status);
+    }
+
+    var data = await resp.json();
+    var text = data.text || "";
+
+    if(!text.trim()){
+      document.getElementById("transcriptContent").innerHTML=
+        '<div style="color:var(--muted);font-size:13px;padding:12px">No speech detected in the recording.</div>';
+      return;
+    }
+
+    // Count words and estimate speaking rate
+    var words = text.trim().split(/\s+/).filter(function(w){return w;}).length;
+    var minutes = _spkRecordedSecs / 60;
+    var wpm = Math.round(words / minutes);
+
+    // Render transcript
+    document.getElementById("transcriptContent").innerHTML=
+      '<div class="transcript-box">'+escapeHtml(text)+'</div>';
+
+    // Stats row
+    document.getElementById("transcriptStats").innerHTML=
+      '<span class="transcript-stat">'+words+' words</span>'
+      +'<span class="transcript-stat">'+wpm+' wpm</span>'
+      +'<span class="transcript-stat">'+formatTime(_spkRecordedSecs)+' duration</span>';
+
+    // Also save transcript to Firebase
+    if(_fbReady && db){
+      db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw+"/transcript").set({
+        text: text, words: words, wpm: wpm, time: Date.now()
+      }).catch(function(){});
+    }
+
+    document.getElementById("speakUploadStatus").innerHTML=
+      '<span style="color:var(--green);font-weight:700">✅ Uploaded & transcribed successfully!</span>';
+
+  } catch(err){
+    document.getElementById("transcriptContent").innerHTML=
+      '<div style="color:var(--red);font-size:13px;padding:12px;background:rgba(247,85,106,.06);border:1px solid rgba(247,85,106,.2);border-radius:var(--rsm);">'
+      +'❌ Transcription failed: '+(err.message||err)+'<br>'
+      +'<span style="color:var(--muted);font-size:11px">Recording was saved successfully.</span></div>';
+  }
+}
+
+function escapeHtml(t){
+  return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function copyTranscript(){
+  var box=document.querySelector(".transcript-box");
+  if(!box) return;
+  var text=box.textContent||"";
+  navigator.clipboard.writeText(text).then(function(){
+    var btn=document.querySelector(".transcript-copy-btn");
+    btn.textContent="Copied!";
+    btn.style.background="var(--green)";
+    btn.style.color="var(--bg)";
+    setTimeout(function(){ btn.textContent="Copy"; btn.style.background=""; btn.style.color=""; },2000);
+  }).catch(function(){
+    // Fallback
+    var ta=document.createElement("textarea");
+    ta.value=text; document.body.appendChild(ta); ta.select();
+    document.execCommand("copy"); document.body.removeChild(ta);
   });
 }
 
