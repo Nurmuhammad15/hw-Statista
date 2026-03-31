@@ -306,7 +306,7 @@ input[type=file]{display:none}
 
 <!-- SPEAKING RECORDER MODAL -->
 <div id="speakModal" style="display:none">
-  <div class="speak-overlay" onclick="if(event.target.classList.contains('speak-overlay'))closeSpeakModal()">
+  <div class="speak-overlay" onclick="if(event.target.classList.contains('speak-overlay'))closeSpeakModal();" style="cursor:default">
     <div class="speak-modal">
       <div class="speak-modal-header">
         <div class="speak-modal-title">
@@ -875,8 +875,23 @@ function openSpeakModal(group,student,stage,lesson,hw){
 }
 
 function closeSpeakModal(){
+  // Block closing if recording and under minimum time
+  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording" && _spkRecordedSecs < _spkMinSecs){
+    var remaining=_spkMinSecs-_spkRecordedSecs;
+    var warn=document.getElementById("speakMinWarn");
+    warn.textContent="⛔ Cannot close — minimum 20 minutes required! "+formatTime(remaining)+" remaining.";
+    warn.style.color="var(--red)";
+    warn.style.fontWeight="700";
+    // Shake close button
+    var btn=document.querySelector(".speak-close-btn");
+    btn.style.transform="translateX(-5px)";
+    setTimeout(function(){ btn.style.transform="translateX(5px)"; },80);
+    setTimeout(function(){ btn.style.transform="translateX(-4px)"; },160);
+    setTimeout(function(){ btn.style.transform="translateX(4px)"; },240);
+    setTimeout(function(){ btn.style.transform="translateX(0)"; },320);
+    return; // DO NOT close
+  }
   if(_spkMediaRecorder && _spkMediaRecorder.state!=="inactive"){
-    // Prevent onstop from firing upload
     _spkMediaRecorder.onstop=null;
     _spkMediaRecorder.stop();
   }
