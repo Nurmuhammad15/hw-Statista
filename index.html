@@ -1174,29 +1174,80 @@ function handleVideoFileSelect(input){
 async function submitVideoFile(){
   if(!_spkSelectedVideoFile){ alert("Please select a video file first."); return; }
   if(!requireDB()) return;
-  var btn=document.getElementById("videoSubmitBtn");
-  btn.disabled=true;
-  btn.textContent="Uploading…";
-  document.getElementById("videoUploadStatus").innerHTML='<span style="color:var(--amber)">⏳ Uploading video… this may take a moment</span>';
 
-  var ext=_spkSelectedVideoFile.name.split('.').pop()||"mp4";
-  var path="speaking/"+safe(_spkGroup)+"/"+safe(_spkStudent)+"/"+safe(_spkStage)+"/"+safe(_spkLesson)+"/"+safe(_spkHw)+"/"+Date.now()+"."+ext;
-  var ref=storage.ref(path);
-  try{
-    var snap=await ref.put(_spkSelectedVideoFile);
-    var url=await ref.getDownloadURL();
-    await db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw).set({
-      recordingUrl:url, recordingType:"video", duration:0, time:Date.now()
-    });
-    document.getElementById("videoUploadStatus").innerHTML='<span style="color:var(--green);font-weight:700">✅ Video submitted successfully! You can close this window.</span>';
-    btn.textContent="✅ Submitted!";
-    btn.style.background="var(--green)";
-    pushNotif("Speaking Video Submitted","Your video for \""+_spkHw+"\" was uploaded.","success");
-  } catch(err){
-    document.getElementById("videoUploadStatus").innerHTML='<span style="color:var(--red)">Upload error: '+(err.message||err)+'</span>';
-    btn.disabled=false;
-    btn.textContent="Retry Submit";
+  var file = _spkSelectedVideoFile;
+  var sizeMB = Math.round(file.size / 1024 / 1024 * 10) / 10;
+
+  // Warn if very large (over 500MB)
+  if(file.size > 500 * 1024 * 1024){
+    alert("File is too large ("+sizeMB+"MB). Please choose a file under 500MB.");
+    return;
   }
+
+  var btn = document.getElementById("videoSubmitBtn");
+  var statusEl = document.getElementById("videoUploadStatus");
+  btn.disabled = true;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg> Uploading…';
+
+  statusEl.innerHTML = '<div style="color:var(--amber);font-weight:600;margin-bottom:8px">⏳ Uploading '+sizeMB+'MB… do not close this window</div>'
+    + '<div style="background:var(--surface2);border-radius:20px;height:8px;overflow:hidden;margin-bottom:6px">'
+    + '<div id="videoProgressBar" style="height:100%;background:linear-gradient(90deg,var(--green),#1aad74);border-radius:20px;width:0%;transition:width .3s"></div>'
+    + '</div>'
+    + '<div id="videoProgressText" style="font-size:12px;color:var(--muted);font-family:\'Space Mono\',monospace">0%</div>';
+
+  var ext = file.name.split('.').pop() || "mp4";
+  var path = "speaking/"+safe(_spkGroup)+"/"+safe(_spkStudent)+"/"+safe(_spkStage)+"/"+safe(_spkLesson)+"/"+safe(_spkHw)+"/"+Date.now()+"."+ext;
+  var ref = storage.ref(path);
+
+  // Use uploadTask for progress tracking
+  var uploadTask = ref.put(file);
+
+  uploadTask.on('state_changed',
+    function(snapshot){
+      // Progress
+      var pct = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+      var bar = document.getElementById("videoProgressBar");
+      var txt = document.getElementById("videoProgressText");
+      if(bar) bar.style.width = pct + "%";
+      if(txt) txt.textContent = pct + "% — " + Math.round(snapshot.bytesTransferred/1024/1024*10)/10 + "MB / " + sizeMB + "MB";
+    },
+    function(error){
+      // Error
+      var msg = "";
+      switch(error.code){
+        case 'storage/unauthorized': msg = "Permission denied. Check Firebase Storage rules."; break;
+        case 'storage/canceled': msg = "Upload was cancelled."; break;
+        case 'storage/unknown': msg = "Unknown error. Check your internet connection."; break;
+        default: msg = error.message || error.code || "Upload failed";
+      }
+      statusEl.innerHTML = '<div style="color:var(--red);font-weight:600">❌ Upload failed: '+msg+'</div>'
+        + '<div style="font-size:11px;color:var(--muted);margin-top:4px">Open DevTools (F12) → Console for more details</div>';
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Retry Submit';
+      console.error("Firebase Storage upload error:", error);
+    },
+    function(){
+      // Success
+      uploadTask.snapshot.ref.getDownloadURL().then(function(url){
+        return db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw).set({
+          recordingUrl: url,
+          recordingType: "video",
+          duration: 0,
+          fileName: file.name,
+          fileSizeMB: sizeMB,
+          time: Date.now()
+        });
+      }).then(function(){
+        statusEl.innerHTML = '<span style="color:var(--green);font-weight:700">✅ Video uploaded successfully! ('+sizeMB+'MB) You can close this window.</span>';
+        btn.innerHTML = '✅ Submitted!';
+        btn.style.background = "linear-gradient(135deg,var(--green),#1aad74)";
+        pushNotif("Speaking Video Submitted","Your video for \""+_spkHw+"\" was uploaded ("+sizeMB+"MB).","success");
+      }).catch(function(err){
+        statusEl.innerHTML = '<div style="color:var(--red)">✅ File uploaded but failed to save record: '+(err.message||err)+'</div>';
+        console.error("Firebase DB save error:", err);
+      });
+    }
+  );
 }
 
 // ===== ADMIN =====
