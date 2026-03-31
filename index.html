@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <title>Statista</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0d0f14;--surface:#161b25;--surface2:#1e2538;--border:#2a3347;--accent:#4f8ef7;--accent2:#7b5cf5;--green:#22c887;--red:#f7556a;--amber:#f5a623;--text:#e8edf5;--muted:#7a8499;--white:#ffffff;--r:14px;--rsm:8px}
@@ -32,7 +29,7 @@ button{font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:14px
 .back:hover{background:var(--surface2);color:var(--text)}
 .green{display:inline-flex;align-items:center;gap:4px;color:var(--green);font-weight:700;font-size:13px;background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.25);padding:3px 10px;border-radius:20px}
 .red{display:inline-flex;align-items:center;gap:4px;color:var(--red);font-weight:700;font-size:13px;background:rgba(247,85,106,.08);border:1px solid rgba(247,85,106,.2);padding:3px 10px;border-radius:20px}
-img{width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border);margin:8px 6px 0 0}
+img.hw-img{width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border);margin:8px 6px 0 0}
 label.primary,label.danger{display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:13px;border-radius:var(--rsm);padding:9px 14px;margin-top:10px;transition:all .18s;line-height:1}
 label.primary{background:linear-gradient(135deg,var(--accent),#3a7ef5);color:#fff;box-shadow:0 2px 10px rgba(79,142,247,.2)}
 label.primary:hover{transform:translateY(-1px)}
@@ -114,8 +111,6 @@ input[type=file]{display:none}
 .schedule-banner{border-radius:var(--rsm);padding:12px 16px;font-size:13px;font-weight:600;margin-bottom:14px;text-align:center}
 .warning-banner{background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.4);color:var(--amber)}
 .blocked-banner{background:rgba(247,85,106,.1);border:1px solid rgba(247,85,106,.35);color:var(--red)}
-
-/* === AI CHECKER === */
 .ai-check-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(123,92,245,.15),rgba(79,142,247,.15));color:#a78bfa;border:1px solid rgba(123,92,245,.4);padding:7px 12px;border-radius:var(--rsm);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s;white-space:nowrap}
 .ai-check-btn:hover{background:linear-gradient(135deg,rgba(123,92,245,.35),rgba(79,142,247,.25));color:#c4b5fd;transform:translateY(-1px)}
 .ai-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;z-index:1000}
@@ -164,8 +159,6 @@ input[type=file]{display:none}
 .ai-section-body ul{padding-left:18px}
 .ai-section-body li{margin-bottom:5px}
 .ai-error{background:rgba(247,85,106,.08);border:1px solid rgba(247,85,106,.25);border-radius:var(--rsm);padding:14px;color:var(--red);font-size:13px;margin-top:14px;text-align:center}
-
-/* AI Detection bar */
 .ai-detect{background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px 16px;margin-bottom:18px}
 .ai-detect-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .ai-detect-bar{position:relative;height:28px;border-radius:20px;overflow:hidden;background:var(--surface2);margin-bottom:10px}
@@ -175,6 +168,56 @@ input[type=file]{display:none}
 .ai-detect-lbl{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700}
 .ai-detect-dot{width:8px;height:8px;border-radius:50%}
 .ai-detect-note{font-size:12px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);line-height:1.5;font-style:italic}
+.speak-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(34,200,135,.15),rgba(34,200,135,.08));color:var(--green);border:1px solid rgba(34,200,135,.35);padding:7px 12px;border-radius:var(--rsm);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.speak-btn:hover{background:linear-gradient(135deg,rgba(34,200,135,.3),rgba(34,200,135,.15));transform:translateY(-1px)}
+.speak-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;z-index:1000}
+@media(min-height:600px){.speak-overlay{align-items:center}}
+.speak-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
+@media(min-height:600px){.speak-modal{border-radius:20px;margin:16px}}
+.speak-modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.speak-modal-title{font-size:17px;font-weight:800;color:var(--white);display:flex;align-items:center;gap:8px}
+.speak-close-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;transition:all .15s}
+.speak-close-btn:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.speak-hw-badge{font-size:12px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.2);padding:5px 12px;border-radius:20px;display:inline-block}
+.speak-type-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.speak-type-btn{background:var(--surface2);border:2px solid var(--border);border-radius:var(--rsm);padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;font-family:inherit}
+.speak-type-btn.active{border-color:var(--green);background:rgba(34,200,135,.08)}
+.speak-type-btn:hover{border-color:var(--green)}
+.speak-type-icon{font-size:24px;margin-bottom:6px}
+.speak-type-label{font-size:13px;font-weight:700;color:var(--white)}
+.speak-type-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.speak-timer-wrap{text-align:center;margin:20px 0}
+.speak-timer{font-size:56px;font-weight:800;font-family:'Space Mono',monospace;color:var(--white);line-height:1}
+.speak-timer.warning{color:var(--amber)}
+.speak-timer.danger{color:var(--red)}
+.speak-timer-label{font-size:12px;color:var(--muted);margin-top:6px}
+.speak-progress{width:100%;height:6px;background:var(--surface2);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.speak-progress-bar{height:100%;background:linear-gradient(90deg,var(--green),#1aad74);border-radius:10px;transition:width .5s linear}
+.speak-progress-bar.warn{background:linear-gradient(90deg,var(--amber),#e59400)}
+.speak-progress-bar.danger-bar{background:linear-gradient(90deg,var(--red),#d43050)}
+.speak-controls{display:flex;gap:10px;margin-bottom:16px}
+.speak-start-btn{flex:1;background:linear-gradient(135deg,var(--green),#1aad74);color:#fff;border:none;border-radius:var(--rsm);padding:13px 20px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(34,200,135,.3);transition:all .2s}
+.speak-start-btn:hover:not(:disabled){transform:translateY(-1px)}
+.speak-start-btn:disabled{opacity:.5;cursor:not-allowed}
+.speak-stop-btn{background:rgba(247,85,106,.12);color:var(--red);border:1px solid rgba(247,85,106,.35);border-radius:var(--rsm);padding:13px 18px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
+.speak-stop-btn:hover:not(:disabled){background:var(--red);color:#fff}
+.speak-stop-btn:disabled{opacity:.35;cursor:not-allowed}
+.speak-status{font-size:13px;color:var(--muted);text-align:center;min-height:20px;margin-bottom:8px}
+.speak-status.recording{color:var(--red);font-weight:700;animation:recPulse 1.2s ease-in-out infinite}
+@keyframes recPulse{0%,100%{opacity:1}50%{opacity:.5}}
+.speak-status.uploading{color:var(--amber);font-weight:700}
+.speak-status.done{color:var(--green);font-weight:700}
+.speak-rec-dot{display:inline-block;width:8px;height:8px;background:var(--red);border-radius:50%;margin-right:5px;animation:recPulse 1s infinite}
+.speak-preview{margin-top:14px;border-top:1px solid var(--border);padding-top:14px}
+.speak-preview-label{font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600}
+.speak-audio-player{width:100%;border-radius:var(--rsm);outline:none;accent-color:var(--green)}
+.speak-video-player{width:100%;border-radius:var(--rsm);max-height:200px;background:#000}
+.speak-min-warn{font-size:12px;color:var(--amber);text-align:center;margin-top:8px}
+
+/* Error banner */
+.error-banner{background:rgba(247,85,106,.1);border:1px solid rgba(247,85,106,.3);border-radius:var(--r);padding:20px;margin:20px 0;color:var(--red);font-size:13px;line-height:1.7}
+.error-banner b{color:#ff8a9a;display:block;margin-bottom:8px;font-size:15px}
+.error-banner code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:12px;font-family:'Space Mono',monospace}
 </style>
 </head>
 <body>
@@ -200,7 +243,9 @@ input[type=file]{display:none}
 <div id="notifOverlay" onclick="closeNotifPanel()" style="display:none"></div>
 <div id="webviewWarning">For stable photo upload, open in browser: <b>⋮ → Open in Chrome / Safari</b></div>
 
-<div class="container" id="app"></div>
+<div class="container" id="app">
+  <div class="loading">Loading…</div>
+</div>
 
 <!-- LOGIN MODAL -->
 <div id="loginModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)this.style.display='none'">
@@ -234,16 +279,6 @@ input[type=file]{display:none}
   </div>
 </div>
 
-<!-- COMING SOON MODAL -->
-<div id="comingSoonModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)this.style.display='none'">
-  <div class="modal" style="text-align:center">
-    <div style="font-size:48px;margin-bottom:12px">🚀</div>
-    <div class="modal-title" style="justify-content:center;text-align:center">Coming Soon</div>
-    <div class="modal-sub" style="margin-bottom:28px">AI Essay Checker is currently under development. Stay tuned!</div>
-    <button class="primary" style="justify-content:center" onclick="document.getElementById('comingSoonModal').style.display='none'">Got it</button>
-  </div>
-</div>
-
 <!-- AI CHECKER MODAL -->
 <div id="aiModal" style="display:none">
   <div class="ai-overlay" onclick="if(event.target.classList.contains('ai-overlay'))closeAI()">
@@ -269,23 +304,148 @@ input[type=file]{display:none}
   </div>
 </div>
 
+<!-- SPEAKING RECORDER MODAL -->
+<div id="speakModal" style="display:none">
+  <div class="speak-overlay" onclick="if(event.target.classList.contains('speak-overlay'))closeSpeakModal()">
+    <div class="speak-modal">
+      <div class="speak-modal-header">
+        <div class="speak-modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          Speaking Recorder
+        </div>
+        <button class="speak-close-btn" onclick="closeSpeakModal()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+        </button>
+      </div>
+      <div id="speakHwBadge" class="speak-hw-badge"></div>
+      <div class="speak-type-row">
+        <div class="speak-type-btn active" id="typeAudio" onclick="selectRecordType('audio')">
+          <div class="speak-type-icon">🎤</div>
+          <div class="speak-type-label">Audio Only</div>
+          <div class="speak-type-sub">Voice recording</div>
+        </div>
+        <div class="speak-type-btn" id="typeVideo" onclick="selectRecordType('video')">
+          <div class="speak-type-icon">🎥</div>
+          <div class="speak-type-label">Video + Audio</div>
+          <div class="speak-type-sub">With camera</div>
+        </div>
+      </div>
+      <div class="speak-timer-wrap">
+        <div class="speak-timer" id="speakTimer">20:00</div>
+        <div class="speak-timer-label">Time remaining</div>
+      </div>
+      <div class="speak-progress">
+        <div class="speak-progress-bar" id="speakProgressBar" style="width:100%"></div>
+      </div>
+      <div class="speak-status" id="speakStatus">Choose audio or video, then press Record</div>
+      <div class="speak-controls">
+        <button class="speak-start-btn" id="speakStartBtn" onclick="startSpeakRecording()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
+          Record
+        </button>
+        <button class="speak-stop-btn" id="speakStopBtn" onclick="stopSpeakRecording()" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+          Stop
+        </button>
+      </div>
+      <div class="speak-min-warn">⚠️ Minimum 60 seconds required to submit</div>
+      <div class="speak-preview" id="speakPreview" style="display:none">
+        <div class="speak-preview-label">Preview your recording:</div>
+        <div id="speakPreviewPlayer"></div>
+        <div id="speakUploadStatus" style="margin-top:12px;text-align:center;font-size:13px;color:var(--muted)"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDKs loaded via script tags with error handling -->
 <script>
-// ===== FIREBASE =====
-firebase.initializeApp({
-  apiKey:"AIzaSyDJDVZazGiEUshVicJX8ObvxIjDPgA5rTo",
-  authDomain:"studentstatista.firebaseapp.com",
-  databaseURL:"https://studentstatista-default-rtdb.firebaseio.com",
-  projectId:"studentstatista",
-  storageBucket:"studentstatista.firebasestorage.app"
-});
-var db = firebase.database();
-var storage = firebase.storage();
+window._firebaseLoaded = false;
+window._firebaseError = null;
+</script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"
+  onerror="window._firebaseError='firebase-app failed to load'"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"
+  onerror="window._firebaseError='firebase-database failed to load'"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"
+  onerror="window._firebaseError='firebase-storage failed to load'"></script>
+
+<script>
+// ===== FIREBASE INIT WITH ERROR HANDLING =====
+var db = null;
+var storage = null;
+var _fbReady = false;
+
+function initFirebase() {
+  if (window._firebaseError) {
+    showFatalError(
+      "Firebase failed to load",
+      "The app cannot connect to Firebase. This usually happens when you open the file directly from your computer (<code>file://</code>).",
+      [
+        "Open the file using a local server (e.g. VS Code Live Server extension)",
+        "Or upload the file to Firebase Hosting / Vercel / Netlify",
+        "Do NOT open by double-clicking the .html file directly"
+      ]
+    );
+    return false;
+  }
+
+  if (typeof firebase === 'undefined') {
+    showFatalError(
+      "Firebase SDK not loaded",
+      "Could not load Firebase. Please check your internet connection and reload the page.",
+      ["Make sure you have a stable internet connection", "Try reloading with Ctrl+R / Cmd+R"]
+    );
+    return false;
+  }
+
+  try {
+    if (!firebase.apps.length) {
+      firebase.initializeApp({
+        apiKey: "AIzaSyDJDVZazGiEUshVicJX8ObvxIjDPgA5rTo",
+        authDomain: "studentstatista.firebaseapp.com",
+        databaseURL: "https://studentstatista-default-rtdb.firebaseio.com",
+        projectId: "studentstatista",
+        storageBucket: "studentstatista.firebasestorage.app"
+      });
+    }
+    db = firebase.database();
+    storage = firebase.storage();
+    _fbReady = true;
+    return true;
+  } catch(e) {
+    showFatalError(
+      "Firebase initialization error",
+      "Error: <code>" + e.message + "</code>",
+      ["Check that the Firebase config is correct", "Ensure the database URL is valid"]
+    );
+    return false;
+  }
+}
+
+function showFatalError(title, desc, tips) {
+  var app = document.getElementById("app");
+  var tipsHtml = tips.map(function(t){ return "<li>" + t + "</li>"; }).join("");
+  app.innerHTML = '<div class="error-banner">'
+    + '<b>⚠️ ' + title + '</b>'
+    + '<p style="margin-bottom:10px">' + desc + '</p>'
+    + '<ul style="padding-left:18px;line-height:2">' + tipsHtml + '</ul>'
+    + '</div>';
+}
+
+function requireDB() {
+  if (!_fbReady || !db) {
+    alert("Firebase is not connected. Please check your internet connection and reload.");
+    return false;
+  }
+  return true;
+}
 
 // Detect webview
 (function(){
   var ua = navigator.userAgent.toLowerCase();
-  if(ua.includes("wv")||ua.includes("telegram")||ua.includes("instagram")||(ua.includes("android")&&!ua.includes("chrome"))){
-    document.getElementById("webviewWarning").style.display="block";
+  if(ua.includes("wv") || ua.includes("telegram") || ua.includes("instagram") || (ua.includes("android") && !ua.includes("chrome"))){
+    document.getElementById("webviewWarning").style.display = "block";
   }
 })();
 
@@ -294,12 +454,12 @@ var GROUPS = {
   "GROUP IELTS 9:00 M/W/F":["HOSHIMOVA NILUFAR","JURAYEVA AZIZA","MAHMUDOV SUNNAT","MUHIDDINOVA MAHBUBA","NORBOYEV SHOHJAXON","OCHILOV LOCHINBEK","ORALOVA SHOHINUR","RAVSHANOVA ZAYNAB","TOSHPULATOV ABBOS"],
   "GROUP IELTS 17:00 MWF":["ABDURAHIMOVA ZILOLA","ALIMOV BEHRUZ","ANVAROVA RUXSHONA","ASADOV SARDOR","BAXRONOVA FAYRUZA","GAFURJONOV ULUGBEK","ISMOILOV ISMOIL","JULIBOYEVA ZEBO","KOZIMJONOVA DURDONA","MELIKUZIYEVA RUXSHONA","NIGMATOV ABDURAHIM","RAHMATULLAYEV BEXRUZ","TALABOV SAUD","XISLATULLAYEV JAVOXIR","XODJAYEVA LAZIZA","YORMATOV MIRABROR"],
   "GROUP IELTS M/W/F 14:00":["RASHIDJANOVA FARANGIZ","RUZIYEVA GAVHAR","YADGARALIYEVA GULHAYO","MUHAMMADIYEVA SEVINCH","KHUDOYBERDIYEVA LAZIZA","ODIL RAZZOQOV","SOBIRJONOVA FOTIMA"],
-  "GROUP CEFR M/W/F 15:30":["TURGUNOVA GULCHEHRA","RAXMATULLAYEV SHAHBOZ","ABDULLAYEVA NAFISA","XODJAMQULOVA IRODA","BURXONOVA SARVINOZ","SAMIKOVA MUBINA","ANVAROV SARVARVARBEK","ERIKOVA AYNURA","YOLDOSHEVA DILRABO","TOXTAXODJAYEV ALISHER","UBAYDULLAYEV ISMOIL","BAXTIYOROV ABDULLOH","PRIMOVA MAFTUNA","MASHRAPOVA FARANGIZ","MIRVALIEV RAMZIDDIN","XUDOYOROVA DILAFRUZ","ABDUAZIZOVA HABIBA","GAIPNAZAROV BEHZOD","AXTAMOV OTABEK","UMAROVA RAXIMA","KHOSHIMOVA MUMTOZBONU","SERIKBAYEV AVAZBEK","YUSUFJONOVA NILUFAR"],
+  "GROUP CEFR M/W/F 15:30":["TURGUNOVA GULCHEHRA","RAXMATULLAYEV SHAHBOZ","ABDULLAYEVA NAFISA","XODJAMQULOVA IRODA","BURXONOVA SARVINOZ","SAMIKOVA MUBINA","ANVAROV SARVARVARBEK","ERIKOVA AYNURA","YOLDOSHEVA DILRABO","TOXTAXODJAYEV ALISHER","UBAYDULLAYEV ISMOIL","BAXTIYOROV ABDULLOH","PRIMOVA MAFTUNA","MASHRAPOVA FARANGIZ","MIRVALIEV RAMZIDDIN","XUDOYOROVA DILAFRUZ","ABDUAZIZOVA HABIBA","GAIPNAZAROV BEHZOD","AXTAMOV OTABEK","UMAROVA RAXIMA","KHOSHIMOVA MUMTOZBONU","SERIKBAYEV AVAZBEK"],
   "GROUP IELTS T/T/S 9:00":["ZARINA FAYZULLAEVA","MURODOVA NOZIMA","AZIZA ERKINOVA","NURIDDIN QOCHQOROV","QIDIRALIEVA JAYNA","HAMROYEVA NIGORA","QILICHOVA GULISTON","AZIMOVA MUHTASAR"],
   "GROUP IELTS 10:30 TTS":["ADXAMOVA MUBINA","BAXTIYOROVA NILUFAR","ISAMATOVA LAYLO","NOSIROVA LAZIZA"],
   "GROUP IELTS T/T/S 14:00":["ABDUAZIZOVA HABIBA","ABDUJABBOROVA LOLA","ABDUVALIYEVA OMINA","ALISHEROV NURMUHAMMAD","DJURAYEVA NURGUL","ISLOMBEKOVA EZOZA","ISMAILOVA EZOZA","JORABEKOV AFZALBEK","MAHMUDJONOV FAYZULLOH","MIRAHMEDOVA MUSLIMA","OLIMJONOVA DILNURA","TOJIBOYEV MUXAMMAD","UROLOV SIROJ","XUDOYBERDIYEV QOSIMBEK","SHODIYEVA ROBIYA","ABDULXAMIDOV DILYORBEK","KAYUMXODJAYEVA JASMINA","MIRSIDIQOV MIRABROR"],
   "GROUP IELTS 15:30 TTS":["FAYZULLAYEVA HILOLA","MUSTAFOYEVA SEVINCH","SOBIRJONOVA DURDONA","MIRVALIEVA XADICHA","ABDURAHMONOVA EZOZA","QODIRJANOVA RUSHANA","AMETOV UMIRBEK","SULTANBEKOVA LAZIZA","MIRFOTIHOVA HADICHA","ZOHIDOV ASILBEK","TOXIROV AYUBHON","SHAVKATOV HUSAN","MELIKUZIEVA FARZONA","SULTONOVA MUSLIMA","ABDUGANIEVA MOXINUR","SHAVKATOV KHASAN","URALOVA MUXLISA","TOSHXOJAYEV ISROILXOJA","AXMADJONOV DONIYOR","XASANOV JAHONGIR","UMARALIYEV OYATILLO","ESHMUHAMMEDOV SAIDAHROR"],
-  "GROUP IELTS T/T/S 18:30":["GANIJONOV AZIZBEK","HAMIDJONOV ABDULMALIK","IBROHIMOV JASURBEK","OLIMJONOV ABDUGAFFOR","RAXMATULAYEVA ROZIYA","SHOKIROV ABDURAZZOQ","ULMASOV DALER","ZAHRIDDINOV FAZLIDDIN","MIRZABOYEVA ROZYA","XUSHNAZAROV TEMUR","DAYNOVOVA ZEBINISO","JURAYEV KAMRON","TIMUR ABDUSADIKOV","SALOHIDDINOV BUNYOD","GANISHEROVA ZARIFA","ABDUMANNAPOV KAMRON"],
+  "GROUP IELTS T/T/S 18:30":["GANIJONOV AZIZBEK","HAMIDJONOV ABDULMALIK","IBROHIMOV JASURBEK","OLIMJONOV ABDUGAFFOR","RAXMATULAYEVA ROZIYA","SHOKIROV ABDURAZZOQ","ULMASOV DALER","ZAHRIDDINOV FAZLIDDIN","MIRZABOYEVA ROZYA","XUSHNAZAROV TEMUR","DAYNOVOVA ZEBINISO","JURAYEV KAMRON","TIMUR ABDUSADIKOV","SALOHIDDINOV BUNYOD","GANISHEROVA ZARIFA"],
   "GROUP IELTS MAX T/T/S 18:30":["SHERMATOVA SHIRIN","HASANOV BEHRUZ","KHAKIMOV TEMURBEK","YUSUPOV SARDORBEK","OLIMJONOV SARDOR","TURDIEVA NIGORA","TOSHBADALOV BEHRUZ","PAYZILDAYEVA SEVINCH","MAVLONOVA MAVLUDA","KHALMUHAMMEDOV DINMUKHAMMED","SHAROPOVA FARZONA","XOLMATJONOVA GULYUZA"],
 };
 
@@ -392,234 +552,384 @@ var SCHEDULE = {
 };
 
 function minutesUntilLesson(group){
-  var s=SCHEDULE[group]; if(!s) return null;
-  var now=new Date(), day=now.getDay();
-  var nowMins=now.getHours()*60+now.getMinutes();
-  var lessonMins=s.hour*60+s.minute;
-  if(s.days.indexOf(day)!==-1) return lessonMins-nowMins;
+  var s = SCHEDULE[group]; if(!s) return null;
+  var now = new Date(), day = now.getDay();
+  var nowMins = now.getHours()*60 + now.getMinutes();
+  var lessonMins = s.hour*60 + s.minute;
+  if(s.days.indexOf(day) !== -1) return lessonMins - nowMins;
   return null;
 }
 function isBlocked(group){
-  var m=minutesUntilLesson(group);
-  return m!==null && m<=0 && m>=-90;
+  var m = minutesUntilLesson(group);
+  return m !== null && m <= 0 && m >= -90;
 }
 
 // ===== NAV =====
-var NAV_KEY="statista_nav_v1";
-function setNav(v,p){try{localStorage.setItem(NAV_KEY,JSON.stringify({view:v,payload:p}));}catch(e){}}
-function getNav(){try{var r=localStorage.getItem(NAV_KEY);return r?JSON.parse(r):null;}catch(e){return null;}}
-
-var app=document.getElementById("app");
+var app = document.getElementById("app");
 
 function home(){
-  setNav("home",{});
-  app.innerHTML='<div class="home-wrap"><div class="home-title">Statista</div><div class="home-sub">IELTS Homework Tracker</div><div class="home-cards"><div class="home-card student" onclick="enterStudent()"><div class="label">Student</div><div class="sub">Submit homework</div></div><div class="home-card teacher" onclick="loginAdmin()"><div class="label">Teacher</div><div class="sub">Admin panel</div></div></div></div>';
+  app.innerHTML = '<div class="home-wrap">'
+    + '<div class="home-title">Statista</div>'
+    + '<div class="home-sub">IELTS Homework Tracker</div>'
+    + '<div class="home-cards">'
+    + '<div class="home-card student" onclick="enterStudent()"><div class="label">Student</div><div class="sub">Submit homework</div></div>'
+    + '<div class="home-card teacher" onclick="loginAdmin()"><div class="label">Teacher</div><div class="sub">Admin panel</div></div>'
+    + '</div></div>';
 }
 
 function enterStudent(){
-  setNav("enterStudent",{});
-  app.innerHTML="";
-  var back=document.createElement("button"); back.className="back"; back.textContent="← Back";
-  back.addEventListener("click",home); app.appendChild(back);
-  var h3=document.createElement("h3"); h3.textContent="Select Group"; app.appendChild(h3);
+  app.innerHTML = "";
+  var back = document.createElement("button"); back.className = "back"; back.textContent = "← Back";
+  back.addEventListener("click", home); app.appendChild(back);
+  var h3 = document.createElement("h3"); h3.textContent = "Select Group"; app.appendChild(h3);
   Object.keys(GROUPS).forEach(function(g){
-    var div=document.createElement("div"); div.className="card";
-    var btn=document.createElement("button"); btn.className="primary"; btn.textContent=g;
-    btn.addEventListener("click",function(){ selectStudent(g); });
+    var div = document.createElement("div"); div.className = "card";
+    var btn = document.createElement("button"); btn.className = "primary"; btn.textContent = g;
+    btn.addEventListener("click", function(){ selectStudent(g); });
     div.appendChild(btn); app.appendChild(div);
   });
 }
 
 function selectStudent(group){
-  setNav("selectStudent",{group:group});
-  app.innerHTML="";
-  var back=document.createElement("button"); back.className="back"; back.textContent="← Back";
-  back.addEventListener("click",enterStudent); app.appendChild(back);
-  var bc=document.createElement("div"); bc.className="bc"; bc.textContent=group; app.appendChild(bc);
-  var h3=document.createElement("h3"); h3.textContent="Select Your Name"; app.appendChild(h3);
+  app.innerHTML = "";
+  var back = document.createElement("button"); back.className = "back"; back.textContent = "← Back";
+  back.addEventListener("click", enterStudent); app.appendChild(back);
+  var bc = document.createElement("div"); bc.className = "bc"; bc.textContent = group; app.appendChild(bc);
+  var h3 = document.createElement("h3"); h3.textContent = "Select Your Name"; app.appendChild(h3);
   GROUPS[group].forEach(function(s){
-    var div=document.createElement("div"); div.className="card";
-    var btn=document.createElement("button"); btn.className="primary"; btn.textContent=s;
-    btn.addEventListener("click",function(){ showStages(group,s); });
+    var div = document.createElement("div"); div.className = "card";
+    var btn = document.createElement("button"); btn.className = "primary"; btn.textContent = s;
+    btn.addEventListener("click", function(){ showStages(group, s); });
     div.appendChild(btn); app.appendChild(div);
   });
 }
-function showStages(group,student){
-  setNav("showStages",{group:group,student:student});
-  app.innerHTML='<button class="back" onclick="selectStudent(\''+group.replace(/'/g,"\\'")+'\')">← Back</button><div class="bc">'+group+' › <b>'+student+'</b></div><h3>Select Stage</h3><div id="stageList"></div>';
-  var list=document.getElementById("stageList");
+
+function showStages(group, student){
+  app.innerHTML = '<button class="back" onclick="selectStudent(\''+esc(group)+'\')">← Back</button>'
+    + '<div class="bc">'+group+' › <b>'+student+'</b></div><h3>Select Stage</h3><div id="stageList"></div>';
+  var list = document.getElementById("stageList");
   Object.keys(STAGES).forEach(function(stage){
-    var div=document.createElement("div"); div.className="card";
-    var btn=document.createElement("button"); btn.className="primary"; btn.textContent=stage;
-    btn.addEventListener("click",function(){ showLessons(group,student,stage); });
+    var div = document.createElement("div"); div.className = "card";
+    var btn = document.createElement("button"); btn.className = "primary"; btn.textContent = stage;
+    btn.addEventListener("click", function(){ showLessons(group, student, stage); });
     div.appendChild(btn); list.appendChild(div);
   });
 }
 
-function showLessons(group,student,stage){
-  setNav("showLessons",{group:group,student:student,stage:stage});
-  app.innerHTML='<button class="back" onclick="showStages(\''+group.replace(/'/g,"\\'")+'\',\''+student.replace(/'/g,"\\'")+'\')">← Back</button><div class="bc"><b>'+student+'</b> › '+stage+'</div><h3>Select Lesson</h3><div id="lessonList"></div>';
-  var list=document.getElementById("lessonList");
+function showLessons(group, student, stage){
+  app.innerHTML = '<button class="back" onclick="showStages(\''+esc(group)+'\',\''+esc(student)+'\')">← Back</button>'
+    + '<div class="bc"><b>'+student+'</b> › '+stage+'</div><h3>Select Lesson</h3><div id="lessonList"></div>';
+  var list = document.getElementById("lessonList");
   Object.keys(STAGES[stage]).forEach(function(lesson){
-    var div=document.createElement("div"); div.className="card";
-    var btn=document.createElement("button"); btn.className="secondary"; btn.textContent=lesson;
-    btn.addEventListener("click",function(){ showHomework(group,student,stage,lesson); });
+    var div = document.createElement("div"); div.className = "card";
+    var btn = document.createElement("button"); btn.className = "secondary"; btn.textContent = lesson;
+    btn.addEventListener("click", function(){ showHomework(group, student, stage, lesson); });
     div.appendChild(btn); list.appendChild(div);
   });
 }
 
-async function showHomework(group,student,stage,lesson){
-  setNav("showHomework",{group:group,student:student,stage:stage,lesson:lesson});
-  app.innerHTML='<div class="loading">Loading…</div>';
-  var snap=await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson).once("value");
-  var data=snap.val()||{};
+async function showHomework(group, student, stage, lesson){
+  if(!requireDB()) return;
+  app.innerHTML = '<div class="loading">Loading…</div>';
+  var snap = await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson).once("value").catch(function(e){
+    app.innerHTML = '<div class="error-banner"><b>⚠️ Database error</b>' + e.message + '</div>';
+    return null;
+  });
+  if(!snap) return;
+  var data = snap.val() || {};
 
-  app.innerHTML='';
-
-  var backBtn=document.createElement("button"); backBtn.className="back"; backBtn.textContent="← Back";
-  backBtn.addEventListener("click",function(){ showLessons(group,student,stage); });
+  app.innerHTML = '';
+  var backBtn = document.createElement("button"); backBtn.className = "back"; backBtn.textContent = "← Back";
+  backBtn.addEventListener("click", function(){ showLessons(group, student, stage); });
   app.appendChild(backBtn);
 
-  var bc=document.createElement("div"); bc.className="bc";
-  bc.innerHTML="<b>"+student+"</b> › "+stage+" › <b>"+lesson+"</b>";
+  var bc = document.createElement("div"); bc.className = "bc";
+  bc.innerHTML = "<b>"+student+"</b> › "+stage+" › <b>"+lesson+"</b>";
   app.appendChild(bc);
 
-  // Schedule banner
-  var mins=minutesUntilLesson(group);
-  var blocked=isBlocked(group);
+  var mins = minutesUntilLesson(group);
+  var blocked = isBlocked(group);
   if(blocked){
-    var b=document.createElement("div"); b.className="schedule-banner blocked-banner";
-    b.textContent="Lesson has started — homework submission is now closed.";
+    var b = document.createElement("div"); b.className = "schedule-banner blocked-banner";
+    b.textContent = "Lesson has started — homework submission is now closed.";
     app.appendChild(b);
-  } else if(mins!==null && mins>0 && mins<=30){
-    var b=document.createElement("div"); b.className="schedule-banner warning-banner";
-    b.textContent="Lesson starts in "+mins+" minute"+(mins===1?"":"s")+" — submit any missing homework now!";
+  } else if(mins !== null && mins > 0 && mins <= 30){
+    var b = document.createElement("div"); b.className = "schedule-banner warning-banner";
+    b.textContent = "Lesson starts in "+mins+" minute"+(mins===1?"":"s")+" — submit any missing homework now!";
     app.appendChild(b);
   }
 
-  var h3=document.createElement("h3"); h3.textContent="Homework Tasks"; app.appendChild(h3);
+  var h3 = document.createElement("h3"); h3.textContent = "Homework Tasks"; app.appendChild(h3);
 
   STAGES[stage][lesson].forEach(function(hw){
-    var d=data[hw];
-    var submitted=d&&Array.isArray(d.files)&&d.files.length>0;
-    var isWriting=isWritingTask(hw);
+    var d = data[hw];
+    var isSpeaking = isSpeakingTask(hw);
+    var isWriting = isWritingTask(hw);
+    var speakSubmitted = isSpeaking && d && d.recordingUrl;
+    var photoSubmitted = !isSpeaking && d && Array.isArray(d.files) && d.files.length > 0;
+    var submitted = isSpeaking ? speakSubmitted : photoSubmitted;
 
-    var card=document.createElement("div"); card.className="card hw";
+    var card = document.createElement("div"); card.className = "card hw";
+    var title = document.createElement("b"); title.textContent = hw; card.appendChild(title);
 
-    var title=document.createElement("b"); title.textContent=hw; card.appendChild(title);
+    var row = document.createElement("div");
+    row.style.cssText = "display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;";
 
-    var row=document.createElement("div");
-    row.style.cssText="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;";
-
-    var badge=document.createElement("span");
-    badge.className=submitted?"green":"red";
-    badge.textContent=submitted?"Submitted":"Not submitted";
+    var badge = document.createElement("span");
+    badge.className = submitted ? "green" : "red";
+    badge.textContent = submitted ? "Submitted" : "Not submitted";
     row.appendChild(badge);
 
-    if(isWriting){
-      var aiBtn=document.createElement("button");
-      aiBtn.className="ai-check-btn";
-      aiBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Check with AI';
-      (function(hwName){ aiBtn.addEventListener("click",function(){ showComingSoon(); }); })(hw);
+    if(isWriting && !isSpeaking){
+      var aiBtn = document.createElement("button");
+      aiBtn.className = "ai-check-btn";
+      aiBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Check with AI';
+      (function(hwName){ aiBtn.addEventListener("click", function(){ openAI(hwName); }); })(hw);
       row.appendChild(aiBtn);
     }
+
+    if(isSpeaking){
+      var spkBtn = document.createElement("button");
+      spkBtn.className = "speak-btn";
+      spkBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> '+(submitted?'Re-record':'Record Speaking');
+      if(blocked){ spkBtn.style.opacity = "0.35"; spkBtn.style.pointerEvents = "none"; }
+      (function(g,st,sg,ls,h){ spkBtn.addEventListener("click", function(){ openSpeakModal(g,st,sg,ls,h); }); })(group,student,stage,lesson,hw);
+      row.appendChild(spkBtn);
+    }
+
     card.appendChild(row);
 
-    if(submitted){
+    if(isSpeaking && speakSubmitted){
+      var type = d.recordingType || 'audio';
+      var playerWrap = document.createElement("div"); playerWrap.style.marginTop = "10px";
+      if(type === 'video'){
+        playerWrap.innerHTML = '<video class="speak-video-player" controls src="'+d.recordingUrl+'"></video>';
+      } else {
+        playerWrap.innerHTML = '<audio class="speak-audio-player" controls src="'+d.recordingUrl+'"></audio>';
+      }
+      if(d.duration) playerWrap.innerHTML += '<div style="font-size:11px;color:var(--muted);margin-top:4px;font-family:\'Space Mono\',monospace">Duration: '+formatTime(d.duration)+'</div>';
+      card.appendChild(playerWrap);
+    }
+
+    if(!isSpeaking && photoSubmitted){
       d.files.forEach(function(url){
-        var a=document.createElement("a"); a.href=url; a.target="_blank";
-        var img=document.createElement("img"); img.src=url; a.appendChild(img);
+        var a = document.createElement("a"); a.href = url; a.target = "_blank";
+        var img = document.createElement("img"); img.src = url; img.className = "hw-img"; a.appendChild(img);
         card.appendChild(a);
       });
     }
 
     card.appendChild(document.createElement("br"));
 
-    var lbl=document.createElement("label"); lbl.className="primary"; lbl.textContent="Submit photo (max 4)";
-    var inp=document.createElement("input"); inp.type="file"; inp.accept="image/*"; inp.multiple=true;
-    if(blocked){ lbl.style.opacity="0.35"; lbl.style.pointerEvents="none"; }
-    (function(g,st,sg,ls,h){ inp.addEventListener("change",function(){ submitHW(this,g,st,sg,ls,h); }); })(group,student,stage,lesson,hw);
-    lbl.appendChild(inp); card.appendChild(lbl);
+    if(!isSpeaking){
+      var lbl = document.createElement("label"); lbl.className = "primary"; lbl.textContent = "Submit photo (max 4)";
+      var inp = document.createElement("input"); inp.type = "file"; inp.accept = "image/*"; inp.multiple = true;
+      if(blocked){ lbl.style.opacity = "0.35"; lbl.style.pointerEvents = "none"; }
+      (function(g,st,sg,ls,h){ inp.addEventListener("change", function(){ submitHW(this,g,st,sg,ls,h); }); })(group,student,stage,lesson,hw);
+      lbl.appendChild(inp); card.appendChild(lbl);
 
-    if(submitted){
-      var lbl2=document.createElement("label"); lbl2.className="danger"; lbl2.style.marginLeft="8px"; lbl2.textContent="Replace photos";
-      var inp2=document.createElement("input"); inp2.type="file"; inp2.accept="image/*"; inp2.multiple=true;
-      if(blocked){ lbl2.style.opacity="0.35"; lbl2.style.pointerEvents="none"; }
-      (function(g,st,sg,ls,h){ inp2.addEventListener("change",function(){ replaceHW(this,g,st,sg,ls,h); }); })(group,student,stage,lesson,hw);
-      lbl2.appendChild(inp2); card.appendChild(lbl2);
+      if(photoSubmitted){
+        var lbl2 = document.createElement("label"); lbl2.className = "danger"; lbl2.style.marginLeft = "8px"; lbl2.textContent = "Replace photos";
+        var inp2 = document.createElement("input"); inp2.type = "file"; inp2.accept = "image/*"; inp2.multiple = true;
+        if(blocked){ lbl2.style.opacity = "0.35"; lbl2.style.pointerEvents = "none"; }
+        (function(g,st,sg,ls,h){ inp2.addEventListener("change", function(){ replaceHW(this,g,st,sg,ls,h); }); })(group,student,stage,lesson,hw);
+        lbl2.appendChild(inp2); card.appendChild(lbl2);
+      }
     }
 
     app.appendChild(card);
   });
 }
 
-// ===== WRITING TASK DETECTION =====
-function isWritingTask(hw){
-  var n=hw.toLowerCase();
-  return n.includes("writing task")||n.includes("writing report")||
-         n.includes("task 1")||n.includes("task 2")||
-         n.includes("essay")||n.includes("report");
-}
+// ===== HELPERS =====
+function esc(v){ return String(v).replace(/\\/g,"\\\\").replace(/'/g,"\\'"); }
+function isWritingTask(hw){ var n=hw.toLowerCase(); return n.includes("writing task")||n.includes("writing report")||n.includes("task 1")||n.includes("task 2")||n.includes("essay")||n.includes("report"); }
+function isSpeakingTask(hw){ return hw.toLowerCase().includes("speaking"); }
+function formatTime(secs){ var m=Math.floor(secs/60), s=secs%60; return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'); }
+function safe(v){ return String(v).replace(/[^a-zA-Z0-9_-]/g,"_"); }
 
-// ===== UPLOAD =====
-function safe(v){return String(v).replace(/[^a-zA-Z0-9_-]/g,"_");}
-
+// ===== IMAGE COMPRESS =====
 async function compressImage(file){
-  var img=document.createElement("img");
-  var url=URL.createObjectURL(file); img.src=url;
-  await new Promise(function(res){img.onload=res;});
-  var scale=Math.min(1,1280/img.width);
-  var w=Math.round(img.width*scale), h=Math.round(img.height*scale);
-  var canvas=document.createElement("canvas"); canvas.width=w; canvas.height=h;
-  canvas.getContext("2d").drawImage(img,0,0,w,h);
+  var img = document.createElement("img");
+  var url = URL.createObjectURL(file); img.src = url;
+  await new Promise(function(res){ img.onload = res; });
+  var scale = Math.min(1, 1280/img.width);
+  var w = Math.round(img.width*scale), h = Math.round(img.height*scale);
+  var canvas = document.createElement("canvas"); canvas.width = w; canvas.height = h;
+  canvas.getContext("2d").drawImage(img, 0, 0, w, h);
   URL.revokeObjectURL(url);
-  var blob=await new Promise(function(res){canvas.toBlob(res,"image/jpeg",0.75);});
-  return blob?new File([blob],file.name.replace(/\.\w+$/,".jpg"),{type:"image/jpeg"}):file;
+  var blob = await new Promise(function(res){ canvas.toBlob(res, "image/jpeg", 0.75); });
+  return blob ? new File([blob], file.name.replace(/\.\w+$/, ".jpg"), {type:"image/jpeg"}) : file;
 }
 
-async function submitHW(input,group,student,stage,lesson,hw){
-  var files=Array.from(input.files||[]);
-  if(!files.length){alert("At least one photo is required.");return;}
-  if(files.length>4){alert("Max 4 photos allowed.");input.value="";return;}
-  var urls=[];
-  for(var i=0;i<files.length;i++){
-    var path="submissions/"+safe(group)+"/"+safe(student)+"/"+safe(stage)+"/"+safe(lesson)+"/"+safe(hw)+"/"+Date.now()+"_"+safe(files[i].name);
-    var ref=storage.ref(path);
-    var small=await compressImage(files[i]);
-    try{await ref.put(small);urls.push(await ref.getDownloadURL());}
-    catch(e){alert("Upload failed: "+(e.message||e));input.value="";return;}
+// ===== UPLOAD PHOTO =====
+async function submitHW(input, group, student, stage, lesson, hw){
+  if(!requireDB()) return;
+  var files = Array.from(input.files||[]);
+  if(!files.length){ alert("At least one photo is required."); return; }
+  if(files.length>4){ alert("Max 4 photos allowed."); input.value=""; return; }
+  var urls = [];
+  for(var i=0; i<files.length; i++){
+    var path = "submissions/"+safe(group)+"/"+safe(student)+"/"+safe(stage)+"/"+safe(lesson)+"/"+safe(hw)+"/"+Date.now()+"_"+safe(files[i].name);
+    var ref = storage.ref(path);
+    var small = await compressImage(files[i]);
+    try{ await ref.put(small); urls.push(await ref.getDownloadURL()); }
+    catch(e){ alert("Upload failed: "+(e.message||e)); input.value=""; return; }
   }
-  await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).set({files:urls,time:Date.now()});
-  input.value="";
-  pushNotif("Homework Submitted", hw + " — submitted successfully.", "success");
-  sendPushNotif("✅ Homework Submitted!", hw + " — submitted successfully.");
-  await showHomework(group,student,stage,lesson);
+  await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).set({files:urls, time:Date.now()});
+  input.value = "";
+  pushNotif("Homework Submitted", hw+" — submitted successfully.", "success");
+  await showHomework(group, student, stage, lesson);
   alert("Submitted successfully ✓");
 }
 
-async function replaceHW(input,group,student,stage,lesson,hw){
-  var files=Array.from(input.files||[]);
-  if(!files.length){alert("At least one photo is required.");return;}
-  if(files.length>4){alert("Max 4 photos allowed.");input.value="";return;}
-  var snap=await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).once("value");
-  var old=snap.val();
-  if(old&&Array.isArray(old.files)){
-    for(var j=0;j<old.files.length;j++){try{await storage.refFromURL(old.files[j]).delete();}catch(e){}}
+async function replaceHW(input, group, student, stage, lesson, hw){
+  if(!requireDB()) return;
+  var files = Array.from(input.files||[]);
+  if(!files.length){ alert("At least one photo is required."); return; }
+  if(files.length>4){ alert("Max 4 photos allowed."); input.value=""; return; }
+  var snap = await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).once("value");
+  var old = snap.val();
+  if(old && Array.isArray(old.files)){
+    for(var j=0; j<old.files.length; j++){ try{ await storage.refFromURL(old.files[j]).delete(); }catch(e){} }
   }
-  var urls=[];
-  for(var i=0;i<files.length;i++){
-    var path="submissions/"+safe(group)+"/"+safe(student)+"/"+safe(stage)+"/"+safe(lesson)+"/"+safe(hw)+"/"+Date.now()+"_"+safe(files[i].name);
-    var ref=storage.ref(path);
-    var small=await compressImage(files[i]);
-    try{await ref.put(small);urls.push(await ref.getDownloadURL());}
-    catch(e){alert("Upload failed: "+(e.message||e));input.value="";return;}
+  var urls = [];
+  for(var i=0; i<files.length; i++){
+    var path = "submissions/"+safe(group)+"/"+safe(student)+"/"+safe(stage)+"/"+safe(lesson)+"/"+safe(hw)+"/"+Date.now()+"_"+safe(files[i].name);
+    var ref = storage.ref(path);
+    var small = await compressImage(files[i]);
+    try{ await ref.put(small); urls.push(await ref.getDownloadURL()); }
+    catch(e){ alert("Upload failed: "+(e.message||e)); input.value=""; return; }
   }
-  await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).set({files:urls,time:Date.now()});
-  input.value="";
-  pushNotif("Photos Replaced", hw + " — photos updated successfully.", "success");
-  sendPushNotif("🔄 Photos Replaced!", hw + " — photos updated successfully.");
-  await showHomework(group,student,stage,lesson);
+  await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).set({files:urls, time:Date.now()});
+  input.value = "";
+  pushNotif("Photos Replaced", hw+" — photos updated.", "success");
+  await showHomework(group, student, stage, lesson);
   alert("Replaced successfully ✓");
+}
+
+// ===== SPEAKING RECORDER =====
+var _spkGroup="",_spkStudent="",_spkStage="",_spkLesson="",_spkHw="";
+var _spkType="audio";
+var _spkMediaRecorder=null, _spkChunks=[], _spkStream=null;
+var _spkTimer=1200, _spkInterval=null, _spkRecordedSecs=0;
+var _spkMinSecs=60, _spkTotalSecs=1200;
+
+function openSpeakModal(group,student,stage,lesson,hw){
+  _spkGroup=group; _spkStudent=student; _spkStage=stage; _spkLesson=lesson; _spkHw=hw;
+  _spkType="audio";
+  document.getElementById("speakHwBadge").textContent=hw;
+  document.getElementById("speakTimer").textContent=formatTime(_spkTotalSecs);
+  document.getElementById("speakTimer").className="speak-timer";
+  document.getElementById("speakProgressBar").style.width="100%";
+  document.getElementById("speakProgressBar").className="speak-progress-bar";
+  document.getElementById("speakStatus").textContent="Choose audio or video, then press Record";
+  document.getElementById("speakStatus").className="speak-status";
+  document.getElementById("speakStartBtn").disabled=false;
+  document.getElementById("speakStopBtn").disabled=true;
+  document.getElementById("speakPreview").style.display="none";
+  document.getElementById("speakPreviewPlayer").innerHTML="";
+  document.getElementById("speakUploadStatus").innerHTML="";
+  document.getElementById("typeAudio").classList.add("active");
+  document.getElementById("typeVideo").classList.remove("active");
+  document.getElementById("speakModal").style.display="block";
+}
+function closeSpeakModal(){
+  if(_spkMediaRecorder && _spkMediaRecorder.state!=="inactive"){
+    _spkMediaRecorder.stop();
+    if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
+  }
+  clearInterval(_spkInterval);
+  document.getElementById("speakModal").style.display="none";
+}
+function selectRecordType(type){
+  _spkType=type;
+  document.getElementById("typeAudio").classList.toggle("active",type==="audio");
+  document.getElementById("typeVideo").classList.toggle("active",type==="video");
+}
+function startSpeakRecording(){
+  var constraints = _spkType==="video"
+    ? {video:{width:640,height:480,frameRate:15},audio:true}
+    : {audio:true};
+  navigator.mediaDevices.getUserMedia(constraints).then(function(s){
+    _spkStream=s; _spkChunks=[];
+    var mimeType="audio/webm";
+    if(_spkType==="video"){
+      mimeType=MediaRecorder.isTypeSupported("video/webm;codecs=vp9")?"video/webm;codecs=vp9":MediaRecorder.isTypeSupported("video/webm")?"video/webm":"video/mp4";
+    } else {
+      mimeType=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":MediaRecorder.isTypeSupported("audio/webm")?"audio/webm":"audio/ogg";
+    }
+    _spkMediaRecorder=new MediaRecorder(_spkStream,{mimeType:mimeType});
+    _spkMediaRecorder.ondataavailable=function(e){ if(e.data.size>0) _spkChunks.push(e.data); };
+    _spkMediaRecorder.onstop=onSpeakStop;
+    _spkMediaRecorder.start(1000);
+    document.getElementById("speakStartBtn").disabled=true;
+    document.getElementById("speakStopBtn").disabled=false;
+    document.getElementById("speakStatus").className="speak-status recording";
+    document.getElementById("speakStatus").innerHTML='<span class="speak-rec-dot"></span>Recording…';
+    _spkTimer=_spkTotalSecs; _spkRecordedSecs=0;
+    clearInterval(_spkInterval);
+    _spkInterval=setInterval(function(){
+      _spkTimer--; _spkRecordedSecs++;
+      var pct=(_spkTimer/_spkTotalSecs)*100;
+      var bar=document.getElementById("speakProgressBar");
+      var timerEl=document.getElementById("speakTimer");
+      timerEl.textContent=formatTime(_spkTimer);
+      bar.style.width=pct+"%";
+      if(_spkTimer<=300&&_spkTimer>60){ timerEl.className="speak-timer warning"; bar.className="speak-progress-bar warn"; }
+      else if(_spkTimer<=60){ timerEl.className="speak-timer danger"; bar.className="speak-progress-bar danger-bar"; }
+      if(_spkTimer<=0) stopSpeakRecording();
+    },1000);
+  }).catch(function(err){ alert("Microphone/Camera error: "+err.message); });
+}
+function stopSpeakRecording(){
+  clearInterval(_spkInterval);
+  if(_spkMediaRecorder && _spkMediaRecorder.state!=="inactive") _spkMediaRecorder.stop();
+  if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
+  document.getElementById("speakStartBtn").disabled=false;
+  document.getElementById("speakStopBtn").disabled=true;
+  document.getElementById("speakStatus").className="speak-status";
+  document.getElementById("speakStatus").textContent="Processing…";
+}
+function onSpeakStop(){
+  if(_spkRecordedSecs < _spkMinSecs){
+    document.getElementById("speakStatus").textContent="❌ Minimum "+_spkMinSecs+" seconds required. Try again.";
+    document.getElementById("speakStatus").className="speak-status";
+    _spkChunks=[];
+    return;
+  }
+  if(!requireDB()) return;
+  var mimeType=_spkChunks[0]?_spkChunks[0].type:"audio/webm";
+  var blob=new Blob(_spkChunks,{type:mimeType});
+  var blobUrl=URL.createObjectURL(blob);
+  var previewDiv=document.getElementById("speakPreviewPlayer");
+  if(_spkType==="video"){
+    previewDiv.innerHTML='<video class="speak-video-player" controls src="'+blobUrl+'"></video>';
+  } else {
+    previewDiv.innerHTML='<audio class="speak-audio-player" controls src="'+blobUrl+'"></audio>';
+  }
+  document.getElementById("speakPreview").style.display="block";
+  document.getElementById("speakStatus").className="speak-status uploading";
+  document.getElementById("speakStatus").textContent="Uploading to server…";
+  document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--amber)">⏳ Uploading… please wait</span>';
+  var ext=_spkType==="video"?"webm":"webm";
+  var path="speaking/"+safe(_spkGroup)+"/"+safe(_spkStudent)+"/"+safe(_spkStage)+"/"+safe(_spkLesson)+"/"+safe(_spkHw)+"/"+Date.now()+"."+ext;
+  var ref=storage.ref(path);
+  ref.put(blob).then(function(){ return ref.getDownloadURL(); }).then(function(url){
+    return db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw).set({
+      recordingUrl:url, recordingType:_spkType, duration:_spkRecordedSecs, time:Date.now()
+    });
+  }).then(function(){
+    document.getElementById("speakStatus").className="speak-status done";
+    document.getElementById("speakStatus").textContent="✅ Submitted successfully!";
+    document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--green);font-weight:700">✅ Saved! You can close this window.</span>';
+    pushNotif("Speaking Submitted","Your recording for \""+_spkHw+"\" was uploaded.","success");
+  }).catch(function(err){
+    document.getElementById("speakStatus").className="speak-status";
+    document.getElementById("speakStatus").textContent="❌ Upload failed. Try again.";
+    document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--red)">Upload error: '+(err.message||err)+'</span>';
+  });
+  _spkChunks=[];
 }
 
 // ===== ADMIN =====
@@ -628,7 +938,7 @@ function loginAdmin(){
   document.getElementById("modalPassword").value="";
   document.getElementById("modalError").textContent="";
   document.getElementById("loginModal").style.display="flex";
-  setTimeout(function(){document.getElementById("modalLogin").focus();},100);
+  setTimeout(function(){ document.getElementById("modalLogin").focus(); },100);
 }
 function submitLogin(){
   var u=document.getElementById("modalLogin").value.trim();
@@ -642,8 +952,11 @@ function submitLogin(){
   }
 }
 function admin(){
-  setNav("admin",{});
-  app.innerHTML='<button class="back" onclick="home()">← Back</button><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin-bottom:0">Admin Panel</h3><button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button></div><div id="groupList"></div>';
+  app.innerHTML='<button class="back" onclick="home()">← Back</button>'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'
+    +'<h3 style="margin-bottom:0">Admin Panel</h3>'
+    +'<button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button></div>'
+    +'<div id="groupList"></div>';
   var list=document.getElementById("groupList");
   Object.keys(GROUPS).forEach(function(g){
     var div=document.createElement("div"); div.className="admin-group-card";
@@ -652,14 +965,16 @@ function admin(){
     var btnOpen=document.createElement("button"); btnOpen.className="primary"; btnOpen.textContent="Open Group";
     btnOpen.addEventListener("click",function(){adminGroup(g);}); actions.appendChild(btnOpen);
     var btnClear=document.createElement("button"); btnClear.className="danger"; btnClear.textContent="Clear Files";
-    btnClear.addEventListener("click",function(){if(confirm("Clear ALL files?"))db.ref("submissions/"+g).remove().then(function(){pushNotif("Files Cleared",g+" — all files have been cleared.","info");alert("Cleared");});}); actions.appendChild(btnClear);
+    btnClear.addEventListener("click",function(){
+      if(!requireDB()) return;
+      if(confirm("Clear ALL files?")) db.ref("submissions/"+g).remove().then(function(){ pushNotif("Files Cleared",g+" — cleared.","info"); alert("Cleared"); });
+    }); actions.appendChild(btnClear);
     var btnDel=document.createElement("button"); btnDel.className="btn-delete-group"; btnDel.textContent="Delete";
     btnDel.addEventListener("click",function(){deleteCustomGroup(g);}); actions.appendChild(btnDel);
     div.appendChild(actions); list.appendChild(div);
   });
 }
 function adminGroup(group){
-  setNav("adminGroup",{group:group});
   app.innerHTML='<button class="back" onclick="admin()">← Admin</button><div class="bc"><b>'+group+'</b></div><h3>Select Stage</h3><div id="stageList2"></div>';
   var list=document.getElementById("stageList2");
   Object.keys(STAGES).forEach(function(stage){
@@ -669,8 +984,7 @@ function adminGroup(group){
   });
 }
 function adminStageSelect(group,stage){
-  setNav("adminStageSelect",{group:group,stage:stage});
-  app.innerHTML='<button class="back" onclick="adminGroup(\''+group.replace(/'/g,"\\'")+'\')">← Back</button><div class="bc">'+group+' › <b>'+stage+'</b></div><h3>Select Lesson</h3><div id="lessonList2"></div>';
+  app.innerHTML='<button class="back" onclick="adminGroup(\''+esc(group)+'\')">← Back</button><div class="bc">'+group+' › <b>'+stage+'</b></div><h3>Select Lesson</h3><div id="lessonList2"></div>';
   var list=document.getElementById("lessonList2");
   Object.keys(STAGES[stage]).forEach(function(lesson){
     var div=document.createElement("div"); div.className="card";
@@ -679,22 +993,25 @@ function adminStageSelect(group,stage){
   });
 }
 async function adminLessonView(group,stage,lesson){
-  setNav("adminLessonView",{group:group,stage:stage,lesson:lesson});
+  if(!requireDB()) return;
   app.innerHTML='<div class="loading">Loading…</div>';
-  var h='<button class="back" onclick="adminStageSelect(\''+group.replace(/'/g,"\\'")+'\',\''+stage.replace(/'/g,"\\'")+'\')">← Back</button>';
+  var h='<button class="back" onclick="adminStageSelect(\''+esc(group)+'\',\''+esc(stage)+'\')">← Back</button>';
   h+='<div class="bc">'+group+' › '+stage+' › <b>'+lesson+'</b></div>';
   h+='<h3>'+lesson+' — Results</h3>';
-  h+='<button class="export-btn" onclick="exportCSV(\''+group.replace(/'/g,"\\'")+'\',\''+stage.replace(/'/g,"\\'")+'\',\''+lesson.replace(/'/g,"\\'")+'\')">Export CSV</button>';
+  h+='<button class="export-btn" onclick="exportCSV(\''+esc(group)+'\',\''+esc(stage)+'\',\''+esc(lesson)+'\')">Export CSV</button>';
   for(var i=0;i<GROUPS[group].length;i++){
     var student=GROUPS[group][i];
     h+='<div class="admin-student-card"><div class="admin-student-name">'+student+'</div>';
     for(var j=0;j<STAGES[stage][lesson].length;j++){
       var hw=STAGES[stage][lesson][j];
-      var snap=await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).once("value");
-      var d=snap.val(); var ok=d&&Array.isArray(d.files)&&d.files.length>0;
-      h+='<div class="hw-row"><div class="hw-row-name">'+hw+'</div><div style="display:flex;align-items:center;gap:8px">';
+      var snap=await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).once("value").catch(function(){return {val:function(){return null;}};});
+      var d=snap.val();
+      var isSp=isSpeakingTask(hw);
+      var ok=isSp?(d&&d.recordingUrl):(d&&Array.isArray(d.files)&&d.files.length>0);
+      h+='<div class="hw-row"><div class="hw-row-name">'+hw+(isSp?' 🎤':'')+'</div><div style="display:flex;align-items:center;gap:8px">';
       h+='<span class="'+(ok?"green":"red")+'">'+(ok?"Yes":"No")+'</span>';
-      if(ok) d.files.forEach(function(url){h+='<a href="'+url+'" target="_blank" style="color:var(--accent);font-size:12px;font-weight:600;text-decoration:none">view</a>';});
+      if(ok&&isSp&&d.recordingUrl) h+='<a href="'+d.recordingUrl+'" target="_blank" style="color:var(--green);font-size:12px;font-weight:600;text-decoration:none">▶ play</a>'+(d.duration?'<span style="font-size:11px;color:var(--muted);font-family:\'Space Mono\',monospace">'+formatTime(d.duration)+'</span>':'');
+      if(ok&&!isSp) d.files.forEach(function(url){h+='<a href="'+url+'" target="_blank" style="color:var(--accent);font-size:12px;font-weight:600;text-decoration:none">view</a>';});
       h+='</div></div>';
     }
     h+='</div>';
@@ -702,12 +1019,16 @@ async function adminLessonView(group,stage,lesson){
   app.innerHTML=h;
 }
 async function exportCSV(group,stage,lesson){
+  if(!requireDB()) return;
   var rows=[["Student",...STAGES[stage][lesson]]];
   for(var i=0;i<GROUPS[group].length;i++){
     var row=[GROUPS[group][i]];
     for(var j=0;j<STAGES[stage][lesson].length;j++){
-      var snap=await db.ref("submissions/"+group+"/"+GROUPS[group][i]+"/"+stage+"/"+lesson+"/"+STAGES[stage][lesson][j]).once("value");
-      var d=snap.val(); row.push(d&&Array.isArray(d.files)&&d.files.length>0?"Yes":"No");
+      var hw=STAGES[stage][lesson][j];
+      var snap=await db.ref("submissions/"+group+"/"+GROUPS[group][i]+"/"+stage+"/"+lesson+"/"+hw).once("value").catch(function(){return {val:function(){return null;}};});
+      var d=snap.val(); var isSp=isSpeakingTask(hw);
+      var ok=isSp?(d&&d.recordingUrl):(d&&Array.isArray(d.files)&&d.files.length>0);
+      row.push(ok?"Yes":"No");
     }
     rows.push(row);
   }
@@ -717,19 +1038,21 @@ async function exportCSV(group,stage,lesson){
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(function(){URL.revokeObjectURL(url);},1000);
 }
+
+// ===== CUSTOM GROUPS =====
 var _CG_KEY="statista_custom_groups_v1";
+var _BUILTIN=["GROUP IELTS 9:00 M/W/F","GROUP IELTS 17:00 MWF","GROUP IELTS M/W/F 14:00","GROUP CEFR M/W/F 15:30","GROUP IELTS T/T/S 9:00","GROUP IELTS 10:30 TTS","GROUP IELTS T/T/S 14:00","GROUP IELTS 15:30 TTS","GROUP IELTS T/T/S 18:30","GROUP IELTS MAX T/T/S 18:30"];
 function _saveCustomGroups(){
   try{
     var custom={};
-    var builtin=["GROUP IELTS 9:00 M/W/F","GROUP IELTS 17:00 MWF","GROUP IELTS M/W/F 14:00","GROUP IELTS T/T/S 9:00","GROUP IELTS 10:30 TTS","GROUP IELTS T/T/S 14:00","GROUP IELTS 15:30 TTS","GROUP IELTS T/T/S 18:30"];
-    Object.keys(GROUPS).forEach(function(n){if(builtin.indexOf(n)===-1)custom[n]=GROUPS[n];});
-    localStorage.setItem(_CG_KEY,JSON.stringify(custom));
+    Object.keys(GROUPS).forEach(function(n){ if(_BUILTIN.indexOf(n)===-1) custom[n]=GROUPS[n]; });
+    localStorage.setItem(_CG_KEY, JSON.stringify(custom));
   }catch(e){}
 }
 function _loadCustomGroups(){
   try{
     var saved=localStorage.getItem(_CG_KEY);
-    if(saved){var c=JSON.parse(saved);Object.keys(c).forEach(function(n){GROUPS[n]=c[n];});}
+    if(saved){ var c=JSON.parse(saved); Object.keys(c).forEach(function(n){ GROUPS[n]=c[n]; }); }
   }catch(e){}
 }
 function openNewGroupModal(){
@@ -741,43 +1064,37 @@ function openNewGroupModal(){
 function submitNewGroup(){
   var name=document.getElementById("newGroupName").value.trim();
   var raw=document.getElementById("newGroupStudents").value.trim();
-  if(!name){document.getElementById("newGroupError").textContent="Group name required.";return;}
-  if(GROUPS[name]){document.getElementById("newGroupError").textContent="Group already exists.";return;}
-  if(!raw){document.getElementById("newGroupError").textContent="Add at least one student.";return;}
+  if(!name){ document.getElementById("newGroupError").textContent="Group name required."; return; }
+  if(GROUPS[name]){ document.getElementById("newGroupError").textContent="Group already exists."; return; }
+  if(!raw){ document.getElementById("newGroupError").textContent="Add at least one student."; return; }
   GROUPS[name]=raw.split("\n").map(function(s){return s.trim().toUpperCase();}).filter(function(s){return s;});
   _saveCustomGroups();
-  pushNotif("Group Created",name+" has been created.","success");
+  pushNotif("Group Created", name+" has been created.", "success");
   document.getElementById("newGroupModal").style.display="none";
   admin();
 }
 function deleteCustomGroup(g){
   if(!confirm("Delete group and all data?")) return;
-  db.ref("submissions/"+g).remove();
+  if(_fbReady && db) db.ref("submissions/"+g).remove().catch(function(){});
   delete GROUPS[g];
   _saveCustomGroups();
-  pushNotif("Group Deleted",g+" has been deleted.","blocked");
+  pushNotif("Group Deleted", g+" has been deleted.", "blocked");
   admin();
 }
 
 // ===== INSTRUCTIONS =====
 function openInstruction(){
-  setNav("instructions",{});
   app.innerHTML='<button class="back" onclick="home()">← Back</button><h2>How to Use Statista</h2>'
     +'<div class="step-card"><div class="step-num">1</div><div class="step-title">Open the App</div><div class="step-body">Tap <b>"Enter as Student"</b>.</div></div>'
     +'<div class="step-card"><div class="step-num">2</div><div class="step-title">Find Yourself</div><div class="step-body">Select your <b>group</b>, then find your <b>full name</b>.</div></div>'
     +'<div class="step-card"><div class="step-num">3</div><div class="step-title">Choose Homework</div><div class="step-body">Tap your stage → lesson → task.</div></div>'
-    +'<div class="step-card"><div class="step-num">4</div><div class="step-title">Submit Photo</div><div class="step-body">Attach <b>at least one photo</b>. Without a photo homework is NOT saved.</div></div>'
+    +'<div class="step-card"><div class="step-num">4</div><div class="step-title">Submit Photo or Recording</div><div class="step-body">For writing/reading tasks: attach <b>at least one photo</b>.<br>For speaking tasks: tap <b style="color:var(--green)">🎤 Record Speaking</b> and record your answer (min 1 minute, max 20 minutes).</div></div>'
     +'<div class="step-card"><div class="step-num">5</div><div class="step-title">Check Writing with AI</div><div class="step-body">For Task 1/2 tasks tap <b style="color:#a78bfa">Check with AI</b> to get IELTS band score and grammar feedback.</div></div>'
-    +'<div class="alert-card"><b>Speaking:</b> screenshot your message in the group chat and upload the screenshot.</div>';
+    +'<div class="alert-card"><b>Speaking tasks</b> now have a built-in recorder — choose audio or video, record your answer, and it uploads automatically.</div>';
 }
 
 // ===== AI CHECKER =====
 var _aiCurrentHw="";
-
-function showComingSoon(){
-  document.getElementById("comingSoonModal").style.display="flex";
-}
-
 function openAI(hwName){
   _aiCurrentHw=hwName;
   document.getElementById("aiHwBadge").textContent=hwName;
@@ -788,17 +1105,12 @@ function openAI(hwName){
   document.getElementById("aiModal").style.display="block";
   setTimeout(function(){document.getElementById("aiText").focus();},200);
 }
-
-function closeAI(){
-  document.getElementById("aiModal").style.display="none";
-}
-
+function closeAI(){ document.getElementById("aiModal").style.display="none"; }
 function updateWordCount(){
   var t=document.getElementById("aiText").value.trim();
   var w=t?t.split(/\s+/).filter(function(x){return x;}).length:0;
   document.getElementById("aiWordCount").textContent=w+" word"+(w!==1?"s":"");
 }
-
 async function runCheck(){
   var text=document.getElementById("aiText").value.trim();
   if(!text||text.split(/\s+/).length<10){
@@ -807,206 +1119,127 @@ async function runCheck(){
   }
   var isTask2=_aiCurrentHw.toLowerCase().includes("task 2")||_aiCurrentHw.toLowerCase().includes("essay");
   var taskLabel=isTask2?"IELTS Writing Task 2 (essay)":"IELTS Writing Task 1 (report/graph description)";
-
   document.getElementById("aiBtn").disabled=true;
   document.getElementById("aiResult").innerHTML='<div class="ai-loading"><div class="ai-dots"><span></span><span></span><span></span></div>Analysing your writing…</div>';
-
   var sysPrompt="You are an expert IELTS examiner. Analyse this "+taskLabel+" and respond ONLY with valid JSON, no markdown, no extra text.\n"
-    +"{\n"
-    +"  \"overall\": 6.5,\n"
-    +"  \"ta\": 6.5,\n"
-    +"  \"cc\": 6.0,\n"
-    +"  \"lr\": 7.0,\n"
-    +"  \"gra\": 6.5,\n"
-    +"  \"human_percent\": 78,\n"
-    +"  \"ai_percent\": 22,\n"
-    +"  \"ai_note\": \"Short sentence about AI patterns detected or confirming human writing.\",\n"
-    +"  \"summary\": \"2-3 sentences about overall quality.\",\n"
-    +"  \"strengths\": [\"strength 1\",\"strength 2\",\"strength 3\"],\n"
-    +"  \"improvements\": [\"improvement 1\",\"improvement 2\",\"improvement 3\"],\n"
-    +"  \"grammar_errors\": [\"ERROR: wrong phrase → FIX: correction — REASON: why\"],\n"
-    +"  \"vocab_tips\": [\"WEAK: word used → BETTER: alternative — WHY: reason\"],\n"
-    +"  \"band_desc\": \"What this band score means.\"\n"
-    +"}\n"
+    +"{\n\"overall\":6.5,\"ta\":6.5,\"cc\":6.0,\"lr\":7.0,\"gra\":6.5,\n"
+    +"\"human_percent\":78,\"ai_percent\":22,\n"
+    +"\"ai_note\":\"Short sentence about AI patterns detected or confirming human writing.\",\n"
+    +"\"summary\":\"2-3 sentences about overall quality.\",\n"
+    +"\"strengths\":[\"strength 1\",\"strength 2\",\"strength 3\"],\n"
+    +"\"improvements\":[\"improvement 1\",\"improvement 2\",\"improvement 3\"],\n"
+    +"\"grammar_errors\":[\"ERROR: wrong phrase → FIX: correction — REASON: why\"],\n"
+    +"\"vocab_tips\":[\"WEAK: word used → BETTER: alternative — WHY: reason\"],\n"
+    +"\"band_desc\":\"What this band score means.\"\n}\n"
     +"Bands: 4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,8.5,9.0. human_percent+ai_percent=100. Be strict and honest.";
-
   try {
     var resp=await fetch("https://api.groq.com/openai/v1/chat/completions",{
       method:"POST",
       headers:{"Content-Type":"application/json","Authorization":"Bearer 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"},
       body:JSON.stringify({model:"llama-3.3-70b-versatile",max_tokens:1200,temperature:0.3,messages:[{role:"system",content:sysPrompt},{role:"user",content:text}]})
     });
-    if(!resp.ok){var e=await resp.json().catch(function(){return {};});throw new Error(e.error&&e.error.message?e.error.message:"API error "+resp.status);}
+    if(!resp.ok){var e=await resp.json().catch(function(){return{};}); throw new Error(e.error&&e.error.message?e.error.message:"API error "+resp.status);}
     var data=await resp.json();
     var raw=data.choices[0].message.content.trim().replace(/```json|```/g,"").trim();
     var r=JSON.parse(raw);
-    renderResult(r);
+    renderAIResult(r);
   } catch(err){
     document.getElementById("aiResult").innerHTML='<div class="ai-error">Something went wrong.<br><span style="font-size:11px;opacity:.7">'+err.message+'</span></div>';
   } finally {
     document.getElementById("aiBtn").disabled=false;
   }
 }
-
-function renderResult(r){
+function renderAIResult(r){
   var hp=r.human_percent||80, ap=r.ai_percent||(100-hp);
   var aiColor=ap>=50?"var(--red)":ap>=30?"var(--amber)":"var(--accent2)";
-
   var s='<div class="ai-result">';
-
-  // Overall band
   s+='<div class="ai-overall"><div class="ai-overall-label">Estimated IELTS Band</div>';
   s+='<div class="ai-overall-num">'+r.overall+'</div>';
   s+='<div class="ai-overall-desc">'+(r.band_desc||"")+'</div></div>';
-
-  // 4 scores
   s+='<div class="ai-scores">';
   s+='<div class="ai-score ta"><div class="ai-score-lbl">Task Achievement</div><div class="ai-score-num">'+r.ta+'</div></div>';
   s+='<div class="ai-score cc"><div class="ai-score-lbl">Coherence & Cohesion</div><div class="ai-score-num">'+r.cc+'</div></div>';
   s+='<div class="ai-score lr"><div class="ai-score-lbl">Lexical Resource</div><div class="ai-score-num">'+r.lr+'</div></div>';
   s+='<div class="ai-score gra"><div class="ai-score-lbl">Grammar & Accuracy</div><div class="ai-score-num">'+r.gra+'</div></div>';
   s+='</div>';
-
-  // AI Detection bar
-  s+='<div class="ai-detect">';
-  s+='<div class="ai-detect-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>AI Detection Analysis</div>';
-  s+='<div class="ai-detect-bar">';
-  s+='<div class="ai-detect-human" style="width:'+hp+'%">'+hp+'%</div>';
-  s+='<div class="ai-detect-ai" style="width:'+ap+'%;background:linear-gradient(90deg,#7c3aed,'+aiColor+')">'+ap+'%</div>';
-  s+='</div>';
-  s+='<div class="ai-detect-labels">';
-  s+='<div class="ai-detect-lbl" style="color:var(--green)"><div class="ai-detect-dot" style="background:var(--green)"></div>Human — '+hp+'%</div>';
-  s+='<div class="ai-detect-lbl" style="color:'+aiColor+'"><div class="ai-detect-dot" style="background:'+aiColor+'"></div>AI — '+ap+'%</div>';
-  s+='</div>';
+  s+='<div class="ai-detect"><div class="ai-detect-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>AI Detection Analysis</div>';
+  s+='<div class="ai-detect-bar"><div class="ai-detect-human" style="width:'+hp+'%">'+hp+'%</div><div class="ai-detect-ai" style="width:'+ap+'%;background:linear-gradient(90deg,#7c3aed,'+aiColor+')">'+ap+'%</div></div>';
+  s+='<div class="ai-detect-labels"><div class="ai-detect-lbl" style="color:var(--green)"><div class="ai-detect-dot" style="background:var(--green)"></div>Human — '+hp+'%</div>';
+  s+='<div class="ai-detect-lbl" style="color:'+aiColor+'"><div class="ai-detect-dot" style="background:'+aiColor+'"></div>AI — '+ap+'%</div></div>';
   if(r.ai_note) s+='<div class="ai-detect-note">💡 '+r.ai_note+'</div>';
   s+='</div>';
-
-  // Summary
+  function sect(title,icon,body){ return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div><div class="ai-section-body">'+body+'</div></div>'; }
+  function sectList(title,icon,items){ var li=items.map(function(x){return '<li style="margin-bottom:6px">'+x+'</li>';}).join(""); return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div><div class="ai-section-body"><ul>'+li+'</ul></div></div>'; }
   s+=sect("📝 Summary",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',r.summary||"");
-
-  // Strengths
   if(r.strengths&&r.strengths.length) s+=sectList("✅ Strengths",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',r.strengths);
-
-  // Improvements
   if(r.improvements&&r.improvements.length) s+=sectList("⚠️ Areas to Improve",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',r.improvements);
-
-  // Grammar errors
   if(r.grammar_errors&&r.grammar_errors.length) s+=sectList("❌ Grammar Errors",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',r.grammar_errors);
-
-  // Vocab tips
   if(r.vocab_tips&&r.vocab_tips.length) s+=sectList("📚 Vocabulary Tips",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',r.vocab_tips);
-
   s+='</div>';
   document.getElementById("aiResult").innerHTML=s;
 }
 
-function sect(title,icon,body){
-  return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div><div class="ai-section-body">'+body+'</div></div>';
-}
-function sectList(title,icon,items){
-  var li=items.map(function(x){return '<li style="margin-bottom:6px">'+x+'</li>';}).join("");
-  return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div><div class="ai-section-body"><ul>'+li+'</ul></div></div>';
-}
-
 // ===== NOTIFICATIONS =====
 var _notifs=[]; var _unread=0;
-function _tstr(){var n=new Date();return n.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" · "+n.toLocaleDateString([],{day:"numeric",month:"short"});}
+function _tstr(){ var n=new Date(); return n.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" · "+n.toLocaleDateString([],{day:"numeric",month:"short"}); }
 function pushNotif(title,body,type){
   _notifs.unshift({id:Date.now(),title:title,body:body,type:type||"info",time:_tstr(),read:false});
-  if(_notifs.length>50)_notifs.pop();
-  _unread++;_renderBell();_renderNotifs();
+  if(_notifs.length>50) _notifs.pop();
+  _unread++; _renderBell(); _renderNotifs();
 }
 function _renderBell(){
-  var bell=document.getElementById("notifBell"),badge=document.getElementById("notifBadge");
-  if(!bell||!badge)return;
-  if(_unread>0){badge.style.display="flex";badge.textContent=_unread>99?"99+":_unread;bell.style.color="var(--accent)";}
-  else{badge.style.display="none";bell.style.color="";}
+  var bell=document.getElementById("notifBell"), badge=document.getElementById("notifBadge");
+  if(!bell||!badge) return;
+  if(_unread>0){ badge.style.display="flex"; badge.textContent=_unread>99?"99+":_unread; bell.style.color="var(--accent)"; }
+  else{ badge.style.display="none"; bell.style.color=""; }
 }
 function _renderNotifs(){
-  var list=document.getElementById("notifList");if(!list)return;
-  if(!_notifs.length){list.innerHTML='<div class="notif-empty">No notifications yet</div>';return;}
-  list.innerHTML=_notifs.map(function(n){return '<div class="notif-item type-'+n.type+(n.read?"":" unread")+'"><div class="notif-title">'+n.title+'</div><div class="notif-body">'+n.body+'</div><div class="notif-time">'+n.time+'</div></div>';}).join("");
+  var list=document.getElementById("notifList"); if(!list) return;
+  if(!_notifs.length){ list.innerHTML='<div class="notif-empty">No notifications yet</div>'; return; }
+  list.innerHTML=_notifs.map(function(n){ return '<div class="notif-item type-'+n.type+(n.read?"":" unread")+'"><div class="notif-title">'+n.title+'</div><div class="notif-body">'+n.body+'</div><div class="notif-time">'+n.time+'</div></div>'; }).join("");
 }
 function toggleNotifPanel(){
-  var p=document.getElementById("notifPanel"),o=document.getElementById("notifOverlay");
-  if(p.style.display!=="none"){closeNotifPanel();}
-  else{_notifs.forEach(function(n){n.read=true;});_unread=0;_renderBell();_renderNotifs();p.style.display="flex";o.style.display="block";}
+  var p=document.getElementById("notifPanel"), o=document.getElementById("notifOverlay");
+  if(p.style.display!=="none"){ closeNotifPanel(); }
+  else{ _notifs.forEach(function(n){n.read=true;}); _unread=0; _renderBell(); _renderNotifs(); p.style.display="flex"; o.style.display="block"; }
 }
-function closeNotifPanel(){document.getElementById("notifPanel").style.display="none";document.getElementById("notifOverlay").style.display="none";}
-function clearAllNotifs(){_notifs.length=0;_unread=0;_renderBell();_renderNotifs();}
+function closeNotifPanel(){ document.getElementById("notifPanel").style.display="none"; document.getElementById("notifOverlay").style.display="none"; }
+function clearAllNotifs(){ _notifs.length=0; _unread=0; _renderBell(); _renderNotifs(); }
+
+// ===== SCHEDULE WATCHER =====
+var _notifSent={};
+function checkScheduleNotifs(){
+  var now=new Date();
+  Object.keys(SCHEDULE).forEach(function(group){
+    var m=minutesUntilLesson(group); if(m===null) return;
+    var key60=group+"_warn60_"+now.toDateString();
+    var key20=group+"_warn20_"+now.toDateString();
+    var keyNow=group+"_start_"+now.toDateString();
+    if(m<=60&&m>=58&&!_notifSent[key60]){ _notifSent[key60]=true; pushNotif("Lesson Soon",group+" starts in 1 hour — submit homework now!","reminder"); }
+    if(m<=20&&m>=18&&!_notifSent[key20]){ _notifSent[key20]=true; pushNotif("Lesson Very Soon",group+" starts in 20 minutes — last chance to submit!","reminder"); }
+    if(m<=0&&m>=-2&&!_notifSent[keyNow]){ _notifSent[keyNow]=true; pushNotif("Lesson Started",group+" has started — homework submission is now closed.","blocked"); }
+  });
+}
 
 // ===== DEVTOOLS PROTECTION =====
 document.addEventListener("contextmenu",function(e){e.preventDefault();});
 document.addEventListener("keydown",function(e){
   if(e.key==="F12"||(e.ctrlKey&&e.shiftKey&&["I","i","J","j","C","c"].includes(e.key))||(e.ctrlKey&&["U","u"].includes(e.key))){
-    e.preventDefault();e.stopPropagation();return false;
+    e.preventDefault(); e.stopPropagation(); return false;
   }
 },true);
 
-// ===== PUSH NOTIFICATIONS =====
-function requestPushPermission(){
-  if(!("Notification" in window)) return;
-  if(Notification.permission==="default"){
-    Notification.requestPermission();
-  }
-}
-
-function sendPushNotif(title, body){
-  if(!("Notification" in window)) return;
-  if(Notification.permission!=="granted") return;
-  try {
-    var n = new Notification(title, {
-      body: body,
-      icon: "https://cdn-icons-png.flaticon.com/512/2232/2232688.png",
-      badge: "https://cdn-icons-png.flaticon.com/512/2232/2232688.png",
-      vibrate: [200, 100, 200]
-    });
-    setTimeout(function(){ n.close(); }, 6000);
-  } catch(e) {}
-}
-
-// ===== SCHEDULE WATCHER =====
-var _notifSent = {}; // track already-sent notifs to avoid duplicates
-
-function checkScheduleNotifs(){
-  var now = new Date();
-  Object.keys(SCHEDULE).forEach(function(group){
-    var m = minutesUntilLesson(group);
-    if(m === null) return;
-
-    var key30  = group + "_warn_"  + now.toDateString();
-    var keyNow = group + "_start_" + now.toDateString();
-
-    // 1 hour warning (between 60 and 58 min left)
-    if(m <= 60 && m >= 58 && !_notifSent[key30]){
-      _notifSent[key30] = true;
-      pushNotif("Lesson Soon", group + " starts in 1 hour — submit homework now!", "reminder");
-      sendPushNotif("Lesson Soon", group + " starts in 1 hour — submit homework now!");
-    }
-
-    // 20-minute warning (between 20 and 18 min left)
-    var key20 = group + "_warn20_" + now.toDateString();
-    if(m <= 20 && m >= 18 && !_notifSent[key20]){
-      _notifSent[key20] = true;
-      pushNotif("Lesson Very Soon", group + " starts in 20 minutes — last chance to submit!", "reminder");
-      sendPushNotif("Lesson Very Soon", group + " starts in 20 minutes — last chance to submit!");
-    }
-
-    // Lesson started (between 0 and -2 min)
-    if(m <= 0 && m >= -2 && !_notifSent[keyNow]){
-      _notifSent[keyNow] = true;
-      pushNotif("Lesson Started", group + " has started — homework submission is now closed.", "blocked");
-      sendPushNotif("Lesson Started", group + " has started — homework submission is now closed.");
-    }
-  });
-}
-
 // ===== INIT =====
 _loadCustomGroups();
-home();
-requestPushPermission();
-setInterval(checkScheduleNotifs, 60000); // check every minute
-checkScheduleNotifs(); // check immediately on load
+
+// Wait for Firebase SDKs to load, then init
+window.addEventListener('load', function(){
+  if(initFirebase()){
+    home();
+    setInterval(checkScheduleNotifs, 60000);
+    checkScheduleNotifs();
+  }
+});
 </script>
 </body>
 </html>
