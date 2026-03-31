@@ -318,6 +318,8 @@ input[type=file]{display:none}
         </button>
       </div>
       <div id="speakHwBadge" class="speak-hw-badge"></div>
+
+      <!-- Mode selector: Audio or Video upload -->
       <div class="speak-type-row">
         <div class="speak-type-btn active" id="typeAudio" onclick="selectRecordType('audio')">
           <div class="speak-type-icon">🎤</div>
@@ -327,32 +329,58 @@ input[type=file]{display:none}
         <div class="speak-type-btn" id="typeVideo" onclick="selectRecordType('video')">
           <div class="speak-type-icon">🎥</div>
           <div class="speak-type-label">Video + Audio</div>
-          <div class="speak-type-sub">With camera</div>
+          <div class="speak-type-sub">Upload from device</div>
         </div>
       </div>
-      <div class="speak-timer-wrap">
-        <div class="speak-timer" id="speakTimer">20:00</div>
-        <div class="speak-timer-label">Time remaining</div>
+
+      <!-- AUDIO MODE -->
+      <div id="audioRecorderSection">
+        <div class="speak-timer-wrap">
+          <div class="speak-timer" id="speakTimer">00:00</div>
+          <div class="speak-timer-label" id="speakTimerLabel">Press Record to start</div>
+        </div>
+        <div class="speak-progress">
+          <div class="speak-progress-bar" id="speakProgressBar" style="width:0%"></div>
+        </div>
+        <div class="speak-status" id="speakStatus">Press Record to begin your speaking</div>
+        <div class="speak-controls">
+          <button class="speak-start-btn" id="speakStartBtn" onclick="startSpeakRecording()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
+            Record
+          </button>
+          <button class="speak-stop-btn" id="speakStopBtn" onclick="stopSpeakRecording()" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+            Stop & Submit
+          </button>
+        </div>
+        <div class="speak-min-warn" id="speakMinWarn">⚠️ Minimum 20 minutes required to submit</div>
+        <div class="speak-preview" id="speakPreview" style="display:none">
+          <div class="speak-preview-label">Preview your recording:</div>
+          <div id="speakPreviewPlayer"></div>
+          <div id="speakUploadStatus" style="margin-top:12px;text-align:center;font-size:13px;color:var(--muted)"></div>
+        </div>
       </div>
-      <div class="speak-progress">
-        <div class="speak-progress-bar" id="speakProgressBar" style="width:100%"></div>
-      </div>
-      <div class="speak-status" id="speakStatus">Choose audio or video, then press Record</div>
-      <div class="speak-controls">
-        <button class="speak-start-btn" id="speakStartBtn" onclick="startSpeakRecording()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
-          Record
-        </button>
-        <button class="speak-stop-btn" id="speakStopBtn" onclick="stopSpeakRecording()" disabled>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
-          Stop
-        </button>
-      </div>
-      <div class="speak-min-warn">⚠️ Minimum 60 seconds required to submit</div>
-      <div class="speak-preview" id="speakPreview" style="display:none">
-        <div class="speak-preview-label">Preview your recording:</div>
-        <div id="speakPreviewPlayer"></div>
-        <div id="speakUploadStatus" style="margin-top:12px;text-align:center;font-size:13px;color:var(--muted)"></div>
+
+      <!-- VIDEO UPLOAD MODE -->
+      <div id="videoUploadSection" style="display:none">
+        <div style="text-align:center;padding:20px 0 10px">
+          <div style="font-size:48px;margin-bottom:10px">🎥</div>
+          <div style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6">Select a video file from your device.<br>Supported formats: MP4, MOV, WebM</div>
+          <label style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),#1aad74);color:#fff;padding:13px 24px;border-radius:var(--rsm);font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 14px rgba(34,200,135,.3);transition:all .2s">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Choose Video File
+            <input type="file" id="videoFileInput" accept="video/*" onchange="handleVideoFileSelect(this)">
+          </label>
+        </div>
+        <div id="videoUploadStatus" style="margin-top:16px;text-align:center;font-size:13px;color:var(--muted)"></div>
+        <div id="videoPreviewWrap" style="display:none;margin-top:14px;border-top:1px solid var(--border);padding-top:14px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600">Selected video:</div>
+          <video id="videoPreviewEl" class="speak-video-player" controls style="width:100%;border-radius:var(--rsm);max-height:200px;background:#000"></video>
+          <button id="videoSubmitBtn" onclick="submitVideoFile()" style="width:100%;margin-top:12px;background:linear-gradient(135deg,var(--green),#1aad74);color:#fff;border:none;border-radius:var(--rsm);padding:13px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(34,200,135,.3)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Submit Video
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -812,124 +840,211 @@ async function replaceHW(input, group, student, stage, lesson, hw){
 var _spkGroup="",_spkStudent="",_spkStage="",_spkLesson="",_spkHw="";
 var _spkType="audio";
 var _spkMediaRecorder=null, _spkChunks=[], _spkStream=null;
-var _spkTimer=1200, _spkInterval=null, _spkRecordedSecs=0;
-var _spkMinSecs=60, _spkTotalSecs=1200;
+var _spkInterval=null, _spkRecordedSecs=0;
+var _spkMinSecs=1200; // 20 minutes minimum
+var _spkSelectedVideoFile=null;
 
 function openSpeakModal(group,student,stage,lesson,hw){
   _spkGroup=group; _spkStudent=student; _spkStage=stage; _spkLesson=lesson; _spkHw=hw;
-  _spkType="audio";
+  _spkType="audio"; _spkSelectedVideoFile=null;
   document.getElementById("speakHwBadge").textContent=hw;
-  document.getElementById("speakTimer").textContent=formatTime(_spkTotalSecs);
+  // Reset audio recorder UI
+  document.getElementById("speakTimer").textContent="00:00";
   document.getElementById("speakTimer").className="speak-timer";
-  document.getElementById("speakProgressBar").style.width="100%";
+  document.getElementById("speakTimerLabel").textContent="Press Record to start";
+  document.getElementById("speakProgressBar").style.width="0%";
   document.getElementById("speakProgressBar").className="speak-progress-bar";
-  document.getElementById("speakStatus").textContent="Choose audio or video, then press Record";
+  document.getElementById("speakStatus").textContent="Press Record to begin your speaking";
   document.getElementById("speakStatus").className="speak-status";
   document.getElementById("speakStartBtn").disabled=false;
   document.getElementById("speakStopBtn").disabled=true;
   document.getElementById("speakPreview").style.display="none";
   document.getElementById("speakPreviewPlayer").innerHTML="";
   document.getElementById("speakUploadStatus").innerHTML="";
+  document.getElementById("speakMinWarn").style.display="block";
+  // Reset video upload UI
+  document.getElementById("videoUploadStatus").innerHTML="";
+  document.getElementById("videoPreviewWrap").style.display="none";
+  document.getElementById("videoFileInput").value="";
+  // Show audio section by default
+  document.getElementById("audioRecorderSection").style.display="block";
+  document.getElementById("videoUploadSection").style.display="none";
   document.getElementById("typeAudio").classList.add("active");
   document.getElementById("typeVideo").classList.remove("active");
   document.getElementById("speakModal").style.display="block";
 }
+
 function closeSpeakModal(){
   if(_spkMediaRecorder && _spkMediaRecorder.state!=="inactive"){
+    // Prevent onstop from firing upload
+    _spkMediaRecorder.onstop=null;
     _spkMediaRecorder.stop();
-    if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
   }
+  if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
   clearInterval(_spkInterval);
+  _spkChunks=[];
   document.getElementById("speakModal").style.display="none";
 }
+
 function selectRecordType(type){
+  // Don't allow switching while recording
+  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording"){
+    return;
+  }
   _spkType=type;
   document.getElementById("typeAudio").classList.toggle("active",type==="audio");
   document.getElementById("typeVideo").classList.toggle("active",type==="video");
+  document.getElementById("audioRecorderSection").style.display=type==="audio"?"block":"none";
+  document.getElementById("videoUploadSection").style.display=type==="video"?"block":"none";
 }
+
 function startSpeakRecording(){
-  var constraints = _spkType==="video"
-    ? {video:{width:640,height:480,frameRate:15},audio:true}
-    : {audio:true};
-  navigator.mediaDevices.getUserMedia(constraints).then(function(s){
-    _spkStream=s; _spkChunks=[];
-    var mimeType="audio/webm";
-    if(_spkType==="video"){
-      mimeType=MediaRecorder.isTypeSupported("video/webm;codecs=vp9")?"video/webm;codecs=vp9":MediaRecorder.isTypeSupported("video/webm")?"video/webm":"video/mp4";
-    } else {
-      mimeType=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":MediaRecorder.isTypeSupported("audio/webm")?"audio/webm":"audio/ogg";
-    }
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
+    _spkStream=s; _spkChunks=[]; _spkRecordedSecs=0;
+    var mimeType=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":
+                 MediaRecorder.isTypeSupported("audio/webm")?"audio/webm":"audio/ogg";
     _spkMediaRecorder=new MediaRecorder(_spkStream,{mimeType:mimeType});
     _spkMediaRecorder.ondataavailable=function(e){ if(e.data.size>0) _spkChunks.push(e.data); };
     _spkMediaRecorder.onstop=onSpeakStop;
     _spkMediaRecorder.start(1000);
+
     document.getElementById("speakStartBtn").disabled=true;
     document.getElementById("speakStopBtn").disabled=false;
     document.getElementById("speakStatus").className="speak-status recording";
     document.getElementById("speakStatus").innerHTML='<span class="speak-rec-dot"></span>Recording…';
-    _spkTimer=_spkTotalSecs; _spkRecordedSecs=0;
+    document.getElementById("speakMinWarn").style.display="block";
+
     clearInterval(_spkInterval);
     _spkInterval=setInterval(function(){
-      _spkTimer--; _spkRecordedSecs++;
-      var pct=(_spkTimer/_spkTotalSecs)*100;
-      var bar=document.getElementById("speakProgressBar");
+      _spkRecordedSecs++;
+      // Stopwatch: count up
       var timerEl=document.getElementById("speakTimer");
-      timerEl.textContent=formatTime(_spkTimer);
+      var bar=document.getElementById("speakProgressBar");
+      timerEl.textContent=formatTime(_spkRecordedSecs);
+
+      // Progress bar fills up toward 20 min
+      var pct=Math.min((_spkRecordedSecs/_spkMinSecs)*100, 100);
       bar.style.width=pct+"%";
-      if(_spkTimer<=300&&_spkTimer>60){ timerEl.className="speak-timer warning"; bar.className="speak-progress-bar warn"; }
-      else if(_spkTimer<=60){ timerEl.className="speak-timer danger"; bar.className="speak-progress-bar danger-bar"; }
-      if(_spkTimer<=0) stopSpeakRecording();
+
+      if(_spkRecordedSecs < _spkMinSecs){
+        // Still under 20 min
+        var remaining=_spkMinSecs-_spkRecordedSecs;
+        document.getElementById("speakTimerLabel").textContent="Keep going — "+formatTime(remaining)+" until you can stop";
+        timerEl.className="speak-timer";
+        bar.className="speak-progress-bar";
+        document.getElementById("speakMinWarn").textContent="⚠️ Minimum 20 minutes required to submit";
+      } else {
+        // Reached 20 min — can stop
+        timerEl.className="speak-timer";
+        bar.className="speak-progress-bar";
+        bar.style.background="linear-gradient(90deg,var(--green),#1aad74)";
+        document.getElementById("speakTimerLabel").textContent="✅ You can stop now!";
+        document.getElementById("speakMinWarn").textContent="✅ Minimum reached — press Stop & Submit when ready";
+        document.getElementById("speakMinWarn").style.color="var(--green)";
+      }
     },1000);
-  }).catch(function(err){ alert("Microphone/Camera error: "+err.message); });
+  }).catch(function(err){ alert("Microphone error: "+err.message); });
 }
+
 function stopSpeakRecording(){
+  // Block stop if under minimum
+  if(_spkRecordedSecs < _spkMinSecs){
+    var remaining=_spkMinSecs-_spkRecordedSecs;
+    // Show shake warning
+    var warn=document.getElementById("speakMinWarn");
+    warn.textContent="⛔ Minimum 20 minutes required! "+formatTime(remaining)+" remaining.";
+    warn.style.color="var(--red)";
+    warn.style.fontWeight="700";
+    warn.style.animation="none";
+    setTimeout(function(){ warn.style.animation=""; },10);
+    // Shake the stop button
+    var btn=document.getElementById("speakStopBtn");
+    btn.style.transform="translateX(-5px)";
+    setTimeout(function(){ btn.style.transform="translateX(5px)"; },80);
+    setTimeout(function(){ btn.style.transform="translateX(-4px)"; },160);
+    setTimeout(function(){ btn.style.transform="translateX(4px)"; },240);
+    setTimeout(function(){ btn.style.transform="translateX(0)"; },320);
+    return; // DO NOT stop
+  }
+  // Allowed — stop and submit
   clearInterval(_spkInterval);
   if(_spkMediaRecorder && _spkMediaRecorder.state!=="inactive") _spkMediaRecorder.stop();
   if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
   document.getElementById("speakStartBtn").disabled=false;
   document.getElementById("speakStopBtn").disabled=true;
-  document.getElementById("speakStatus").className="speak-status";
-  document.getElementById("speakStatus").textContent="Processing…";
+  document.getElementById("speakStatus").className="speak-status uploading";
+  document.getElementById("speakStatus").textContent="Processing… please wait";
 }
+
 function onSpeakStop(){
-  if(_spkRecordedSecs < _spkMinSecs){
-    document.getElementById("speakStatus").textContent="❌ Minimum "+_spkMinSecs+" seconds required. Try again.";
-    document.getElementById("speakStatus").className="speak-status";
-    _spkChunks=[];
-    return;
-  }
   if(!requireDB()) return;
   var mimeType=_spkChunks[0]?_spkChunks[0].type:"audio/webm";
   var blob=new Blob(_spkChunks,{type:mimeType});
   var blobUrl=URL.createObjectURL(blob);
   var previewDiv=document.getElementById("speakPreviewPlayer");
-  if(_spkType==="video"){
-    previewDiv.innerHTML='<video class="speak-video-player" controls src="'+blobUrl+'"></video>';
-  } else {
-    previewDiv.innerHTML='<audio class="speak-audio-player" controls src="'+blobUrl+'"></audio>';
-  }
+  previewDiv.innerHTML='<audio class="speak-audio-player" controls src="'+blobUrl+'"></audio>';
   document.getElementById("speakPreview").style.display="block";
   document.getElementById("speakStatus").className="speak-status uploading";
   document.getElementById("speakStatus").textContent="Uploading to server…";
   document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--amber)">⏳ Uploading… please wait</span>';
-  var ext=_spkType==="video"?"webm":"webm";
-  var path="speaking/"+safe(_spkGroup)+"/"+safe(_spkStudent)+"/"+safe(_spkStage)+"/"+safe(_spkLesson)+"/"+safe(_spkHw)+"/"+Date.now()+"."+ext;
+
+  var path="speaking/"+safe(_spkGroup)+"/"+safe(_spkStudent)+"/"+safe(_spkStage)+"/"+safe(_spkLesson)+"/"+safe(_spkHw)+"/"+Date.now()+".webm";
   var ref=storage.ref(path);
   ref.put(blob).then(function(){ return ref.getDownloadURL(); }).then(function(url){
     return db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw).set({
-      recordingUrl:url, recordingType:_spkType, duration:_spkRecordedSecs, time:Date.now()
+      recordingUrl:url, recordingType:"audio", duration:_spkRecordedSecs, time:Date.now()
     });
   }).then(function(){
     document.getElementById("speakStatus").className="speak-status done";
     document.getElementById("speakStatus").textContent="✅ Submitted successfully!";
     document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--green);font-weight:700">✅ Saved! You can close this window.</span>';
     pushNotif("Speaking Submitted","Your recording for \""+_spkHw+"\" was uploaded.","success");
+    _spkChunks=[];
   }).catch(function(err){
     document.getElementById("speakStatus").className="speak-status";
     document.getElementById("speakStatus").textContent="❌ Upload failed. Try again.";
     document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--red)">Upload error: '+(err.message||err)+'</span>';
+    _spkChunks=[];
   });
-  _spkChunks=[];
+}
+
+// ===== VIDEO FILE UPLOAD =====
+function handleVideoFileSelect(input){
+  var file=input.files[0];
+  if(!file) return;
+  _spkSelectedVideoFile=file;
+  var url=URL.createObjectURL(file);
+  document.getElementById("videoPreviewEl").src=url;
+  document.getElementById("videoPreviewWrap").style.display="block";
+  document.getElementById("videoUploadStatus").innerHTML='<span style="color:var(--muted)">File selected: <b style="color:var(--text)">'+file.name+'</b> ('+Math.round(file.size/1024/1024*10)/10+' MB)</span>';
+}
+
+async function submitVideoFile(){
+  if(!_spkSelectedVideoFile){ alert("Please select a video file first."); return; }
+  if(!requireDB()) return;
+  var btn=document.getElementById("videoSubmitBtn");
+  btn.disabled=true;
+  btn.textContent="Uploading…";
+  document.getElementById("videoUploadStatus").innerHTML='<span style="color:var(--amber)">⏳ Uploading video… this may take a moment</span>';
+
+  var ext=_spkSelectedVideoFile.name.split('.').pop()||"mp4";
+  var path="speaking/"+safe(_spkGroup)+"/"+safe(_spkStudent)+"/"+safe(_spkStage)+"/"+safe(_spkLesson)+"/"+safe(_spkHw)+"/"+Date.now()+"."+ext;
+  var ref=storage.ref(path);
+  try{
+    var snap=await ref.put(_spkSelectedVideoFile);
+    var url=await ref.getDownloadURL();
+    await db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw).set({
+      recordingUrl:url, recordingType:"video", duration:0, time:Date.now()
+    });
+    document.getElementById("videoUploadStatus").innerHTML='<span style="color:var(--green);font-weight:700">✅ Video submitted successfully! You can close this window.</span>';
+    btn.textContent="✅ Submitted!";
+    btn.style.background="var(--green)";
+    pushNotif("Speaking Video Submitted","Your video for \""+_spkHw+"\" was uploaded.","success");
+  } catch(err){
+    document.getElementById("videoUploadStatus").innerHTML='<span style="color:var(--red)">Upload error: '+(err.message||err)+'</span>';
+    btn.disabled=false;
+    btn.textContent="Retry Submit";
+  }
 }
 
 // ===== ADMIN =====
