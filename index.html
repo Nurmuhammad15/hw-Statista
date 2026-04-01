@@ -1317,6 +1317,7 @@ async function adminLessonView(group,stage,lesson){
   h+='<div class="bc">'+group+' › '+stage+' › <b>'+lesson+'</b></div>';
   h+='<h3>'+lesson+' — Results</h3>';
   h+='<button class="export-btn" onclick="exportCSV(\''+esc(group)+'\',\''+esc(stage)+'\',\''+esc(lesson)+'\')">Export CSV</button>';
+
   for(var i=0;i<GROUPS[group].length;i++){
     var student=GROUPS[group][i];
     h+='<div class="admin-student-card"><div class="admin-student-name">'+student+'</div>';
@@ -1326,15 +1327,84 @@ async function adminLessonView(group,stage,lesson){
       var d=snap.val();
       var isSp=isSpeakingTask(hw);
       var ok=isSp?(d&&d.recordingUrl):(d&&Array.isArray(d.files)&&d.files.length>0);
-      h+='<div class="hw-row"><div class="hw-row-name">'+hw+(isSp?' 🎤':'')+'</div><div style="display:flex;align-items:center;gap:8px">';
+
+      h+='<div class="hw-row" style="flex-direction:column;align-items:flex-start;gap:6px">';
+      h+='<div style="display:flex;align-items:center;justify-content:space-between;width:100%;gap:8px">';
+      h+='<div class="hw-row-name">'+hw+(isSp?' 🎤':'')+'</div>';
+      h+='<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">';
       h+='<span class="'+(ok?"green":"red")+'">'+(ok?"Yes":"No")+'</span>';
-      if(ok&&isSp&&d.recordingUrl) h+='<a href="'+d.recordingUrl+'" target="_blank" style="color:var(--green);font-size:12px;font-weight:600;text-decoration:none">▶ play</a>'+(d.duration?'<span style="font-size:11px;color:var(--muted);font-family:\'Space Mono\',monospace">'+formatTime(d.duration)+'</span>':'');
-      if(ok&&!isSp) d.files.forEach(function(url){h+='<a href="'+url+'" target="_blank" style="color:var(--accent);font-size:12px;font-weight:600;text-decoration:none">view</a>';});
+
+      if(ok&&isSp&&d.recordingUrl){
+        h+='<a href="'+d.recordingUrl+'" target="_blank" style="color:var(--green);font-size:12px;font-weight:600;text-decoration:none;background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.25);padding:3px 10px;border-radius:20px">▶ play</a>';
+        if(d.duration) h+='<span style="font-size:11px;color:var(--muted);font-family:\'Space Mono\',monospace">'+formatTime(d.duration)+'</span>';
+      }
+      if(ok&&!isSp) d.files.forEach(function(url){h+='<a href="'+url+'" target="_blank" style="color:var(--accent);font-size:12px;font-weight:600;text-decoration:none;background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.25);padding:3px 10px;border-radius:20px">📷 view</a>';});
       h+='</div></div>';
+
+      // ---- TRANSCRIPT BLOCK (speaking only) ----
+      if(isSp && ok){
+        var tsnap=await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw+"/transcript").once("value").catch(function(){return{val:function(){return null;}};});
+        var tr=tsnap.val();
+        if(tr && tr.text){
+          var tId="tr_"+i+"_"+j;
+          h+='<div style="width:100%;margin-top:4px">';
+          // Stats badges
+          h+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">';
+          if(tr.words) h+='<span style="font-size:11px;color:var(--accent);background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.2);padding:2px 8px;border-radius:20px;font-family:\'Space Mono\',monospace">'+tr.words+' words</span>';
+          if(tr.wpm)   h+='<span style="font-size:11px;color:var(--accent2);background:rgba(123,92,245,.1);border:1px solid rgba(123,92,245,.2);padding:2px 8px;border-radius:20px;font-family:\'Space Mono\',monospace">'+tr.wpm+' wpm</span>';
+          h+='<span style="font-size:11px;color:var(--green);background:rgba(34,200,135,.08);border:1px solid rgba(34,200,135,.2);padding:2px 8px;border-radius:20px">✅ Transcript available</span>';
+          h+='</div>';
+          // Collapsible transcript
+          h+='<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);overflow:hidden">';
+          h+='<div onclick="toggleTranscript(\''+tId+'\')" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;user-select:none">';
+          h+='<span style="font-size:12px;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Speech Transcript</span>';
+          h+='<svg id="'+tId+'_arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" style="transition:transform .2s"><polyline points="6 9 12 15 18 9"/></svg>';
+          h+='</div>';
+          h+='<div id="'+tId+'" style="display:none;padding:0 14px 14px">';
+          h+='<div style="font-size:13px;color:var(--text);line-height:1.8;white-space:pre-wrap;word-break:break-word;max-height:200px;overflow-y:auto;background:var(--surface2);border-radius:var(--rsm);padding:12px">'+escapeHtml(tr.text)+'</div>';
+          h+='<button onclick="copyAdminTranscript(\''+tId+'_text\')" style="margin-top:8px;background:rgba(79,142,247,.1);color:var(--accent);border:1px solid rgba(79,142,247,.3);padding:5px 12px;border-radius:var(--rsm);font-family:inherit;font-weight:600;font-size:12px;cursor:pointer;width:auto">Copy text</button>';
+          h+='<span id="'+tId+'_text" style="display:none">'+escapeHtml(tr.text)+'</span>';
+          h+='</div>';
+          h+='</div>';
+          h+='</div>';
+        } else {
+          // Speaking submitted but no transcript
+          h+='<div style="width:100%;margin-top:4px">';
+          h+='<span style="font-size:11px;color:var(--muted);font-style:italic">⏳ No transcript yet — student recorded before transcription was added</span>';
+          h+='</div>';
+        }
+      }
+
+      h+='</div>'; // end hw-row
     }
-    h+='</div>';
+    h+='</div>'; // end admin-student-card
   }
   app.innerHTML=h;
+}
+
+function toggleTranscript(id){
+  var el=document.getElementById(id);
+  var arrow=document.getElementById(id+"_arrow");
+  if(!el) return;
+  var open=el.style.display==="none";
+  el.style.display=open?"block":"none";
+  if(arrow) arrow.style.transform=open?"rotate(180deg)":"rotate(0deg)";
+}
+
+function copyAdminTranscript(spanId){
+  var span=document.getElementById(spanId);
+  if(!span) return;
+  var text=span.textContent;
+  navigator.clipboard.writeText(text).then(function(){
+    // find the copy button before the span
+    var btn=span.previousElementSibling;
+    if(btn){ btn.textContent="Copied!"; btn.style.background="var(--green)"; btn.style.color="var(--bg)";
+      setTimeout(function(){ btn.textContent="Copy text"; btn.style.background=""; btn.style.color=""; },2000);
+    }
+  }).catch(function(){
+    var ta=document.createElement("textarea"); ta.value=text;
+    document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
+  });
 }
 async function exportCSV(group,stage,lesson){
   if(!requireDB()) return;
