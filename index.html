@@ -942,9 +942,19 @@ function _spkGetSaveKey(group,student,stage,lesson,hw){
 }
 
 function openSpeakModal(group,student,stage,lesson,hw){
+  // Stop any existing recording first
+  if(_spkMediaRecorder && _spkMediaRecorder.state!=="inactive"){
+    _spkMediaRecorder.onstop=null;
+    try{ _spkMediaRecorder.stop(); }catch(e){}
+  }
+  if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
+  clearInterval(_spkInterval);
+
+  // Reset all state
   _spkGroup=group; _spkStudent=student; _spkStage=stage; _spkLesson=lesson; _spkHw=hw;
   _spkType="audio"; _spkSelectedVideoFile=null;
   _spkAllChunks=[]; _spkRecordedSecs=0; _spkIsPaused=false;
+  _spkMediaRecorder=null; _spkStream=null;
   _spkSaveKey=_spkGetSaveKey(group,student,stage,lesson,hw);
 
   document.getElementById("speakHwBadge").textContent=hw;
@@ -987,12 +997,21 @@ function _resetAudioUI(){
   document.getElementById("speakTimer").className="speak-timer";
   document.getElementById("speakTimerLabel").textContent="Press Record to start";
   document.getElementById("speakProgressBar").style.width="0%";
+  document.getElementById("speakProgressBar").style.background="";
   document.getElementById("speakProgressBar").className="speak-progress-bar";
   document.getElementById("speakStatus").textContent="Press Record to begin your speaking";
   document.getElementById("speakStatus").className="speak-status";
+  // Record button — fully reset
   document.getElementById("speakStartBtn").disabled=false;
   document.getElementById("speakStartBtn").innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg> Record';
-  document.getElementById("speakPauseBtn").disabled=true;
+  // Pause button — fully reset
+  var pauseBtn=document.getElementById("speakPauseBtn");
+  pauseBtn.disabled=true;
+  pauseBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause';
+  pauseBtn.style.background="rgba(245,166,35,.12)";
+  pauseBtn.style.color="var(--amber)";
+  pauseBtn.style.borderColor="rgba(245,166,35,.35)";
+  // Stop button
   document.getElementById("speakStopBtn").disabled=true;
   document.getElementById("speakPreview").style.display="none";
   document.getElementById("speakPreviewPlayer").innerHTML="";
@@ -1177,9 +1196,9 @@ function pauseSpeakRecording(){
 
       document.getElementById("speakPauseBtn").innerHTML=
         '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause';
-      document.getElementById("speakPauseBtn").style.background="";
+      document.getElementById("speakPauseBtn").style.background="rgba(245,166,35,.12)";
       document.getElementById("speakPauseBtn").style.color="var(--amber)";
-      document.getElementById("speakPauseBtn").style.borderColor="";
+      document.getElementById("speakPauseBtn").style.borderColor="rgba(245,166,35,.35)";
       document.getElementById("speakStatus").className="speak-status recording";
       document.getElementById("speakStatus").innerHTML='<span class="speak-rec-dot"></span>Recording…';
 
