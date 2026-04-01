@@ -345,6 +345,22 @@ input[type=file]{display:none}
 
       <!-- AUDIO MODE -->
       <div id="audioRecorderSection">
+
+        <!-- Saved progress banner -->
+        <div id="speakSavedBanner" style="display:none;background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.3);border-radius:var(--rsm);padding:12px 14px;margin-bottom:14px">
+          <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">⏸️ Unfinished recording found</div>
+          <div id="speakSavedInfo" style="font-size:12px;color:var(--muted);margin-bottom:10px"></div>
+          <div style="display:flex;gap:8px">
+            <button onclick="resumeSavedRecording()" style="flex:1;background:linear-gradient(135deg,var(--accent),#3a7ef5);color:#fff;border:none;border-radius:var(--rsm);padding:9px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Continue from where I left off
+            </button>
+            <button onclick="discardSavedRecording()" style="background:rgba(247,85,106,.1);color:var(--red);border:1px solid rgba(247,85,106,.3);border-radius:var(--rsm);padding:9px 12px;font-family:inherit;font-weight:600;font-size:12px;cursor:pointer;white-space:nowrap;width:auto">
+              Start fresh
+            </button>
+          </div>
+        </div>
+
         <div class="speak-timer-wrap">
           <div class="speak-timer" id="speakTimer">00:00</div>
           <div class="speak-timer-label" id="speakTimerLabel">Press Record to start</div>
@@ -353,17 +369,26 @@ input[type=file]{display:none}
           <div class="speak-progress-bar" id="speakProgressBar" style="width:0%"></div>
         </div>
         <div class="speak-status" id="speakStatus">Press Record to begin your speaking</div>
-        <div class="speak-controls">
-          <button class="speak-start-btn" id="speakStartBtn" onclick="startSpeakRecording()">
+
+        <!-- 3 buttons: Record | Pause | Stop&Submit -->
+        <div class="speak-controls" style="gap:8px">
+          <button class="speak-start-btn" id="speakStartBtn" onclick="startSpeakRecording()" style="flex:2">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
             Record
           </button>
-          <button class="speak-stop-btn" id="speakStopBtn" onclick="stopSpeakRecording()" disabled>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
-            Stop & Submit
+          <button id="speakPauseBtn" onclick="pauseSpeakRecording()" disabled
+            style="flex:1;background:rgba(245,166,35,.12);color:var(--amber);border:1px solid rgba(245,166,35,.35);border-radius:var(--rsm);padding:13px 10px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .2s">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            Pause
+          </button>
+          <button class="speak-stop-btn" id="speakStopBtn" onclick="stopSpeakRecording()" disabled style="flex:1.5">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+            Submit
           </button>
         </div>
-        <div class="speak-min-warn" id="speakMinWarn">⚠️ Minimum 20 minutes required to submit</div>
+
+        <div class="speak-min-warn" id="speakMinWarn">⚠️ Minimum 10 minutes required to submit</div>
+
         <div class="speak-preview" id="speakPreview" style="display:none">
           <div class="speak-preview-label">Preview your recording:</div>
           <div id="speakPreviewPlayer"></div>
@@ -884,16 +909,80 @@ async function replaceHW(input, group, student, stage, lesson, hw){
 // ===== SPEAKING RECORDER =====
 var _spkGroup="",_spkStudent="",_spkStage="",_spkLesson="",_spkHw="";
 var _spkType="audio";
-var _spkMediaRecorder=null, _spkChunks=[], _spkStream=null;
+var _spkMediaRecorder=null, _spkStream=null;
 var _spkInterval=null, _spkRecordedSecs=0;
-var _spkMinSecs=1200; // 20 minutes minimum
+var _spkMinSecs=600; // 10 minutes minimum
 var _spkSelectedVideoFile=null;
+var _spkAllChunks=[]; // all chunks across all sessions (resume support)
+var _spkIsPaused=false;
+var _spkSaveKey=""; // localStorage key for this session
+
+// Save progress to localStorage every 5 seconds
+function _spkSaveProgress(){
+  if(!_spkSaveKey) return;
+  try{
+    localStorage.setItem(_spkSaveKey, JSON.stringify({
+      secs: _spkRecordedSecs,
+      hw: _spkHw,
+      group: _spkGroup,
+      student: _spkStudent,
+      stage: _spkStage,
+      lesson: _spkLesson,
+      ts: Date.now()
+    }));
+  }catch(e){}
+}
+
+function _spkClearProgress(){
+  if(_spkSaveKey) try{ localStorage.removeItem(_spkSaveKey); }catch(e){}
+}
+
+function _spkGetSaveKey(group,student,stage,lesson,hw){
+  return "spk_prog_"+safe(group)+"_"+safe(student)+"_"+safe(hw);
+}
 
 function openSpeakModal(group,student,stage,lesson,hw){
   _spkGroup=group; _spkStudent=student; _spkStage=stage; _spkLesson=lesson; _spkHw=hw;
   _spkType="audio"; _spkSelectedVideoFile=null;
+  _spkAllChunks=[]; _spkRecordedSecs=0; _spkIsPaused=false;
+  _spkSaveKey=_spkGetSaveKey(group,student,stage,lesson,hw);
+
   document.getElementById("speakHwBadge").textContent=hw;
-  // Reset audio recorder UI
+  _resetAudioUI();
+
+  // Check for saved progress
+  try{
+    var saved=localStorage.getItem(_spkSaveKey);
+    if(saved){
+      var s=JSON.parse(saved);
+      // Only show if saved in last 24 hours
+      if(s && s.secs>0 && (Date.now()-s.ts)<86400000){
+        document.getElementById("speakSavedBanner").style.display="block";
+        document.getElementById("speakSavedInfo").textContent=
+          "You recorded "+formatTime(s.secs)+" — saved "+_timeAgo(s.ts)+". Continue from where you left off.";
+        // Pre-load the saved seconds
+        _spkRecordedSecs=s.secs;
+        document.getElementById("speakTimer").textContent=formatTime(_spkRecordedSecs);
+        _updateProgressBar();
+      } else {
+        _spkClearProgress();
+        document.getElementById("speakSavedBanner").style.display="none";
+      }
+    } else {
+      document.getElementById("speakSavedBanner").style.display="none";
+    }
+  }catch(e){
+    document.getElementById("speakSavedBanner").style.display="none";
+  }
+
+  document.getElementById("audioRecorderSection").style.display="block";
+  document.getElementById("videoUploadSection").style.display="none";
+  document.getElementById("typeAudio").classList.add("active");
+  document.getElementById("typeVideo").classList.remove("active");
+  document.getElementById("speakModal").style.display="block";
+}
+
+function _resetAudioUI(){
   document.getElementById("speakTimer").textContent="00:00";
   document.getElementById("speakTimer").className="speak-timer";
   document.getElementById("speakTimerLabel").textContent="Press Record to start";
@@ -902,58 +991,77 @@ function openSpeakModal(group,student,stage,lesson,hw){
   document.getElementById("speakStatus").textContent="Press Record to begin your speaking";
   document.getElementById("speakStatus").className="speak-status";
   document.getElementById("speakStartBtn").disabled=false;
+  document.getElementById("speakStartBtn").innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg> Record';
+  document.getElementById("speakPauseBtn").disabled=true;
   document.getElementById("speakStopBtn").disabled=true;
   document.getElementById("speakPreview").style.display="none";
   document.getElementById("speakPreviewPlayer").innerHTML="";
   document.getElementById("speakUploadStatus").innerHTML="";
   document.getElementById("speakMinWarn").style.display="block";
+  document.getElementById("speakMinWarn").textContent="⚠️ Minimum 10 minutes required to submit";
+  document.getElementById("speakMinWarn").style.color="";
+  document.getElementById("speakMinWarn").style.fontWeight="";
   document.getElementById("transcriptWrap").style.display="none";
   document.getElementById("transcriptContent").innerHTML="";
   document.getElementById("transcriptStats").innerHTML="";
-  // Reset video upload UI
   document.getElementById("videoUploadStatus").innerHTML="";
   document.getElementById("videoPreviewWrap").style.display="none";
   document.getElementById("videoFileInput").value="";
-  // Show audio section by default
-  document.getElementById("audioRecorderSection").style.display="block";
-  document.getElementById("videoUploadSection").style.display="none";
-  document.getElementById("typeAudio").classList.add("active");
-  document.getElementById("typeVideo").classList.remove("active");
-  document.getElementById("speakModal").style.display="block";
+}
+
+function _timeAgo(ts){
+  var mins=Math.round((Date.now()-ts)/60000);
+  if(mins<2) return "just now";
+  if(mins<60) return mins+" minutes ago";
+  return Math.round(mins/60)+" hours ago";
+}
+
+function resumeSavedRecording(){
+  // Hide banner and just start recording — seconds already loaded
+  document.getElementById("speakSavedBanner").style.display="none";
+  startSpeakRecording();
+}
+
+function discardSavedRecording(){
+  _spkClearProgress();
+  _spkRecordedSecs=0;
+  _spkAllChunks=[];
+  document.getElementById("speakSavedBanner").style.display="none";
+  document.getElementById("speakTimer").textContent="00:00";
+  _updateProgressBar();
 }
 
 function closeSpeakModal(){
-  // Block closing if recording and under minimum time
+  // If actively recording (not paused) and under minimum — block
   if(_spkMediaRecorder && _spkMediaRecorder.state==="recording" && _spkRecordedSecs < _spkMinSecs){
     var remaining=_spkMinSecs-_spkRecordedSecs;
     var warn=document.getElementById("speakMinWarn");
-    warn.textContent="⛔ Cannot close — minimum 20 minutes required! "+formatTime(remaining)+" remaining.";
-    warn.style.color="var(--red)";
-    warn.style.fontWeight="700";
-    // Shake close button
-    var btn=document.querySelector(".speak-close-btn");
-    btn.style.transform="translateX(-5px)";
-    setTimeout(function(){ btn.style.transform="translateX(5px)"; },80);
-    setTimeout(function(){ btn.style.transform="translateX(-4px)"; },160);
-    setTimeout(function(){ btn.style.transform="translateX(4px)"; },240);
-    setTimeout(function(){ btn.style.transform="translateX(0)"; },320);
-    return; // DO NOT close
+    warn.textContent="⛔ Cannot close while recording — pause first or reach 10 min minimum! "+formatTime(remaining)+" left.";
+    warn.style.color="var(--red)"; warn.style.fontWeight="700";
+    _shakeEl(document.querySelector(".speak-close-btn"));
+    return;
   }
-  if(_spkMediaRecorder && _spkMediaRecorder.state!=="inactive"){
-    _spkMediaRecorder.onstop=null;
-    _spkMediaRecorder.stop();
+  // If recording, pause it automatically before closing (saves progress)
+  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording"){
+    _pauseRecorderHard();
   }
+  _spkSaveProgress(); // save whatever we have
   if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
   clearInterval(_spkInterval);
-  _spkChunks=[];
   document.getElementById("speakModal").style.display="none";
 }
 
+function _shakeEl(el){
+  if(!el) return;
+  el.style.transform="translateX(-5px)";
+  setTimeout(function(){ el.style.transform="translateX(5px)"; },80);
+  setTimeout(function(){ el.style.transform="translateX(-4px)"; },160);
+  setTimeout(function(){ el.style.transform="translateX(4px)"; },240);
+  setTimeout(function(){ el.style.transform="translateX(0)"; },320);
+}
+
 function selectRecordType(type){
-  // Don't allow switching while recording
-  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording"){
-    return;
-  }
+  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording") return;
   _spkType=type;
   document.getElementById("typeAudio").classList.toggle("active",type==="audio");
   document.getElementById("typeVideo").classList.toggle("active",type==="video");
@@ -961,123 +1069,199 @@ function selectRecordType(type){
   document.getElementById("videoUploadSection").style.display=type==="video"?"block":"none";
 }
 
+function _updateProgressBar(){
+  var pct=Math.min((_spkRecordedSecs/_spkMinSecs)*100,100);
+  var bar=document.getElementById("speakProgressBar");
+  bar.style.width=pct+"%";
+  if(_spkRecordedSecs>=_spkMinSecs){
+    bar.style.background="linear-gradient(90deg,var(--green),#1aad74)";
+  } else {
+    bar.style.background="";
+  }
+}
+
 function startSpeakRecording(){
   navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
-    _spkStream=s; _spkChunks=[]; _spkRecordedSecs=0;
+    _spkStream=s;
+    _spkIsPaused=false;
+
     var mimeType=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":
                  MediaRecorder.isTypeSupported("audio/webm")?"audio/webm":"audio/ogg";
     _spkMediaRecorder=new MediaRecorder(_spkStream,{mimeType:mimeType});
-    _spkMediaRecorder.ondataavailable=function(e){ if(e.data.size>0) _spkChunks.push(e.data); };
-    _spkMediaRecorder.onstop=onSpeakStop;
+    _spkMediaRecorder.ondataavailable=function(e){ if(e.data.size>0) _spkAllChunks.push(e.data); };
+    _spkMediaRecorder.onstop=function(){};  // handled manually
     _spkMediaRecorder.start(1000);
 
     document.getElementById("speakStartBtn").disabled=true;
+    document.getElementById("speakStartBtn").innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg> Recording…';
+    document.getElementById("speakPauseBtn").disabled=false;
     document.getElementById("speakStopBtn").disabled=false;
     document.getElementById("speakStatus").className="speak-status recording";
     document.getElementById("speakStatus").innerHTML='<span class="speak-rec-dot"></span>Recording…';
-    document.getElementById("speakMinWarn").style.display="block";
 
     clearInterval(_spkInterval);
+    var saveCounter=0;
     _spkInterval=setInterval(function(){
       _spkRecordedSecs++;
-      // Stopwatch: count up
-      var timerEl=document.getElementById("speakTimer");
-      var bar=document.getElementById("speakProgressBar");
-      timerEl.textContent=formatTime(_spkRecordedSecs);
+      saveCounter++;
+      if(saveCounter>=5){ _spkSaveProgress(); saveCounter=0; } // save every 5 secs
 
-      // Progress bar fills up toward 20 min
-      var pct=Math.min((_spkRecordedSecs/_spkMinSecs)*100, 100);
-      bar.style.width=pct+"%";
+      var timerEl=document.getElementById("speakTimer");
+      timerEl.textContent=formatTime(_spkRecordedSecs);
+      _updateProgressBar();
 
       if(_spkRecordedSecs < _spkMinSecs){
-        // Still under 20 min
         var remaining=_spkMinSecs-_spkRecordedSecs;
         document.getElementById("speakTimerLabel").textContent="Keep going — "+formatTime(remaining)+" until you can stop";
-        timerEl.className="speak-timer";
-        bar.className="speak-progress-bar";
-        document.getElementById("speakMinWarn").textContent="⚠️ Minimum 20 minutes required to submit";
+        document.getElementById("speakMinWarn").textContent="⚠️ Minimum 10 minutes required to submit";
+        document.getElementById("speakMinWarn").style.color="";
       } else {
-        // Reached 20 min — can stop
-        timerEl.className="speak-timer";
-        bar.className="speak-progress-bar";
-        bar.style.background="linear-gradient(90deg,var(--green),#1aad74)";
         document.getElementById("speakTimerLabel").textContent="✅ You can stop now!";
-        document.getElementById("speakMinWarn").textContent="✅ Minimum reached — press Stop & Submit when ready";
+        document.getElementById("speakMinWarn").textContent="✅ Minimum reached — press Submit when ready";
         document.getElementById("speakMinWarn").style.color="var(--green)";
       }
     },1000);
+
   }).catch(function(err){ alert("Microphone error: "+err.message); });
 }
 
+function pauseSpeakRecording(){
+  if(!_spkMediaRecorder) return;
+
+  if(_spkMediaRecorder.state==="recording"){
+    // PAUSE
+    _pauseRecorderHard();
+    _spkSaveProgress();
+    document.getElementById("speakPauseBtn").innerHTML=
+      '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Resume';
+    document.getElementById("speakPauseBtn").style.background="rgba(34,200,135,.12)";
+    document.getElementById("speakPauseBtn").style.color="var(--green)";
+    document.getElementById("speakPauseBtn").style.borderColor="rgba(34,200,135,.35)";
+    document.getElementById("speakStartBtn").disabled=true;
+    document.getElementById("speakStatus").className="speak-status";
+    document.getElementById("speakStatus").innerHTML='⏸️ Paused at '+formatTime(_spkRecordedSecs)+' — press Resume to continue';
+    _spkIsPaused=true;
+
+  } else if(_spkIsPaused){
+    // RESUME
+    navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
+      _spkStream=s;
+      _spkIsPaused=false;
+      var mimeType=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":
+                   MediaRecorder.isTypeSupported("audio/webm")?"audio/webm":"audio/ogg";
+      _spkMediaRecorder=new MediaRecorder(_spkStream,{mimeType:mimeType});
+      _spkMediaRecorder.ondataavailable=function(e){ if(e.data.size>0) _spkAllChunks.push(e.data); };
+      _spkMediaRecorder.onstop=function(){};
+      _spkMediaRecorder.start(1000);
+
+      // Reset timer interval
+      clearInterval(_spkInterval);
+      var saveCounter=0;
+      _spkInterval=setInterval(function(){
+        _spkRecordedSecs++;
+        saveCounter++;
+        if(saveCounter>=5){ _spkSaveProgress(); saveCounter=0; }
+        document.getElementById("speakTimer").textContent=formatTime(_spkRecordedSecs);
+        _updateProgressBar();
+        if(_spkRecordedSecs < _spkMinSecs){
+          var remaining=_spkMinSecs-_spkRecordedSecs;
+          document.getElementById("speakTimerLabel").textContent="Keep going — "+formatTime(remaining)+" until you can stop";
+          document.getElementById("speakMinWarn").textContent="⚠️ Minimum 10 minutes required to submit";
+          document.getElementById("speakMinWarn").style.color="";
+        } else {
+          document.getElementById("speakTimerLabel").textContent="✅ You can stop now!";
+          document.getElementById("speakMinWarn").textContent="✅ Minimum reached — press Submit when ready";
+          document.getElementById("speakMinWarn").style.color="var(--green)";
+        }
+      },1000);
+
+      document.getElementById("speakPauseBtn").innerHTML=
+        '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause';
+      document.getElementById("speakPauseBtn").style.background="";
+      document.getElementById("speakPauseBtn").style.color="var(--amber)";
+      document.getElementById("speakPauseBtn").style.borderColor="";
+      document.getElementById("speakStatus").className="speak-status recording";
+      document.getElementById("speakStatus").innerHTML='<span class="speak-rec-dot"></span>Recording…';
+
+    }).catch(function(err){ alert("Microphone error: "+err.message); });
+  }
+}
+
+function _pauseRecorderHard(){
+  clearInterval(_spkInterval);
+  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording"){
+    _spkMediaRecorder.stop();
+  }
+  if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
+}
+
 function stopSpeakRecording(){
-  // Block stop if under minimum
   if(_spkRecordedSecs < _spkMinSecs){
     var remaining=_spkMinSecs-_spkRecordedSecs;
-    // Show shake warning
     var warn=document.getElementById("speakMinWarn");
-    warn.textContent="⛔ Minimum 20 minutes required! "+formatTime(remaining)+" remaining.";
-    warn.style.color="var(--red)";
-    warn.style.fontWeight="700";
-    warn.style.animation="none";
-    setTimeout(function(){ warn.style.animation=""; },10);
-    // Shake the stop button
-    var btn=document.getElementById("speakStopBtn");
-    btn.style.transform="translateX(-5px)";
-    setTimeout(function(){ btn.style.transform="translateX(5px)"; },80);
-    setTimeout(function(){ btn.style.transform="translateX(-4px)"; },160);
-    setTimeout(function(){ btn.style.transform="translateX(4px)"; },240);
-    setTimeout(function(){ btn.style.transform="translateX(0)"; },320);
-    return; // DO NOT stop
+    warn.textContent="⛔ Minimum 10 minutes required! "+formatTime(remaining)+" remaining.";
+    warn.style.color="var(--red)"; warn.style.fontWeight="700";
+    _shakeEl(document.getElementById("speakStopBtn"));
+    return;
   }
-  // Allowed — stop and submit
   clearInterval(_spkInterval);
-  if(_spkMediaRecorder && _spkMediaRecorder.state!=="inactive") _spkMediaRecorder.stop();
-  if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
-  document.getElementById("speakStartBtn").disabled=false;
+  document.getElementById("speakStartBtn").disabled=true;
+  document.getElementById("speakPauseBtn").disabled=true;
   document.getElementById("speakStopBtn").disabled=true;
   document.getElementById("speakStatus").className="speak-status uploading";
   document.getElementById("speakStatus").textContent="Processing… please wait";
+
+  // Stop recorder if still running, then upload
+  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording"){
+    _spkMediaRecorder.onstop=function(){ _doUpload(); };
+    _spkMediaRecorder.stop();
+    if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
+  } else {
+    _doUpload();
+  }
 }
 
-function onSpeakStop(){
+function _doUpload(){
   if(!requireDB()) return;
-  var mimeType=_spkChunks[0]?_spkChunks[0].type:"audio/webm";
-  var blob=new Blob(_spkChunks,{type:mimeType});
+  if(!_spkAllChunks.length){
+    document.getElementById("speakStatus").textContent="❌ No audio recorded. Please try again.";
+    return;
+  }
+  var mimeType=_spkAllChunks[0]?_spkAllChunks[0].type:"audio/webm";
+  var blob=new Blob(_spkAllChunks,{type:mimeType});
   var blobUrl=URL.createObjectURL(blob);
-  var previewDiv=document.getElementById("speakPreviewPlayer");
-  previewDiv.innerHTML='<audio class="speak-audio-player" controls src="'+blobUrl+'"></audio>';
+
+  document.getElementById("speakPreviewPlayer").innerHTML='<audio class="speak-audio-player" controls src="'+blobUrl+'"></audio>';
   document.getElementById("speakPreview").style.display="block";
   document.getElementById("speakStatus").className="speak-status uploading";
   document.getElementById("speakStatus").textContent="Uploading to server…";
   document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--amber)">⏳ Step 1/2: Uploading audio…</span>';
-
-  // Show transcript section with loading
   document.getElementById("transcriptWrap").style.display="block";
-  document.getElementById("transcriptContent").innerHTML='<div class="transcript-loading"><div class="ai-dots"><span></span><span></span><span></span></div>Waiting for upload to finish…</div>';
-  document.getElementById("transcriptStats").innerHTML="";
+  document.getElementById("transcriptContent").innerHTML='<div class="transcript-loading"><div class="ai-dots"><span></span><span></span><span></span></div>Waiting for upload…</div>';
 
-  var savedBlob=blob; // keep reference for transcription
+  var savedBlob=blob;
   var path="speaking/"+safe(_spkGroup)+"/"+safe(_spkStudent)+"/"+safe(_spkStage)+"/"+safe(_spkLesson)+"/"+safe(_spkHw)+"/"+Date.now()+".webm";
   var ref=storage.ref(path);
-
   ref.put(blob).then(function(){ return ref.getDownloadURL(); }).then(function(url){
     return db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw).set({
       recordingUrl:url, recordingType:"audio", duration:_spkRecordedSecs, time:Date.now()
     });
   }).then(function(){
+    _spkClearProgress(); // clear saved progress — done!
     document.getElementById("speakStatus").className="speak-status done";
     document.getElementById("speakStatus").textContent="✅ Audio uploaded!";
     document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--green);font-weight:700">✅ Saved! Transcribing your speech…</span>';
     pushNotif("Speaking Submitted","Your recording for \""+_spkHw+"\" was uploaded.","success");
-    _spkChunks=[];
-    // Start transcription
+    _spkAllChunks=[];
     transcribeAudio(savedBlob);
   }).catch(function(err){
     document.getElementById("speakStatus").className="speak-status";
     document.getElementById("speakStatus").textContent="❌ Upload failed. Try again.";
     document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--red)">Upload error: '+(err.message||err)+'</span>';
     document.getElementById("transcriptContent").innerHTML='<div style="color:var(--red);font-size:13px;padding:10px">⚠️ Upload failed — transcription skipped.</div>';
-    _spkChunks=[];
+    // Re-enable submit button so they can retry
+    document.getElementById("speakStopBtn").disabled=false;
+    _spkAllChunks=[];
   });
 }
 
@@ -1505,70 +1689,235 @@ function updateWordCount(){
   var w=t?t.split(/\s+/).filter(function(x){return x;}).length:0;
   document.getElementById("aiWordCount").textContent=w+" word"+(w!==1?"s":"");
 }
+
 async function runCheck(){
   var text=document.getElementById("aiText").value.trim();
-  if(!text||text.split(/\s+/).length<10){
-    document.getElementById("aiResult").innerHTML='<div class="ai-error">Please paste at least 10 words of your writing.</div>';
+  var wordCount=text?text.split(/\s+/).filter(function(x){return x;}).length:0;
+  if(!text||wordCount<50){
+    document.getElementById("aiResult").innerHTML='<div class="ai-error">Please paste at least 50 words of your writing.</div>';
     return;
   }
+
   var isTask2=_aiCurrentHw.toLowerCase().includes("task 2")||_aiCurrentHw.toLowerCase().includes("essay");
-  var taskLabel=isTask2?"IELTS Writing Task 2 (essay)":"IELTS Writing Task 1 (report/graph description)";
+  var taskType=isTask2?"Task 2":"Task 1";
+  var taskLabel=isTask2
+    ?"IELTS Academic Writing Task 2 — argumentative/opinion/discussion essay (minimum 250 words required)"
+    :"IELTS Academic Writing Task 1 — report describing visual data (graph/chart/table/map/diagram, minimum 150 words required)";
+
   document.getElementById("aiBtn").disabled=true;
-  document.getElementById("aiResult").innerHTML='<div class="ai-loading"><div class="ai-dots"><span></span><span></span><span></span></div>Analysing your writing…</div>';
-  var sysPrompt="You are an expert IELTS examiner. Analyse this "+taskLabel+" and respond ONLY with valid JSON, no markdown, no extra text.\n"
-    +"{\n\"overall\":6.5,\"ta\":6.5,\"cc\":6.0,\"lr\":7.0,\"gra\":6.5,\n"
-    +"\"human_percent\":78,\"ai_percent\":22,\n"
-    +"\"ai_note\":\"Short sentence about AI patterns detected or confirming human writing.\",\n"
-    +"\"summary\":\"2-3 sentences about overall quality.\",\n"
-    +"\"strengths\":[\"strength 1\",\"strength 2\",\"strength 3\"],\n"
-    +"\"improvements\":[\"improvement 1\",\"improvement 2\",\"improvement 3\"],\n"
-    +"\"grammar_errors\":[\"ERROR: wrong phrase → FIX: correction — REASON: why\"],\n"
-    +"\"vocab_tips\":[\"WEAK: word used → BETTER: alternative — WHY: reason\"],\n"
-    +"\"band_desc\":\"What this band score means.\"\n}\n"
-    +"Bands: 4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,8.5,9.0. human_percent+ai_percent=100. Be strict and honest.";
+  document.getElementById("aiResult").innerHTML=
+    '<div class="ai-loading"><div class="ai-dots"><span></span><span></span><span></span></div>'
+    +'Checking with Claude AI… this may take 15–30 seconds</div>';
+
+  var sysPrompt=
+    "You are a certified IELTS examiner with 15+ years of experience marking writing scripts. "
+    +"You use the official IELTS Writing Band Descriptors (Task Achievement/Response, Coherence & Cohesion, Lexical Resource, Grammatical Range & Accuracy). "
+    +"You are strict, precise, and give actionable, honest feedback. Never be generous — give the score the essay truly deserves.\n\n"
+    +"The student has submitted a "+taskLabel+".\n"
+    +"Word count submitted: "+wordCount+" words.\n\n"
+    +"Analyse the essay thoroughly and respond ONLY with a valid JSON object. No markdown, no code fences, no explanation outside JSON. "
+    +"Use this exact structure:\n"
+    +"{\n"
+    +"  \"overall\": 6.5,\n"
+    +"  \"ta\": 6.0,\n"
+    +"  \"cc\": 7.0,\n"
+    +"  \"lr\": 6.5,\n"
+    +"  \"gra\": 6.5,\n"
+    +"  \"word_count\": "+wordCount+",\n"
+    +"  \"word_count_note\": \"Comment on whether word count meets requirements and how it affects the score\",\n"
+    +"  \"band_desc\": \"One sentence describing what this overall band means for the student's level\",\n"
+    +"  \"summary\": \"3-4 sentences of overall honest assessment — what the examiner's first impression is, overall strengths and weaknesses\",\n"
+    +"  \"task_achievement\": \"3-4 sentences specifically about Task Achievement/Response: did they answer all parts? Is the position clear? Are ideas developed?\",\n"
+    +"  \"coherence\": \"3-4 sentences about Coherence & Cohesion: paragraph structure, logical flow, use of linking devices, referencing\",\n"
+    +"  \"lexical\": \"3-4 sentences about Lexical Resource: range of vocabulary, accuracy of word choice, collocations, spelling\",\n"
+    +"  \"grammar\": \"3-4 sentences about Grammatical Range & Accuracy: variety of structures, error frequency, punctuation\",\n"
+    +"  \"strengths\": [\"Specific strength with example from the text\", \"Another specific strength\", \"Third strength\"],\n"
+    +"  \"improvements\": [\"Most important thing to improve with specific advice\", \"Second priority improvement\", \"Third improvement\"],\n"
+    +"  \"grammar_errors\": [\n"
+    +"    {\"error\": \"exact phrase from essay\", \"fix\": \"corrected version\", \"reason\": \"grammatical explanation\"},\n"
+    +"    {\"error\": \"another error\", \"fix\": \"correction\", \"reason\": \"explanation\"}\n"
+    +"  ],\n"
+    +"  \"vocab_tips\": [\n"
+    +"    {\"weak\": \"word/phrase used\", \"better\": \"more academic alternative\", \"why\": \"reason it is better\"},\n"
+    +"    {\"weak\": \"another weak word\", \"better\": \"alternative\", \"why\": \"reason\"}\n"
+    +"  ],\n"
+    +"  \"model_phrases\": [\"Example of a well-written sentence the student could learn from their own essay or an improved version\", \"Another model phrase\"],\n"
+    +"  \"next_band\": \"Specific, concrete advice on exactly what the student must do to reach the next 0.5 band higher\",\n"
+    +"  \"human_percent\": 75,\n"
+    +"  \"ai_percent\": 25,\n"
+    +"  \"ai_note\": \"One sentence: signs of AI use detected or confirmation of authentic student writing\"\n"
+    +"}\n\n"
+    +"SCORING RULES:\n"
+    +"- Use only these band values: 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0\n"
+    +"- overall = average of ta+cc+lr+gra rounded to nearest 0.5\n"
+    +"- If word count is under minimum ("+taskType+" Task 1: 150, Task 2: 250), penalise Task Achievement\n"
+    +"- Find at least 3 real grammar errors from the actual text\n"
+    +"- human_percent + ai_percent must equal 100\n"
+    +"- Be honest and strict — never inflate scores";
+
   try {
-    var resp=await fetch("https://api.groq.com/openai/v1/chat/completions",{
-      method:"POST",
-      headers:{"Content-Type":"application/json","Authorization":"Bearer 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"},
-      body:JSON.stringify({model:"llama-3.3-70b-versatile",max_tokens:1200,temperature:0.3,messages:[{role:"system",content:sysPrompt},{role:"user",content:text}]})
+    var resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 4000,
+        system: sysPrompt,
+        messages: [{ role: "user", content: "Here is the student's essay to analyse:\n\n" + text }]
+      })
     });
-    if(!resp.ok){var e=await resp.json().catch(function(){return{};}); throw new Error(e.error&&e.error.message?e.error.message:"API error "+resp.status);}
+
+    if(!resp.ok){
+      var errData=await resp.json().catch(function(){return{};});
+      throw new Error(errData.error&&errData.error.message ? errData.error.message : "API error "+resp.status);
+    }
+
     var data=await resp.json();
-    var raw=data.choices[0].message.content.trim().replace(/```json|```/g,"").trim();
-    var r=JSON.parse(raw);
+    var raw=data.content[0].text.trim().replace(/^```json\s*/,"").replace(/^```\s*/,"").replace(/```\s*$/,"").trim();
+
+    // Sometimes model adds text before/after JSON — extract just the JSON object
+    var jsonMatch=raw.match(/\{[\s\S]*\}/);
+    if(!jsonMatch) throw new Error("Could not parse AI response. Try again.");
+    var r=JSON.parse(jsonMatch[0]);
     renderAIResult(r);
+
   } catch(err){
-    document.getElementById("aiResult").innerHTML='<div class="ai-error">Something went wrong.<br><span style="font-size:11px;opacity:.7">'+err.message+'</span></div>';
+    document.getElementById("aiResult").innerHTML=
+      '<div class="ai-error">❌ Something went wrong.<br>'
+      +'<span style="font-size:11px;opacity:.7">'+escapeHtml(err.message)+'</span></div>';
   } finally {
     document.getElementById("aiBtn").disabled=false;
   }
 }
+
 function renderAIResult(r){
-  var hp=r.human_percent||80, ap=r.ai_percent||(100-hp);
-  var aiColor=ap>=50?"var(--red)":ap>=30?"var(--amber)":"var(--accent2)";
+  var hp=Math.max(0,Math.min(100,r.human_percent||75));
+  var ap=100-hp;
+  var aiColor=ap>=60?"var(--red)":ap>=35?"var(--amber)":"var(--accent2)";
+
   var s='<div class="ai-result">';
-  s+='<div class="ai-overall"><div class="ai-overall-label">Estimated IELTS Band</div>';
-  s+='<div class="ai-overall-num">'+r.overall+'</div>';
-  s+='<div class="ai-overall-desc">'+(r.band_desc||"")+'</div></div>';
-  s+='<div class="ai-scores">';
-  s+='<div class="ai-score ta"><div class="ai-score-lbl">Task Achievement</div><div class="ai-score-num">'+r.ta+'</div></div>';
-  s+='<div class="ai-score cc"><div class="ai-score-lbl">Coherence & Cohesion</div><div class="ai-score-num">'+r.cc+'</div></div>';
-  s+='<div class="ai-score lr"><div class="ai-score-lbl">Lexical Resource</div><div class="ai-score-num">'+r.lr+'</div></div>';
-  s+='<div class="ai-score gra"><div class="ai-score-lbl">Grammar & Accuracy</div><div class="ai-score-num">'+r.gra+'</div></div>';
-  s+='</div>';
-  s+='<div class="ai-detect"><div class="ai-detect-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>AI Detection Analysis</div>';
-  s+='<div class="ai-detect-bar"><div class="ai-detect-human" style="width:'+hp+'%">'+hp+'%</div><div class="ai-detect-ai" style="width:'+ap+'%;background:linear-gradient(90deg,#7c3aed,'+aiColor+')">'+ap+'%</div></div>';
-  s+='<div class="ai-detect-labels"><div class="ai-detect-lbl" style="color:var(--green)"><div class="ai-detect-dot" style="background:var(--green)"></div>Human — '+hp+'%</div>';
-  s+='<div class="ai-detect-lbl" style="color:'+aiColor+'"><div class="ai-detect-dot" style="background:'+aiColor+'"></div>AI — '+ap+'%</div></div>';
-  if(r.ai_note) s+='<div class="ai-detect-note">💡 '+r.ai_note+'</div>';
-  s+='</div>';
-  function sect(title,icon,body){ return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div><div class="ai-section-body">'+body+'</div></div>'; }
-  function sectList(title,icon,items){ var li=items.map(function(x){return '<li style="margin-bottom:6px">'+x+'</li>';}).join(""); return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div><div class="ai-section-body"><ul>'+li+'</ul></div></div>'; }
-  s+=sect("📝 Summary",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',r.summary||"");
-  if(r.strengths&&r.strengths.length) s+=sectList("✅ Strengths",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',r.strengths);
-  if(r.improvements&&r.improvements.length) s+=sectList("⚠️ Areas to Improve",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',r.improvements);
-  if(r.grammar_errors&&r.grammar_errors.length) s+=sectList("❌ Grammar Errors",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',r.grammar_errors);
-  if(r.vocab_tips&&r.vocab_tips.length) s+=sectList("📚 Vocabulary Tips",'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',r.vocab_tips);
+
+  // Overall band
+  s+='<div class="ai-overall">'
+    +'<div class="ai-overall-label">Estimated IELTS Band</div>'
+    +'<div class="ai-overall-num">'+r.overall+'</div>'
+    +'<div class="ai-overall-desc">'+(r.band_desc||"")+'</div>'
+    +(r.word_count_note?'<div style="margin-top:8px;font-size:12px;color:var(--amber);background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.2);padding:6px 12px;border-radius:var(--rsm)">📝 '+escapeHtml(r.word_count_note)+'</div>':"")
+    +'</div>';
+
+  // 4 criterion scores
+  s+='<div class="ai-scores">'
+    +'<div class="ai-score ta"><div class="ai-score-lbl">Task Achievement</div><div class="ai-score-num">'+r.ta+'</div></div>'
+    +'<div class="ai-score cc"><div class="ai-score-lbl">Coherence & Cohesion</div><div class="ai-score-num">'+r.cc+'</div></div>'
+    +'<div class="ai-score lr"><div class="ai-score-lbl">Lexical Resource</div><div class="ai-score-num">'+r.lr+'</div></div>'
+    +'<div class="ai-score gra"><div class="ai-score-lbl">Grammatical Range</div><div class="ai-score-num">'+r.gra+'</div></div>'
+    +'</div>';
+
+  // AI Detection bar
+  s+='<div class="ai-detect">'
+    +'<div class="ai-detect-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>AI Detection</div>'
+    +'<div class="ai-detect-bar">'
+    +'<div class="ai-detect-human" style="width:'+hp+'%">'+hp+'%</div>'
+    +'<div class="ai-detect-ai" style="width:'+ap+'%;background:linear-gradient(90deg,#7c3aed,'+aiColor+')">'+ap+'%</div>'
+    +'</div>'
+    +'<div class="ai-detect-labels">'
+    +'<div class="ai-detect-lbl" style="color:var(--green)"><div class="ai-detect-dot" style="background:var(--green)"></div>Human — '+hp+'%</div>'
+    +'<div class="ai-detect-lbl" style="color:'+aiColor+'"><div class="ai-detect-dot" style="background:'+aiColor+'"></div>AI Written — '+ap+'%</div>'
+    +'</div>'
+    +(r.ai_note?'<div class="ai-detect-note">💡 '+escapeHtml(r.ai_note)+'</div>':"")
+    +'</div>';
+
+  // Helper functions
+  function blk(title,icon,body){
+    return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div>'
+      +'<div class="ai-section-body">'+body+'</div></div>';
+  }
+  function listBlk(title,icon,items,mapFn){
+    if(!items||!items.length) return "";
+    var li=items.map(function(x){ return '<li style="margin-bottom:8px">'+mapFn(x)+'</li>'; }).join("");
+    return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div>'
+      +'<div class="ai-section-body"><ul>'+li+'</ul></div></div>';
+  }
+
+  // Summary
+  s+=blk("📋 Overall Assessment",
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+    escapeHtml(r.summary||""));
+
+  // Criterion details
+  if(r.task_achievement) s+=blk("🎯 Task Achievement / Response",
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    escapeHtml(r.task_achievement));
+  if(r.coherence) s+=blk("🔗 Coherence & Cohesion",
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+    escapeHtml(r.coherence));
+  if(r.lexical) s+=blk("📚 Lexical Resource",
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+    escapeHtml(r.lexical));
+  if(r.grammar) s+=blk("⚙️ Grammatical Range & Accuracy",
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>',
+    escapeHtml(r.grammar));
+
+  // Strengths
+  if(r.strengths&&r.strengths.length)
+    s+=listBlk("✅ Strengths",
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
+      r.strengths, function(x){ return escapeHtml(x); });
+
+  // Improvements
+  if(r.improvements&&r.improvements.length)
+    s+=listBlk("⚠️ What to Improve",
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+      r.improvements, function(x){ return escapeHtml(x); });
+
+  // Grammar errors — detailed
+  if(r.grammar_errors&&r.grammar_errors.length){
+    var li=r.grammar_errors.map(function(e){
+      if(typeof e==="string") return '<li style="margin-bottom:8px">'+escapeHtml(e)+'</li>';
+      return '<li style="margin-bottom:10px">'
+        +'<div style="color:var(--red);margin-bottom:3px">❌ <s style="opacity:.7">'+escapeHtml(e.error||"")+'</s></div>'
+        +'<div style="color:var(--green);margin-bottom:3px">✅ '+escapeHtml(e.fix||"")+'</div>'
+        +'<div style="color:var(--muted);font-size:12px">💬 '+escapeHtml(e.reason||"")+'</div>'
+        +'</li>';
+    }).join("");
+    s+='<div class="ai-section"><div class="ai-section-title">'
+      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
+      +' Grammar Errors Found</div><div class="ai-section-body"><ul>'+li+'</ul></div></div>';
+  }
+
+  // Vocabulary tips — detailed
+  if(r.vocab_tips&&r.vocab_tips.length){
+    var li2=r.vocab_tips.map(function(v){
+      if(typeof v==="string") return '<li style="margin-bottom:8px">'+escapeHtml(v)+'</li>';
+      return '<li style="margin-bottom:10px">'
+        +'<div style="margin-bottom:3px"><span style="color:var(--muted)">Weak: </span><span style="color:var(--amber);text-decoration:underline">'+escapeHtml(v.weak||"")+'</span></div>'
+        +'<div style="margin-bottom:3px"><span style="color:var(--muted)">Better: </span><span style="color:var(--green);font-weight:600">'+escapeHtml(v.better||"")+'</span></div>'
+        +'<div style="color:var(--muted);font-size:12px">💬 '+escapeHtml(v.why||"")+'</div>'
+        +'</li>';
+    }).join("");
+    s+='<div class="ai-section"><div class="ai-section-title">'
+      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
+      +' Vocabulary Tips</div><div class="ai-section-body"><ul>'+li2+'</ul></div></div>';
+  }
+
+  // Model phrases
+  if(r.model_phrases&&r.model_phrases.length){
+    var li3=r.model_phrases.map(function(p){
+      return '<li style="margin-bottom:8px;font-style:italic;color:var(--accent)">„'+escapeHtml(p)+'"</li>';
+    }).join("");
+    s+='<div class="ai-section"><div class="ai-section-title">'
+      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+      +' Model Phrases</div><div class="ai-section-body"><ul>'+li3+'</ul></div></div>';
+  }
+
+  // Next band tip — highlighted
+  if(r.next_band){
+    s+='<div class="ai-section"><div class="ai-section-title">'
+      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>'
+      +' How to Reach the Next Band</div>'
+      +'<div class="ai-section-body" style="border-color:rgba(34,200,135,.3);background:rgba(34,200,135,.05);color:var(--text)">'+escapeHtml(r.next_band)+'</div></div>';
+  }
+
   s+='</div>';
   document.getElementById("aiResult").innerHTML=s;
 }
