@@ -303,6 +303,14 @@ input[type=file]{display:none}
         </button>
       </div>
       <div id="aiHwBadge" class="ai-hw-badge"></div>
+      <div id="aiKeyWrap" style="margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 12px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="aiApiKey" placeholder="Paste your Anthropic API key (sk-ant-…)" oninput="saveAiKey()" style="background:transparent;border:none;outline:none;flex:1;font-size:13px;color:var(--text);font-family:inherit" />
+          <span id="aiKeyStatus" style="font-size:11px;font-weight:600;white-space:nowrap"></span>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:5px;padding:0 2px">🔑 Get your free key at <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--accent)">console.anthropic.com</a> — saved only in your browser</div>
+      </div>
       <textarea class="ai-textarea" id="aiText" placeholder="Paste your essay or writing here…" oninput="updateWordCount()"></textarea>
       <div class="ai-word-count" id="aiWordCount">0 words</div>
       <button class="ai-submit-btn" id="aiBtn" onclick="runCheck()">
@@ -552,7 +560,7 @@ function requireDB() {
 // ===== GROUPS =====
 var GROUPS = {
   "GROUP IELTS 9:00 M/W/F":["HOSHIMOVA NILUFAR","JURAYEVA AZIZA","MAHMUDOV SUNNAT","MUHIDDINOVA MAHBUBA","NORBOYEV SHOHJAXON","OCHILOV LOCHINBEK","ORALOVA SHOHINUR","RAVSHANOVA ZAYNAB","TOSHPULATOV ABBOS"],
-  "GROUP IELTS 17:00 MWF":["SARVAR ASADOV","QODIROV JAMSHID","SAIDAZIZOV SAID","ABDUMAJIDOVA MALOHAT","ESHONQULOVA MUXLISA","SAIDAZIMOVA MUBINA"],
+  "GROUP IELTS 17:00 MWF":["ABDURAHIMOVA ZILOLA","ALIMOV BEHRUZ","ANVAROVA RUXSHONA","ASADOV SARDOR","BAXRONOVA FAYRUZA","GAFURJONOV ULUGBEK","ISMOILOV ISMOIL","JULIBOYEVA ZEBO","KOZIMJONOVA DURDONA","MELIKUZIYEVA RUXSHONA","NIGMATOV ABDURAHIM","RAHMATULLAYEV BEXRUZ","TALABOV SAUD","XISLATULLAYEV JAVOXIR","XODJAYEVA LAZIZA","YORMATOV MIRABROR"],
   "GROUP IELTS M/W/F 14:00":["RASHIDJANOVA FARANGIZ","RUZIYEVA GAVHAR","YADGARALIYEVA GULHAYO","MUHAMMADIYEVA SEVINCH","KHUDOYBERDIYEVA LAZIZA","ODIL RAZZOQOV","SOBIRJONOVA FOTIMA"],
   "GROUP CEFR M/W/F 15:30":["TURGUNOVA GULCHEHRA","RAXMATULLAYEV SHAHBOZ","ABDULLAYEVA NAFISA","XODJAMQULOVA IRODA","BURXONOVA SARVINOZ","SAMIKOVA MUBINA","ANVAROV SARVARVARBEK","ERIKOVA AYNURA","YOLDOSHEVA DILRABO","TOXTAXODJAYEV ALISHER","UBAYDULLAYEV ISMOIL","BAXTIYOROV ABDULLOH","PRIMOVA MAFTUNA","MASHRAPOVA FARANGIZ","MIRVALIEV RAMZIDDIN","XUDOYOROVA DILAFRUZ","ABDUAZIZOVA HABIBA","GAIPNAZAROV BEHZOD","AXTAMOV OTABEK","UMAROVA RAXIMA","KHOSHIMOVA MUMTOZBONU","SERIKBAYEV AVAZBEK"],
   "GROUP IELTS T/T/S 9:00":["ZARINA FAYZULLAEVA","MURODOVA NOZIMA","AZIZA ERKINOVA","NURIDDIN QOCHQOROV","QIDIRALIEVA JAYNA","HAMROYEVA NIGORA","QILICHOVA GULISTON","AZIMOVA MUHTASAR"],
@@ -1700,6 +1708,27 @@ function openInstruction(){
 
 // ===== AI CHECKER =====
 var _aiCurrentHw="";
+
+function saveAiKey(){
+  var k=(document.getElementById("aiApiKey")||{}).value||"";
+  k=k.trim();
+  if(k) localStorage.setItem("anthropic_api_key",k);
+  updateAiKeyStatus(k);
+}
+function loadAiKey(){
+  var k=localStorage.getItem("anthropic_api_key")||"";
+  var inp=document.getElementById("aiApiKey");
+  if(inp&&k){ inp.value=k; updateAiKeyStatus(k); }
+}
+function updateAiKeyStatus(k){
+  var el=document.getElementById("aiKeyStatus");
+  if(!el) return;
+  if(k&&k.startsWith("sk-ant-")){ el.textContent="✅ Ready"; el.style.color="var(--green)"; }
+  else if(k&&k.length>10){ el.textContent="⚠️ Check key"; el.style.color="var(--amber)"; }
+  else{ el.textContent=""; }
+}
+function getAiKey(){ return ((document.getElementById("aiApiKey")||{}).value||"").trim()||localStorage.getItem("anthropic_api_key")||""; }
+
 function openAI(hwName){
   _aiCurrentHw=hwName;
   document.getElementById("aiHwBadge").textContent=hwName;
@@ -1708,6 +1737,7 @@ function openAI(hwName){
   document.getElementById("aiWordCount").textContent="0 words";
   document.getElementById("aiBtn").disabled=false;
   document.getElementById("aiModal").style.display="block";
+  loadAiKey();
   setTimeout(function(){document.getElementById("aiText").focus();},200);
 }
 function closeAI(){ document.getElementById("aiModal").style.display="none"; }
@@ -1783,9 +1813,20 @@ async function runCheck(){
     +"- Be honest and strict — never inflate scores";
 
   try {
+    var apiKey=getAiKey();
+    if(!apiKey||apiKey.length<20){
+      document.getElementById("aiResult").innerHTML='<div class="ai-error">❌ Please enter your Anthropic API key above to use AI checking.</div>';
+      document.getElementById("aiBtn").disabled=false;
+      return;
+    }
     var resp = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: 4000,
