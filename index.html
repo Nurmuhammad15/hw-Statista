@@ -170,61 +170,6 @@ input[type=file]{display:none}
 .ai-detect-note{font-size:12px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);line-height:1.5;font-style:italic}
 .speak-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(34,200,135,.15),rgba(34,200,135,.08));color:var(--green);border:1px solid rgba(34,200,135,.35);padding:7px 12px;border-radius:var(--rsm);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s;white-space:nowrap}
 .speak-btn:hover{background:linear-gradient(135deg,rgba(34,200,135,.3),rgba(34,200,135,.15));transform:translateY(-1px)}
-.speak-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;z-index:1000}
-@media(min-height:600px){.speak-overlay{align-items:center}}
-.speak-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
-@media(min-height:600px){.speak-modal{border-radius:20px;margin:16px}}
-.speak-modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.speak-modal-title{font-size:17px;font-weight:800;color:var(--white);display:flex;align-items:center;gap:8px}
-.speak-close-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;transition:all .15s}
-.speak-close-btn:hover{background:var(--red);color:#fff;border-color:var(--red)}
-.speak-hw-badge{font-size:12px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.2);padding:5px 12px;border-radius:20px;display:inline-block}
-.speak-type-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
-.speak-type-btn{background:var(--surface2);border:2px solid var(--border);border-radius:var(--rsm);padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;font-family:inherit}
-.speak-type-btn.active{border-color:var(--green);background:rgba(34,200,135,.08)}
-.speak-type-btn:hover{border-color:var(--green)}
-.speak-type-icon{font-size:24px;margin-bottom:6px}
-.speak-type-label{font-size:13px;font-weight:700;color:var(--white)}
-.speak-type-sub{font-size:11px;color:var(--muted);margin-top:2px}
-.speak-timer-wrap{text-align:center;margin:20px 0}
-.speak-timer{font-size:56px;font-weight:800;font-family:'Space Mono',monospace;color:var(--white);line-height:1}
-.speak-timer.warning{color:var(--amber)}
-.speak-timer.danger{color:var(--red)}
-.speak-timer-label{font-size:12px;color:var(--muted);margin-top:6px}
-.speak-progress{width:100%;height:6px;background:var(--surface2);border-radius:10px;overflow:hidden;margin-bottom:20px}
-.speak-progress-bar{height:100%;background:linear-gradient(90deg,var(--green),#1aad74);border-radius:10px;transition:width .5s linear}
-.speak-progress-bar.warn{background:linear-gradient(90deg,var(--amber),#e59400)}
-.speak-progress-bar.danger-bar{background:linear-gradient(90deg,var(--red),#d43050)}
-.speak-controls{display:flex;gap:10px;margin-bottom:16px}
-.speak-start-btn{flex:1;background:linear-gradient(135deg,var(--green),#1aad74);color:#fff;border:none;border-radius:var(--rsm);padding:13px 20px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(34,200,135,.3);transition:all .2s}
-.speak-start-btn:hover:not(:disabled){transform:translateY(-1px)}
-.speak-start-btn:disabled{opacity:.5;cursor:not-allowed}
-.speak-stop-btn{background:rgba(247,85,106,.12);color:var(--red);border:1px solid rgba(247,85,106,.35);border-radius:var(--rsm);padding:13px 18px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
-.speak-stop-btn:hover:not(:disabled){background:var(--red);color:#fff}
-.speak-stop-btn:disabled{opacity:.35;cursor:not-allowed}
-.speak-status{font-size:13px;color:var(--muted);text-align:center;min-height:20px;margin-bottom:8px}
-.speak-status.recording{color:var(--red);font-weight:700;animation:recPulse 1.2s ease-in-out infinite}
-@keyframes recPulse{0%,100%{opacity:1}50%{opacity:.5}}
-.speak-status.uploading{color:var(--amber);font-weight:700}
-.speak-status.done{color:var(--green);font-weight:700}
-.speak-rec-dot{display:inline-block;width:8px;height:8px;background:var(--red);border-radius:50%;margin-right:5px;animation:recPulse 1s infinite}
-.speak-preview{margin-top:14px;border-top:1px solid var(--border);padding-top:14px}
-.speak-preview-label{font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600}
-.speak-audio-player{width:100%;border-radius:var(--rsm);outline:none;accent-color:var(--green)}
-.speak-video-player{width:100%;border-radius:var(--rsm);max-height:200px;background:#000}
-.speak-min-warn{font-size:12px;color:var(--amber);text-align:center;margin-top:8px}
-/* Transcription */
-.transcript-wrap{margin-top:16px;border-top:1px solid var(--border);padding-top:16px}
-.transcript-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.transcript-title{font-size:13px;font-weight:700;color:var(--white);display:flex;align-items:center;gap:6px}
-.transcript-copy-btn{background:rgba(79,142,247,.1);color:var(--accent);border:1px solid rgba(79,142,247,.3);padding:5px 12px;border-radius:var(--rsm);font-family:inherit;font-weight:600;font-size:12px;cursor:pointer;transition:all .18s;width:auto}
-.transcript-copy-btn:hover{background:var(--accent);color:#fff}
-.transcript-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:13px;color:var(--text);line-height:1.8;max-height:220px;overflow-y:auto;white-space:pre-wrap;word-break:break-word}
-.transcript-loading{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;padding:14px}
-.transcript-stats{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
-.transcript-stat{font-size:11px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);padding:3px 10px;border-radius:20px;font-family:'Space Mono',monospace}
-
-/* Error banner */
 .error-banner{background:rgba(247,85,106,.1);border:1px solid rgba(247,85,106,.3);border-radius:var(--r);padding:20px;margin:20px 0;color:var(--red);font-size:13px;line-height:1.7}
 .error-banner b{color:#ff8a9a;display:block;margin-bottom:8px;font-size:15px}
 .error-banner code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:12px;font-family:'Space Mono',monospace}
@@ -289,244 +234,68 @@ input[type=file]{display:none}
   </div>
 </div>
 
-<!-- AI CHECKER MODAL -->
+<!-- AI CHECKER MODAL - SIMPLIFIED (NO API KEY INPUT) -->
 <div id="aiModal" style="display:none">
   <div class="ai-overlay" onclick="if(event.target.classList.contains('ai-overlay'))closeAI()">
     <div class="ai-modal">
       <div class="ai-modal-header">
         <div class="ai-modal-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          <span>AI Essay Checker</span>
+          <span>Grammar & Writing Check (Grammarly Style)</span>
         </div>
         <button class="ai-close-btn" onclick="closeAI()">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
         </button>
       </div>
       <div id="aiHwBadge" class="ai-hw-badge"></div>
-      <div id="aiKeyWrap" style="margin-bottom:10px">
-        <div style="display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 12px">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <input type="password" id="aiApiKey" placeholder="Paste your Anthropic API key (sk-ant-…)" oninput="saveAiKey()" style="background:transparent;border:none;outline:none;flex:1;font-size:13px;color:var(--text);font-family:inherit" />
-          <span id="aiKeyStatus" style="font-size:11px;font-weight:600;white-space:nowrap"></span>
-        </div>
-        <div style="font-size:11px;color:var(--muted);margin-top:5px;padding:0 2px">🔑 Get your free key at <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--accent)">console.anthropic.com</a> — saved only in your browser</div>
+      <div style="background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.25);border-radius:var(--rsm);padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--green);font-weight:600">
+        ✅ Powered by Groq AI — Grammar, clarity & style analysis
       </div>
       <textarea class="ai-textarea" id="aiText" placeholder="Paste your essay or writing here…" oninput="updateWordCount()"></textarea>
       <div class="ai-word-count" id="aiWordCount">0 words</div>
       <button class="ai-submit-btn" id="aiBtn" onclick="runCheck()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        Check my writing
+        Check Writing
       </button>
       <div id="aiResult"></div>
     </div>
   </div>
 </div>
 
-<!-- SPEAKING RECORDER MODAL -->
-<div id="speakModal" style="display:none">
-  <div class="speak-overlay" onclick="if(event.target.classList.contains('speak-overlay'))closeSpeakModal();" style="cursor:default">
-    <div class="speak-modal">
-      <div class="speak-modal-header">
-        <div class="speak-modal-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-          Speaking Recorder
-        </div>
-        <button class="speak-close-btn" onclick="closeSpeakModal()">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
-        </button>
-      </div>
-      <div id="speakHwBadge" class="speak-hw-badge"></div>
-
-      <!-- Mode selector: Audio or Video upload -->
-      <div class="speak-type-row">
-        <div class="speak-type-btn active" id="typeAudio" onclick="selectRecordType('audio')">
-          <div class="speak-type-icon">🎤</div>
-          <div class="speak-type-label">Audio Only</div>
-          <div class="speak-type-sub">Voice recording</div>
-        </div>
-        <div class="speak-type-btn" id="typeVideo" onclick="selectRecordType('video')">
-          <div class="speak-type-icon">🎥</div>
-          <div class="speak-type-label">Video + Audio</div>
-          <div class="speak-type-sub">Upload from device</div>
-        </div>
-      </div>
-
-      <!-- AUDIO MODE -->
-      <div id="audioRecorderSection">
-
-        <!-- Saved progress banner -->
-        <div id="speakSavedBanner" style="display:none;background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.3);border-radius:var(--rsm);padding:12px 14px;margin-bottom:14px">
-          <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">⏸️ Unfinished recording found</div>
-          <div id="speakSavedInfo" style="font-size:12px;color:var(--muted);margin-bottom:10px"></div>
-          <div style="display:flex;gap:8px">
-            <button onclick="resumeSavedRecording()" style="flex:1;background:linear-gradient(135deg,var(--accent),#3a7ef5);color:#fff;border:none;border-radius:var(--rsm);padding:9px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              Continue from where I left off
-            </button>
-            <button onclick="discardSavedRecording()" style="background:rgba(247,85,106,.1);color:var(--red);border:1px solid rgba(247,85,106,.3);border-radius:var(--rsm);padding:9px 12px;font-family:inherit;font-weight:600;font-size:12px;cursor:pointer;white-space:nowrap;width:auto">
-              Start fresh
-            </button>
-          </div>
-        </div>
-
-        <div class="speak-timer-wrap">
-          <div class="speak-timer" id="speakTimer">00:00</div>
-          <div class="speak-timer-label" id="speakTimerLabel">Press Record to start</div>
-        </div>
-        <div class="speak-progress">
-          <div class="speak-progress-bar" id="speakProgressBar" style="width:0%"></div>
-        </div>
-        <div class="speak-status" id="speakStatus">Press Record to begin your speaking</div>
-
-        <!-- Row 1: Record + Pause -->
-        <div class="speak-controls" style="gap:8px;margin-bottom:8px">
-          <button class="speak-start-btn" id="speakStartBtn" onclick="startSpeakRecording()" style="flex:1">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
-            Record
-          </button>
-          <button id="speakPauseBtn" onclick="pauseSpeakRecording()" disabled
-            style="flex:1;background:rgba(245,166,35,.12);color:var(--amber);border:1px solid rgba(245,166,35,.35);border-radius:var(--rsm);padding:13px 10px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-            Pause
-          </button>
-        </div>
-        <!-- Row 2: Submit full width -->
-        <button id="speakStopBtn" onclick="stopSpeakRecording()" disabled
-          style="width:100%;background:rgba(247,85,106,.12);color:var(--red);border:1px solid rgba(247,85,106,.35);border-radius:var(--rsm);padding:13px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;margin-bottom:10px">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
-          Stop & Submit
-        </button>
-
-        <div class="speak-min-warn" id="speakMinWarn">⚠️ Minimum 10 minutes required to submit</div>
-
-        <div class="speak-preview" id="speakPreview" style="display:none">
-          <div class="speak-preview-label">Preview your recording:</div>
-          <div id="speakPreviewPlayer"></div>
-          <div id="speakUploadStatus" style="margin-top:12px;text-align:center;font-size:13px;color:var(--muted)"></div>
-          <!-- TRANSCRIPTION -->
-          <div class="transcript-wrap" id="transcriptWrap" style="display:none">
-            <div class="transcript-header">
-              <div class="transcript-title">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                Speech Transcript (Whisper AI)
-              </div>
-              <button class="transcript-copy-btn" onclick="copyTranscript()">Copy</button>
-            </div>
-            <div id="transcriptContent"></div>
-            <div class="transcript-stats" id="transcriptStats"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- VIDEO UPLOAD MODE -->
-      <div id="videoUploadSection" style="display:none">
-        <div style="text-align:center;padding:20px 0 10px">
-          <div style="font-size:48px;margin-bottom:10px">🎥</div>
-          <div style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6">Select a video file from your device.<br>Supported formats: MP4, MOV, WebM</div>
-          <label style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),#1aad74);color:#fff;padding:13px 24px;border-radius:var(--rsm);font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 14px rgba(34,200,135,.3);transition:all .2s">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            Choose Video File
-            <input type="file" id="videoFileInput" accept="video/*" onchange="handleVideoFileSelect(this)">
-          </label>
-        </div>
-        <div id="videoUploadStatus" style="margin-top:16px;text-align:center;font-size:13px;color:var(--muted)"></div>
-        <div id="videoPreviewWrap" style="display:none;margin-top:14px;border-top:1px solid var(--border);padding-top:14px">
-          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600">Selected video:</div>
-          <video id="videoPreviewEl" class="speak-video-player" controls style="width:100%;border-radius:var(--rsm);max-height:200px;background:#000"></video>
-          <button id="videoSubmitBtn" onclick="submitVideoFile()" style="width:100%;margin-top:12px;background:linear-gradient(135deg,var(--green),#1aad74);color:#fff;border:none;border-radius:var(--rsm);padding:13px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(34,200,135,.3)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Submit Video
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- TRANSCRIPT MODAL -->
-<div id="transcriptModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)this.style.display='none'">
-  <div class="modal" style="max-width:500px;max-height:85vh;display:flex;flex-direction:column">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-      <div class="modal-title" style="margin-bottom:0;display:flex;align-items:center;gap:8px">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Speech Transcript
-      </div>
-      <button onclick="document.getElementById('transcriptModal').style.display='none'" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;width:auto">✕</button>
-    </div>
-    <div id="tmStudent" class="modal-sub" style="margin-bottom:12px"></div>
-    <div id="tmStats" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"></div>
-    <div id="tmText" style="flex:1;overflow-y:auto;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:13px;color:var(--text);line-height:1.9;white-space:pre-wrap;word-break:break-word;max-height:50vh"></div>
-    <div style="display:flex;gap:10px;margin-top:16px">
-      <button onclick="copyTranscriptModal()" style="flex:1;background:linear-gradient(135deg,var(--accent),#3a7ef5);color:#fff;border:none;border-radius:var(--rsm);padding:11px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        Copy text
-      </button>
-      <button onclick="document.getElementById('transcriptModal').style.display='none'" style="background:var(--surface2);color:var(--muted);border:1px solid var(--border);border-radius:var(--rsm);padding:11px 18px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;width:auto">Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- Firebase SDKs loaded via script tags with error handling -->
+<!-- Firebase SDKs -->
 <script>
 window._firebaseLoaded = false;
 window._firebaseError = null;
 </script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"
-  onerror="window._firebaseError='firebase-app failed to load'"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"
-  onerror="window._firebaseError='firebase-database failed to load'"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"
-  onerror="window._firebaseError='firebase-storage failed to load'"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js" onerror="window._firebaseError='firebase-app failed to load'"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js" onerror="window._firebaseError='firebase-database failed to load'"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js" onerror="window._firebaseError='firebase-storage failed to load'"></script>
 
 <script>
-// ===== FIREBASE INIT WITH ERROR HANDLING =====
+// ===== FIREBASE INIT =====
 var db = null;
 var storage = null;
 var _fbReady = false;
 
 function initFirebase() {
   if (window._firebaseError) {
-    showFatalError(
-      "Firebase failed to load",
-      "The app cannot connect to Firebase. This usually happens when you open the file directly from your computer (<code>file://</code>).",
-      [
-        "Open the file using a local server (e.g. VS Code Live Server extension)",
-        "Or upload the file to Firebase Hosting / Vercel / Netlify",
-        "Do NOT open by double-clicking the .html file directly"
-      ]
-    );
+    showFatalError("Firebase failed to load","The app cannot connect to Firebase. This usually happens when you open the file directly from your computer (<code>file://</code>).",["Open the file using a local server (e.g. VS Code Live Server extension)","Or upload the file to Firebase Hosting / Vercel / Netlify","Do NOT open by double-clicking the .html file directly"]);
     return false;
   }
-
   if (typeof firebase === 'undefined') {
-    showFatalError(
-      "Firebase SDK not loaded",
-      "Could not load Firebase. Please check your internet connection and reload the page.",
-      ["Make sure you have a stable internet connection", "Try reloading with Ctrl+R / Cmd+R"]
-    );
+    showFatalError("Firebase SDK not loaded","Could not load Firebase. Please check your internet connection and reload the page.",["Make sure you have a stable internet connection", "Try reloading with Ctrl+R / Cmd+R"]);
     return false;
   }
-
   try {
     if (!firebase.apps.length) {
-      firebase.initializeApp({
-        apiKey: "AIzaSyDJDVZazGiEUshVicJX8ObvxIjDPgA5rTo",
-        authDomain: "studentstatista.firebaseapp.com",
-        databaseURL: "https://studentstatista-default-rtdb.firebaseio.com",
-        projectId: "studentstatista",
-        storageBucket: "studentstatista.firebasestorage.app"
-      });
+      firebase.initializeApp({apiKey:"AIzaSyDJDVZazGiEUshVicJX8ObvxIjDPgA5rTo",authDomain:"studentstatista.firebaseapp.com",databaseURL:"https://studentstatista-default-rtdb.firebaseio.com",projectId:"studentstatista",storageBucket:"studentstatista.firebasestorage.app"});
     }
     db = firebase.database();
     storage = firebase.storage();
     _fbReady = true;
     return true;
   } catch(e) {
-    showFatalError(
-      "Firebase initialization error",
-      "Error: <code>" + e.message + "</code>",
-      ["Check that the Firebase config is correct", "Ensure the database URL is valid"]
-    );
+    showFatalError("Firebase initialization error","Error: <code>" + e.message + "</code>",["Check that the Firebase config is correct", "Ensure the database URL is valid"]);
     return false;
   }
 }
@@ -534,11 +303,7 @@ function initFirebase() {
 function showFatalError(title, desc, tips) {
   var app = document.getElementById("app");
   var tipsHtml = tips.map(function(t){ return "<li>" + t + "</li>"; }).join("");
-  app.innerHTML = '<div class="error-banner">'
-    + '<b>⚠️ ' + title + '</b>'
-    + '<p style="margin-bottom:10px">' + desc + '</p>'
-    + '<ul style="padding-left:18px;line-height:2">' + tipsHtml + '</ul>'
-    + '</div>';
+  app.innerHTML = '<div class="error-banner"><b>⚠️ ' + title + '</b><p style="margin-bottom:10px">' + desc + '</p><ul style="padding-left:18px;line-height:2">' + tipsHtml + '</ul></div>';
 }
 
 function requireDB() {
@@ -549,7 +314,6 @@ function requireDB() {
   return true;
 }
 
-// Detect webview
 (function(){
   var ua = navigator.userAgent.toLowerCase();
   if(ua.includes("wv") || ua.includes("telegram") || ua.includes("instagram") || (ua.includes("android") && !ua.includes("chrome"))){
@@ -676,13 +440,7 @@ function isBlocked(group){
 var app = document.getElementById("app");
 
 function home(){
-  app.innerHTML = '<div class="home-wrap">'
-    + '<div class="home-title">Statista</div>'
-    + '<div class="home-sub">IELTS Homework Tracker</div>'
-    + '<div class="home-cards">'
-    + '<div class="home-card student" onclick="enterStudent()"><div class="label">Student</div><div class="sub">Submit homework</div></div>'
-    + '<div class="home-card teacher" onclick="loginAdmin()"><div class="label">Teacher</div><div class="sub">Admin panel</div></div>'
-    + '</div></div>';
+  app.innerHTML = '<div class="home-wrap"><div class="home-title">Statista</div><div class="home-sub">IELTS Homework Tracker</div><div class="home-cards"><div class="home-card student" onclick="enterStudent()"><div class="label">Student</div><div class="sub">Submit homework</div></div><div class="home-card teacher" onclick="loginAdmin()"><div class="label">Teacher</div><div class="sub">Admin panel</div></div></div></div>';
 }
 
 function enterStudent(){
@@ -713,8 +471,7 @@ function selectStudent(group){
 }
 
 function showStages(group, student){
-  app.innerHTML = '<button class="back" onclick="selectStudent(\''+esc(group)+'\')">← Back</button>'
-    + '<div class="bc">'+group+' › <b>'+student+'</b></div><h3>Select Stage</h3><div id="stageList"></div>';
+  app.innerHTML = '<button class="back" onclick="selectStudent(\''+esc(group)+'\')">← Back</button><div class="bc">'+group+' › <b>'+student+'</b></div><h3>Select Stage</h3><div id="stageList"></div>';
   var list = document.getElementById("stageList");
   Object.keys(STAGES).forEach(function(stage){
     var div = document.createElement("div"); div.className = "card";
@@ -725,8 +482,7 @@ function showStages(group, student){
 }
 
 function showLessons(group, student, stage){
-  app.innerHTML = '<button class="back" onclick="showStages(\''+esc(group)+'\',\''+esc(student)+'\')">← Back</button>'
-    + '<div class="bc"><b>'+student+'</b> › '+stage+'</div><h3>Select Lesson</h3><div id="lessonList"></div>';
+  app.innerHTML = '<button class="back" onclick="showStages(\''+esc(group)+'\',\''+esc(student)+'\')">← Back</button><div class="bc"><b>'+student+'</b> › '+stage+'</div><h3>Select Lesson</h3><div id="lessonList"></div>';
   var list = document.getElementById("lessonList");
   Object.keys(STAGES[stage]).forEach(function(lesson){
     var div = document.createElement("div"); div.className = "card";
@@ -796,28 +552,7 @@ async function showHomework(group, student, stage, lesson){
       row.appendChild(aiBtn);
     }
 
-    if(isSpeaking){
-      var spkBtn = document.createElement("button");
-      spkBtn.className = "speak-btn";
-      spkBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> '+(submitted?'Re-record':'Record Speaking');
-      if(blocked){ spkBtn.style.opacity = "0.35"; spkBtn.style.pointerEvents = "none"; }
-      (function(g,st,sg,ls,h){ spkBtn.addEventListener("click", function(){ openSpeakModal(g,st,sg,ls,h); }); })(group,student,stage,lesson,hw);
-      row.appendChild(spkBtn);
-    }
-
     card.appendChild(row);
-
-    if(isSpeaking && speakSubmitted){
-      var type = d.recordingType || 'audio';
-      var playerWrap = document.createElement("div"); playerWrap.style.marginTop = "10px";
-      if(type === 'video'){
-        playerWrap.innerHTML = '<video class="speak-video-player" controls src="'+d.recordingUrl+'"></video>';
-      } else {
-        playerWrap.innerHTML = '<audio class="speak-audio-player" controls src="'+d.recordingUrl+'"></audio>';
-      }
-      if(d.duration) playerWrap.innerHTML += '<div style="font-size:11px;color:var(--muted);margin-top:4px;font-family:\'Space Mono\',monospace">Duration: '+formatTime(d.duration)+'</div>';
-      card.appendChild(playerWrap);
-    }
 
     if(!isSpeaking && photoSubmitted){
       d.files.forEach(function(url){
@@ -916,582 +651,6 @@ async function replaceHW(input, group, student, stage, lesson, hw){
   alert("Replaced successfully ✓");
 }
 
-// ===== SPEAKING RECORDER =====
-var _spkGroup="",_spkStudent="",_spkStage="",_spkLesson="",_spkHw="";
-var _spkType="audio";
-var _spkMediaRecorder=null, _spkStream=null;
-var _spkInterval=null, _spkRecordedSecs=0;
-var _spkMinSecs=600; // 10 minutes minimum
-var _spkSelectedVideoFile=null;
-var _spkAllChunks=[]; // all chunks across all sessions (resume support)
-var _spkIsPaused=false;
-var _spkSaveKey=""; // localStorage key for this session
-
-// Save progress to localStorage every 5 seconds
-function _spkSaveProgress(){
-  if(!_spkSaveKey) return;
-  try{
-    localStorage.setItem(_spkSaveKey, JSON.stringify({
-      secs: _spkRecordedSecs,
-      hw: _spkHw,
-      group: _spkGroup,
-      student: _spkStudent,
-      stage: _spkStage,
-      lesson: _spkLesson,
-      ts: Date.now()
-    }));
-  }catch(e){}
-}
-
-function _spkClearProgress(){
-  if(_spkSaveKey) try{ localStorage.removeItem(_spkSaveKey); }catch(e){}
-}
-
-function _spkGetSaveKey(group,student,stage,lesson,hw){
-  return "spk_prog_"+safe(group)+"_"+safe(student)+"_"+safe(hw);
-}
-
-function openSpeakModal(group,student,stage,lesson,hw){
-  // Stop any existing recording first
-  if(_spkMediaRecorder && _spkMediaRecorder.state!=="inactive"){
-    _spkMediaRecorder.onstop=null;
-    try{ _spkMediaRecorder.stop(); }catch(e){}
-  }
-  if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
-  clearInterval(_spkInterval);
-
-  // Reset all state
-  _spkGroup=group; _spkStudent=student; _spkStage=stage; _spkLesson=lesson; _spkHw=hw;
-  _spkType="audio"; _spkSelectedVideoFile=null;
-  _spkAllChunks=[]; _spkRecordedSecs=0; _spkIsPaused=false;
-  _spkMediaRecorder=null; _spkStream=null;
-  _spkSaveKey=_spkGetSaveKey(group,student,stage,lesson,hw);
-
-  document.getElementById("speakHwBadge").textContent=hw;
-  _resetAudioUI();
-
-  // Check for saved progress
-  try{
-    var saved=localStorage.getItem(_spkSaveKey);
-    if(saved){
-      var s=JSON.parse(saved);
-      // Only show if saved in last 24 hours
-      if(s && s.secs>0 && (Date.now()-s.ts)<86400000){
-        document.getElementById("speakSavedBanner").style.display="block";
-        document.getElementById("speakSavedInfo").textContent=
-          "You recorded "+formatTime(s.secs)+" — saved "+_timeAgo(s.ts)+". Continue from where you left off.";
-        // Pre-load the saved seconds
-        _spkRecordedSecs=s.secs;
-        document.getElementById("speakTimer").textContent=formatTime(_spkRecordedSecs);
-        _updateProgressBar();
-      } else {
-        _spkClearProgress();
-        document.getElementById("speakSavedBanner").style.display="none";
-      }
-    } else {
-      document.getElementById("speakSavedBanner").style.display="none";
-    }
-  }catch(e){
-    document.getElementById("speakSavedBanner").style.display="none";
-  }
-
-  document.getElementById("audioRecorderSection").style.display="block";
-  document.getElementById("videoUploadSection").style.display="none";
-  document.getElementById("typeAudio").classList.add("active");
-  document.getElementById("typeVideo").classList.remove("active");
-  document.getElementById("speakModal").style.display="block";
-}
-
-function _resetAudioUI(){
-  document.getElementById("speakTimer").textContent="00:00";
-  document.getElementById("speakTimer").className="speak-timer";
-  document.getElementById("speakTimerLabel").textContent="Press Record to start";
-  document.getElementById("speakProgressBar").style.width="0%";
-  document.getElementById("speakProgressBar").style.background="";
-  document.getElementById("speakProgressBar").className="speak-progress-bar";
-  document.getElementById("speakStatus").textContent="Press Record to begin your speaking";
-  document.getElementById("speakStatus").className="speak-status";
-  // Record button — fully reset
-  document.getElementById("speakStartBtn").disabled=false;
-  document.getElementById("speakStartBtn").innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg> Record';
-  // Pause button — fully reset
-  var pauseBtn=document.getElementById("speakPauseBtn");
-  pauseBtn.disabled=true;
-  pauseBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause';
-  pauseBtn.style.background="rgba(245,166,35,.12)";
-  pauseBtn.style.color="var(--amber)";
-  pauseBtn.style.borderColor="rgba(245,166,35,.35)";
-  // Stop button
-  var stopBtn=document.getElementById("speakStopBtn");
-  stopBtn.disabled=true;
-  stopBtn.style.opacity="0.4";
-  stopBtn.style.cursor="not-allowed";
-  document.getElementById("speakPreview").style.display="none";
-  document.getElementById("speakPreviewPlayer").innerHTML="";
-  document.getElementById("speakUploadStatus").innerHTML="";
-  document.getElementById("speakMinWarn").style.display="block";
-  document.getElementById("speakMinWarn").textContent="⚠️ Minimum 10 minutes required to submit";
-  document.getElementById("speakMinWarn").style.color="";
-  document.getElementById("speakMinWarn").style.fontWeight="";
-  document.getElementById("transcriptWrap").style.display="none";
-  document.getElementById("transcriptContent").innerHTML="";
-  document.getElementById("transcriptStats").innerHTML="";
-  document.getElementById("videoUploadStatus").innerHTML="";
-  document.getElementById("videoPreviewWrap").style.display="none";
-  document.getElementById("videoFileInput").value="";
-}
-
-function _timeAgo(ts){
-  var mins=Math.round((Date.now()-ts)/60000);
-  if(mins<2) return "just now";
-  if(mins<60) return mins+" minutes ago";
-  return Math.round(mins/60)+" hours ago";
-}
-
-function resumeSavedRecording(){
-  // Hide banner and just start recording — seconds already loaded
-  document.getElementById("speakSavedBanner").style.display="none";
-  startSpeakRecording();
-}
-
-function discardSavedRecording(){
-  _spkClearProgress();
-  _spkRecordedSecs=0;
-  _spkAllChunks=[];
-  document.getElementById("speakSavedBanner").style.display="none";
-  document.getElementById("speakTimer").textContent="00:00";
-  _updateProgressBar();
-}
-
-function closeSpeakModal(){
-  // If actively recording (not paused) and under minimum — block
-  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording" && _spkRecordedSecs < _spkMinSecs){
-    var remaining=_spkMinSecs-_spkRecordedSecs;
-    var warn=document.getElementById("speakMinWarn");
-    warn.textContent="⛔ Cannot close while recording — pause first or reach 10 min minimum! "+formatTime(remaining)+" left.";
-    warn.style.color="var(--red)"; warn.style.fontWeight="700";
-    _shakeEl(document.querySelector(".speak-close-btn"));
-    return;
-  }
-  // If recording, pause it automatically before closing (saves progress)
-  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording"){
-    _pauseRecorderHard();
-  }
-  _spkSaveProgress(); // save whatever we have
-  if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
-  clearInterval(_spkInterval);
-  document.getElementById("speakModal").style.display="none";
-}
-
-function _shakeEl(el){
-  if(!el) return;
-  el.style.transform="translateX(-5px)";
-  setTimeout(function(){ el.style.transform="translateX(5px)"; },80);
-  setTimeout(function(){ el.style.transform="translateX(-4px)"; },160);
-  setTimeout(function(){ el.style.transform="translateX(4px)"; },240);
-  setTimeout(function(){ el.style.transform="translateX(0)"; },320);
-}
-
-function selectRecordType(type){
-  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording") return;
-  _spkType=type;
-  document.getElementById("typeAudio").classList.toggle("active",type==="audio");
-  document.getElementById("typeVideo").classList.toggle("active",type==="video");
-  document.getElementById("audioRecorderSection").style.display=type==="audio"?"block":"none";
-  document.getElementById("videoUploadSection").style.display=type==="video"?"block":"none";
-}
-
-function _updateProgressBar(){
-  var pct=Math.min((_spkRecordedSecs/_spkMinSecs)*100,100);
-  var bar=document.getElementById("speakProgressBar");
-  bar.style.width=pct+"%";
-  if(_spkRecordedSecs>=_spkMinSecs){
-    bar.style.background="linear-gradient(90deg,var(--green),#1aad74)";
-  } else {
-    bar.style.background="";
-  }
-}
-
-function startSpeakRecording(){
-  navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
-    _spkStream=s;
-    _spkIsPaused=false;
-
-    var mimeType=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":
-                 MediaRecorder.isTypeSupported("audio/webm")?"audio/webm":"audio/ogg";
-    _spkMediaRecorder=new MediaRecorder(_spkStream,{mimeType:mimeType});
-    _spkMediaRecorder.ondataavailable=function(e){ if(e.data.size>0) _spkAllChunks.push(e.data); };
-    _spkMediaRecorder.onstop=function(){};  // handled manually
-    _spkMediaRecorder.start(1000);
-
-    document.getElementById("speakStartBtn").disabled=true;
-    document.getElementById("speakStartBtn").innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg> Recording…';
-    document.getElementById("speakPauseBtn").disabled=false;
-    var stopBtn=document.getElementById("speakStopBtn");
-    stopBtn.disabled=false;
-    stopBtn.style.opacity="1";
-    stopBtn.style.cursor="pointer";
-    document.getElementById("speakStatus").className="speak-status recording";
-    document.getElementById("speakStatus").innerHTML='<span class="speak-rec-dot"></span>Recording…';
-
-    clearInterval(_spkInterval);
-    var saveCounter=0;
-    _spkInterval=setInterval(function(){
-      _spkRecordedSecs++;
-      saveCounter++;
-      if(saveCounter>=5){ _spkSaveProgress(); saveCounter=0; } // save every 5 secs
-
-      var timerEl=document.getElementById("speakTimer");
-      timerEl.textContent=formatTime(_spkRecordedSecs);
-      _updateProgressBar();
-
-      if(_spkRecordedSecs < _spkMinSecs){
-        var remaining=_spkMinSecs-_spkRecordedSecs;
-        document.getElementById("speakTimerLabel").textContent="Keep going — "+formatTime(remaining)+" until you can stop";
-        document.getElementById("speakMinWarn").textContent="⚠️ Minimum 10 minutes required to submit";
-        document.getElementById("speakMinWarn").style.color="";
-      } else {
-        document.getElementById("speakTimerLabel").textContent="✅ You can stop now!";
-        document.getElementById("speakMinWarn").textContent="✅ Minimum reached — press Submit when ready";
-        document.getElementById("speakMinWarn").style.color="var(--green)";
-      }
-    },1000);
-
-  }).catch(function(err){ alert("Microphone error: "+err.message); });
-}
-
-function pauseSpeakRecording(){
-  if(!_spkMediaRecorder) return;
-
-  if(_spkMediaRecorder.state==="recording"){
-    // PAUSE
-    _pauseRecorderHard();
-    _spkSaveProgress();
-    document.getElementById("speakPauseBtn").innerHTML=
-      '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Resume';
-    document.getElementById("speakPauseBtn").style.background="rgba(34,200,135,.12)";
-    document.getElementById("speakPauseBtn").style.color="var(--green)";
-    document.getElementById("speakPauseBtn").style.borderColor="rgba(34,200,135,.35)";
-    document.getElementById("speakStartBtn").disabled=true;
-    document.getElementById("speakStatus").className="speak-status";
-    document.getElementById("speakStatus").innerHTML='⏸️ Paused at '+formatTime(_spkRecordedSecs)+' — press Resume to continue';
-    _spkIsPaused=true;
-
-  } else if(_spkIsPaused){
-    // RESUME
-    navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
-      _spkStream=s;
-      _spkIsPaused=false;
-      var mimeType=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":
-                   MediaRecorder.isTypeSupported("audio/webm")?"audio/webm":"audio/ogg";
-      _spkMediaRecorder=new MediaRecorder(_spkStream,{mimeType:mimeType});
-      _spkMediaRecorder.ondataavailable=function(e){ if(e.data.size>0) _spkAllChunks.push(e.data); };
-      _spkMediaRecorder.onstop=function(){};
-      _spkMediaRecorder.start(1000);
-
-      // Reset timer interval
-      clearInterval(_spkInterval);
-      var saveCounter=0;
-      _spkInterval=setInterval(function(){
-        _spkRecordedSecs++;
-        saveCounter++;
-        if(saveCounter>=5){ _spkSaveProgress(); saveCounter=0; }
-        document.getElementById("speakTimer").textContent=formatTime(_spkRecordedSecs);
-        _updateProgressBar();
-        if(_spkRecordedSecs < _spkMinSecs){
-          var remaining=_spkMinSecs-_spkRecordedSecs;
-          document.getElementById("speakTimerLabel").textContent="Keep going — "+formatTime(remaining)+" until you can stop";
-          document.getElementById("speakMinWarn").textContent="⚠️ Minimum 10 minutes required to submit";
-          document.getElementById("speakMinWarn").style.color="";
-        } else {
-          document.getElementById("speakTimerLabel").textContent="✅ You can stop now!";
-          document.getElementById("speakMinWarn").textContent="✅ Minimum reached — press Submit when ready";
-          document.getElementById("speakMinWarn").style.color="var(--green)";
-        }
-      },1000);
-
-      document.getElementById("speakPauseBtn").innerHTML=
-        '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause';
-      document.getElementById("speakPauseBtn").style.background="rgba(245,166,35,.12)";
-      document.getElementById("speakPauseBtn").style.color="var(--amber)";
-      document.getElementById("speakPauseBtn").style.borderColor="rgba(245,166,35,.35)";
-      document.getElementById("speakStatus").className="speak-status recording";
-      document.getElementById("speakStatus").innerHTML='<span class="speak-rec-dot"></span>Recording…';
-
-    }).catch(function(err){ alert("Microphone error: "+err.message); });
-  }
-}
-
-function _pauseRecorderHard(){
-  clearInterval(_spkInterval);
-  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording"){
-    _spkMediaRecorder.stop();
-  }
-  if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
-}
-
-function stopSpeakRecording(){
-  if(_spkRecordedSecs < _spkMinSecs){
-    var remaining=_spkMinSecs-_spkRecordedSecs;
-    var warn=document.getElementById("speakMinWarn");
-    warn.textContent="⛔ Minimum 10 minutes required! "+formatTime(remaining)+" remaining.";
-    warn.style.color="var(--red)"; warn.style.fontWeight="700";
-    _shakeEl(document.getElementById("speakStopBtn"));
-    return;
-  }
-  clearInterval(_spkInterval);
-  document.getElementById("speakStartBtn").disabled=true;
-  document.getElementById("speakPauseBtn").disabled=true;
-  document.getElementById("speakStopBtn").disabled=true;
-  document.getElementById("speakStatus").className="speak-status uploading";
-  document.getElementById("speakStatus").textContent="Processing… please wait";
-
-  // Stop recorder if still running, then upload
-  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording"){
-    _spkMediaRecorder.onstop=function(){ _doUpload(); };
-    _spkMediaRecorder.stop();
-    if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
-  } else {
-    _doUpload();
-  }
-}
-
-function _doUpload(){
-  if(!requireDB()) return;
-  if(!_spkAllChunks.length){
-    document.getElementById("speakStatus").textContent="❌ No audio recorded. Please try again.";
-    return;
-  }
-  var mimeType=_spkAllChunks[0]?_spkAllChunks[0].type:"audio/webm";
-  var blob=new Blob(_spkAllChunks,{type:mimeType});
-  var blobUrl=URL.createObjectURL(blob);
-
-  document.getElementById("speakPreviewPlayer").innerHTML='<audio class="speak-audio-player" controls src="'+blobUrl+'"></audio>';
-  document.getElementById("speakPreview").style.display="block";
-  document.getElementById("speakStatus").className="speak-status uploading";
-  document.getElementById("speakStatus").textContent="Uploading to server…";
-  document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--amber)">⏳ Step 1/2: Uploading audio…</span>';
-  document.getElementById("transcriptWrap").style.display="block";
-  document.getElementById("transcriptContent").innerHTML='<div class="transcript-loading"><div class="ai-dots"><span></span><span></span><span></span></div>Waiting for upload…</div>';
-
-  var savedBlob=blob;
-  var path="speaking/"+safe(_spkGroup)+"/"+safe(_spkStudent)+"/"+safe(_spkStage)+"/"+safe(_spkLesson)+"/"+safe(_spkHw)+"/"+Date.now()+".webm";
-  var ref=storage.ref(path);
-  ref.put(blob).then(function(){ return ref.getDownloadURL(); }).then(function(url){
-    return db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw).set({
-      recordingUrl:url, recordingType:"audio", duration:_spkRecordedSecs, time:Date.now()
-    });
-  }).then(function(){
-    _spkClearProgress(); // clear saved progress — done!
-    document.getElementById("speakStatus").className="speak-status done";
-    document.getElementById("speakStatus").textContent="✅ Audio uploaded!";
-    document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--green);font-weight:700">✅ Saved! Transcribing your speech…</span>';
-    pushNotif("Speaking Submitted","Your recording for \""+_spkHw+"\" was uploaded.","success");
-    _spkAllChunks=[];
-    transcribeAudio(savedBlob);
-  }).catch(function(err){
-    document.getElementById("speakStatus").className="speak-status";
-    document.getElementById("speakStatus").textContent="❌ Upload failed. Try again.";
-    document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--red)">Upload error: '+(err.message||err)+'</span>';
-    document.getElementById("transcriptContent").innerHTML='<div style="color:var(--red);font-size:13px;padding:10px">⚠️ Upload failed — transcription skipped.</div>';
-    // Re-enable submit button so they can retry
-    document.getElementById("speakStopBtn").disabled=false;
-    _spkAllChunks=[];
-  });
-}
-
-// ===== GROQ WHISPER TRANSCRIPTION =====
-var GROQ_KEY="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";
-
-async function transcribeAudio(blob){
-  document.getElementById("transcriptContent").innerHTML=
-    '<div class="transcript-loading"><div class="ai-dots"><span></span><span></span><span></span></div>Step 2/2: Transcribing with Whisper AI… this may take 30–60 seconds</div>';
-
-  try {
-    // Groq Whisper accepts: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, webm — max 25MB
-    var sizeMB = blob.size / 1024 / 1024;
-
-    // If over 24MB, we need to warn (very rare for 20min audio at low bitrate)
-    if(sizeMB > 24){
-      document.getElementById("transcriptContent").innerHTML=
-        '<div style="color:var(--amber);font-size:13px;padding:12px;background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.25);border-radius:var(--rsm);">'
-        +'⚠️ Audio file is too large for transcription ('+Math.round(sizeMB)+'MB, max 24MB).<br>Recording was saved successfully — transcription skipped.</div>';
-      return;
-    }
-
-    var formData = new FormData();
-    // Use .webm extension so Groq recognizes the format
-    formData.append("file", blob, "recording.webm");
-    formData.append("model", "whisper-large-v3");
-    formData.append("language", "en"); // English for IELTS
-    formData.append("response_format", "verbose_json"); // get word count etc
-    formData.append("temperature", "0");
-
-    var resp = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", {
-      method: "POST",
-      headers: { "Authorization": "Bearer "+GROQ_KEY },
-      body: formData
-    });
-
-    if(!resp.ok){
-      var errData = await resp.json().catch(function(){return{};});
-      throw new Error(errData.error&&errData.error.message ? errData.error.message : "Whisper API error "+resp.status);
-    }
-
-    var data = await resp.json();
-    var text = data.text || "";
-
-    if(!text.trim()){
-      document.getElementById("transcriptContent").innerHTML=
-        '<div style="color:var(--muted);font-size:13px;padding:12px">No speech detected in the recording.</div>';
-      return;
-    }
-
-    // Count words and estimate speaking rate
-    var words = text.trim().split(/\s+/).filter(function(w){return w;}).length;
-    var minutes = _spkRecordedSecs / 60;
-    var wpm = Math.round(words / minutes);
-
-    // Render transcript
-    document.getElementById("transcriptContent").innerHTML=
-      '<div class="transcript-box">'+escapeHtml(text)+'</div>';
-
-    // Stats row
-    document.getElementById("transcriptStats").innerHTML=
-      '<span class="transcript-stat">'+words+' words</span>'
-      +'<span class="transcript-stat">'+wpm+' wpm</span>'
-      +'<span class="transcript-stat">'+formatTime(_spkRecordedSecs)+' duration</span>';
-
-    // Also save transcript to Firebase
-    if(_fbReady && db){
-      db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw+"/transcript").set({
-        text: text, words: words, wpm: wpm, time: Date.now()
-      }).catch(function(){});
-    }
-
-    document.getElementById("speakUploadStatus").innerHTML=
-      '<span style="color:var(--green);font-weight:700">✅ Uploaded & transcribed successfully!</span>';
-
-  } catch(err){
-    document.getElementById("transcriptContent").innerHTML=
-      '<div style="color:var(--red);font-size:13px;padding:12px;background:rgba(247,85,106,.06);border:1px solid rgba(247,85,106,.2);border-radius:var(--rsm);">'
-      +'❌ Transcription failed: '+(err.message||err)+'<br>'
-      +'<span style="color:var(--muted);font-size:11px">Recording was saved successfully.</span></div>';
-  }
-}
-
-function escapeHtml(t){
-  return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-}
-
-function copyTranscript(){
-  var box=document.querySelector(".transcript-box");
-  if(!box) return;
-  var text=box.textContent||"";
-  navigator.clipboard.writeText(text).then(function(){
-    var btn=document.querySelector(".transcript-copy-btn");
-    btn.textContent="Copied!";
-    btn.style.background="var(--green)";
-    btn.style.color="var(--bg)";
-    setTimeout(function(){ btn.textContent="Copy"; btn.style.background=""; btn.style.color=""; },2000);
-  }).catch(function(){
-    // Fallback
-    var ta=document.createElement("textarea");
-    ta.value=text; document.body.appendChild(ta); ta.select();
-    document.execCommand("copy"); document.body.removeChild(ta);
-  });
-}
-
-// ===== VIDEO FILE UPLOAD =====
-function handleVideoFileSelect(input){
-  var file=input.files[0];
-  if(!file) return;
-  _spkSelectedVideoFile=file;
-  var url=URL.createObjectURL(file);
-  document.getElementById("videoPreviewEl").src=url;
-  document.getElementById("videoPreviewWrap").style.display="block";
-  document.getElementById("videoUploadStatus").innerHTML='<span style="color:var(--muted)">File selected: <b style="color:var(--text)">'+file.name+'</b> ('+Math.round(file.size/1024/1024*10)/10+' MB)</span>';
-}
-
-async function submitVideoFile(){
-  if(!_spkSelectedVideoFile){ alert("Please select a video file first."); return; }
-  if(!requireDB()) return;
-
-  var file = _spkSelectedVideoFile;
-  var sizeMB = Math.round(file.size / 1024 / 1024 * 10) / 10;
-
-  // Warn if very large (over 500MB)
-  if(file.size > 500 * 1024 * 1024){
-    alert("File is too large ("+sizeMB+"MB). Please choose a file under 500MB.");
-    return;
-  }
-
-  var btn = document.getElementById("videoSubmitBtn");
-  var statusEl = document.getElementById("videoUploadStatus");
-  btn.disabled = true;
-  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg> Uploading…';
-
-  statusEl.innerHTML = '<div style="color:var(--amber);font-weight:600;margin-bottom:8px">⏳ Uploading '+sizeMB+'MB… do not close this window</div>'
-    + '<div style="background:var(--surface2);border-radius:20px;height:8px;overflow:hidden;margin-bottom:6px">'
-    + '<div id="videoProgressBar" style="height:100%;background:linear-gradient(90deg,var(--green),#1aad74);border-radius:20px;width:0%;transition:width .3s"></div>'
-    + '</div>'
-    + '<div id="videoProgressText" style="font-size:12px;color:var(--muted);font-family:\'Space Mono\',monospace">0%</div>';
-
-  var ext = file.name.split('.').pop() || "mp4";
-  var path = "speaking/"+safe(_spkGroup)+"/"+safe(_spkStudent)+"/"+safe(_spkStage)+"/"+safe(_spkLesson)+"/"+safe(_spkHw)+"/"+Date.now()+"."+ext;
-  var ref = storage.ref(path);
-
-  // Use uploadTask for progress tracking
-  var uploadTask = ref.put(file);
-
-  uploadTask.on('state_changed',
-    function(snapshot){
-      // Progress
-      var pct = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-      var bar = document.getElementById("videoProgressBar");
-      var txt = document.getElementById("videoProgressText");
-      if(bar) bar.style.width = pct + "%";
-      if(txt) txt.textContent = pct + "% — " + Math.round(snapshot.bytesTransferred/1024/1024*10)/10 + "MB / " + sizeMB + "MB";
-    },
-    function(error){
-      // Error
-      var msg = "";
-      switch(error.code){
-        case 'storage/unauthorized': msg = "Permission denied. Check Firebase Storage rules."; break;
-        case 'storage/canceled': msg = "Upload was cancelled."; break;
-        case 'storage/unknown': msg = "Unknown error. Check your internet connection."; break;
-        default: msg = error.message || error.code || "Upload failed";
-      }
-      statusEl.innerHTML = '<div style="color:var(--red);font-weight:600">❌ Upload failed: '+msg+'</div>'
-        + '<div style="font-size:11px;color:var(--muted);margin-top:4px">Open DevTools (F12) → Console for more details</div>';
-      btn.disabled = false;
-      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Retry Submit';
-      console.error("Firebase Storage upload error:", error);
-    },
-    function(){
-      // Success
-      uploadTask.snapshot.ref.getDownloadURL().then(function(url){
-        return db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw).set({
-          recordingUrl: url,
-          recordingType: "video",
-          duration: 0,
-          fileName: file.name,
-          fileSizeMB: sizeMB,
-          time: Date.now()
-        });
-      }).then(function(){
-        statusEl.innerHTML = '<span style="color:var(--green);font-weight:700">✅ Video uploaded successfully! ('+sizeMB+'MB) You can close this window.</span>';
-        btn.innerHTML = '✅ Submitted!';
-        btn.style.background = "linear-gradient(135deg,var(--green),#1aad74)";
-        pushNotif("Speaking Video Submitted","Your video for \""+_spkHw+"\" was uploaded ("+sizeMB+"MB).","success");
-      }).catch(function(err){
-        statusEl.innerHTML = '<div style="color:var(--red)">✅ File uploaded but failed to save record: '+(err.message||err)+'</div>';
-        console.error("Firebase DB save error:", err);
-      });
-    }
-  );
-}
-
 // ===== ADMIN =====
 function loginAdmin(){
   document.getElementById("modalLogin").value="";
@@ -1512,11 +671,7 @@ function submitLogin(){
   }
 }
 function admin(){
-  app.innerHTML='<button class="back" onclick="home()">← Back</button>'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'
-    +'<h3 style="margin-bottom:0">Admin Panel</h3>'
-    +'<button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button></div>'
-    +'<div id="groupList"></div>';
+  app.innerHTML='<button class="back" onclick="home()">← Back</button><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin-bottom:0">Admin Panel</h3><button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button></div><div id="groupList"></div>';
   var list=document.getElementById("groupList");
   Object.keys(GROUPS).forEach(function(g){
     var div=document.createElement("div"); div.className="admin-group-card";
@@ -1560,9 +715,6 @@ async function adminLessonView(group,stage,lesson){
   h+='<h3>'+lesson+' — Results</h3>';
   h+='<button class="export-btn" onclick="exportCSV(\''+esc(group)+'\',\''+esc(stage)+'\',\''+esc(lesson)+'\')">Export CSV</button>';
 
-  // Store transcripts globally so modal can access them
-  window._adminTranscripts = {};
-
   for(var i=0;i<GROUPS[group].length;i++){
     var student=GROUPS[group][i];
     h+='<div class="admin-student-card"><div class="admin-student-name">'+student+'</div>';
@@ -1580,20 +732,6 @@ async function adminLessonView(group,stage,lesson){
       if(ok&&isSp&&d.recordingUrl){
         h+='<a href="'+d.recordingUrl+'" target="_blank" style="color:var(--green);font-size:12px;font-weight:600;text-decoration:none;background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.25);padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:4px">▶ play</a>';
         if(d.duration) h+='<span style="font-size:11px;color:var(--muted);font-family:\'Space Mono\',monospace">'+formatTime(d.duration)+'</span>';
-
-        // Fetch transcript and show button right next to play
-        var tsnap=await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw+"/transcript").once("value").catch(function(){return{val:function(){return null;}};});
-        var tr=tsnap.val();
-        if(tr&&tr.text){
-          var tKey="t_"+i+"_"+j;
-          window._adminTranscripts[tKey]={text:tr.text, words:tr.words||0, wpm:tr.wpm||0, student:student, hw:hw};
-          h+='<button onclick="openTranscriptModal(\''+tKey+'\')" style="display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,rgba(79,142,247,.2),rgba(123,92,245,.15));color:#a78bfa;border:1px solid rgba(123,92,245,.4);padding:3px 10px;border-radius:20px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;width:auto">'
-            +'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
-            +(tr.words?tr.words+' words':'📝 Transcript')
-            +'</button>';
-        } else {
-          h+='<span style="font-size:11px;color:var(--muted);font-style:italic">no transcript</span>';
-        }
       }
       if(ok&&!isSp) d.files.forEach(function(url){h+='<a href="'+url+'" target="_blank" style="color:var(--accent);font-size:12px;font-weight:600;text-decoration:none;background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.25);padding:3px 10px;border-radius:20px">📷 view</a>';});
 
@@ -1602,33 +740,6 @@ async function adminLessonView(group,stage,lesson){
     h+='</div>';
   }
   app.innerHTML=h;
-}
-
-function openTranscriptModal(tKey){
-  var tr=window._adminTranscripts&&window._adminTranscripts[tKey];
-  if(!tr) return;
-  document.getElementById("tmStudent").textContent=tr.student+" — "+tr.hw;
-  var stats="";
-  if(tr.words) stats+='<span style="font-size:12px;color:var(--accent);background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.2);padding:3px 10px;border-radius:20px;font-family:\'Space Mono\',monospace">'+tr.words+' words</span>';
-  if(tr.wpm)   stats+='<span style="font-size:12px;color:var(--accent2);background:rgba(123,92,245,.1);border:1px solid rgba(123,92,245,.2);padding:3px 10px;border-radius:20px;font-family:\'Space Mono\',monospace">'+tr.wpm+' wpm</span>';
-  document.getElementById("tmStats").innerHTML=stats;
-  document.getElementById("tmText").textContent=tr.text;
-  document.getElementById("transcriptModal").style.display="flex";
-}
-
-function copyTranscriptModal(){
-  var text=document.getElementById("tmText").textContent;
-  var btns=document.querySelectorAll("#transcriptModal button");
-  var copyBtn=null;
-  btns.forEach(function(b){ if(b.textContent.includes("Copy")) copyBtn=b; });
-  navigator.clipboard.writeText(text).then(function(){
-    if(copyBtn){ copyBtn.textContent="✅ Copied!";
-      setTimeout(function(){ copyBtn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy text'; },2000);
-    }
-  }).catch(function(){
-    var ta=document.createElement("textarea"); ta.value=text;
-    document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
-  });
 }
 
 async function exportCSV(group,stage,lesson){
@@ -1701,33 +812,15 @@ function openInstruction(){
     +'<div class="step-card"><div class="step-num">1</div><div class="step-title">Open the App</div><div class="step-body">Tap <b>"Enter as Student"</b>.</div></div>'
     +'<div class="step-card"><div class="step-num">2</div><div class="step-title">Find Yourself</div><div class="step-body">Select your <b>group</b>, then find your <b>full name</b>.</div></div>'
     +'<div class="step-card"><div class="step-num">3</div><div class="step-title">Choose Homework</div><div class="step-body">Tap your stage → lesson → task.</div></div>'
-    +'<div class="step-card"><div class="step-num">4</div><div class="step-title">Submit Photo or Recording</div><div class="step-body">For writing/reading tasks: attach <b>at least one photo</b>.<br>For speaking tasks: tap <b style="color:var(--green)">🎤 Record Speaking</b> and record your answer (min 1 minute, max 20 minutes).</div></div>'
-    +'<div class="step-card"><div class="step-num">5</div><div class="step-title">Check Writing with AI</div><div class="step-body">For Task 1/2 tasks tap <b style="color:#a78bfa">Check with AI</b> to get IELTS band score and grammar feedback.</div></div>'
-    +'<div class="alert-card"><b>Speaking tasks</b> now have a built-in recorder — choose audio or video, record your answer, and it uploads automatically.</div>';
+    +'<div class="step-card"><div class="step-num">4</div><div class="step-title">Submit Photo</div><div class="step-body">For writing/reading tasks: attach <b>at least one photo</b>.</div></div>'
+    +'<div class="step-card"><div class="step-num">5</div><div class="step-title">Check Writing with AI</div><div class="step-body">For Task 1/2 essays, tap <b style="color:#a78bfa">Check with AI</b> to get instant grammar & clarity feedback.</div></div>'
+    +'<div class="alert-card"><b>Grammar checking is powered by Groq AI</b> — get real-time suggestions for grammar, vocabulary, clarity, and style improvements.</div>';
 }
 
-// ===== AI CHECKER =====
+// ===== AI CHECKER - GROQ POWERED =====
 var _aiCurrentHw="";
-
-function saveAiKey(){
-  var k=(document.getElementById("aiApiKey")||{}).value||"";
-  k=k.trim();
-  if(k) localStorage.setItem("anthropic_api_key",k);
-  updateAiKeyStatus(k);
-}
-function loadAiKey(){
-  var k=localStorage.getItem("anthropic_api_key")||"";
-  var inp=document.getElementById("aiApiKey");
-  if(inp&&k){ inp.value=k; updateAiKeyStatus(k); }
-}
-function updateAiKeyStatus(k){
-  var el=document.getElementById("aiKeyStatus");
-  if(!el) return;
-  if(k&&k.startsWith("sk-ant-")){ el.textContent="✅ Ready"; el.style.color="var(--green)"; }
-  else if(k&&k.length>10){ el.textContent="⚠️ Check key"; el.style.color="var(--amber)"; }
-  else{ el.textContent=""; }
-}
-function getAiKey(){ return ((document.getElementById("aiApiKey")||{}).value||"").trim()||localStorage.getItem("anthropic_api_key")||""; }
+// ⚠️ GROQ API KEY EMBEDDED HERE (no input field)
+var GROQ_API_KEY="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";
 
 function openAI(hwName){
   _aiCurrentHw=hwName;
@@ -1737,7 +830,6 @@ function openAI(hwName){
   document.getElementById("aiWordCount").textContent="0 words";
   document.getElementById("aiBtn").disabled=false;
   document.getElementById("aiModal").style.display="block";
-  loadAiKey();
   setTimeout(function(){document.getElementById("aiText").focus();},200);
 }
 function closeAI(){ document.getElementById("aiModal").style.display="none"; }
@@ -1750,244 +842,161 @@ function updateWordCount(){
 async function runCheck(){
   var text=document.getElementById("aiText").value.trim();
   var wordCount=text?text.split(/\s+/).filter(function(x){return x;}).length:0;
-  if(!text||wordCount<50){
-    document.getElementById("aiResult").innerHTML='<div class="ai-error">Please paste at least 50 words of your writing.</div>';
+  if(!text||wordCount<20){
+    document.getElementById("aiResult").innerHTML='<div class="ai-error">Please paste at least 20 words to check.</div>';
     return;
   }
-
-  var isTask2=_aiCurrentHw.toLowerCase().includes("task 2")||_aiCurrentHw.toLowerCase().includes("essay");
-  var taskType=isTask2?"Task 2":"Task 1";
-  var taskLabel=isTask2
-    ?"IELTS Academic Writing Task 2 — argumentative/opinion/discussion essay (minimum 250 words required)"
-    :"IELTS Academic Writing Task 1 — report describing visual data (graph/chart/table/map/diagram, minimum 150 words required)";
 
   document.getElementById("aiBtn").disabled=true;
   document.getElementById("aiResult").innerHTML=
     '<div class="ai-loading"><div class="ai-dots"><span></span><span></span><span></span></div>'
-    +'Checking with Claude AI… this may take 15–30 seconds</div>';
+    +'Analyzing with Groq AI… analyzing grammar, clarity & style</div>';
 
   var sysPrompt=
-    "You are a certified IELTS examiner with 15+ years of experience marking writing scripts. "
-    +"You use the official IELTS Writing Band Descriptors (Task Achievement/Response, Coherence & Cohesion, Lexical Resource, Grammatical Range & Accuracy). "
-    +"You are strict, precise, and give actionable, honest feedback. Never be generous — give the score the essay truly deserves.\n\n"
-    +"The student has submitted a "+taskLabel+".\n"
-    +"Word count submitted: "+wordCount+" words.\n\n"
-    +"Analyse the essay thoroughly and respond ONLY with a valid JSON object. No markdown, no code fences, no explanation outside JSON. "
-    +"Use this exact structure:\n"
+    "You are a professional English grammar and writing coach. Analyze the text for grammar, style, clarity, vocabulary, and tone. "
+    +"Provide actionable, specific feedback just like Grammarly AI. "
+    +"Be direct, helpful, and encouraging. "
+    +"The user is an IELTS student, so focus on academic English.\n\n"
+    +"Return ONLY a valid JSON object with this exact structure (NO markdown, NO extra text):\n"
     +"{\n"
-    +"  \"overall\": 6.5,\n"
-    +"  \"ta\": 6.0,\n"
-    +"  \"cc\": 7.0,\n"
-    +"  \"lr\": 6.5,\n"
-    +"  \"gra\": 6.5,\n"
+    +"  \"overall_score\": 7.5,\n"
+    +"  \"grammar_score\": 8.0,\n"
+    +"  \"clarity_score\": 7.0,\n"
+    +"  \"vocabulary_score\": 7.5,\n"
+    +"  \"tone_score\": 7.0,\n"
     +"  \"word_count\": "+wordCount+",\n"
-    +"  \"word_count_note\": \"Comment on whether word count meets requirements and how it affects the score\",\n"
-    +"  \"band_desc\": \"One sentence describing what this overall band means for the student's level\",\n"
-    +"  \"summary\": \"3-4 sentences of overall honest assessment — what the examiner's first impression is, overall strengths and weaknesses\",\n"
-    +"  \"task_achievement\": \"3-4 sentences specifically about Task Achievement/Response: did they answer all parts? Is the position clear? Are ideas developed?\",\n"
-    +"  \"coherence\": \"3-4 sentences about Coherence & Cohesion: paragraph structure, logical flow, use of linking devices, referencing\",\n"
-    +"  \"lexical\": \"3-4 sentences about Lexical Resource: range of vocabulary, accuracy of word choice, collocations, spelling\",\n"
-    +"  \"grammar\": \"3-4 sentences about Grammatical Range & Accuracy: variety of structures, error frequency, punctuation\",\n"
-    +"  \"strengths\": [\"Specific strength with example from the text\", \"Another specific strength\", \"Third strength\"],\n"
-    +"  \"improvements\": [\"Most important thing to improve with specific advice\", \"Second priority improvement\", \"Third improvement\"],\n"
-    +"  \"grammar_errors\": [\n"
-    +"    {\"error\": \"exact phrase from essay\", \"fix\": \"corrected version\", \"reason\": \"grammatical explanation\"},\n"
-    +"    {\"error\": \"another error\", \"fix\": \"correction\", \"reason\": \"explanation\"}\n"
+    +"  \"summary\": \"1-2 sentences: overall impression of the writing\",\n"
+    +"  \"grammar_issues\": [\n"
+    +"    {\"error\": \"incorrect phrase\", \"correction\": \"corrected version\", \"explanation\": \"why\"},\n"
+    +"    {\"error\": \"another error\", \"correction\": \"fix\", \"explanation\": \"reason\"}\n"
     +"  ],\n"
-    +"  \"vocab_tips\": [\n"
-    +"    {\"weak\": \"word/phrase used\", \"better\": \"more academic alternative\", \"why\": \"reason it is better\"},\n"
-    +"    {\"weak\": \"another weak word\", \"better\": \"alternative\", \"why\": \"reason\"}\n"
-    +"  ],\n"
-    +"  \"model_phrases\": [\"Example of a well-written sentence the student could learn from their own essay or an improved version\", \"Another model phrase\"],\n"
-    +"  \"next_band\": \"Specific, concrete advice on exactly what the student must do to reach the next 0.5 band higher\",\n"
-    +"  \"human_percent\": 75,\n"
-    +"  \"ai_percent\": 25,\n"
-    +"  \"ai_note\": \"One sentence: signs of AI use detected or confirmation of authentic student writing\"\n"
-    +"}\n\n"
-    +"SCORING RULES:\n"
-    +"- Use only these band values: 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0\n"
-    +"- overall = average of ta+cc+lr+gra rounded to nearest 0.5\n"
-    +"- If word count is under minimum ("+taskType+" Task 1: 150, Task 2: 250), penalise Task Achievement\n"
-    +"- Find at least 3 real grammar errors from the actual text\n"
-    +"- human_percent + ai_percent must equal 100\n"
-    +"- Be honest and strict — never inflate scores";
+    +"  \"clarity_suggestions\": [\"suggestion 1\", \"suggestion 2\", \"suggestion 3\"],\n"
+    +"  \"vocabulary_tips\": [{\"weak_word\": \"word\", \"better_option\": \"alternative\", \"reason\": \"why it's better\"}],\n"
+    +"  \"style_notes\": \"2-3 sentences about sentence structure, flow, academic tone\",\n"
+    +"  \"strengths\": [\"strength 1\", \"strength 2\"],\n"
+    +"  \"top_priority_improvements\": [\"#1 most important fix\", \"#2 next priority\"]\n"
+    +"}";
 
   try {
-    var apiKey=getAiKey();
-    if(!apiKey||apiKey.length<20){
-      document.getElementById("aiResult").innerHTML='<div class="ai-error">❌ Please enter your Anthropic API key above to use AI checking.</div>';
-      document.getElementById("aiBtn").disabled=false;
-      return;
-    }
-    var resp = await fetch("https://api.anthropic.com/v1/messages", {
+    var resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
-        "anthropic-dangerous-direct-browser-access": "true"
+        "Authorization": "Bearer "+GROQ_API_KEY
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 4000,
-        system: sysPrompt,
-        messages: [{ role: "user", content: "Here is the student's essay to analyse:\n\n" + text }]
+        model: "mixtral-8x7b-32768",
+        messages: [
+          { role: "system", content: sysPrompt },
+          { role: "user", content: "Please analyze this essay:\n\n"+text }
+        ],
+        temperature: 0.7,
+        max_tokens: 2000
       })
     });
 
     if(!resp.ok){
       var errData=await resp.json().catch(function(){return{};});
-      throw new Error(errData.error&&errData.error.message ? errData.error.message : "API error "+resp.status);
+      var errMsg = errData.error && errData.error.message ? errData.error.message : "API error "+resp.status;
+      throw new Error(errMsg);
     }
 
     var data=await resp.json();
-    var raw=data.content[0].text.trim().replace(/^```json\s*/,"").replace(/^```\s*/,"").replace(/```\s*$/,"").trim();
-
-    // Sometimes model adds text before/after JSON — extract just the JSON object
+    if(!data.choices || !data.choices[0]) throw new Error("Invalid API response");
+    
+    var raw=data.choices[0].message.content.trim().replace(/^```json\s*/,"").replace(/^```\s*/,"").replace(/```\s*$/,"");
     var jsonMatch=raw.match(/\{[\s\S]*\}/);
-    if(!jsonMatch) throw new Error("Could not parse AI response. Try again.");
-    var r=JSON.parse(jsonMatch[0]);
-    renderAIResult(r);
+    if(!jsonMatch) throw new Error("Could not parse response");
+    
+    var result=JSON.parse(jsonMatch[0]);
+    renderGrammarResult(result);
 
   } catch(err){
     document.getElementById("aiResult").innerHTML=
-      '<div class="ai-error">❌ Something went wrong.<br>'
-      +'<span style="font-size:11px;opacity:.7">'+escapeHtml(err.message)+'</span></div>';
+      '<div class="ai-error">⚠️ Analysis failed: '+escapeHtml(err.message||err)+'<br>'
+      +'<span style="font-size:11px;opacity:.7">Please try again in a moment</span></div>';
   } finally {
     document.getElementById("aiBtn").disabled=false;
   }
 }
 
-function renderAIResult(r){
-  var hp=Math.max(0,Math.min(100,r.human_percent||75));
-  var ap=100-hp;
-  var aiColor=ap>=60?"var(--red)":ap>=35?"var(--amber)":"var(--accent2)";
-
+function renderGrammarResult(r){
   var s='<div class="ai-result">';
 
-  // Overall band
+  // Overall scores
   s+='<div class="ai-overall">'
-    +'<div class="ai-overall-label">Estimated IELTS Band</div>'
-    +'<div class="ai-overall-num">'+r.overall+'</div>'
-    +'<div class="ai-overall-desc">'+(r.band_desc||"")+'</div>'
-    +(r.word_count_note?'<div style="margin-top:8px;font-size:12px;color:var(--amber);background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.2);padding:6px 12px;border-radius:var(--rsm)">📝 '+escapeHtml(r.word_count_note)+'</div>':"")
+    +'<div class="ai-overall-label">Writing Quality Score</div>'
+    +'<div class="ai-overall-num">'+r.overall_score.toFixed(1)+'/10</div>'
+    +'<div class="ai-overall-desc">'+escapeHtml(r.summary||'')+'</div>'
     +'</div>';
 
-  // 4 criterion scores
+  // Detailed scores
   s+='<div class="ai-scores">'
-    +'<div class="ai-score ta"><div class="ai-score-lbl">Task Achievement</div><div class="ai-score-num">'+r.ta+'</div></div>'
-    +'<div class="ai-score cc"><div class="ai-score-lbl">Coherence & Cohesion</div><div class="ai-score-num">'+r.cc+'</div></div>'
-    +'<div class="ai-score lr"><div class="ai-score-lbl">Lexical Resource</div><div class="ai-score-num">'+r.lr+'</div></div>'
-    +'<div class="ai-score gra"><div class="ai-score-lbl">Grammatical Range</div><div class="ai-score-num">'+r.gra+'</div></div>'
+    +'<div class="ai-score ta"><div class="ai-score-lbl">Grammar</div><div class="ai-score-num">'+r.grammar_score.toFixed(1)+'</div></div>'
+    +'<div class="ai-score cc"><div class="ai-score-lbl">Clarity</div><div class="ai-score-num">'+r.clarity_score.toFixed(1)+'</div></div>'
+    +'<div class="ai-score lr"><div class="ai-score-lbl">Vocabulary</div><div class="ai-score-num">'+r.vocabulary_score.toFixed(1)+'</div></div>'
+    +'<div class="ai-score gra"><div class="ai-score-lbl">Tone</div><div class="ai-score-num">'+r.tone_score.toFixed(1)+'</div></div>'
     +'</div>';
 
-  // AI Detection bar
-  s+='<div class="ai-detect">'
-    +'<div class="ai-detect-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>AI Detection</div>'
-    +'<div class="ai-detect-bar">'
-    +'<div class="ai-detect-human" style="width:'+hp+'%">'+hp+'%</div>'
-    +'<div class="ai-detect-ai" style="width:'+ap+'%;background:linear-gradient(90deg,#7c3aed,'+aiColor+')">'+ap+'%</div>'
-    +'</div>'
-    +'<div class="ai-detect-labels">'
-    +'<div class="ai-detect-lbl" style="color:var(--green)"><div class="ai-detect-dot" style="background:var(--green)"></div>Human — '+hp+'%</div>'
-    +'<div class="ai-detect-lbl" style="color:'+aiColor+'"><div class="ai-detect-dot" style="background:'+aiColor+'"></div>AI Written — '+ap+'%</div>'
-    +'</div>'
-    +(r.ai_note?'<div class="ai-detect-note">💡 '+escapeHtml(r.ai_note)+'</div>':"")
-    +'</div>';
-
-  // Helper functions
-  function blk(title,icon,body){
-    return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div>'
-      +'<div class="ai-section-body">'+body+'</div></div>';
-  }
-  function listBlk(title,icon,items,mapFn){
-    if(!items||!items.length) return "";
-    var li=items.map(function(x){ return '<li style="margin-bottom:8px">'+mapFn(x)+'</li>'; }).join("");
-    return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div>'
-      +'<div class="ai-section-body"><ul>'+li+'</ul></div></div>';
-  }
-
-  // Summary
-  s+=blk("📋 Overall Assessment",
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
-    escapeHtml(r.summary||""));
-
-  // Criterion details
-  if(r.task_achievement) s+=blk("🎯 Task Achievement / Response",
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-    escapeHtml(r.task_achievement));
-  if(r.coherence) s+=blk("🔗 Coherence & Cohesion",
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
-    escapeHtml(r.coherence));
-  if(r.lexical) s+=blk("📚 Lexical Resource",
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
-    escapeHtml(r.lexical));
-  if(r.grammar) s+=blk("⚙️ Grammatical Range & Accuracy",
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>',
-    escapeHtml(r.grammar));
-
-  // Strengths
-  if(r.strengths&&r.strengths.length)
-    s+=listBlk("✅ Strengths",
-      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
-      r.strengths, function(x){ return escapeHtml(x); });
-
-  // Improvements
-  if(r.improvements&&r.improvements.length)
-    s+=listBlk("⚠️ What to Improve",
-      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
-      r.improvements, function(x){ return escapeHtml(x); });
-
-  // Grammar errors — detailed
-  if(r.grammar_errors&&r.grammar_errors.length){
-    var li=r.grammar_errors.map(function(e){
-      if(typeof e==="string") return '<li style="margin-bottom:8px">'+escapeHtml(e)+'</li>';
+  // Grammar issues
+  if(r.grammar_issues && r.grammar_issues.length){
+    var errs=r.grammar_issues.map(function(e){
       return '<li style="margin-bottom:10px">'
         +'<div style="color:var(--red);margin-bottom:3px">❌ <s style="opacity:.7">'+escapeHtml(e.error||"")+'</s></div>'
-        +'<div style="color:var(--green);margin-bottom:3px">✅ '+escapeHtml(e.fix||"")+'</div>'
-        +'<div style="color:var(--muted);font-size:12px">💬 '+escapeHtml(e.reason||"")+'</div>'
+        +'<div style="color:var(--green);margin-bottom:3px">✅ '+escapeHtml(e.correction||"")+'</div>'
+        +'<div style="color:var(--muted);font-size:12px">💬 '+escapeHtml(e.explanation||"")+'</div>'
         +'</li>';
     }).join("");
-    s+='<div class="ai-section"><div class="ai-section-title">'
-      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
-      +' Grammar Errors Found</div><div class="ai-section-body"><ul>'+li+'</ul></div></div>';
+    s+='<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Grammar Issues</div><div class="ai-section-body"><ul>'+errs+'</ul></div></div>';
   }
 
-  // Vocabulary tips — detailed
-  if(r.vocab_tips&&r.vocab_tips.length){
-    var li2=r.vocab_tips.map(function(v){
-      if(typeof v==="string") return '<li style="margin-bottom:8px">'+escapeHtml(v)+'</li>';
+  // Clarity suggestions
+  if(r.clarity_suggestions && r.clarity_suggestions.length){
+    var clr=r.clarity_suggestions.map(function(c){
+      return '<li style="margin-bottom:6px">💡 '+escapeHtml(c)+'</li>';
+    }).join("");
+    s+='<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 16 16 12 12 8"/><polyline points="8 12 12 8"/></svg> Clarity Tips</div><div class="ai-section-body"><ul>'+clr+'</ul></div></div>';
+  }
+
+  // Vocabulary
+  if(r.vocabulary_tips && r.vocabulary_tips.length){
+    var vocab=r.vocabulary_tips.map(function(v){
       return '<li style="margin-bottom:10px">'
-        +'<div style="margin-bottom:3px"><span style="color:var(--muted)">Weak: </span><span style="color:var(--amber);text-decoration:underline">'+escapeHtml(v.weak||"")+'</span></div>'
-        +'<div style="margin-bottom:3px"><span style="color:var(--muted)">Better: </span><span style="color:var(--green);font-weight:600">'+escapeHtml(v.better||"")+'</span></div>'
-        +'<div style="color:var(--muted);font-size:12px">💬 '+escapeHtml(v.why||"")+'</div>'
+        +'<div style="margin-bottom:3px"><span style="color:var(--muted)">Weak: </span><span style="color:var(--amber);text-decoration:underline">'+escapeHtml(v.weak_word||"")+'</span></div>'
+        +'<div style="margin-bottom:3px"><span style="color:var(--muted)">Better: </span><span style="color:var(--green);font-weight:600">'+escapeHtml(v.better_option||"")+'</span></div>'
+        +'<div style="color:var(--muted);font-size:12px">📚 '+escapeHtml(v.reason||"")+'</div>'
         +'</li>';
     }).join("");
-    s+='<div class="ai-section"><div class="ai-section-title">'
-      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
-      +' Vocabulary Tips</div><div class="ai-section-body"><ul>'+li2+'</ul></div></div>';
+    s+='<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Vocabulary</div><div class="ai-section-body"><ul>'+vocab+'</ul></div></div>';
   }
 
-  // Model phrases
-  if(r.model_phrases&&r.model_phrases.length){
-    var li3=r.model_phrases.map(function(p){
-      return '<li style="margin-bottom:8px;font-style:italic;color:var(--accent)">„'+escapeHtml(p)+'"</li>';
+  // Style notes
+  if(r.style_notes){
+    s+='<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Style & Tone</div><div class="ai-section-body">'+escapeHtml(r.style_notes)+'</div></div>';
+  }
+
+  // Strengths
+  if(r.strengths && r.strengths.length){
+    var str=r.strengths.map(function(st){
+      return '<li style="margin-bottom:6px">✅ '+escapeHtml(st)+'</li>';
     }).join("");
-    s+='<div class="ai-section"><div class="ai-section-title">'
-      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
-      +' Model Phrases</div><div class="ai-section-body"><ul>'+li3+'</ul></div></div>';
+    s+='<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Your Strengths</div><div class="ai-section-body"><ul>'+str+'</ul></div></div>';
   }
 
-  // Next band tip — highlighted
-  if(r.next_band){
-    s+='<div class="ai-section"><div class="ai-section-title">'
-      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>'
-      +' How to Reach the Next Band</div>'
-      +'<div class="ai-section-body" style="border-color:rgba(34,200,135,.3);background:rgba(34,200,135,.05);color:var(--text)">'+escapeHtml(r.next_band)+'</div></div>';
+  // Top priorities
+  if(r.top_priority_improvements && r.top_priority_improvements.length){
+    var prio=r.top_priority_improvements.map(function(p){
+      return '<li style="margin-bottom:6px">🎯 '+escapeHtml(p)+'</li>';
+    }).join("");
+    s+='<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Next Steps</div><div class="ai-section-body" style="background:rgba(34,200,135,.05)"><ul>'+prio+'</ul></div></div>';
   }
 
   s+='</div>';
   document.getElementById("aiResult").innerHTML=s;
+}
+
+function escapeHtml(t){
+  return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
 // ===== NOTIFICATIONS =====
@@ -2032,7 +1041,8 @@ function checkScheduleNotifs(){
   });
 }
 
-// ===== DEVTOOLS PROTECTION =====
+// ===== INIT =====
+_loadCustomGroups();
 document.addEventListener("contextmenu",function(e){e.preventDefault();});
 document.addEventListener("keydown",function(e){
   if(e.key==="F12"||(e.ctrlKey&&e.shiftKey&&["I","i","J","j","C","c"].includes(e.key))||(e.ctrlKey&&["U","u"].includes(e.key))){
@@ -2040,10 +1050,6 @@ document.addEventListener("keydown",function(e){
   }
 },true);
 
-// ===== INIT =====
-_loadCustomGroups();
-
-// Wait for Firebase SDKs to load, then init
 window.addEventListener('load', function(){
   if(initFirebase()){
     home();
