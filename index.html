@@ -953,7 +953,7 @@ async function runCheck(){
     + "  • Clarity & coherence (logical flow, paragraph transitions)\n"
     + "  • Academic tone (formal vs informal)\n"
     + "  • Task achievement (does it fully answer the question?)\n\n"
-    + "Return ONLY valid JSON (NO markdown, NO backticks, NO preamble):\n"
+    + "IMPORTANT: Return ONLY valid JSON. No markdown, no backticks, no preamble. Escape all apostrophes in string values. Use double quotes only.\n"
     + "{\n"
     + "  \"overall_score\": 7.5,\n"
     + "  \"grammar_score\": 8.0,\n"
@@ -1011,7 +1011,8 @@ async function runCheck(){
     setProgress(100, "✅ Analysis complete!");
     await new Promise(function(r){ setTimeout(r, 300); });
 
-    var result = JSON.parse(jsonMatch[0]);
+    var result = safeParseJSON(jsonMatch[0]);
+    if(!result) throw new Error("Could not parse AI response — please try again");
     renderGrammarResult(result, topic);
 
   } catch(err){
@@ -1026,6 +1027,27 @@ async function runCheck(){
   }
 }
 
+
+function safeParseJSON(str) {
+  // Try direct parse first
+  try { return JSON.parse(str); } catch(e) {}
+  // Fix smart quotes
+  str = str.replace(/[‘’]/g, "\'").replace(/[“”]/g, '"');
+  try { return JSON.parse(str); } catch(e) {}
+  // Remove control characters
+  str = str.replace(/[\x00-\x1F\x7F]/g, function(c) {
+    if(c === '\n' || c === '\r' || c === '\t') return ' ';
+    return '';
+  });
+  try { return JSON.parse(str); } catch(e) {}
+  // Last resort: sanitize string values
+  str = str.replace(/"([^"\\]*(\\.[^"\\]*)*)"\s*:/g, function(m) { return m; })
+           .replace(/:\s*"((?:[^"\\]|\\.)*)"/g, function(m, val) {
+             var clean = val.replace(/(?<!\\)\n/g, ' ').replace(/(?<!\\)\r/g, '');
+             return ': "' + clean + '"';
+           });
+  try { return JSON.parse(str); } catch(e) { return null; }
+}
 function renderGrammarResult(r, topic){
   var s = '<div class="ai-result">';
 
