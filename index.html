@@ -820,7 +820,7 @@ function openInstruction(){
 // ===== AI CHECKER - GROQ POWERED =====
 var _aiCurrentHw="";
 // ⚠️ GROQ API KEY EMBEDDED HERE (no input field)
-var GROQ_API_KEY="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";
+var GROQ_API_KEY="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";
 
 function openAI(hwName){
   _aiCurrentHw=hwName;
@@ -853,28 +853,35 @@ async function runCheck(){
     +'Analyzing with Groq AI… analyzing grammar, clarity & style</div>';
 
   var sysPrompt=
-    "You are a professional English grammar and writing coach. Analyze the text for grammar, style, clarity, vocabulary, and tone. "
-    +"Provide actionable, specific feedback just like Grammarly AI. "
-    +"Be direct, helpful, and encouraging. "
-    +"The user is an IELTS student, so focus on academic English.\n\n"
-    +"Return ONLY a valid JSON object with this exact structure (NO markdown, NO extra text):\n"
+    "You are a professional IELTS Writing examiner and Grammarly-style editor. Analyze the essay for:\n\n"
+    +"1. GRAMMAR & MECHANICS: Find all errors (tense, agreement, articles, prepositions)\n"
+    +"2. VOCABULARY: Check if words are used correctly and suggest improvements\n"
+    +"3. SENTENCE STRUCTURE: Identify run-ons, fragments, and complexity issues\n"
+    +"4. CLARITY & FLOW: Assess paragraph organization, transitions, and logical coherence\n"
+    +"5. MEANING & ARGUMENT: Check if the essay makes sense, ideas are developed, and arguments are clear\n"
+    +"6. ACADEMIC TONE: Ensure it's formal and appropriate for IELTS\n\n"
+    +"Word count: "+wordCount+" words.\n"
+    +"Return ONLY valid JSON (NO markdown, NO backticks, NO extra text):\n"
     +"{\n"
     +"  \"overall_score\": 7.5,\n"
     +"  \"grammar_score\": 8.0,\n"
     +"  \"clarity_score\": 7.0,\n"
     +"  \"vocabulary_score\": 7.5,\n"
-    +"  \"tone_score\": 7.0,\n"
+    +"  \"meaning_score\": 7.0,\n"
     +"  \"word_count\": "+wordCount+",\n"
-    +"  \"summary\": \"1-2 sentences: overall impression of the writing\",\n"
+    +"  \"word_count_ok\": true,\n"
+    +"  \"summary\": \"1-2 sentences about overall writing quality and main impression\",\n"
     +"  \"grammar_issues\": [\n"
-    +"    {\"error\": \"incorrect phrase\", \"correction\": \"corrected version\", \"explanation\": \"why\"},\n"
-    +"    {\"error\": \"another error\", \"correction\": \"fix\", \"explanation\": \"reason\"}\n"
+    +"    {\"error\": \"exact phrase from text\", \"correction\": \"corrected version\", \"explanation\": \"grammatical rule explained\"}\n"
     +"  ],\n"
-    +"  \"clarity_suggestions\": [\"suggestion 1\", \"suggestion 2\", \"suggestion 3\"],\n"
-    +"  \"vocabulary_tips\": [{\"weak_word\": \"word\", \"better_option\": \"alternative\", \"reason\": \"why it's better\"}],\n"
-    +"  \"style_notes\": \"2-3 sentences about sentence structure, flow, academic tone\",\n"
-    +"  \"strengths\": [\"strength 1\", \"strength 2\"],\n"
-    +"  \"top_priority_improvements\": [\"#1 most important fix\", \"#2 next priority\"]\n"
+    +"  \"clarity_suggestions\": [\"specific improvement for readability\"],\n"
+    +"  \"vocabulary_tips\": [{\"weak_word\": \"word from text\", \"better_option\": \"more academic word\", \"reason\": \"why\"}],\n"
+    +"  \"meaning_analysis\": \"2-3 sentences: Is the main idea clear? Are arguments developed? Does it make sense?\",\n"
+    +"  \"argument_quality\": \"2-3 sentences: Are ideas logically connected? Is there good flow between paragraphs?\",\n"
+    +"  \"tone_assessment\": \"Is this appropriate for academic IELTS? Too casual? Too formal?\",\n"
+    +"  \"strengths\": [\"specific strength with example\"],\n"
+    +"  \"critical_fixes\": [\"#1 most important grammar/clarity issue\", \"#2 next priority\"],\n"
+    +"  \"ielts_band_estimate\": 7.0\n"
     +"}";
 
   try {
