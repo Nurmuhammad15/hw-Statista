@@ -123,12 +123,38 @@ input[type=file]{display:none}
 .ai-close-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;transition:all .15s}
 .ai-close-btn:hover{background:var(--red);color:#fff;border-color:var(--red)}
 .ai-hw-badge{font-size:12px;color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;background:rgba(123,92,245,.1);border:1px solid rgba(123,92,245,.2);padding:5px 12px;border-radius:20px;display:inline-block}
-.ai-textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:14px;font-family:inherit;color:var(--text);outline:none;resize:vertical;min-height:160px;line-height:1.7;transition:border-color .2s;margin-bottom:6px}
+
+/* ===== NEW: API KEY FIELD ===== */
+.ai-apikey-box{background:rgba(79,142,247,.06);border:1px solid rgba(79,142,247,.2);border-radius:var(--rsm);padding:12px 14px;margin-bottom:14px}
+.ai-apikey-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.ai-apikey-link{color:var(--accent);font-size:11px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:3px}
+.ai-apikey-link:hover{text-decoration:underline}
+.ai-apikey-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:9px 12px;font-size:13px;font-family:'Space Mono',monospace;color:var(--text);outline:none;transition:border-color .2s}
+.ai-apikey-input:focus{border-color:var(--accent)}
+.ai-apikey-saved{font-size:11px;color:var(--green);margin-top:5px;display:none}
+
+/* ===== NEW: ESSAY TOPIC FIELD ===== */
+.ai-topic-box{margin-bottom:12px}
+.ai-topic-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
+.ai-topic-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 14px;font-size:14px;font-family:inherit;color:var(--text);outline:none;transition:border-color .2s}
+.ai-topic-input:focus{border-color:var(--accent2)}
+.ai-topic-input::placeholder{color:var(--muted)}
+
+/* ===== ESSAY TEXTAREA ===== */
+.ai-textarea-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
+.ai-textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:14px;font-family:inherit;color:var(--text);outline:none;resize:vertical;min-height:180px;line-height:1.7;transition:border-color .2s;margin-bottom:6px}
 .ai-textarea:focus{border-color:var(--accent2)}
 .ai-word-count{font-size:11px;color:var(--muted);text-align:right;margin-bottom:12px;font-family:'Space Mono',monospace}
 .ai-submit-btn{width:100%;background:linear-gradient(135deg,var(--accent2),#6d4fe5);color:#fff;border:none;border-radius:var(--rsm);padding:13px 20px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(123,92,245,.3)}
 .ai-submit-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 22px rgba(123,92,245,.45)}
 .ai-submit-btn:disabled{opacity:.6;cursor:not-allowed}
+
+/* ===== READING INDICATOR ===== */
+.ai-reading-stage{background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.2);border-radius:var(--rsm);padding:14px 16px;margin-top:14px;font-size:13px;color:var(--accent)}
+.ai-reading-stage b{display:block;margin-bottom:4px;font-size:14px}
+.ai-progress-bar{height:4px;background:var(--surface2);border-radius:2px;margin-top:8px;overflow:hidden}
+.ai-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;transition:width .4s ease}
+
 .ai-loading{text-align:center;padding:30px 20px;color:var(--muted);font-size:13px}
 .ai-dots{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:14px}
 .ai-dots span{width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:dotPulse 1.2s infinite ease-in-out}
@@ -159,20 +185,17 @@ input[type=file]{display:none}
 .ai-section-body ul{padding-left:18px}
 .ai-section-body li{margin-bottom:5px}
 .ai-error{background:rgba(247,85,106,.08);border:1px solid rgba(247,85,106,.25);border-radius:var(--rsm);padding:14px;color:var(--red);font-size:13px;margin-top:14px;text-align:center}
+.ai-error a{color:var(--amber);font-weight:700}
 .ai-detect{background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px 16px;margin-bottom:18px}
 .ai-detect-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.ai-detect-bar{position:relative;height:28px;border-radius:20px;overflow:hidden;background:var(--surface2);margin-bottom:10px}
-.ai-detect-human{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--green),#1aad74);display:flex;align-items:center;padding-left:12px;font-size:12px;font-weight:800;color:#fff;font-family:'Space Mono',monospace;border-radius:20px 0 0 20px;min-width:48px}
-.ai-detect-ai{position:absolute;right:0;top:0;bottom:0;background:linear-gradient(90deg,#7c3aed,var(--accent2));display:flex;align-items:center;justify-content:flex-end;padding-right:12px;font-size:12px;font-weight:800;color:#fff;font-family:'Space Mono',monospace;border-radius:0 20px 20px 0;min-width:48px}
-.ai-detect-labels{display:flex;justify-content:space-between}
-.ai-detect-lbl{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700}
-.ai-detect-dot{width:8px;height:8px;border-radius:50%}
-.ai-detect-note{font-size:12px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);line-height:1.5;font-style:italic}
-.speak-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(34,200,135,.15),rgba(34,200,135,.08));color:var(--green);border:1px solid rgba(34,200,135,.35);padding:7px 12px;border-radius:var(--rsm);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s;white-space:nowrap}
-.speak-btn:hover{background:linear-gradient(135deg,rgba(34,200,135,.3),rgba(34,200,135,.15));transform:translateY(-1px)}
 .error-banner{background:rgba(247,85,106,.1);border:1px solid rgba(247,85,106,.3);border-radius:var(--r);padding:20px;margin:20px 0;color:var(--red);font-size:13px;line-height:1.7}
 .error-banner b{color:#ff8a9a;display:block;margin-bottom:8px;font-size:15px}
 .error-banner code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:12px;font-family:'Space Mono',monospace}
+
+/* ===== TASK RELEVANCE BADGE ===== */
+.ai-relevance{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:14px}
+.ai-relevance.on-topic{color:var(--green);background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.25)}
+.ai-relevance.off-topic{color:var(--amber);background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3)}
 </style>
 </head>
 <body>
@@ -234,29 +257,44 @@ input[type=file]{display:none}
   </div>
 </div>
 
-<!-- AI CHECKER MODAL - SIMPLIFIED (NO API KEY INPUT) -->
+<!-- ===== AI CHECKER MODAL (UPGRADED) ===== -->
 <div id="aiModal" style="display:none">
   <div class="ai-overlay" onclick="if(event.target.classList.contains('ai-overlay'))closeAI()">
     <div class="ai-modal">
       <div class="ai-modal-header">
         <div class="ai-modal-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          <span>Grammar & Writing Check (Grammarly Style)</span>
+          <span>AI Writing Check — Grammarly Style</span>
         </div>
         <button class="ai-close-btn" onclick="closeAI()">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
         </button>
       </div>
+
       <div id="aiHwBadge" class="ai-hw-badge"></div>
+
+      <!-- API KEY BOX (hidden - key is embedded) -->
+      <input type="hidden" id="groqApiKey" value="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">
       <div style="background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.25);border-radius:var(--rsm);padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--green);font-weight:600">
         ✅ Powered by Groq AI — Grammar, clarity & style analysis
       </div>
-      <textarea class="ai-textarea" id="aiText" placeholder="Paste your essay or writing here…" oninput="updateWordCount()"></textarea>
+
+      <!-- ESSAY TOPIC (NEW) -->
+      <div class="ai-topic-box">
+        <label class="ai-topic-label">📝 Essay Topic / Question</label>
+        <input type="text" class="ai-topic-input" id="aiTopic" placeholder="e.g. The graph shows the percentage of people using the internet in three countries from 2000 to 2020.">
+      </div>
+
+      <!-- ESSAY TEXT -->
+      <label class="ai-textarea-label">✍️ Your Essay / Writing</label>
+      <textarea class="ai-textarea" id="aiText" placeholder="Paste your full essay or writing here…&#10;&#10;The AI will read your essay, check it against the topic, then analyze grammar, vocabulary, clarity and style — just like Grammarly." oninput="updateWordCount()"></textarea>
       <div class="ai-word-count" id="aiWordCount">0 words</div>
+
       <button class="ai-submit-btn" id="aiBtn" onclick="runCheck()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        Check Writing
+        Check Writing with AI
       </button>
+
       <div id="aiResult"></div>
     </div>
   </div>
@@ -813,197 +851,276 @@ function openInstruction(){
     +'<div class="step-card"><div class="step-num">2</div><div class="step-title">Find Yourself</div><div class="step-body">Select your <b>group</b>, then find your <b>full name</b>.</div></div>'
     +'<div class="step-card"><div class="step-num">3</div><div class="step-title">Choose Homework</div><div class="step-body">Tap your stage → lesson → task.</div></div>'
     +'<div class="step-card"><div class="step-num">4</div><div class="step-title">Submit Photo</div><div class="step-body">For writing/reading tasks: attach <b>at least one photo</b>.</div></div>'
-    +'<div class="step-card"><div class="step-num">5</div><div class="step-title">Check Writing with AI</div><div class="step-body">For Task 1/2 essays, tap <b style="color:#a78bfa">Check with AI</b> to get instant grammar & clarity feedback.</div></div>'
-    +'<div class="alert-card"><b>Grammar checking is powered by Groq AI</b> — get real-time suggestions for grammar, vocabulary, clarity, and style improvements.</div>';
+    +'<div class="step-card"><div class="step-num">5</div><div class="step-title">Check Writing with AI</div><div class="step-body">For Task 1/2 essays, tap <b style="color:#a78bfa">Check with AI</b>. Enter the essay topic, paste your text, and get instant feedback.</div></div>'
+    +'<div class="alert-card"><b>Get your free Groq API key at:</b><br><a href="https://console.groq.com/keys" target="_blank" style="color:var(--accent)">https://console.groq.com/keys</a><br>Sign up → API Keys → Create → Copy → Paste in the AI checker.</div>';
 }
 
-// ===== AI CHECKER - GROQ POWERED =====
-var _aiCurrentHw="";
-// ⚠️ GROQ API KEY EMBEDDED HERE (no input field)
-var GROQ_API_KEY="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";
+// ===== AI CHECKER — UPGRADED =====
+var _aiCurrentHw = "";
+var _GROQ_KEY_LS = "statista_groq_key";
+
+function saveApiKey(){
+  var k = document.getElementById("groqApiKey").value.trim();
+  if(k){ try{ localStorage.setItem(_GROQ_KEY_LS, k); }catch(e){} }
+  var saved = document.getElementById("apiKeySaved");
+  if(saved){ saved.style.display = k ? "block" : "none"; }
+}
+
+function loadApiKey(){
+  try{
+    var k = localStorage.getItem(_GROQ_KEY_LS);
+    if(k){
+      document.getElementById("groqApiKey").value = k;
+      var saved = document.getElementById("apiKeySaved");
+      if(saved) saved.style.display = "block";
+    }
+  }catch(e){}
+}
 
 function openAI(hwName){
-  _aiCurrentHw=hwName;
-  document.getElementById("aiHwBadge").textContent=hwName;
-  document.getElementById("aiText").value="";
-  document.getElementById("aiResult").innerHTML="";
-  document.getElementById("aiWordCount").textContent="0 words";
-  document.getElementById("aiBtn").disabled=false;
-  document.getElementById("aiModal").style.display="block";
-  setTimeout(function(){document.getElementById("aiText").focus();},200);
+  _aiCurrentHw = hwName;
+  document.getElementById("aiHwBadge").textContent = hwName;
+  document.getElementById("aiText").value = "";
+  document.getElementById("aiTopic").value = "";
+  document.getElementById("aiResult").innerHTML = "";
+  document.getElementById("aiWordCount").textContent = "0 words";
+  document.getElementById("aiBtn").disabled = false;
+  document.getElementById("aiModal").style.display = "block";
+  setTimeout(function(){ document.getElementById("aiTopic").focus(); }, 200);
 }
-function closeAI(){ document.getElementById("aiModal").style.display="none"; }
+
+function closeAI(){ document.getElementById("aiModal").style.display = "none"; }
+
 function updateWordCount(){
-  var t=document.getElementById("aiText").value.trim();
-  var w=t?t.split(/\s+/).filter(function(x){return x;}).length:0;
-  document.getElementById("aiWordCount").textContent=w+" word"+(w!==1?"s":"");
+  var t = document.getElementById("aiText").value.trim();
+  var w = t ? t.split(/\s+/).filter(function(x){ return x; }).length : 0;
+  document.getElementById("aiWordCount").textContent = w + " word" + (w !== 1 ? "s" : "");
+}
+
+function setProgress(pct, label){
+  document.getElementById("aiResult").innerHTML =
+    '<div class="ai-reading-stage">'
+    + '<b>'+label+'</b>'
+    + '<div class="ai-progress-bar"><div class="ai-progress-fill" style="width:'+pct+'%"></div></div>'
+    + '</div>';
 }
 
 async function runCheck(){
-  var text=document.getElementById("aiText").value.trim();
-  var wordCount=text?text.split(/\s+/).filter(function(x){return x;}).length:0;
-  if(!text||wordCount<20){
-    document.getElementById("aiResult").innerHTML='<div class="ai-error">Please paste at least 20 words to check.</div>';
+  var apiKey = document.getElementById("groqApiKey").value.trim();
+  if(!apiKey || !apiKey.startsWith("gsk_")){
+    document.getElementById("aiResult").innerHTML =
+      '<div class="ai-error">⚠️ Please enter your Groq API key above.<br>'
+      +'<a href="https://console.groq.com/keys" target="_blank">Get a free key at console.groq.com ↗</a></div>';
     return;
   }
 
-  document.getElementById("aiBtn").disabled=true;
-  document.getElementById("aiResult").innerHTML=
-    '<div class="ai-loading"><div class="ai-dots"><span></span><span></span><span></span></div>'
-    +'Analyzing with Groq AI… analyzing grammar, clarity & style</div>';
+  var topic = document.getElementById("aiTopic").value.trim();
+  var text = document.getElementById("aiText").value.trim();
+  var wordCount = text ? text.split(/\s+/).filter(function(x){ return x; }).length : 0;
 
-  var sysPrompt=
-    "You are a professional IELTS Writing examiner and Grammarly-style editor. Analyze the essay for:\n\n"
-    +"1. GRAMMAR & MECHANICS: Find all errors (tense, agreement, articles, prepositions)\n"
-    +"2. VOCABULARY: Check if words are used correctly and suggest improvements\n"
-    +"3. SENTENCE STRUCTURE: Identify run-ons, fragments, and complexity issues\n"
-    +"4. CLARITY & FLOW: Assess paragraph organization, transitions, and logical coherence\n"
-    +"5. MEANING & ARGUMENT: Check if the essay makes sense, ideas are developed, and arguments are clear\n"
-    +"6. ACADEMIC TONE: Ensure it's formal and appropriate for IELTS\n\n"
-    +"Word count: "+wordCount+" words.\n"
-    +"Return ONLY valid JSON (NO markdown, NO backticks, NO extra text):\n"
-    +"{\n"
-    +"  \"overall_score\": 7.5,\n"
-    +"  \"grammar_score\": 8.0,\n"
-    +"  \"clarity_score\": 7.0,\n"
-    +"  \"vocabulary_score\": 7.5,\n"
-    +"  \"meaning_score\": 7.0,\n"
-    +"  \"word_count\": "+wordCount+",\n"
-    +"  \"word_count_ok\": true,\n"
-    +"  \"summary\": \"1-2 sentences about overall writing quality and main impression\",\n"
-    +"  \"grammar_issues\": [\n"
-    +"    {\"error\": \"exact phrase from text\", \"correction\": \"corrected version\", \"explanation\": \"grammatical rule explained\"}\n"
-    +"  ],\n"
-    +"  \"clarity_suggestions\": [\"specific improvement for readability\"],\n"
-    +"  \"vocabulary_tips\": [{\"weak_word\": \"word from text\", \"better_option\": \"more academic word\", \"reason\": \"why\"}],\n"
-    +"  \"meaning_analysis\": \"2-3 sentences: Is the main idea clear? Are arguments developed? Does it make sense?\",\n"
-    +"  \"argument_quality\": \"2-3 sentences: Are ideas logically connected? Is there good flow between paragraphs?\",\n"
-    +"  \"tone_assessment\": \"Is this appropriate for academic IELTS? Too casual? Too formal?\",\n"
-    +"  \"strengths\": [\"specific strength with example\"],\n"
-    +"  \"critical_fixes\": [\"#1 most important grammar/clarity issue\", \"#2 next priority\"],\n"
-    +"  \"ielts_band_estimate\": 7.0\n"
-    +"}";
+  if(!text || wordCount < 20){
+    document.getElementById("aiResult").innerHTML = '<div class="ai-error">Please paste at least 20 words to check.</div>';
+    return;
+  }
+
+  document.getElementById("aiBtn").disabled = true;
+
+  // STAGE 1: Reading the essay
+  setProgress(15, "📖 Reading your essay…");
+  await new Promise(function(r){ setTimeout(r, 600); });
+
+  // STAGE 2: Checking topic relevance
+  setProgress(35, "🔍 Checking topic relevance…");
+  await new Promise(function(r){ setTimeout(r, 400); });
+
+  // STAGE 3: Analyzing grammar
+  setProgress(60, "✏️ Analyzing grammar & vocabulary…");
+
+  var topicLine = topic ? "Essay topic / question: \""+topic+"\"\n\n" : "";
+  var taskType = _aiCurrentHw.toLowerCase().includes("task 2") || _aiCurrentHw.toLowerCase().includes("essay") ? "Task 2 (discursive essay)" : "Task 1 (report/graph description)";
+
+  var sysPrompt =
+    "You are a professional IELTS Writing examiner and Grammarly-style AI writing assistant.\n\n"
+    + "IELTS task type: "+taskType+"\n"
+    + topicLine
+    + "Word count: "+wordCount+" words\n\n"
+    + "STEP 1 — READ THE ESSAY CAREFULLY from start to finish before evaluating.\n"
+    + "STEP 2 — CHECK TOPIC RELEVANCE: Does the essay actually address the given topic/question? Is the main idea on-topic?\n"
+    + "STEP 3 — ANALYZE like Grammarly:\n"
+    + "  • Grammar & mechanics (tense, agreement, articles, prepositions, punctuation)\n"
+    + "  • Vocabulary accuracy and range (weak/repeated words → suggest better IELTS alternatives)\n"
+    + "  • Sentence structure (run-ons, fragments, variety)\n"
+    + "  • Clarity & coherence (logical flow, paragraph transitions)\n"
+    + "  • Academic tone (formal vs informal)\n"
+    + "  • Task achievement (does it fully answer the question?)\n\n"
+    + "Return ONLY valid JSON (NO markdown, NO backticks, NO preamble):\n"
+    + "{\n"
+    + "  \"overall_score\": 7.5,\n"
+    + "  \"grammar_score\": 8.0,\n"
+    + "  \"clarity_score\": 7.0,\n"
+    + "  \"vocabulary_score\": 7.5,\n"
+    + "  \"tone_score\": 7.0,\n"
+    + "  \"ielts_band_estimate\": 6.5,\n"
+    + "  \"topic_relevant\": true,\n"
+    + "  \"topic_comment\": \"One sentence: does the essay address the topic? If off-topic, explain briefly.\",\n"
+    + "  \"summary\": \"2-3 sentence overall impression of the writing quality.\",\n"
+    + "  \"grammar_issues\": [{\"error\": \"exact phrase\", \"correction\": \"corrected version\", \"explanation\": \"rule\"}],\n"
+    + "  \"clarity_suggestions\": [\"specific tip\"],\n"
+    + "  \"vocabulary_tips\": [{\"weak_word\": \"word used\", \"better_option\": \"academic alternative\", \"reason\": \"why\"}],\n"
+    + "  \"style_notes\": \"Tone/register assessment for IELTS.\",\n"
+    + "  \"strengths\": [\"specific strength with example from essay\"],\n"
+    + "  \"top_priority_improvements\": [\"#1 fix\", \"#2 fix\", \"#3 fix\"]\n"
+    + "}";
 
   try {
     var resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer "+GROQ_API_KEY
+        "Authorization": "Bearer " + apiKey
       },
       body: JSON.stringify({
-        model: "mixtral-8x7b-32768",
+        model: "llama3-70b-8192",
         messages: [
           { role: "system", content: sysPrompt },
-          { role: "user", content: "Please analyze this essay:\n\n"+text }
+          { role: "user", content: "Please read and analyze this essay carefully:\n\n" + text }
         ],
-        temperature: 0.7,
-        max_tokens: 2000
+        temperature: 0.4,
+        max_tokens: 2500
       })
     });
 
     if(!resp.ok){
-      var errData=await resp.json().catch(function(){return{};});
-      var errMsg = errData.error && errData.error.message ? errData.error.message : "API error "+resp.status;
+      var errData = await resp.json().catch(function(){ return {}; });
+      var errMsg = errData.error && errData.error.message ? errData.error.message : "API error " + resp.status;
+      if(resp.status === 401) errMsg = "Invalid API Key — please check your key at console.groq.com";
       throw new Error(errMsg);
     }
 
-    var data=await resp.json();
+    setProgress(85, "🧠 Generating detailed feedback…");
+    await new Promise(function(r){ setTimeout(r, 300); });
+
+    var data = await resp.json();
     if(!data.choices || !data.choices[0]) throw new Error("Invalid API response");
-    
-    var raw=data.choices[0].message.content.trim().replace(/^```json\s*/,"").replace(/^```\s*/,"").replace(/```\s*$/,"");
-    var jsonMatch=raw.match(/\{[\s\S]*\}/);
-    if(!jsonMatch) throw new Error("Could not parse response");
-    
-    var result=JSON.parse(jsonMatch[0]);
-    renderGrammarResult(result);
+
+    var raw = data.choices[0].message.content.trim()
+      .replace(/^```json\s*/,"").replace(/^```\s*/,"").replace(/```\s*$/,"");
+    var jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if(!jsonMatch) throw new Error("Could not parse AI response");
+
+    setProgress(100, "✅ Analysis complete!");
+    await new Promise(function(r){ setTimeout(r, 300); });
+
+    var result = JSON.parse(jsonMatch[0]);
+    renderGrammarResult(result, topic);
 
   } catch(err){
-    document.getElementById("aiResult").innerHTML=
-      '<div class="ai-error">⚠️ Analysis failed: '+escapeHtml(err.message||err)+'<br>'
-      +'<span style="font-size:11px;opacity:.7">Please try again in a moment</span></div>';
+    var errHtml = '<div class="ai-error">⚠️ ' + escapeHtml(err.message || String(err));
+    if((err.message||"").toLowerCase().includes("api key") || (err.message||"").toLowerCase().includes("invalid")){
+      errHtml += '<br><a href="https://console.groq.com/keys" target="_blank" style="color:var(--amber)">Get a free Groq API key ↗</a>';
+    }
+    errHtml += '</div>';
+    document.getElementById("aiResult").innerHTML = errHtml;
   } finally {
-    document.getElementById("aiBtn").disabled=false;
+    document.getElementById("aiBtn").disabled = false;
   }
 }
 
-function renderGrammarResult(r){
-  var s='<div class="ai-result">';
+function renderGrammarResult(r, topic){
+  var s = '<div class="ai-result">';
 
-  // Overall scores
-  s+='<div class="ai-overall">'
-    +'<div class="ai-overall-label">Writing Quality Score</div>'
-    +'<div class="ai-overall-num">'+r.overall_score.toFixed(1)+'/10</div>'
-    +'<div class="ai-overall-desc">'+escapeHtml(r.summary||'')+'</div>'
-    +'</div>';
+  // Topic relevance badge
+  if(typeof r.topic_relevant !== "undefined"){
+    s += '<div class="ai-relevance '+(r.topic_relevant ? "on-topic" : "off-topic")+'">'
+      + (r.topic_relevant ? "✅ On Topic" : "⚠️ Off Topic / Partially relevant")
+      + '</div>';
+    if(r.topic_comment){
+      s += '<div style="font-size:12px;color:var(--muted);margin-bottom:14px;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm)">'+escapeHtml(r.topic_comment)+'</div>';
+    }
+  }
 
-  // Detailed scores
-  s+='<div class="ai-scores">'
-    +'<div class="ai-score ta"><div class="ai-score-lbl">Grammar</div><div class="ai-score-num">'+r.grammar_score.toFixed(1)+'</div></div>'
-    +'<div class="ai-score cc"><div class="ai-score-lbl">Clarity</div><div class="ai-score-num">'+r.clarity_score.toFixed(1)+'</div></div>'
-    +'<div class="ai-score lr"><div class="ai-score-lbl">Vocabulary</div><div class="ai-score-num">'+r.vocabulary_score.toFixed(1)+'</div></div>'
-    +'<div class="ai-score gra"><div class="ai-score-lbl">Tone</div><div class="ai-score-num">'+r.tone_score.toFixed(1)+'</div></div>'
-    +'</div>';
+  // IELTS band estimate
+  if(r.ielts_band_estimate){
+    s += '<div style="text-align:center;margin-bottom:16px">'
+      + '<span style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;font-weight:700">Estimated IELTS Band</span>'
+      + '<span style="font-size:36px;font-weight:800;font-family:\'Space Mono\',monospace;color:var(--amber)">'+(r.ielts_band_estimate)+'</span>'
+      + '</div>';
+  }
+
+  // Overall score
+  s += '<div class="ai-overall">'
+    + '<div class="ai-overall-label">Overall Writing Quality</div>'
+    + '<div class="ai-overall-num">'+(r.overall_score||0).toFixed(1)+'/10</div>'
+    + '<div class="ai-overall-desc">'+escapeHtml(r.summary||'')+'</div>'
+    + '</div>';
+
+  // Scores grid
+  s += '<div class="ai-scores">'
+    + '<div class="ai-score ta"><div class="ai-score-lbl">Grammar</div><div class="ai-score-num">'+((r.grammar_score||0).toFixed(1))+'</div></div>'
+    + '<div class="ai-score cc"><div class="ai-score-lbl">Clarity</div><div class="ai-score-num">'+((r.clarity_score||0).toFixed(1))+'</div></div>'
+    + '<div class="ai-score lr"><div class="ai-score-lbl">Vocabulary</div><div class="ai-score-num">'+((r.vocabulary_score||0).toFixed(1))+'</div></div>'
+    + '<div class="ai-score gra"><div class="ai-score-lbl">Tone</div><div class="ai-score-num">'+((r.tone_score||0).toFixed(1))+'</div></div>'
+    + '</div>';
 
   // Grammar issues
   if(r.grammar_issues && r.grammar_issues.length){
-    var errs=r.grammar_issues.map(function(e){
+    var errs = r.grammar_issues.map(function(e){
       return '<li style="margin-bottom:10px">'
-        +'<div style="color:var(--red);margin-bottom:3px">❌ <s style="opacity:.7">'+escapeHtml(e.error||"")+'</s></div>'
-        +'<div style="color:var(--green);margin-bottom:3px">✅ '+escapeHtml(e.correction||"")+'</div>'
-        +'<div style="color:var(--muted);font-size:12px">💬 '+escapeHtml(e.explanation||"")+'</div>'
-        +'</li>';
+        + '<div style="color:var(--red);margin-bottom:3px">❌ <s style="opacity:.7">'+escapeHtml(e.error||"")+'</s></div>'
+        + '<div style="color:var(--green);margin-bottom:3px">✅ '+escapeHtml(e.correction||"")+'</div>'
+        + '<div style="color:var(--muted);font-size:12px">💬 '+escapeHtml(e.explanation||"")+'</div>'
+        + '</li>';
     }).join("");
-    s+='<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Grammar Issues</div><div class="ai-section-body"><ul>'+errs+'</ul></div></div>';
+    s += '<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Grammar Issues</div><div class="ai-section-body"><ul>'+errs+'</ul></div></div>';
   }
 
   // Clarity suggestions
   if(r.clarity_suggestions && r.clarity_suggestions.length){
-    var clr=r.clarity_suggestions.map(function(c){
+    var clr = r.clarity_suggestions.map(function(c){
       return '<li style="margin-bottom:6px">💡 '+escapeHtml(c)+'</li>';
     }).join("");
-    s+='<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 16 16 12 12 8"/><polyline points="8 12 12 8"/></svg> Clarity Tips</div><div class="ai-section-body"><ul>'+clr+'</ul></div></div>';
+    s += '<div class="ai-section"><div class="ai-section-title">💬 Clarity & Coherence Tips</div><div class="ai-section-body"><ul>'+clr+'</ul></div></div>';
   }
 
   // Vocabulary
   if(r.vocabulary_tips && r.vocabulary_tips.length){
-    var vocab=r.vocabulary_tips.map(function(v){
+    var vocab = r.vocabulary_tips.map(function(v){
       return '<li style="margin-bottom:10px">'
-        +'<div style="margin-bottom:3px"><span style="color:var(--muted)">Weak: </span><span style="color:var(--amber);text-decoration:underline">'+escapeHtml(v.weak_word||"")+'</span></div>'
-        +'<div style="margin-bottom:3px"><span style="color:var(--muted)">Better: </span><span style="color:var(--green);font-weight:600">'+escapeHtml(v.better_option||"")+'</span></div>'
-        +'<div style="color:var(--muted);font-size:12px">📚 '+escapeHtml(v.reason||"")+'</div>'
-        +'</li>';
+        + '<div style="margin-bottom:3px"><span style="color:var(--muted)">Weak: </span><span style="color:var(--amber);text-decoration:underline">'+escapeHtml(v.weak_word||"")+'</span></div>'
+        + '<div style="margin-bottom:3px"><span style="color:var(--muted)">Better: </span><span style="color:var(--green);font-weight:600">'+escapeHtml(v.better_option||"")+'</span></div>'
+        + '<div style="color:var(--muted);font-size:12px">📚 '+escapeHtml(v.reason||"")+'</div>'
+        + '</li>';
     }).join("");
-    s+='<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Vocabulary</div><div class="ai-section-body"><ul>'+vocab+'</ul></div></div>';
+    s += '<div class="ai-section"><div class="ai-section-title">📚 Vocabulary Upgrades</div><div class="ai-section-body"><ul>'+vocab+'</ul></div></div>';
   }
 
   // Style notes
   if(r.style_notes){
-    s+='<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Style & Tone</div><div class="ai-section-body">'+escapeHtml(r.style_notes)+'</div></div>';
+    s += '<div class="ai-section"><div class="ai-section-title">🎓 Academic Tone & Style</div><div class="ai-section-body">'+escapeHtml(r.style_notes)+'</div></div>';
   }
 
   // Strengths
   if(r.strengths && r.strengths.length){
-    var str=r.strengths.map(function(st){
+    var str = r.strengths.map(function(st){
       return '<li style="margin-bottom:6px">✅ '+escapeHtml(st)+'</li>';
     }).join("");
-    s+='<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Your Strengths</div><div class="ai-section-body"><ul>'+str+'</ul></div></div>';
+    s += '<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Your Strengths</div><div class="ai-section-body"><ul>'+str+'</ul></div></div>';
   }
 
   // Top priorities
   if(r.top_priority_improvements && r.top_priority_improvements.length){
-    var prio=r.top_priority_improvements.map(function(p){
+    var prio = r.top_priority_improvements.map(function(p){
       return '<li style="margin-bottom:6px">🎯 '+escapeHtml(p)+'</li>';
     }).join("");
-    s+='<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Next Steps</div><div class="ai-section-body" style="background:rgba(34,200,135,.05)"><ul>'+prio+'</ul></div></div>';
+    s += '<div class="ai-section"><div class="ai-section-title">🚀 Top 3 Things to Fix</div><div class="ai-section-body" style="background:rgba(34,200,135,.05)"><ul>'+prio+'</ul></div></div>';
   }
 
-  s+='</div>';
-  document.getElementById("aiResult").innerHTML=s;
+  s += '</div>';
+  document.getElementById("aiResult").innerHTML = s;
 }
 
 function escapeHtml(t){
-  return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
 // ===== NOTIFICATIONS =====
