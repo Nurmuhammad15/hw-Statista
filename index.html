@@ -123,38 +123,12 @@ input[type=file]{display:none}
 .ai-close-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;transition:all .15s}
 .ai-close-btn:hover{background:var(--red);color:#fff;border-color:var(--red)}
 .ai-hw-badge{font-size:12px;color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;background:rgba(123,92,245,.1);border:1px solid rgba(123,92,245,.2);padding:5px 12px;border-radius:20px;display:inline-block}
-
-/* ===== NEW: API KEY FIELD ===== */
-.ai-apikey-box{background:rgba(79,142,247,.06);border:1px solid rgba(79,142,247,.2);border-radius:var(--rsm);padding:12px 14px;margin-bottom:14px}
-.ai-apikey-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
-.ai-apikey-link{color:var(--accent);font-size:11px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:3px}
-.ai-apikey-link:hover{text-decoration:underline}
-.ai-apikey-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:9px 12px;font-size:13px;font-family:'Space Mono',monospace;color:var(--text);outline:none;transition:border-color .2s}
-.ai-apikey-input:focus{border-color:var(--accent)}
-.ai-apikey-saved{font-size:11px;color:var(--green);margin-top:5px;display:none}
-
-/* ===== NEW: ESSAY TOPIC FIELD ===== */
-.ai-topic-box{margin-bottom:12px}
-.ai-topic-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
-.ai-topic-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 14px;font-size:14px;font-family:inherit;color:var(--text);outline:none;transition:border-color .2s}
-.ai-topic-input:focus{border-color:var(--accent2)}
-.ai-topic-input::placeholder{color:var(--muted)}
-
-/* ===== ESSAY TEXTAREA ===== */
-.ai-textarea-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
-.ai-textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:14px;font-family:inherit;color:var(--text);outline:none;resize:vertical;min-height:180px;line-height:1.7;transition:border-color .2s;margin-bottom:6px}
+.ai-textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:14px;font-family:inherit;color:var(--text);outline:none;resize:vertical;min-height:160px;line-height:1.7;transition:border-color .2s;margin-bottom:6px}
 .ai-textarea:focus{border-color:var(--accent2)}
 .ai-word-count{font-size:11px;color:var(--muted);text-align:right;margin-bottom:12px;font-family:'Space Mono',monospace}
 .ai-submit-btn{width:100%;background:linear-gradient(135deg,var(--accent2),#6d4fe5);color:#fff;border:none;border-radius:var(--rsm);padding:13px 20px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(123,92,245,.3)}
 .ai-submit-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 22px rgba(123,92,245,.45)}
 .ai-submit-btn:disabled{opacity:.6;cursor:not-allowed}
-
-/* ===== READING INDICATOR ===== */
-.ai-reading-stage{background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.2);border-radius:var(--rsm);padding:14px 16px;margin-top:14px;font-size:13px;color:var(--accent)}
-.ai-reading-stage b{display:block;margin-bottom:4px;font-size:14px}
-.ai-progress-bar{height:4px;background:var(--surface2);border-radius:2px;margin-top:8px;overflow:hidden}
-.ai-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;transition:width .4s ease}
-
 .ai-loading{text-align:center;padding:30px 20px;color:var(--muted);font-size:13px}
 .ai-dots{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:14px}
 .ai-dots span{width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:dotPulse 1.2s infinite ease-in-out}
@@ -185,17 +159,165 @@ input[type=file]{display:none}
 .ai-section-body ul{padding-left:18px}
 .ai-section-body li{margin-bottom:5px}
 .ai-error{background:rgba(247,85,106,.08);border:1px solid rgba(247,85,106,.25);border-radius:var(--rsm);padding:14px;color:var(--red);font-size:13px;margin-top:14px;text-align:center}
-.ai-error a{color:var(--amber);font-weight:700}
 .ai-detect{background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px 16px;margin-bottom:18px}
 .ai-detect-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.ai-detect-bar{position:relative;height:28px;border-radius:20px;overflow:hidden;background:var(--surface2);margin-bottom:10px}
+.ai-detect-human{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--green),#1aad74);display:flex;align-items:center;padding-left:12px;font-size:12px;font-weight:800;color:#fff;font-family:'Space Mono',monospace;border-radius:20px 0 0 20px;min-width:48px}
+.ai-detect-ai{position:absolute;right:0;top:0;bottom:0;background:linear-gradient(90deg,#7c3aed,var(--accent2));display:flex;align-items:center;justify-content:flex-end;padding-right:12px;font-size:12px;font-weight:800;color:#fff;font-family:'Space Mono',monospace;border-radius:0 20px 20px 0;min-width:48px}
+.ai-detect-labels{display:flex;justify-content:space-between}
+.ai-detect-lbl{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700}
+.ai-detect-dot{width:8px;height:8px;border-radius:50%}
+.ai-detect-note{font-size:12px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);line-height:1.5;font-style:italic}
+.speak-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(34,200,135,.15),rgba(34,200,135,.08));color:var(--green);border:1px solid rgba(34,200,135,.35);padding:7px 12px;border-radius:var(--rsm);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.speak-btn:hover{background:linear-gradient(135deg,rgba(34,200,135,.3),rgba(34,200,135,.15));transform:translateY(-1px)}
+.speak-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;z-index:1000}
+@media(min-height:600px){.speak-overlay{align-items:center}}
+.speak-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
+@media(min-height:600px){.speak-modal{border-radius:20px;margin:16px}}
+.speak-modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.speak-modal-title{font-size:17px;font-weight:800;color:var(--white);display:flex;align-items:center;gap:8px}
+.speak-close-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;transition:all .15s}
+.speak-close-btn:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.speak-hw-badge{font-size:12px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.2);padding:5px 12px;border-radius:20px;display:inline-block}
+.speak-type-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.speak-type-btn{background:var(--surface2);border:2px solid var(--border);border-radius:var(--rsm);padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;font-family:inherit}
+.speak-type-btn.active{border-color:var(--green);background:rgba(34,200,135,.08)}
+.speak-type-btn:hover{border-color:var(--green)}
+.speak-type-icon{font-size:24px;margin-bottom:6px}
+.speak-type-label{font-size:13px;font-weight:700;color:var(--white)}
+.speak-type-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.speak-timer-wrap{text-align:center;margin:20px 0}
+.speak-timer{font-size:56px;font-weight:800;font-family:'Space Mono',monospace;color:var(--white);line-height:1}
+.speak-timer.warning{color:var(--amber)}
+.speak-timer.danger{color:var(--red)}
+.speak-timer-label{font-size:12px;color:var(--muted);margin-top:6px}
+.speak-progress{width:100%;height:6px;background:var(--surface2);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.speak-progress-bar{height:100%;background:linear-gradient(90deg,var(--green),#1aad74);border-radius:10px;transition:width .5s linear}
+.speak-progress-bar.warn{background:linear-gradient(90deg,var(--amber),#e59400)}
+.speak-progress-bar.danger-bar{background:linear-gradient(90deg,var(--red),#d43050)}
+.speak-controls{display:flex;gap:10px;margin-bottom:16px}
+.speak-start-btn{flex:1;background:linear-gradient(135deg,var(--green),#1aad74);color:#fff;border:none;border-radius:var(--rsm);padding:13px 20px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(34,200,135,.3);transition:all .2s}
+.speak-start-btn:hover:not(:disabled){transform:translateY(-1px)}
+.speak-start-btn:disabled{opacity:.5;cursor:not-allowed}
+.speak-stop-btn{background:rgba(247,85,106,.12);color:var(--red);border:1px solid rgba(247,85,106,.35);border-radius:var(--rsm);padding:13px 18px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
+.speak-stop-btn:hover:not(:disabled){background:var(--red);color:#fff}
+.speak-stop-btn:disabled{opacity:.35;cursor:not-allowed}
+.speak-status{font-size:13px;color:var(--muted);text-align:center;min-height:20px;margin-bottom:8px}
+.speak-status.recording{color:var(--red);font-weight:700;animation:recPulse 1.2s ease-in-out infinite}
+@keyframes recPulse{0%,100%{opacity:1}50%{opacity:.5}}
+.speak-status.uploading{color:var(--amber);font-weight:700}
+.speak-status.done{color:var(--green);font-weight:700}
+.speak-rec-dot{display:inline-block;width:8px;height:8px;background:var(--red);border-radius:50%;margin-right:5px;animation:recPulse 1s infinite}
+.speak-preview{margin-top:14px;border-top:1px solid var(--border);padding-top:14px}
+.speak-preview-label{font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600}
+.speak-audio-player{width:100%;border-radius:var(--rsm);outline:none;accent-color:var(--green)}
+.speak-video-player{width:100%;border-radius:var(--rsm);max-height:200px;background:#000}
+.speak-min-warn{font-size:12px;color:var(--amber);text-align:center;margin-top:8px}
+/* Transcription */
+.transcript-wrap{margin-top:16px;border-top:1px solid var(--border);padding-top:16px}
+.transcript-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.transcript-title{font-size:13px;font-weight:700;color:var(--white);display:flex;align-items:center;gap:6px}
+.transcript-copy-btn{background:rgba(79,142,247,.1);color:var(--accent);border:1px solid rgba(79,142,247,.3);padding:5px 12px;border-radius:var(--rsm);font-family:inherit;font-weight:600;font-size:12px;cursor:pointer;transition:all .18s;width:auto}
+.transcript-copy-btn:hover{background:var(--accent);color:#fff}
+.transcript-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:13px;color:var(--text);line-height:1.8;max-height:220px;overflow-y:auto;white-space:pre-wrap;word-break:break-word}
+.transcript-loading{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;padding:14px}
+.transcript-stats{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+.transcript-stat{font-size:11px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);padding:3px 10px;border-radius:20px;font-family:'Space Mono',monospace}
+
+/* Error banner */
 .error-banner{background:rgba(247,85,106,.1);border:1px solid rgba(247,85,106,.3);border-radius:var(--r);padding:20px;margin:20px 0;color:var(--red);font-size:13px;line-height:1.7}
 .error-banner b{color:#ff8a9a;display:block;margin-bottom:8px;font-size:15px}
 .error-banner code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:12px;font-family:'Space Mono',monospace}
+.speak-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;z-index:1000}
+@media(min-height:600px){.speak-overlay{align-items:center}}
+.speak-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
+@media(min-height:600px){.speak-modal{border-radius:20px;margin:16px}}
+.speak-modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.speak-modal-title{font-size:17px;font-weight:800;color:var(--white);display:flex;align-items:center;gap:8px}
+.speak-close-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;transition:all .15s}
+.speak-close-btn:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.speak-hw-badge{font-size:12px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.2);padding:5px 12px;border-radius:20px;display:inline-block}
+.speak-type-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.speak-type-btn{background:var(--surface2);border:2px solid var(--border);border-radius:var(--rsm);padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;font-family:inherit}
+.speak-type-btn.active{border-color:var(--green);background:rgba(34,200,135,.08)}
+.speak-type-btn:hover{border-color:var(--green)}
+.speak-type-icon{font-size:24px;margin-bottom:6px}
+.speak-type-label{font-size:13px;font-weight:700;color:var(--white)}
+.speak-type-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.speak-timer-wrap{text-align:center;margin:20px 0}
+.speak-timer{font-size:56px;font-weight:800;font-family:'Space Mono',monospace;color:var(--white);line-height:1}
+.speak-timer.warning{color:var(--amber)}
+.speak-timer.danger{color:var(--red)}
+.speak-timer-label{font-size:12px;color:var(--muted);margin-top:6px}
+.speak-progress{width:100%;height:6px;background:var(--surface2);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.speak-progress-bar{height:100%;background:linear-gradient(90deg,var(--green),#1aad74);border-radius:10px;transition:width .5s linear}
+.speak-progress-bar.warn{background:linear-gradient(90deg,var(--amber),#e59400)}
+.speak-progress-bar.danger-bar{background:linear-gradient(90deg,var(--red),#d43050)}
+.speak-controls{display:flex;gap:10px;margin-bottom:16px}
+.speak-start-btn{flex:1;background:linear-gradient(135deg,var(--green),#1aad74);color:#fff;border:none;border-radius:var(--rsm);padding:13px 20px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(34,200,135,.3);transition:all .2s}
+.speak-start-btn:hover:not(:disabled){transform:translateY(-1px)}
+.speak-start-btn:disabled{opacity:.5;cursor:not-allowed}
+.speak-stop-btn{background:rgba(247,85,106,.12);color:var(--red);border:1px solid rgba(247,85,106,.35);border-radius:var(--rsm);padding:13px 18px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
+.speak-stop-btn:hover:not(:disabled){background:var(--red);color:#fff}
+.speak-stop-btn:disabled{opacity:.35;cursor:not-allowed}
+.speak-status{font-size:13px;color:var(--muted);text-align:center;min-height:20px;margin-bottom:8px}
+.speak-status.recording{color:var(--red);font-weight:700;animation:recPulse 1.2s ease-in-out infinite}
+@keyframes recPulse{0%,100%{opacity:1}50%{opacity:.5}}
+.speak-status.uploading{color:var(--amber);font-weight:700}
+.speak-status.done{color:var(--green);font-weight:700}
+.speak-rec-dot{display:inline-block;width:8px;height:8px;background:var(--red);border-radius:50%;margin-right:5px;animation:recPulse 1s infinite}
+.speak-preview{margin-top:14px;border-top:1px solid var(--border);padding-top:14px}
+.speak-preview-label{font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600}
+.speak-audio-player{width:100%;border-radius:var(--rsm);outline:none;accent-color:var(--green)}
+.speak-video-player{width:100%;border-radius:var(--rsm);max-height:200px;background:#000}
+.speak-min-warn{font-size:12px;color:var(--amber);text-align:center;margin-top:8px}
+/* Transcription */
+.transcript-wrap{margin-top:16px;border-top:1px solid var(--border);padding-top:16px}
+.transcript-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.transcript-title{font-size:13px;font-weight:700;color:var(--white);display:flex;align-items:center;gap:6px}
+.transcript-copy-btn{background:rgba(79,142,247,.1);color:var(--accent);border:1px solid rgba(79,142,247,.3);padding:5px 12px;border-radius:var(--rsm);font-family:inherit;font-weight:600;font-size:12px;cursor:pointer;transition:all .18s;width:auto}
+.transcript-copy-btn:hover{background:var(--accent);color:#fff}
+.transcript-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:13px;color:var(--text);line-height:1.8;max-height:220px;overflow-y:auto;white-space:pre-wrap;word-break:break-word}
+.transcript-loading{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;padding:14px}
+.transcript-stats{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+.transcript-stat{font-size:11px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);padding:3px 10px;border-radius:20px;font-family:'Space Mono',monospace}
+
+/* Error banner */
+.error-banner{background:rgba(247,85,106,.1);border:1px solid rgba(247,85,106,.3);border-radius:var(--r);padding:20px;margin:20px 0;color:var(--red);font-size:13px;line-height:1.7}
+.error-banner b{color:#ff8a9a;display:block;margin-bottom:8px;font-size:15px}
+.error-banner code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:12px;font-family:'Space Mono',monospace}
+
+
+/* ===== NEW: API KEY FIELD ===== */
+.ai-apikey-box{background:rgba(79,142,247,.06);border:1px solid rgba(79,142,247,.2);border-radius:var(--rsm);padding:12px 14px;margin-bottom:14px}
+.ai-apikey-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.ai-apikey-link{color:var(--accent);font-size:11px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:3px}
+.ai-apikey-link:hover{text-decoration:underline}
+.ai-apikey-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:9px 12px;font-size:13px;font-family:'Space Mono',monospace;color:var(--text);outline:none;transition:border-color .2s}
+.ai-apikey-input:focus{border-color:var(--accent)}
+.ai-apikey-saved{font-size:11px;color:var(--green);margin-top:5px;display:none}
+
+/* ===== NEW: ESSAY TOPIC FIELD ===== */
+.ai-topic-box{margin-bottom:12px}
+.ai-topic-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
+.ai-topic-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 14px;font-size:14px;font-family:inherit;color:var(--text);outline:none;transition:border-color .2s}
+.ai-topic-input:focus{border-color:var(--accent2)}
+.ai-topic-input::placeholder{color:var(--muted)}
+
+/* ===== ESSAY TEXTAREA ===== */
+.ai-textarea-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
+
+/* ===== READING INDICATOR ===== */
+.ai-reading-stage{background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.2);border-radius:var(--rsm);padding:14px 16px;margin-top:14px;font-size:13px;color:var(--accent)}
+.ai-reading-stage b{display:block;margin-bottom:4px;font-size:14px}
+.ai-progress-bar{height:4px;background:var(--surface2);border-radius:2px;margin-top:8px;overflow:hidden}
+.ai-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;transition:width .4s ease}
 
 /* ===== TASK RELEVANCE BADGE ===== */
 .ai-relevance{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:14px}
 .ai-relevance.on-topic{color:var(--green);background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.25)}
 .ai-relevance.off-topic{color:var(--amber);background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3)}
+
 </style>
 </head>
 <body>
@@ -279,7 +401,7 @@ input[type=file]{display:none}
         ✅ Powered by Groq AI.
       </div>
 
-      <!-- ESSAY TOPIC (NEW) -->
+      <!-- ESSAY TOPIC -->
       <div class="ai-topic-box">
         <label class="ai-topic-label">📝 Essay Topic / Question</label>
         <input type="text" class="ai-topic-input" id="aiTopic" placeholder="e.g. The graph shows the percentage of people using the internet in three countries from 2000 to 2020.">
@@ -300,40 +422,211 @@ input[type=file]{display:none}
   </div>
 </div>
 
-<!-- Firebase SDKs -->
+<!-- SPEAKING RECORDER MODAL -->
+<div id="speakModal" style="display:none">
+  <div class="speak-overlay" onclick="if(event.target.classList.contains('speak-overlay'))closeSpeakModal();" style="cursor:default">
+    <div class="speak-modal">
+      <div class="speak-modal-header">
+        <div class="speak-modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          Speaking Recorder
+        </div>
+        <button class="speak-close-btn" onclick="closeSpeakModal()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+        </button>
+      </div>
+      <div id="speakHwBadge" class="speak-hw-badge"></div>
+
+      <!-- Mode selector: Audio or Video upload -->
+      <div class="speak-type-row">
+        <div class="speak-type-btn active" id="typeAudio" onclick="selectRecordType('audio')">
+          <div class="speak-type-icon">🎤</div>
+          <div class="speak-type-label">Audio Only</div>
+          <div class="speak-type-sub">Voice recording</div>
+        </div>
+        <div class="speak-type-btn" id="typeVideo" onclick="selectRecordType('video')">
+          <div class="speak-type-icon">🎥</div>
+          <div class="speak-type-label">Video + Audio</div>
+          <div class="speak-type-sub">Upload from device</div>
+        </div>
+      </div>
+
+      <!-- AUDIO MODE -->
+      <div id="audioRecorderSection">
+
+        <!-- Saved progress banner -->
+        <div id="speakSavedBanner" style="display:none;background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.3);border-radius:var(--rsm);padding:12px 14px;margin-bottom:14px">
+          <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">⏸️ Unfinished recording found</div>
+          <div id="speakSavedInfo" style="font-size:12px;color:var(--muted);margin-bottom:10px"></div>
+          <div style="display:flex;gap:8px">
+            <button onclick="resumeSavedRecording()" style="flex:1;background:linear-gradient(135deg,var(--accent),#3a7ef5);color:#fff;border:none;border-radius:var(--rsm);padding:9px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Continue from where I left off
+            </button>
+            <button onclick="discardSavedRecording()" style="background:rgba(247,85,106,.1);color:var(--red);border:1px solid rgba(247,85,106,.3);border-radius:var(--rsm);padding:9px 12px;font-family:inherit;font-weight:600;font-size:12px;cursor:pointer;white-space:nowrap;width:auto">
+              Start fresh
+            </button>
+          </div>
+        </div>
+
+        <div class="speak-timer-wrap">
+          <div class="speak-timer" id="speakTimer">00:00</div>
+          <div class="speak-timer-label" id="speakTimerLabel">Press Record to start</div>
+        </div>
+        <div class="speak-progress">
+          <div class="speak-progress-bar" id="speakProgressBar" style="width:0%"></div>
+        </div>
+        <div class="speak-status" id="speakStatus">Press Record to begin your speaking</div>
+
+        <!-- Row 1: Record + Pause -->
+        <div class="speak-controls" style="gap:8px;margin-bottom:8px">
+          <button class="speak-start-btn" id="speakStartBtn" onclick="startSpeakRecording()" style="flex:1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
+            Record
+          </button>
+          <button id="speakPauseBtn" onclick="pauseSpeakRecording()" disabled
+            style="flex:1;background:rgba(245,166,35,.12);color:var(--amber);border:1px solid rgba(245,166,35,.35);border-radius:var(--rsm);padding:13px 10px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            Pause
+          </button>
+        </div>
+        <!-- Row 2: Submit full width -->
+        <button id="speakStopBtn" onclick="stopSpeakRecording()" disabled
+          style="width:100%;background:rgba(247,85,106,.12);color:var(--red);border:1px solid rgba(247,85,106,.35);border-radius:var(--rsm);padding:13px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;margin-bottom:10px">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+          Stop & Submit
+        </button>
+
+        <div class="speak-min-warn" id="speakMinWarn">⚠️ Minimum 10 minutes required to submit</div>
+
+        <div class="speak-preview" id="speakPreview" style="display:none">
+          <div class="speak-preview-label">Preview your recording:</div>
+          <div id="speakPreviewPlayer"></div>
+          <div id="speakUploadStatus" style="margin-top:12px;text-align:center;font-size:13px;color:var(--muted)"></div>
+          <!-- TRANSCRIPTION -->
+          <div class="transcript-wrap" id="transcriptWrap" style="display:none">
+            <div class="transcript-header">
+              <div class="transcript-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Speech Transcript (Whisper AI)
+              </div>
+              <button class="transcript-copy-btn" onclick="copyTranscript()">Copy</button>
+            </div>
+            <div id="transcriptContent"></div>
+            <div class="transcript-stats" id="transcriptStats"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIDEO UPLOAD MODE -->
+      <div id="videoUploadSection" style="display:none">
+        <div style="text-align:center;padding:20px 0 10px">
+          <div style="font-size:48px;margin-bottom:10px">🎥</div>
+          <div style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6">Select a video file from your device.<br>Supported formats: MP4, MOV, WebM</div>
+          <label style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),#1aad74);color:#fff;padding:13px 24px;border-radius:var(--rsm);font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 14px rgba(34,200,135,.3);transition:all .2s">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Choose Video File
+            <input type="file" id="videoFileInput" accept="video/*" onchange="handleVideoFileSelect(this)">
+          </label>
+        </div>
+        <div id="videoUploadStatus" style="margin-top:16px;text-align:center;font-size:13px;color:var(--muted)"></div>
+        <div id="videoPreviewWrap" style="display:none;margin-top:14px;border-top:1px solid var(--border);padding-top:14px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600">Selected video:</div>
+          <video id="videoPreviewEl" class="speak-video-player" controls style="width:100%;border-radius:var(--rsm);max-height:200px;background:#000"></video>
+          <button id="videoSubmitBtn" onclick="submitVideoFile()" style="width:100%;margin-top:12px;background:linear-gradient(135deg,var(--green),#1aad74);color:#fff;border:none;border-radius:var(--rsm);padding:13px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(34,200,135,.3)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Submit Video
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSCRIPT MODAL -->
+<div id="transcriptModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal" style="max-width:500px;max-height:85vh;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div class="modal-title" style="margin-bottom:0;display:flex;align-items:center;gap:8px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Speech Transcript
+      </div>
+      <button onclick="document.getElementById('transcriptModal').style.display='none'" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;width:auto">✕</button>
+    </div>
+    <div id="tmStudent" class="modal-sub" style="margin-bottom:12px"></div>
+    <div id="tmStats" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"></div>
+    <div id="tmText" style="flex:1;overflow-y:auto;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:13px;color:var(--text);line-height:1.9;white-space:pre-wrap;word-break:break-word;max-height:50vh"></div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button onclick="copyTranscriptModal()" style="flex:1;background:linear-gradient(135deg,var(--accent),#3a7ef5);color:#fff;border:none;border-radius:var(--rsm);padding:11px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy text
+      </button>
+      <button onclick="document.getElementById('transcriptModal').style.display='none'" style="background:var(--surface2);color:var(--muted);border:1px solid var(--border);border-radius:var(--rsm);padding:11px 18px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;width:auto">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDKs loaded via script tags with error handling -->
 <script>
 window._firebaseLoaded = false;
 window._firebaseError = null;
 </script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js" onerror="window._firebaseError='firebase-app failed to load'"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js" onerror="window._firebaseError='firebase-database failed to load'"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js" onerror="window._firebaseError='firebase-storage failed to load'"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"
+  onerror="window._firebaseError='firebase-app failed to load'"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"
+  onerror="window._firebaseError='firebase-database failed to load'"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"
+  onerror="window._firebaseError='firebase-storage failed to load'"></script>
 
 <script>
-// ===== FIREBASE INIT =====
+// ===== FIREBASE INIT WITH ERROR HANDLING =====
 var db = null;
 var storage = null;
 var _fbReady = false;
 
 function initFirebase() {
   if (window._firebaseError) {
-    showFatalError("Firebase failed to load","The app cannot connect to Firebase. This usually happens when you open the file directly from your computer (<code>file://</code>).",["Open the file using a local server (e.g. VS Code Live Server extension)","Or upload the file to Firebase Hosting / Vercel / Netlify","Do NOT open by double-clicking the .html file directly"]);
+    showFatalError(
+      "Firebase failed to load",
+      "The app cannot connect to Firebase. This usually happens when you open the file directly from your computer (<code>file://</code>).",
+      [
+        "Open the file using a local server (e.g. VS Code Live Server extension)",
+        "Or upload the file to Firebase Hosting / Vercel / Netlify",
+        "Do NOT open by double-clicking the .html file directly"
+      ]
+    );
     return false;
   }
+
   if (typeof firebase === 'undefined') {
-    showFatalError("Firebase SDK not loaded","Could not load Firebase. Please check your internet connection and reload the page.",["Make sure you have a stable internet connection", "Try reloading with Ctrl+R / Cmd+R"]);
+    showFatalError(
+      "Firebase SDK not loaded",
+      "Could not load Firebase. Please check your internet connection and reload the page.",
+      ["Make sure you have a stable internet connection", "Try reloading with Ctrl+R / Cmd+R"]
+    );
     return false;
   }
+
   try {
     if (!firebase.apps.length) {
-      firebase.initializeApp({apiKey:"AIzaSyDJDVZazGiEUshVicJX8ObvxIjDPgA5rTo",authDomain:"studentstatista.firebaseapp.com",databaseURL:"https://studentstatista-default-rtdb.firebaseio.com",projectId:"studentstatista",storageBucket:"studentstatista.firebasestorage.app"});
+      firebase.initializeApp({
+        apiKey: "AIzaSyDJDVZazGiEUshVicJX8ObvxIjDPgA5rTo",
+        authDomain: "studentstatista.firebaseapp.com",
+        databaseURL: "https://studentstatista-default-rtdb.firebaseio.com",
+        projectId: "studentstatista",
+        storageBucket: "studentstatista.firebasestorage.app"
+      });
     }
     db = firebase.database();
     storage = firebase.storage();
     _fbReady = true;
     return true;
   } catch(e) {
-    showFatalError("Firebase initialization error","Error: <code>" + e.message + "</code>",["Check that the Firebase config is correct", "Ensure the database URL is valid"]);
+    showFatalError(
+      "Firebase initialization error",
+      "Error: <code>" + e.message + "</code>",
+      ["Check that the Firebase config is correct", "Ensure the database URL is valid"]
+    );
     return false;
   }
 }
@@ -341,7 +634,11 @@ function initFirebase() {
 function showFatalError(title, desc, tips) {
   var app = document.getElementById("app");
   var tipsHtml = tips.map(function(t){ return "<li>" + t + "</li>"; }).join("");
-  app.innerHTML = '<div class="error-banner"><b>⚠️ ' + title + '</b><p style="margin-bottom:10px">' + desc + '</p><ul style="padding-left:18px;line-height:2">' + tipsHtml + '</ul></div>';
+  app.innerHTML = '<div class="error-banner">'
+    + '<b>⚠️ ' + title + '</b>'
+    + '<p style="margin-bottom:10px">' + desc + '</p>'
+    + '<ul style="padding-left:18px;line-height:2">' + tipsHtml + '</ul>'
+    + '</div>';
 }
 
 function requireDB() {
@@ -352,6 +649,7 @@ function requireDB() {
   return true;
 }
 
+// Detect webview
 (function(){
   var ua = navigator.userAgent.toLowerCase();
   if(ua.includes("wv") || ua.includes("telegram") || ua.includes("instagram") || (ua.includes("android") && !ua.includes("chrome"))){
@@ -362,7 +660,7 @@ function requireDB() {
 // ===== GROUPS =====
 var GROUPS = {
   "GROUP IELTS 9:00 M/W/F":["HOSHIMOVA NILUFAR","JURAYEVA AZIZA","MAHMUDOV SUNNAT","MUHIDDINOVA MAHBUBA","NORBOYEV SHOHJAXON","OCHILOV LOCHINBEK","ORALOVA SHOHINUR","RAVSHANOVA ZAYNAB","TOSHPULATOV ABBOS"],
-  "GROUP IELTS 17:00 MWF":["SARVAR ASADOV","QODIROV JAMSHID","ABDUMAJIDOVA MALOHAT","ESHONQULOVA MUXLISA","SAIDAZIZOV SAID","SAIDAZIMOVA MUBINA","RAHMONOV MUHAMMAD","DAYNOVOVA SAIDA","SODIQOVA ANORA"],
+  "GROUP IELTS 17:00 MWF":["ABDURAHIMOVA ZILOLA","ALIMOV BEHRUZ","ANVAROVA RUXSHONA","ASADOV SARDOR","BAXRONOVA FAYRUZA","GAFURJONOV ULUGBEK","ISMOILOV ISMOIL","JULIBOYEVA ZEBO","KOZIMJONOVA DURDONA","MELIKUZIYEVA RUXSHONA","NIGMATOV ABDURAHIM","RAHMATULLAYEV BEXRUZ","TALABOV SAUD","XISLATULLAYEV JAVOXIR","XODJAYEVA LAZIZA","YORMATOV MIRABROR"],
   "GROUP IELTS M/W/F 14:00":["RASHIDJANOVA FARANGIZ","RUZIYEVA GAVHAR","YADGARALIYEVA GULHAYO","MUHAMMADIYEVA SEVINCH","KHUDOYBERDIYEVA LAZIZA","ODIL RAZZOQOV","SOBIRJONOVA FOTIMA"],
   "GROUP CEFR M/W/F 15:30":["TURGUNOVA GULCHEHRA","RAXMATULLAYEV SHAHBOZ","ABDULLAYEVA NAFISA","XODJAMQULOVA IRODA","BURXONOVA SARVINOZ","SAMIKOVA MUBINA","ANVAROV SARVARVARBEK","ERIKOVA AYNURA","YOLDOSHEVA DILRABO","TOXTAXODJAYEV ALISHER","UBAYDULLAYEV ISMOIL","BAXTIYOROV ABDULLOH","PRIMOVA MAFTUNA","MASHRAPOVA FARANGIZ","MIRVALIEV RAMZIDDIN","XUDOYOROVA DILAFRUZ","ABDUAZIZOVA HABIBA","GAIPNAZAROV BEHZOD","AXTAMOV OTABEK","UMAROVA RAXIMA","KHOSHIMOVA MUMTOZBONU","SERIKBAYEV AVAZBEK"],
   "GROUP IELTS T/T/S 9:00":["ZARINA FAYZULLAEVA","MURODOVA NOZIMA","AZIZA ERKINOVA","NURIDDIN QOCHQOROV","QIDIRALIEVA JAYNA","HAMROYEVA NIGORA","QILICHOVA GULISTON","AZIMOVA MUHTASAR"],
@@ -478,7 +776,13 @@ function isBlocked(group){
 var app = document.getElementById("app");
 
 function home(){
-  app.innerHTML = '<div class="home-wrap"><div class="home-title">Statista</div><div class="home-sub">IELTS Homework Tracker</div><div class="home-cards"><div class="home-card student" onclick="enterStudent()"><div class="label">Student</div><div class="sub">Submit homework</div></div><div class="home-card teacher" onclick="loginAdmin()"><div class="label">Teacher</div><div class="sub">Admin panel</div></div></div></div>';
+  app.innerHTML = '<div class="home-wrap">'
+    + '<div class="home-title">Statista</div>'
+    + '<div class="home-sub">IELTS Homework Tracker</div>'
+    + '<div class="home-cards">'
+    + '<div class="home-card student" onclick="enterStudent()"><div class="label">Student</div><div class="sub">Submit homework</div></div>'
+    + '<div class="home-card teacher" onclick="loginAdmin()"><div class="label">Teacher</div><div class="sub">Admin panel</div></div>'
+    + '</div></div>';
 }
 
 function enterStudent(){
@@ -509,7 +813,8 @@ function selectStudent(group){
 }
 
 function showStages(group, student){
-  app.innerHTML = '<button class="back" onclick="selectStudent(\''+esc(group)+'\')">← Back</button><div class="bc">'+group+' › <b>'+student+'</b></div><h3>Select Stage</h3><div id="stageList"></div>';
+  app.innerHTML = '<button class="back" onclick="selectStudent(\''+esc(group)+'\')">← Back</button>'
+    + '<div class="bc">'+group+' › <b>'+student+'</b></div><h3>Select Stage</h3><div id="stageList"></div>';
   var list = document.getElementById("stageList");
   Object.keys(STAGES).forEach(function(stage){
     var div = document.createElement("div"); div.className = "card";
@@ -520,7 +825,8 @@ function showStages(group, student){
 }
 
 function showLessons(group, student, stage){
-  app.innerHTML = '<button class="back" onclick="showStages(\''+esc(group)+'\',\''+esc(student)+'\')">← Back</button><div class="bc"><b>'+student+'</b> › '+stage+'</div><h3>Select Lesson</h3><div id="lessonList"></div>';
+  app.innerHTML = '<button class="back" onclick="showStages(\''+esc(group)+'\',\''+esc(student)+'\')">← Back</button>'
+    + '<div class="bc"><b>'+student+'</b> › '+stage+'</div><h3>Select Lesson</h3><div id="lessonList"></div>';
   var list = document.getElementById("lessonList");
   Object.keys(STAGES[stage]).forEach(function(lesson){
     var div = document.createElement("div"); div.className = "card";
@@ -590,7 +896,28 @@ async function showHomework(group, student, stage, lesson){
       row.appendChild(aiBtn);
     }
 
+    if(isSpeaking){
+      var spkBtn = document.createElement("button");
+      spkBtn.className = "speak-btn";
+      spkBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> '+(submitted?'Re-record':'Record Speaking');
+      if(blocked){ spkBtn.style.opacity = "0.35"; spkBtn.style.pointerEvents = "none"; }
+      (function(g,st,sg,ls,h){ spkBtn.addEventListener("click", function(){ openSpeakModal(g,st,sg,ls,h); }); })(group,student,stage,lesson,hw);
+      row.appendChild(spkBtn);
+    }
+
     card.appendChild(row);
+
+    if(isSpeaking && speakSubmitted){
+      var type = d.recordingType || 'audio';
+      var playerWrap = document.createElement("div"); playerWrap.style.marginTop = "10px";
+      if(type === 'video'){
+        playerWrap.innerHTML = '<video class="speak-video-player" controls src="'+d.recordingUrl+'"></video>';
+      } else {
+        playerWrap.innerHTML = '<audio class="speak-audio-player" controls src="'+d.recordingUrl+'"></audio>';
+      }
+      if(d.duration) playerWrap.innerHTML += '<div style="font-size:11px;color:var(--muted);margin-top:4px;font-family:\'Space Mono\',monospace">Duration: '+formatTime(d.duration)+'</div>';
+      card.appendChild(playerWrap);
+    }
 
     if(!isSpeaking && photoSubmitted){
       d.files.forEach(function(url){
@@ -689,6 +1016,582 @@ async function replaceHW(input, group, student, stage, lesson, hw){
   alert("Replaced successfully ✓");
 }
 
+// ===== SPEAKING RECORDER =====
+var _spkGroup="",_spkStudent="",_spkStage="",_spkLesson="",_spkHw="";
+var _spkType="audio";
+var _spkMediaRecorder=null, _spkStream=null;
+var _spkInterval=null, _spkRecordedSecs=0;
+var _spkMinSecs=600; // 10 minutes minimum
+var _spkSelectedVideoFile=null;
+var _spkAllChunks=[]; // all chunks across all sessions (resume support)
+var _spkIsPaused=false;
+var _spkSaveKey=""; // localStorage key for this session
+
+// Save progress to localStorage every 5 seconds
+function _spkSaveProgress(){
+  if(!_spkSaveKey) return;
+  try{
+    localStorage.setItem(_spkSaveKey, JSON.stringify({
+      secs: _spkRecordedSecs,
+      hw: _spkHw,
+      group: _spkGroup,
+      student: _spkStudent,
+      stage: _spkStage,
+      lesson: _spkLesson,
+      ts: Date.now()
+    }));
+  }catch(e){}
+}
+
+function _spkClearProgress(){
+  if(_spkSaveKey) try{ localStorage.removeItem(_spkSaveKey); }catch(e){}
+}
+
+function _spkGetSaveKey(group,student,stage,lesson,hw){
+  return "spk_prog_"+safe(group)+"_"+safe(student)+"_"+safe(hw);
+}
+
+function openSpeakModal(group,student,stage,lesson,hw){
+  // Stop any existing recording first
+  if(_spkMediaRecorder && _spkMediaRecorder.state!=="inactive"){
+    _spkMediaRecorder.onstop=null;
+    try{ _spkMediaRecorder.stop(); }catch(e){}
+  }
+  if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
+  clearInterval(_spkInterval);
+
+  // Reset all state
+  _spkGroup=group; _spkStudent=student; _spkStage=stage; _spkLesson=lesson; _spkHw=hw;
+  _spkType="audio"; _spkSelectedVideoFile=null;
+  _spkAllChunks=[]; _spkRecordedSecs=0; _spkIsPaused=false;
+  _spkMediaRecorder=null; _spkStream=null;
+  _spkSaveKey=_spkGetSaveKey(group,student,stage,lesson,hw);
+
+  document.getElementById("speakHwBadge").textContent=hw;
+  _resetAudioUI();
+
+  // Check for saved progress
+  try{
+    var saved=localStorage.getItem(_spkSaveKey);
+    if(saved){
+      var s=JSON.parse(saved);
+      // Only show if saved in last 24 hours
+      if(s && s.secs>0 && (Date.now()-s.ts)<86400000){
+        document.getElementById("speakSavedBanner").style.display="block";
+        document.getElementById("speakSavedInfo").textContent=
+          "You recorded "+formatTime(s.secs)+" — saved "+_timeAgo(s.ts)+". Continue from where you left off.";
+        // Pre-load the saved seconds
+        _spkRecordedSecs=s.secs;
+        document.getElementById("speakTimer").textContent=formatTime(_spkRecordedSecs);
+        _updateProgressBar();
+      } else {
+        _spkClearProgress();
+        document.getElementById("speakSavedBanner").style.display="none";
+      }
+    } else {
+      document.getElementById("speakSavedBanner").style.display="none";
+    }
+  }catch(e){
+    document.getElementById("speakSavedBanner").style.display="none";
+  }
+
+  document.getElementById("audioRecorderSection").style.display="block";
+  document.getElementById("videoUploadSection").style.display="none";
+  document.getElementById("typeAudio").classList.add("active");
+  document.getElementById("typeVideo").classList.remove("active");
+  document.getElementById("speakModal").style.display="block";
+}
+
+function _resetAudioUI(){
+  document.getElementById("speakTimer").textContent="00:00";
+  document.getElementById("speakTimer").className="speak-timer";
+  document.getElementById("speakTimerLabel").textContent="Press Record to start";
+  document.getElementById("speakProgressBar").style.width="0%";
+  document.getElementById("speakProgressBar").style.background="";
+  document.getElementById("speakProgressBar").className="speak-progress-bar";
+  document.getElementById("speakStatus").textContent="Press Record to begin your speaking";
+  document.getElementById("speakStatus").className="speak-status";
+  // Record button — fully reset
+  document.getElementById("speakStartBtn").disabled=false;
+  document.getElementById("speakStartBtn").innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg> Record';
+  // Pause button — fully reset
+  var pauseBtn=document.getElementById("speakPauseBtn");
+  pauseBtn.disabled=true;
+  pauseBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause';
+  pauseBtn.style.background="rgba(245,166,35,.12)";
+  pauseBtn.style.color="var(--amber)";
+  pauseBtn.style.borderColor="rgba(245,166,35,.35)";
+  // Stop button
+  var stopBtn=document.getElementById("speakStopBtn");
+  stopBtn.disabled=true;
+  stopBtn.style.opacity="0.4";
+  stopBtn.style.cursor="not-allowed";
+  document.getElementById("speakPreview").style.display="none";
+  document.getElementById("speakPreviewPlayer").innerHTML="";
+  document.getElementById("speakUploadStatus").innerHTML="";
+  document.getElementById("speakMinWarn").style.display="block";
+  document.getElementById("speakMinWarn").textContent="⚠️ Minimum 10 minutes required to submit";
+  document.getElementById("speakMinWarn").style.color="";
+  document.getElementById("speakMinWarn").style.fontWeight="";
+  document.getElementById("transcriptWrap").style.display="none";
+  document.getElementById("transcriptContent").innerHTML="";
+  document.getElementById("transcriptStats").innerHTML="";
+  document.getElementById("videoUploadStatus").innerHTML="";
+  document.getElementById("videoPreviewWrap").style.display="none";
+  document.getElementById("videoFileInput").value="";
+}
+
+function _timeAgo(ts){
+  var mins=Math.round((Date.now()-ts)/60000);
+  if(mins<2) return "just now";
+  if(mins<60) return mins+" minutes ago";
+  return Math.round(mins/60)+" hours ago";
+}
+
+function resumeSavedRecording(){
+  // Hide banner and just start recording — seconds already loaded
+  document.getElementById("speakSavedBanner").style.display="none";
+  startSpeakRecording();
+}
+
+function discardSavedRecording(){
+  _spkClearProgress();
+  _spkRecordedSecs=0;
+  _spkAllChunks=[];
+  document.getElementById("speakSavedBanner").style.display="none";
+  document.getElementById("speakTimer").textContent="00:00";
+  _updateProgressBar();
+}
+
+function closeSpeakModal(){
+  // If actively recording (not paused) and under minimum — block
+  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording" && _spkRecordedSecs < _spkMinSecs){
+    var remaining=_spkMinSecs-_spkRecordedSecs;
+    var warn=document.getElementById("speakMinWarn");
+    warn.textContent="⛔ Cannot close while recording — pause first or reach 10 min minimum! "+formatTime(remaining)+" left.";
+    warn.style.color="var(--red)"; warn.style.fontWeight="700";
+    _shakeEl(document.querySelector(".speak-close-btn"));
+    return;
+  }
+  // If recording, pause it automatically before closing (saves progress)
+  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording"){
+    _pauseRecorderHard();
+  }
+  _spkSaveProgress(); // save whatever we have
+  if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
+  clearInterval(_spkInterval);
+  document.getElementById("speakModal").style.display="none";
+}
+
+function _shakeEl(el){
+  if(!el) return;
+  el.style.transform="translateX(-5px)";
+  setTimeout(function(){ el.style.transform="translateX(5px)"; },80);
+  setTimeout(function(){ el.style.transform="translateX(-4px)"; },160);
+  setTimeout(function(){ el.style.transform="translateX(4px)"; },240);
+  setTimeout(function(){ el.style.transform="translateX(0)"; },320);
+}
+
+function selectRecordType(type){
+  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording") return;
+  _spkType=type;
+  document.getElementById("typeAudio").classList.toggle("active",type==="audio");
+  document.getElementById("typeVideo").classList.toggle("active",type==="video");
+  document.getElementById("audioRecorderSection").style.display=type==="audio"?"block":"none";
+  document.getElementById("videoUploadSection").style.display=type==="video"?"block":"none";
+}
+
+function _updateProgressBar(){
+  var pct=Math.min((_spkRecordedSecs/_spkMinSecs)*100,100);
+  var bar=document.getElementById("speakProgressBar");
+  bar.style.width=pct+"%";
+  if(_spkRecordedSecs>=_spkMinSecs){
+    bar.style.background="linear-gradient(90deg,var(--green),#1aad74)";
+  } else {
+    bar.style.background="";
+  }
+}
+
+function startSpeakRecording(){
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
+    _spkStream=s;
+    _spkIsPaused=false;
+
+    var mimeType=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":
+                 MediaRecorder.isTypeSupported("audio/webm")?"audio/webm":"audio/ogg";
+    _spkMediaRecorder=new MediaRecorder(_spkStream,{mimeType:mimeType});
+    _spkMediaRecorder.ondataavailable=function(e){ if(e.data.size>0) _spkAllChunks.push(e.data); };
+    _spkMediaRecorder.onstop=function(){};  // handled manually
+    _spkMediaRecorder.start(1000);
+
+    document.getElementById("speakStartBtn").disabled=true;
+    document.getElementById("speakStartBtn").innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg> Recording…';
+    document.getElementById("speakPauseBtn").disabled=false;
+    var stopBtn=document.getElementById("speakStopBtn");
+    stopBtn.disabled=false;
+    stopBtn.style.opacity="1";
+    stopBtn.style.cursor="pointer";
+    document.getElementById("speakStatus").className="speak-status recording";
+    document.getElementById("speakStatus").innerHTML='<span class="speak-rec-dot"></span>Recording…';
+
+    clearInterval(_spkInterval);
+    var saveCounter=0;
+    _spkInterval=setInterval(function(){
+      _spkRecordedSecs++;
+      saveCounter++;
+      if(saveCounter>=5){ _spkSaveProgress(); saveCounter=0; } // save every 5 secs
+
+      var timerEl=document.getElementById("speakTimer");
+      timerEl.textContent=formatTime(_spkRecordedSecs);
+      _updateProgressBar();
+
+      if(_spkRecordedSecs < _spkMinSecs){
+        var remaining=_spkMinSecs-_spkRecordedSecs;
+        document.getElementById("speakTimerLabel").textContent="Keep going — "+formatTime(remaining)+" until you can stop";
+        document.getElementById("speakMinWarn").textContent="⚠️ Minimum 10 minutes required to submit";
+        document.getElementById("speakMinWarn").style.color="";
+      } else {
+        document.getElementById("speakTimerLabel").textContent="✅ You can stop now!";
+        document.getElementById("speakMinWarn").textContent="✅ Minimum reached — press Submit when ready";
+        document.getElementById("speakMinWarn").style.color="var(--green)";
+      }
+    },1000);
+
+  }).catch(function(err){ alert("Microphone error: "+err.message); });
+}
+
+function pauseSpeakRecording(){
+  if(!_spkMediaRecorder) return;
+
+  if(_spkMediaRecorder.state==="recording"){
+    // PAUSE
+    _pauseRecorderHard();
+    _spkSaveProgress();
+    document.getElementById("speakPauseBtn").innerHTML=
+      '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Resume';
+    document.getElementById("speakPauseBtn").style.background="rgba(34,200,135,.12)";
+    document.getElementById("speakPauseBtn").style.color="var(--green)";
+    document.getElementById("speakPauseBtn").style.borderColor="rgba(34,200,135,.35)";
+    document.getElementById("speakStartBtn").disabled=true;
+    document.getElementById("speakStatus").className="speak-status";
+    document.getElementById("speakStatus").innerHTML='⏸️ Paused at '+formatTime(_spkRecordedSecs)+' — press Resume to continue';
+    _spkIsPaused=true;
+
+  } else if(_spkIsPaused){
+    // RESUME
+    navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
+      _spkStream=s;
+      _spkIsPaused=false;
+      var mimeType=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":
+                   MediaRecorder.isTypeSupported("audio/webm")?"audio/webm":"audio/ogg";
+      _spkMediaRecorder=new MediaRecorder(_spkStream,{mimeType:mimeType});
+      _spkMediaRecorder.ondataavailable=function(e){ if(e.data.size>0) _spkAllChunks.push(e.data); };
+      _spkMediaRecorder.onstop=function(){};
+      _spkMediaRecorder.start(1000);
+
+      // Reset timer interval
+      clearInterval(_spkInterval);
+      var saveCounter=0;
+      _spkInterval=setInterval(function(){
+        _spkRecordedSecs++;
+        saveCounter++;
+        if(saveCounter>=5){ _spkSaveProgress(); saveCounter=0; }
+        document.getElementById("speakTimer").textContent=formatTime(_spkRecordedSecs);
+        _updateProgressBar();
+        if(_spkRecordedSecs < _spkMinSecs){
+          var remaining=_spkMinSecs-_spkRecordedSecs;
+          document.getElementById("speakTimerLabel").textContent="Keep going — "+formatTime(remaining)+" until you can stop";
+          document.getElementById("speakMinWarn").textContent="⚠️ Minimum 10 minutes required to submit";
+          document.getElementById("speakMinWarn").style.color="";
+        } else {
+          document.getElementById("speakTimerLabel").textContent="✅ You can stop now!";
+          document.getElementById("speakMinWarn").textContent="✅ Minimum reached — press Submit when ready";
+          document.getElementById("speakMinWarn").style.color="var(--green)";
+        }
+      },1000);
+
+      document.getElementById("speakPauseBtn").innerHTML=
+        '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause';
+      document.getElementById("speakPauseBtn").style.background="rgba(245,166,35,.12)";
+      document.getElementById("speakPauseBtn").style.color="var(--amber)";
+      document.getElementById("speakPauseBtn").style.borderColor="rgba(245,166,35,.35)";
+      document.getElementById("speakStatus").className="speak-status recording";
+      document.getElementById("speakStatus").innerHTML='<span class="speak-rec-dot"></span>Recording…';
+
+    }).catch(function(err){ alert("Microphone error: "+err.message); });
+  }
+}
+
+function _pauseRecorderHard(){
+  clearInterval(_spkInterval);
+  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording"){
+    _spkMediaRecorder.stop();
+  }
+  if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
+}
+
+function stopSpeakRecording(){
+  if(_spkRecordedSecs < _spkMinSecs){
+    var remaining=_spkMinSecs-_spkRecordedSecs;
+    var warn=document.getElementById("speakMinWarn");
+    warn.textContent="⛔ Minimum 10 minutes required! "+formatTime(remaining)+" remaining.";
+    warn.style.color="var(--red)"; warn.style.fontWeight="700";
+    _shakeEl(document.getElementById("speakStopBtn"));
+    return;
+  }
+  clearInterval(_spkInterval);
+  document.getElementById("speakStartBtn").disabled=true;
+  document.getElementById("speakPauseBtn").disabled=true;
+  document.getElementById("speakStopBtn").disabled=true;
+  document.getElementById("speakStatus").className="speak-status uploading";
+  document.getElementById("speakStatus").textContent="Processing… please wait";
+
+  // Stop recorder if still running, then upload
+  if(_spkMediaRecorder && _spkMediaRecorder.state==="recording"){
+    _spkMediaRecorder.onstop=function(){ _doUpload(); };
+    _spkMediaRecorder.stop();
+    if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
+  } else {
+    _doUpload();
+  }
+}
+
+function _doUpload(){
+  if(!requireDB()) return;
+  if(!_spkAllChunks.length){
+    document.getElementById("speakStatus").textContent="❌ No audio recorded. Please try again.";
+    return;
+  }
+  var mimeType=_spkAllChunks[0]?_spkAllChunks[0].type:"audio/webm";
+  var blob=new Blob(_spkAllChunks,{type:mimeType});
+  var blobUrl=URL.createObjectURL(blob);
+
+  document.getElementById("speakPreviewPlayer").innerHTML='<audio class="speak-audio-player" controls src="'+blobUrl+'"></audio>';
+  document.getElementById("speakPreview").style.display="block";
+  document.getElementById("speakStatus").className="speak-status uploading";
+  document.getElementById("speakStatus").textContent="Uploading to server…";
+  document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--amber)">⏳ Step 1/2: Uploading audio…</span>';
+  document.getElementById("transcriptWrap").style.display="block";
+  document.getElementById("transcriptContent").innerHTML='<div class="transcript-loading"><div class="ai-dots"><span></span><span></span><span></span></div>Waiting for upload…</div>';
+
+  var savedBlob=blob;
+  var path="speaking/"+safe(_spkGroup)+"/"+safe(_spkStudent)+"/"+safe(_spkStage)+"/"+safe(_spkLesson)+"/"+safe(_spkHw)+"/"+Date.now()+".webm";
+  var ref=storage.ref(path);
+  ref.put(blob).then(function(){ return ref.getDownloadURL(); }).then(function(url){
+    return db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw).set({
+      recordingUrl:url, recordingType:"audio", duration:_spkRecordedSecs, time:Date.now()
+    });
+  }).then(function(){
+    _spkClearProgress(); // clear saved progress — done!
+    document.getElementById("speakStatus").className="speak-status done";
+    document.getElementById("speakStatus").textContent="✅ Audio uploaded!";
+    document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--green);font-weight:700">✅ Saved! Transcribing your speech…</span>';
+    pushNotif("Speaking Submitted","Your recording for \""+_spkHw+"\" was uploaded.","success");
+    _spkAllChunks=[];
+    transcribeAudio(savedBlob);
+  }).catch(function(err){
+    document.getElementById("speakStatus").className="speak-status";
+    document.getElementById("speakStatus").textContent="❌ Upload failed. Try again.";
+    document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--red)">Upload error: '+(err.message||err)+'</span>';
+    document.getElementById("transcriptContent").innerHTML='<div style="color:var(--red);font-size:13px;padding:10px">⚠️ Upload failed — transcription skipped.</div>';
+    // Re-enable submit button so they can retry
+    document.getElementById("speakStopBtn").disabled=false;
+    _spkAllChunks=[];
+  });
+}
+
+// ===== GROQ WHISPER TRANSCRIPTION =====
+var GROQ_KEY="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";
+
+async function transcribeAudio(blob){
+  document.getElementById("transcriptContent").innerHTML=
+    '<div class="transcript-loading"><div class="ai-dots"><span></span><span></span><span></span></div>Step 2/2: Transcribing with Whisper AI… this may take 30–60 seconds</div>';
+
+  try {
+    // Groq Whisper accepts: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, webm — max 25MB
+    var sizeMB = blob.size / 1024 / 1024;
+
+    // If over 24MB, we need to warn (very rare for 20min audio at low bitrate)
+    if(sizeMB > 24){
+      document.getElementById("transcriptContent").innerHTML=
+        '<div style="color:var(--amber);font-size:13px;padding:12px;background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.25);border-radius:var(--rsm);">'
+        +'⚠️ Audio file is too large for transcription ('+Math.round(sizeMB)+'MB, max 24MB).<br>Recording was saved successfully — transcription skipped.</div>';
+      return;
+    }
+
+    var formData = new FormData();
+    // Use .webm extension so Groq recognizes the format
+    formData.append("file", blob, "recording.webm");
+    formData.append("model", "whisper-large-v3");
+    formData.append("language", "en"); // English for IELTS
+    formData.append("response_format", "verbose_json"); // get word count etc
+    formData.append("temperature", "0");
+
+    var resp = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", {
+      method: "POST",
+      headers: { "Authorization": "Bearer "+GROQ_KEY },
+      body: formData
+    });
+
+    if(!resp.ok){
+      var errData = await resp.json().catch(function(){return{};});
+      throw new Error(errData.error&&errData.error.message ? errData.error.message : "Whisper API error "+resp.status);
+    }
+
+    var data = await resp.json();
+    var text = data.text || "";
+
+    if(!text.trim()){
+      document.getElementById("transcriptContent").innerHTML=
+        '<div style="color:var(--muted);font-size:13px;padding:12px">No speech detected in the recording.</div>';
+      return;
+    }
+
+    // Count words and estimate speaking rate
+    var words = text.trim().split(/\s+/).filter(function(w){return w;}).length;
+    var minutes = _spkRecordedSecs / 60;
+    var wpm = Math.round(words / minutes);
+
+    // Render transcript
+    document.getElementById("transcriptContent").innerHTML=
+      '<div class="transcript-box">'+escapeHtml(text)+'</div>';
+
+    // Stats row
+    document.getElementById("transcriptStats").innerHTML=
+      '<span class="transcript-stat">'+words+' words</span>'
+      +'<span class="transcript-stat">'+wpm+' wpm</span>'
+      +'<span class="transcript-stat">'+formatTime(_spkRecordedSecs)+' duration</span>';
+
+    // Also save transcript to Firebase
+    if(_fbReady && db){
+      db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw+"/transcript").set({
+        text: text, words: words, wpm: wpm, time: Date.now()
+      }).catch(function(){});
+    }
+
+    document.getElementById("speakUploadStatus").innerHTML=
+      '<span style="color:var(--green);font-weight:700">✅ Uploaded & transcribed successfully!</span>';
+
+  } catch(err){
+    document.getElementById("transcriptContent").innerHTML=
+      '<div style="color:var(--red);font-size:13px;padding:12px;background:rgba(247,85,106,.06);border:1px solid rgba(247,85,106,.2);border-radius:var(--rsm);">'
+      +'❌ Transcription failed: '+(err.message||err)+'<br>'
+      +'<span style="color:var(--muted);font-size:11px">Recording was saved successfully.</span></div>';
+  }
+}
+
+function escapeHtml(t){
+  return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function copyTranscript(){
+  var box=document.querySelector(".transcript-box");
+  if(!box) return;
+  var text=box.textContent||"";
+  navigator.clipboard.writeText(text).then(function(){
+    var btn=document.querySelector(".transcript-copy-btn");
+    btn.textContent="Copied!";
+    btn.style.background="var(--green)";
+    btn.style.color="var(--bg)";
+    setTimeout(function(){ btn.textContent="Copy"; btn.style.background=""; btn.style.color=""; },2000);
+  }).catch(function(){
+    // Fallback
+    var ta=document.createElement("textarea");
+    ta.value=text; document.body.appendChild(ta); ta.select();
+    document.execCommand("copy"); document.body.removeChild(ta);
+  });
+}
+
+// ===== VIDEO FILE UPLOAD =====
+function handleVideoFileSelect(input){
+  var file=input.files[0];
+  if(!file) return;
+  _spkSelectedVideoFile=file;
+  var url=URL.createObjectURL(file);
+  document.getElementById("videoPreviewEl").src=url;
+  document.getElementById("videoPreviewWrap").style.display="block";
+  document.getElementById("videoUploadStatus").innerHTML='<span style="color:var(--muted)">File selected: <b style="color:var(--text)">'+file.name+'</b> ('+Math.round(file.size/1024/1024*10)/10+' MB)</span>';
+}
+
+async function submitVideoFile(){
+  if(!_spkSelectedVideoFile){ alert("Please select a video file first."); return; }
+  if(!requireDB()) return;
+
+  var file = _spkSelectedVideoFile;
+  var sizeMB = Math.round(file.size / 1024 / 1024 * 10) / 10;
+
+  // Warn if very large (over 500MB)
+  if(file.size > 500 * 1024 * 1024){
+    alert("File is too large ("+sizeMB+"MB). Please choose a file under 500MB.");
+    return;
+  }
+
+  var btn = document.getElementById("videoSubmitBtn");
+  var statusEl = document.getElementById("videoUploadStatus");
+  btn.disabled = true;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg> Uploading…';
+
+  statusEl.innerHTML = '<div style="color:var(--amber);font-weight:600;margin-bottom:8px">⏳ Uploading '+sizeMB+'MB… do not close this window</div>'
+    + '<div style="background:var(--surface2);border-radius:20px;height:8px;overflow:hidden;margin-bottom:6px">'
+    + '<div id="videoProgressBar" style="height:100%;background:linear-gradient(90deg,var(--green),#1aad74);border-radius:20px;width:0%;transition:width .3s"></div>'
+    + '</div>'
+    + '<div id="videoProgressText" style="font-size:12px;color:var(--muted);font-family:\'Space Mono\',monospace">0%</div>';
+
+  var ext = file.name.split('.').pop() || "mp4";
+  var path = "speaking/"+safe(_spkGroup)+"/"+safe(_spkStudent)+"/"+safe(_spkStage)+"/"+safe(_spkLesson)+"/"+safe(_spkHw)+"/"+Date.now()+"."+ext;
+  var ref = storage.ref(path);
+
+  // Use uploadTask for progress tracking
+  var uploadTask = ref.put(file);
+
+  uploadTask.on('state_changed',
+    function(snapshot){
+      // Progress
+      var pct = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+      var bar = document.getElementById("videoProgressBar");
+      var txt = document.getElementById("videoProgressText");
+      if(bar) bar.style.width = pct + "%";
+      if(txt) txt.textContent = pct + "% — " + Math.round(snapshot.bytesTransferred/1024/1024*10)/10 + "MB / " + sizeMB + "MB";
+    },
+    function(error){
+      // Error
+      var msg = "";
+      switch(error.code){
+        case 'storage/unauthorized': msg = "Permission denied. Check Firebase Storage rules."; break;
+        case 'storage/canceled': msg = "Upload was cancelled."; break;
+        case 'storage/unknown': msg = "Unknown error. Check your internet connection."; break;
+        default: msg = error.message || error.code || "Upload failed";
+      }
+      statusEl.innerHTML = '<div style="color:var(--red);font-weight:600">❌ Upload failed: '+msg+'</div>'
+        + '<div style="font-size:11px;color:var(--muted);margin-top:4px">Open DevTools (F12) → Console for more details</div>';
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Retry Submit';
+      console.error("Firebase Storage upload error:", error);
+    },
+    function(){
+      // Success
+      uploadTask.snapshot.ref.getDownloadURL().then(function(url){
+        return db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw).set({
+          recordingUrl: url,
+          recordingType: "video",
+          duration: 0,
+          fileName: file.name,
+          fileSizeMB: sizeMB,
+          time: Date.now()
+        });
+      }).then(function(){
+        statusEl.innerHTML = '<span style="color:var(--green);font-weight:700">✅ Video uploaded successfully! ('+sizeMB+'MB) You can close this window.</span>';
+        btn.innerHTML = '✅ Submitted!';
+        btn.style.background = "linear-gradient(135deg,var(--green),#1aad74)";
+        pushNotif("Speaking Video Submitted","Your video for \""+_spkHw+"\" was uploaded ("+sizeMB+"MB).","success");
+      }).catch(function(err){
+        statusEl.innerHTML = '<div style="color:var(--red)">✅ File uploaded but failed to save record: '+(err.message||err)+'</div>';
+        console.error("Firebase DB save error:", err);
+      });
+    }
+  );
+}
+
 // ===== ADMIN =====
 function loginAdmin(){
   document.getElementById("modalLogin").value="";
@@ -709,7 +1612,11 @@ function submitLogin(){
   }
 }
 function admin(){
-  app.innerHTML='<button class="back" onclick="home()">← Back</button><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin-bottom:0">Admin Panel</h3><button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button></div><div id="groupList"></div>';
+  app.innerHTML='<button class="back" onclick="home()">← Back</button>'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'
+    +'<h3 style="margin-bottom:0">Admin Panel</h3>'
+    +'<button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button></div>'
+    +'<div id="groupList"></div>';
   var list=document.getElementById("groupList");
   Object.keys(GROUPS).forEach(function(g){
     var div=document.createElement("div"); div.className="admin-group-card";
@@ -753,6 +1660,9 @@ async function adminLessonView(group,stage,lesson){
   h+='<h3>'+lesson+' — Results</h3>';
   h+='<button class="export-btn" onclick="exportCSV(\''+esc(group)+'\',\''+esc(stage)+'\',\''+esc(lesson)+'\')">Export CSV</button>';
 
+  // Store transcripts globally so modal can access them
+  window._adminTranscripts = {};
+
   for(var i=0;i<GROUPS[group].length;i++){
     var student=GROUPS[group][i];
     h+='<div class="admin-student-card"><div class="admin-student-name">'+student+'</div>';
@@ -770,6 +1680,20 @@ async function adminLessonView(group,stage,lesson){
       if(ok&&isSp&&d.recordingUrl){
         h+='<a href="'+d.recordingUrl+'" target="_blank" style="color:var(--green);font-size:12px;font-weight:600;text-decoration:none;background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.25);padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:4px">▶ play</a>';
         if(d.duration) h+='<span style="font-size:11px;color:var(--muted);font-family:\'Space Mono\',monospace">'+formatTime(d.duration)+'</span>';
+
+        // Fetch transcript and show button right next to play
+        var tsnap=await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw+"/transcript").once("value").catch(function(){return{val:function(){return null;}};});
+        var tr=tsnap.val();
+        if(tr&&tr.text){
+          var tKey="t_"+i+"_"+j;
+          window._adminTranscripts[tKey]={text:tr.text, words:tr.words||0, wpm:tr.wpm||0, student:student, hw:hw};
+          h+='<button onclick="openTranscriptModal(\''+tKey+'\')" style="display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,rgba(79,142,247,.2),rgba(123,92,245,.15));color:#a78bfa;border:1px solid rgba(123,92,245,.4);padding:3px 10px;border-radius:20px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;width:auto">'
+            +'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+            +(tr.words?tr.words+' words':'📝 Transcript')
+            +'</button>';
+        } else {
+          h+='<span style="font-size:11px;color:var(--muted);font-style:italic">no transcript</span>';
+        }
       }
       if(ok&&!isSp) d.files.forEach(function(url){h+='<a href="'+url+'" target="_blank" style="color:var(--accent);font-size:12px;font-weight:600;text-decoration:none;background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.25);padding:3px 10px;border-radius:20px">📷 view</a>';});
 
@@ -778,6 +1702,33 @@ async function adminLessonView(group,stage,lesson){
     h+='</div>';
   }
   app.innerHTML=h;
+}
+
+function openTranscriptModal(tKey){
+  var tr=window._adminTranscripts&&window._adminTranscripts[tKey];
+  if(!tr) return;
+  document.getElementById("tmStudent").textContent=tr.student+" — "+tr.hw;
+  var stats="";
+  if(tr.words) stats+='<span style="font-size:12px;color:var(--accent);background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.2);padding:3px 10px;border-radius:20px;font-family:\'Space Mono\',monospace">'+tr.words+' words</span>';
+  if(tr.wpm)   stats+='<span style="font-size:12px;color:var(--accent2);background:rgba(123,92,245,.1);border:1px solid rgba(123,92,245,.2);padding:3px 10px;border-radius:20px;font-family:\'Space Mono\',monospace">'+tr.wpm+' wpm</span>';
+  document.getElementById("tmStats").innerHTML=stats;
+  document.getElementById("tmText").textContent=tr.text;
+  document.getElementById("transcriptModal").style.display="flex";
+}
+
+function copyTranscriptModal(){
+  var text=document.getElementById("tmText").textContent;
+  var btns=document.querySelectorAll("#transcriptModal button");
+  var copyBtn=null;
+  btns.forEach(function(b){ if(b.textContent.includes("Copy")) copyBtn=b; });
+  navigator.clipboard.writeText(text).then(function(){
+    if(copyBtn){ copyBtn.textContent="✅ Copied!";
+      setTimeout(function(){ copyBtn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy text'; },2000);
+    }
+  }).catch(function(){
+    var ta=document.createElement("textarea"); ta.value=text;
+    document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
+  });
 }
 
 async function exportCSV(group,stage,lesson){
@@ -850,43 +1801,24 @@ function openInstruction(){
     +'<div class="step-card"><div class="step-num">1</div><div class="step-title">Open the App</div><div class="step-body">Tap <b>"Enter as Student"</b>.</div></div>'
     +'<div class="step-card"><div class="step-num">2</div><div class="step-title">Find Yourself</div><div class="step-body">Select your <b>group</b>, then find your <b>full name</b>.</div></div>'
     +'<div class="step-card"><div class="step-num">3</div><div class="step-title">Choose Homework</div><div class="step-body">Tap your stage → lesson → task.</div></div>'
-    +'<div class="step-card"><div class="step-num">4</div><div class="step-title">Submit Photo</div><div class="step-body">For writing/reading tasks: attach <b>at least one photo</b>.</div></div>'
-    +'<div class="step-card"><div class="step-num">5</div><div class="step-title">Check Writing with AI</div><div class="step-body">For Task 1/2 essays, tap <b style="color:#a78bfa">Check with AI</b>. Enter the essay topic, paste your text, and get instant feedback.</div></div>'
-    +'<div class="alert-card"><b>Get your free Groq API key at:</b><br><a href="https://console.groq.com/keys" target="_blank" style="color:var(--accent)">https://console.groq.com/keys</a><br>Sign up → API Keys → Create → Copy → Paste in the AI checker.</div>';
+    +'<div class="step-card"><div class="step-num">4</div><div class="step-title">Submit Photo or Recording</div><div class="step-body">For writing/reading tasks: attach <b>at least one photo</b>.<br>For speaking tasks: tap <b style="color:var(--green)">🎤 Record Speaking</b> and record your answer (min 1 minute, max 20 minutes).</div></div>'
+    +'<div class="step-card"><div class="step-num">5</div><div class="step-title">Check Writing with AI</div><div class="step-body">For Task 1/2 tasks tap <b style="color:#a78bfa">Check with AI</b> to get IELTS band score and grammar feedback.</div></div>'
+    +'<div class="alert-card"><b>Speaking tasks</b> now have a built-in recorder — choose audio or video, record your answer, and it uploads automatically.</div>';
 }
 
-// ===== AI CHECKER — UPGRADED =====
+// ===== AI CHECKER — UPGRADED (Groq + Grammarly Style) =====
 var _aiCurrentHw = "";
-var _GROQ_KEY_LS = "statista_groq_key";
-
-function saveApiKey(){
-  var k = document.getElementById("groqApiKey").value.trim();
-  if(k){ try{ localStorage.setItem(_GROQ_KEY_LS, k); }catch(e){} }
-  var saved = document.getElementById("apiKeySaved");
-  if(saved){ saved.style.display = k ? "block" : "none"; }
-}
-
-function loadApiKey(){
-  try{
-    var k = localStorage.getItem(_GROQ_KEY_LS);
-    if(k){
-      document.getElementById("groqApiKey").value = k;
-      var saved = document.getElementById("apiKeySaved");
-      if(saved) saved.style.display = "block";
-    }
-  }catch(e){}
-}
 
 function openAI(hwName){
   _aiCurrentHw = hwName;
   document.getElementById("aiHwBadge").textContent = hwName;
   document.getElementById("aiText").value = "";
-  document.getElementById("aiTopic").value = "";
+  if(document.getElementById("aiTopic")) document.getElementById("aiTopic").value = "";
   document.getElementById("aiResult").innerHTML = "";
   document.getElementById("aiWordCount").textContent = "0 words";
   document.getElementById("aiBtn").disabled = false;
   document.getElementById("aiModal").style.display = "block";
-  setTimeout(function(){ document.getElementById("aiTopic").focus(); }, 200);
+  setTimeout(function(){ if(document.getElementById("aiTopic")) document.getElementById("aiTopic").focus(); else document.getElementById("aiText").focus(); }, 200);
 }
 
 function closeAI(){ document.getElementById("aiModal").style.display = "none"; }
@@ -906,15 +1838,16 @@ function setProgress(pct, label){
 }
 
 async function runCheck(){
-  var apiKey = document.getElementById("groqApiKey").value.trim();
+  var apiKey = (document.getElementById("groqApiKey")||{}).value||"";
+  apiKey = apiKey.trim();
   if(!apiKey || !apiKey.startsWith("gsk_")){
     document.getElementById("aiResult").innerHTML =
-      '<div class="ai-error">⚠️ Please enter your Groq API key above.<br>'
-      +'<a href="https://console.groq.com/keys" target="_blank">Get a free key at console.groq.com ↗</a></div>';
+      '<div class="ai-error">⚠️ API key missing. Please contact your teacher.</div>';
     return;
   }
 
-  var topic = document.getElementById("aiTopic").value.trim();
+  var topic = (document.getElementById("aiTopic")||{}).value||"";
+  topic = topic.trim();
   var text = document.getElementById("aiText").value.trim();
   var wordCount = text ? text.split(/\s+/).filter(function(x){ return x; }).length : 0;
 
@@ -925,15 +1858,10 @@ async function runCheck(){
 
   document.getElementById("aiBtn").disabled = true;
 
-  // STAGE 1: Reading the essay
   setProgress(15, "📖 Reading your essay…");
   await new Promise(function(r){ setTimeout(r, 600); });
-
-  // STAGE 2: Checking topic relevance
   setProgress(35, "🔍 Checking topic relevance…");
   await new Promise(function(r){ setTimeout(r, 400); });
-
-  // STAGE 3: Analyzing grammar
   setProgress(60, "✏️ Analyzing grammar & vocabulary…");
 
   var topicLine = topic ? "Essay topic / question: \""+topic+"\"\n\n" : "";
@@ -944,16 +1872,11 @@ async function runCheck(){
     + "IELTS task type: "+taskType+"\n"
     + topicLine
     + "Word count: "+wordCount+" words\n\n"
-    + "STEP 1 — READ THE ESSAY CAREFULLY from start to finish before evaluating.\n"
-    + "STEP 2 — CHECK TOPIC RELEVANCE: Does the essay actually address the given topic/question? Is the main idea on-topic?\n"
-    + "STEP 3 — ANALYZE like Grammarly:\n"
-    + "  • Grammar & mechanics (tense, agreement, articles, prepositions, punctuation)\n"
-    + "  • Vocabulary accuracy and range (weak/repeated words → suggest better IELTS alternatives)\n"
-    + "  • Sentence structure (run-ons, fragments, variety)\n"
-    + "  • Clarity & coherence (logical flow, paragraph transitions)\n"
-    + "  • Academic tone (formal vs informal)\n"
-    + "  • Task achievement (does it fully answer the question?)\n\n"
-    + "IMPORTANT: Return ONLY valid JSON. No markdown, no backticks, no preamble. Escape all apostrophes in string values. Use double quotes only.\n"
+    + "STEP 1: READ THE ESSAY carefully.\n"
+    + "STEP 2: CHECK TOPIC RELEVANCE.\n"
+    + "STEP 3: ANALYZE like Grammarly:\n"
+    + "  • Grammar & mechanics\n  • Vocabulary range\n  • Sentence structure\n  • Clarity & coherence\n  • Academic tone\n  • Task achievement\n\n"
+    + "Return ONLY valid JSON. No markdown, no backticks:\n"
     + "{\n"
     + "  \"overall_score\": 7.5,\n"
     + "  \"grammar_score\": 8.0,\n"
@@ -962,14 +1885,14 @@ async function runCheck(){
     + "  \"tone_score\": 7.0,\n"
     + "  \"ielts_band_estimate\": 6.5,\n"
     + "  \"topic_relevant\": true,\n"
-    + "  \"topic_comment\": \"One sentence: does the essay address the topic? If off-topic, explain briefly.\",\n"
-    + "  \"summary\": \"2-3 sentence overall impression of the writing quality.\",\n"
-    + "  \"grammar_issues\": [{\"error\": \"exact phrase\", \"correction\": \"corrected version\", \"explanation\": \"rule\"}],\n"
-    + "  \"clarity_suggestions\": [\"specific tip\"],\n"
-    + "  \"vocabulary_tips\": [{\"weak_word\": \"word used\", \"better_option\": \"academic alternative\", \"reason\": \"why\"}],\n"
-    + "  \"style_notes\": \"Tone/register assessment for IELTS.\",\n"
-    + "  \"strengths\": [\"specific strength with example from essay\"],\n"
-    + "  \"top_priority_improvements\": [\"#1 fix\", \"#2 fix\", \"#3 fix\"]\n"
+    + "  \"topic_comment\": \"one sentence about topic relevance\",\n"
+    + "  \"summary\": \"2-3 sentence overall impression\",\n"
+    + "  \"grammar_issues\": [{\"error\": \"phrase\", \"correction\": \"fixed\", \"explanation\": \"rule\"}],\n"
+    + "  \"clarity_suggestions\": [\"tip\"],\n"
+    + "  \"vocabulary_tips\": [{\"weak_word\": \"word\", \"better_option\": \"alternative\", \"reason\": \"why\"}],\n"
+    + "  \"style_notes\": \"tone assessment\",\n"
+    + "  \"strengths\": [\"strength\"],\n"
+    + "  \"top_priority_improvements\": [\"fix1\", \"fix2\", \"fix3\"]\n"
     + "}";
 
   try {
@@ -983,7 +1906,7 @@ async function runCheck(){
         model: "llama-3.3-70b-versatile",
         messages: [
           { role: "system", content: sysPrompt },
-          { role: "user", content: "Please read and analyze this essay carefully:\n\n" + text }
+          { role: "user", content: "Analyze this essay:\n\n" + text }
         ],
         temperature: 0.4,
         max_tokens: 2500
@@ -993,7 +1916,6 @@ async function runCheck(){
     if(!resp.ok){
       var errData = await resp.json().catch(function(){ return {}; });
       var errMsg = errData.error && errData.error.message ? errData.error.message : "API error " + resp.status;
-      if(resp.status === 401) errMsg = "Invalid API Key — please check your key at console.groq.com";
       throw new Error(errMsg);
     }
 
@@ -1012,140 +1934,60 @@ async function runCheck(){
     await new Promise(function(r){ setTimeout(r, 300); });
 
     var result = safeParseJSON(jsonMatch[0]);
-    if(!result) throw new Error("Could not parse AI response — please try again");
+    if(!result) throw new Error("Could not parse AI response");
     renderGrammarResult(result, topic);
 
   } catch(err){
-    var errHtml = '<div class="ai-error">⚠️ ' + escapeHtml(err.message || String(err));
-    if((err.message||"").toLowerCase().includes("api key") || (err.message||"").toLowerCase().includes("invalid")){
-      errHtml += '<br><a href="https://console.groq.com/keys" target="_blank" style="color:var(--amber)">Get a free Groq API key ↗</a>';
-    }
-    errHtml += '</div>';
-    document.getElementById("aiResult").innerHTML = errHtml;
+    document.getElementById("aiResult").innerHTML = '<div class="ai-error">⚠️ ' + escapeHtml(err.message || String(err)) + '</div>';
   } finally {
     document.getElementById("aiBtn").disabled = false;
   }
 }
 
-
 function safeParseJSON(str) {
-  // Try direct parse first
   try { return JSON.parse(str); } catch(e) {}
-  // Fix smart quotes
-  str = str.replace(/[‘’]/g, "\'").replace(/[“”]/g, '"');
+  str = str.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
   try { return JSON.parse(str); } catch(e) {}
-  // Remove control characters
-  str = str.replace(/[\x00-\x1F\x7F]/g, function(c) {
-    if(c === '\n' || c === '\r' || c === '\t') return ' ';
-    return '';
-  });
-  try { return JSON.parse(str); } catch(e) {}
-  // Last resort: sanitize string values
-  str = str.replace(/"([^"\\]*(\\.[^"\\]*)*)"\s*:/g, function(m) { return m; })
-           .replace(/:\s*"((?:[^"\\]|\\.)*)"/g, function(m, val) {
-             var clean = val.replace(/(?<!\\)\n/g, ' ').replace(/(?<!\\)\r/g, '');
-             return ': "' + clean + '"';
-           });
+  str = str.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
   try { return JSON.parse(str); } catch(e) { return null; }
 }
+
 function renderGrammarResult(r, topic){
   var s = '<div class="ai-result">';
-
-  // Topic relevance badge
   if(typeof r.topic_relevant !== "undefined"){
-    s += '<div class="ai-relevance '+(r.topic_relevant ? "on-topic" : "off-topic")+'">'
-      + (r.topic_relevant ? "✅ On Topic" : "⚠️ Off Topic / Partially relevant")
-      + '</div>';
-    if(r.topic_comment){
-      s += '<div style="font-size:12px;color:var(--muted);margin-bottom:14px;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm)">'+escapeHtml(r.topic_comment)+'</div>';
-    }
+    s += '<div class="ai-relevance '+(r.topic_relevant ? "on-topic" : "off-topic")+'">'+(r.topic_relevant ? "✅ On Topic" : "⚠️ Off Topic")+'</div>';
+    if(r.topic_comment) s += '<div style="font-size:12px;color:var(--muted);margin-bottom:14px;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm)">'+escapeHtml(r.topic_comment)+'</div>';
   }
-
-  // IELTS band estimate
   if(r.ielts_band_estimate){
-    s += '<div style="text-align:center;margin-bottom:16px">'
-      + '<span style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;font-weight:700">Estimated IELTS Band</span>'
-      + '<span style="font-size:36px;font-weight:800;font-family:\'Space Mono\',monospace;color:var(--amber)">'+(r.ielts_band_estimate)+'</span>'
-      + '</div>';
+    s += '<div style="text-align:center;margin-bottom:16px"><span style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;font-weight:700">Estimated IELTS Band</span><span style="font-size:36px;font-weight:800;font-family:\'Space Mono\',monospace;color:var(--amber)">'+r.ielts_band_estimate+'</span></div>';
   }
-
-  // Overall score
-  s += '<div class="ai-overall">'
-    + '<div class="ai-overall-label">Overall Writing Quality</div>'
-    + '<div class="ai-overall-num">'+(r.overall_score||0).toFixed(1)+'/10</div>'
-    + '<div class="ai-overall-desc">'+escapeHtml(r.summary||'')+'</div>'
-    + '</div>';
-
-  // Scores grid
+  s += '<div class="ai-overall"><div class="ai-overall-label">Overall Writing Quality</div><div class="ai-overall-num">'+((r.overall_score||0).toFixed(1))+'/10</div><div class="ai-overall-desc">'+escapeHtml(r.summary||'')+'</div></div>';
   s += '<div class="ai-scores">'
     + '<div class="ai-score ta"><div class="ai-score-lbl">Grammar</div><div class="ai-score-num">'+((r.grammar_score||0).toFixed(1))+'</div></div>'
     + '<div class="ai-score cc"><div class="ai-score-lbl">Clarity</div><div class="ai-score-num">'+((r.clarity_score||0).toFixed(1))+'</div></div>'
     + '<div class="ai-score lr"><div class="ai-score-lbl">Vocabulary</div><div class="ai-score-num">'+((r.vocabulary_score||0).toFixed(1))+'</div></div>'
     + '<div class="ai-score gra"><div class="ai-score-lbl">Tone</div><div class="ai-score-num">'+((r.tone_score||0).toFixed(1))+'</div></div>'
     + '</div>';
-
-  // Grammar issues
   if(r.grammar_issues && r.grammar_issues.length){
-    var errs = r.grammar_issues.map(function(e){
-      return '<li style="margin-bottom:10px">'
-        + '<div style="color:var(--red);margin-bottom:3px">❌ <s style="opacity:.7">'+escapeHtml(e.error||"")+'</s></div>'
-        + '<div style="color:var(--green);margin-bottom:3px">✅ '+escapeHtml(e.correction||"")+'</div>'
-        + '<div style="color:var(--muted);font-size:12px">💬 '+escapeHtml(e.explanation||"")+'</div>'
-        + '</li>';
-    }).join("");
-    s += '<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Grammar Issues</div><div class="ai-section-body"><ul>'+errs+'</ul></div></div>';
+    var errs=r.grammar_issues.map(function(e){ return '<li style="margin-bottom:10px"><div style="color:var(--red);margin-bottom:3px">❌ <s>'+escapeHtml(e.error||"")+'</s></div><div style="color:var(--green);margin-bottom:3px">✅ '+escapeHtml(e.correction||"")+'</div><div style="color:var(--muted);font-size:12px">💬 '+escapeHtml(e.explanation||"")+'</div></li>'; }).join("");
+    s += '<div class="ai-section"><div class="ai-section-title">❌ Grammar Issues</div><div class="ai-section-body"><ul>'+errs+'</ul></div></div>';
   }
-
-  // Clarity suggestions
   if(r.clarity_suggestions && r.clarity_suggestions.length){
-    var clr = r.clarity_suggestions.map(function(c){
-      return '<li style="margin-bottom:6px">💡 '+escapeHtml(c)+'</li>';
-    }).join("");
-    s += '<div class="ai-section"><div class="ai-section-title">💬 Clarity & Coherence Tips</div><div class="ai-section-body"><ul>'+clr+'</ul></div></div>';
+    s += '<div class="ai-section"><div class="ai-section-title">💬 Clarity Tips</div><div class="ai-section-body"><ul>'+r.clarity_suggestions.map(function(c){ return '<li style="margin-bottom:6px">💡 '+escapeHtml(c)+'</li>'; }).join("")+'</ul></div></div>';
   }
-
-  // Vocabulary
   if(r.vocabulary_tips && r.vocabulary_tips.length){
-    var vocab = r.vocabulary_tips.map(function(v){
-      return '<li style="margin-bottom:10px">'
-        + '<div style="margin-bottom:3px"><span style="color:var(--muted)">Weak: </span><span style="color:var(--amber);text-decoration:underline">'+escapeHtml(v.weak_word||"")+'</span></div>'
-        + '<div style="margin-bottom:3px"><span style="color:var(--muted)">Better: </span><span style="color:var(--green);font-weight:600">'+escapeHtml(v.better_option||"")+'</span></div>'
-        + '<div style="color:var(--muted);font-size:12px">📚 '+escapeHtml(v.reason||"")+'</div>'
-        + '</li>';
-    }).join("");
+    var vocab=r.vocabulary_tips.map(function(v){ return '<li style="margin-bottom:10px"><div><span style="color:var(--muted)">Weak: </span><span style="color:var(--amber)">'+escapeHtml(v.weak_word||"")+'</span></div><div><span style="color:var(--muted)">Better: </span><span style="color:var(--green);font-weight:600">'+escapeHtml(v.better_option||"")+'</span></div><div style="color:var(--muted);font-size:12px">📚 '+escapeHtml(v.reason||"")+'</div></li>'; }).join("");
     s += '<div class="ai-section"><div class="ai-section-title">📚 Vocabulary Upgrades</div><div class="ai-section-body"><ul>'+vocab+'</ul></div></div>';
   }
-
-  // Style notes
-  if(r.style_notes){
-    s += '<div class="ai-section"><div class="ai-section-title">🎓 Academic Tone & Style</div><div class="ai-section-body">'+escapeHtml(r.style_notes)+'</div></div>';
-  }
-
-  // Strengths
-  if(r.strengths && r.strengths.length){
-    var str = r.strengths.map(function(st){
-      return '<li style="margin-bottom:6px">✅ '+escapeHtml(st)+'</li>';
-    }).join("");
-    s += '<div class="ai-section"><div class="ai-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Your Strengths</div><div class="ai-section-body"><ul>'+str+'</ul></div></div>';
-  }
-
-  // Top priorities
-  if(r.top_priority_improvements && r.top_priority_improvements.length){
-    var prio = r.top_priority_improvements.map(function(p){
-      return '<li style="margin-bottom:6px">🎯 '+escapeHtml(p)+'</li>';
-    }).join("");
-    s += '<div class="ai-section"><div class="ai-section-title">🚀 Top 3 Things to Fix</div><div class="ai-section-body" style="background:rgba(34,200,135,.05)"><ul>'+prio+'</ul></div></div>';
-  }
-
+  if(r.style_notes) s += '<div class="ai-section"><div class="ai-section-title">🎓 Tone & Style</div><div class="ai-section-body">'+escapeHtml(r.style_notes)+'</div></div>';
+  if(r.strengths && r.strengths.length) s += '<div class="ai-section"><div class="ai-section-title">✅ Strengths</div><div class="ai-section-body"><ul>'+r.strengths.map(function(st){ return '<li style="margin-bottom:6px">'+escapeHtml(st)+'</li>'; }).join("")+'</ul></div></div>';
+  if(r.top_priority_improvements && r.top_priority_improvements.length) s += '<div class="ai-section"><div class="ai-section-title">🚀 Top 3 Things to Fix</div><div class="ai-section-body" style="background:rgba(34,200,135,.05)"><ul>'+r.top_priority_improvements.map(function(p){ return '<li style="margin-bottom:6px">🎯 '+escapeHtml(p)+'</li>'; }).join("")+'</ul></div></div>';
   s += '</div>';
   document.getElementById("aiResult").innerHTML = s;
 }
 
-function escapeHtml(t){
-  return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-}
 
-// ===== NOTIFICATIONS =====
+// ===== NOTIFICATIONS// ===== NOTIFICATIONS =====
 var _notifs=[]; var _unread=0;
 function _tstr(){ var n=new Date(); return n.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" · "+n.toLocaleDateString([],{day:"numeric",month:"short"}); }
 function pushNotif(title,body,type){
@@ -1187,8 +2029,7 @@ function checkScheduleNotifs(){
   });
 }
 
-// ===== INIT =====
-_loadCustomGroups();
+// ===== DEVTOOLS PROTECTION =====
 document.addEventListener("contextmenu",function(e){e.preventDefault();});
 document.addEventListener("keydown",function(e){
   if(e.key==="F12"||(e.ctrlKey&&e.shiftKey&&["I","i","J","j","C","c"].includes(e.key))||(e.ctrlKey&&["U","u"].includes(e.key))){
@@ -1196,6 +2037,10 @@ document.addEventListener("keydown",function(e){
   }
 },true);
 
+// ===== INIT =====
+_loadCustomGroups();
+
+// Wait for Firebase SDKs to load, then init
 window.addEventListener('load', function(){
   if(initFirebase()){
     home();
