@@ -228,96 +228,6 @@ input[type=file]{display:none}
 .error-banner{background:rgba(247,85,106,.1);border:1px solid rgba(247,85,106,.3);border-radius:var(--r);padding:20px;margin:20px 0;color:var(--red);font-size:13px;line-height:1.7}
 .error-banner b{color:#ff8a9a;display:block;margin-bottom:8px;font-size:15px}
 .error-banner code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:12px;font-family:'Space Mono',monospace}
-.speak-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;z-index:1000}
-@media(min-height:600px){.speak-overlay{align-items:center}}
-.speak-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
-@media(min-height:600px){.speak-modal{border-radius:20px;margin:16px}}
-.speak-modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.speak-modal-title{font-size:17px;font-weight:800;color:var(--white);display:flex;align-items:center;gap:8px}
-.speak-close-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;transition:all .15s}
-.speak-close-btn:hover{background:var(--red);color:#fff;border-color:var(--red)}
-.speak-hw-badge{font-size:12px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.2);padding:5px 12px;border-radius:20px;display:inline-block}
-.speak-type-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
-.speak-type-btn{background:var(--surface2);border:2px solid var(--border);border-radius:var(--rsm);padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;font-family:inherit}
-.speak-type-btn.active{border-color:var(--green);background:rgba(34,200,135,.08)}
-.speak-type-btn:hover{border-color:var(--green)}
-.speak-type-icon{font-size:24px;margin-bottom:6px}
-.speak-type-label{font-size:13px;font-weight:700;color:var(--white)}
-.speak-type-sub{font-size:11px;color:var(--muted);margin-top:2px}
-.speak-timer-wrap{text-align:center;margin:20px 0}
-.speak-timer{font-size:56px;font-weight:800;font-family:'Space Mono',monospace;color:var(--white);line-height:1}
-.speak-timer.warning{color:var(--amber)}
-.speak-timer.danger{color:var(--red)}
-.speak-timer-label{font-size:12px;color:var(--muted);margin-top:6px}
-.speak-progress{width:100%;height:6px;background:var(--surface2);border-radius:10px;overflow:hidden;margin-bottom:20px}
-.speak-progress-bar{height:100%;background:linear-gradient(90deg,var(--green),#1aad74);border-radius:10px;transition:width .5s linear}
-.speak-progress-bar.warn{background:linear-gradient(90deg,var(--amber),#e59400)}
-.speak-progress-bar.danger-bar{background:linear-gradient(90deg,var(--red),#d43050)}
-.speak-controls{display:flex;gap:10px;margin-bottom:16px}
-.speak-start-btn{flex:1;background:linear-gradient(135deg,var(--green),#1aad74);color:#fff;border:none;border-radius:var(--rsm);padding:13px 20px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(34,200,135,.3);transition:all .2s}
-.speak-start-btn:hover:not(:disabled){transform:translateY(-1px)}
-.speak-start-btn:disabled{opacity:.5;cursor:not-allowed}
-.speak-stop-btn{background:rgba(247,85,106,.12);color:var(--red);border:1px solid rgba(247,85,106,.35);border-radius:var(--rsm);padding:13px 18px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
-.speak-stop-btn:hover:not(:disabled){background:var(--red);color:#fff}
-.speak-stop-btn:disabled{opacity:.35;cursor:not-allowed}
-.speak-status{font-size:13px;color:var(--muted);text-align:center;min-height:20px;margin-bottom:8px}
-.speak-status.recording{color:var(--red);font-weight:700;animation:recPulse 1.2s ease-in-out infinite}
-@keyframes recPulse{0%,100%{opacity:1}50%{opacity:.5}}
-.speak-status.uploading{color:var(--amber);font-weight:700}
-.speak-status.done{color:var(--green);font-weight:700}
-.speak-rec-dot{display:inline-block;width:8px;height:8px;background:var(--red);border-radius:50%;margin-right:5px;animation:recPulse 1s infinite}
-.speak-preview{margin-top:14px;border-top:1px solid var(--border);padding-top:14px}
-.speak-preview-label{font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600}
-.speak-audio-player{width:100%;border-radius:var(--rsm);outline:none;accent-color:var(--green)}
-.speak-video-player{width:100%;border-radius:var(--rsm);max-height:200px;background:#000}
-.speak-min-warn{font-size:12px;color:var(--amber);text-align:center;margin-top:8px}
-/* Transcription */
-.transcript-wrap{margin-top:16px;border-top:1px solid var(--border);padding-top:16px}
-.transcript-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.transcript-title{font-size:13px;font-weight:700;color:var(--white);display:flex;align-items:center;gap:6px}
-.transcript-copy-btn{background:rgba(79,142,247,.1);color:var(--accent);border:1px solid rgba(79,142,247,.3);padding:5px 12px;border-radius:var(--rsm);font-family:inherit;font-weight:600;font-size:12px;cursor:pointer;transition:all .18s;width:auto}
-.transcript-copy-btn:hover{background:var(--accent);color:#fff}
-.transcript-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:13px;color:var(--text);line-height:1.8;max-height:220px;overflow-y:auto;white-space:pre-wrap;word-break:break-word}
-.transcript-loading{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;padding:14px}
-.transcript-stats{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
-.transcript-stat{font-size:11px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);padding:3px 10px;border-radius:20px;font-family:'Space Mono',monospace}
-
-/* Error banner */
-.error-banner{background:rgba(247,85,106,.1);border:1px solid rgba(247,85,106,.3);border-radius:var(--r);padding:20px;margin:20px 0;color:var(--red);font-size:13px;line-height:1.7}
-.error-banner b{color:#ff8a9a;display:block;margin-bottom:8px;font-size:15px}
-.error-banner code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:12px;font-family:'Space Mono',monospace}
-
-
-/* ===== NEW: API KEY FIELD ===== */
-.ai-apikey-box{background:rgba(79,142,247,.06);border:1px solid rgba(79,142,247,.2);border-radius:var(--rsm);padding:12px 14px;margin-bottom:14px}
-.ai-apikey-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
-.ai-apikey-link{color:var(--accent);font-size:11px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:3px}
-.ai-apikey-link:hover{text-decoration:underline}
-.ai-apikey-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:9px 12px;font-size:13px;font-family:'Space Mono',monospace;color:var(--text);outline:none;transition:border-color .2s}
-.ai-apikey-input:focus{border-color:var(--accent)}
-.ai-apikey-saved{font-size:11px;color:var(--green);margin-top:5px;display:none}
-
-/* ===== NEW: ESSAY TOPIC FIELD ===== */
-.ai-topic-box{margin-bottom:12px}
-.ai-topic-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
-.ai-topic-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 14px;font-size:14px;font-family:inherit;color:var(--text);outline:none;transition:border-color .2s}
-.ai-topic-input:focus{border-color:var(--accent2)}
-.ai-topic-input::placeholder{color:var(--muted)}
-
-/* ===== ESSAY TEXTAREA ===== */
-.ai-textarea-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
-
-/* ===== READING INDICATOR ===== */
-.ai-reading-stage{background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.2);border-radius:var(--rsm);padding:14px 16px;margin-top:14px;font-size:13px;color:var(--accent)}
-.ai-reading-stage b{display:block;margin-bottom:4px;font-size:14px}
-.ai-progress-bar{height:4px;background:var(--surface2);border-radius:2px;margin-top:8px;overflow:hidden}
-.ai-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;transition:width .4s ease}
-
-/* ===== TASK RELEVANCE BADGE ===== */
-.ai-relevance{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:14px}
-.ai-relevance.on-topic{color:var(--green);background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.25)}
-.ai-relevance.off-topic{color:var(--amber);background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3)}
-
 </style>
 </head>
 <body>
@@ -379,44 +289,26 @@ input[type=file]{display:none}
   </div>
 </div>
 
-<!-- ===== AI CHECKER MODAL (UPGRADED) ===== -->
+<!-- AI CHECKER MODAL -->
 <div id="aiModal" style="display:none">
   <div class="ai-overlay" onclick="if(event.target.classList.contains('ai-overlay'))closeAI()">
     <div class="ai-modal">
       <div class="ai-modal-header">
         <div class="ai-modal-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          <span>AI Writing Check — Grammarly Style</span>
+          <span>AI Essay Checker</span>
         </div>
         <button class="ai-close-btn" onclick="closeAI()">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
         </button>
       </div>
-
       <div id="aiHwBadge" class="ai-hw-badge"></div>
-
-      <!-- API KEY BOX (hidden - key is embedded) -->
-      <input type="hidden" id="groqApiKey" value="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">
-      <div style="background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.25);border-radius:var(--rsm);padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--green);font-weight:600">
-        ✅ Powered by Groq AI.
-      </div>
-
-      <!-- ESSAY TOPIC -->
-      <div class="ai-topic-box">
-        <label class="ai-topic-label">📝 Essay Topic / Question</label>
-        <input type="text" class="ai-topic-input" id="aiTopic" placeholder="e.g. The graph shows the percentage of people using the internet in three countries from 2000 to 2020.">
-      </div>
-
-      <!-- ESSAY TEXT -->
-      <label class="ai-textarea-label">✍️ Your Essay / Writing</label>
-      <textarea class="ai-textarea" id="aiText" placeholder="Paste your full essay or writing here…&#10;&#10;The AI will read your essay, check it against the topic, then analyze grammar, vocabulary, clarity and style — just like Grammarly." oninput="updateWordCount()"></textarea>
+      <textarea class="ai-textarea" id="aiText" placeholder="Paste your essay or writing here…" oninput="updateWordCount()"></textarea>
       <div class="ai-word-count" id="aiWordCount">0 words</div>
-
       <button class="ai-submit-btn" id="aiBtn" onclick="runCheck()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        Check Writing with AI
+        Check my writing
       </button>
-
       <div id="aiResult"></div>
     </div>
   </div>
@@ -660,15 +552,15 @@ function requireDB() {
 // ===== GROUPS =====
 var GROUPS = {
   "GROUP IELTS 9:00 M/W/F":["HOSHIMOVA NILUFAR","JURAYEVA AZIZA","MAHMUDOV SUNNAT","MUHIDDINOVA MAHBUBA","NORBOYEV SHOHJAXON","OCHILOV LOCHINBEK","ORALOVA SHOHINUR","RAVSHANOVA ZAYNAB","TOSHPULATOV ABBOS"],
-  "GROUP IELTS 17:00 MWF":["SARVAR ASADOV","QODIROV JAMSHID","ABDUMAJIDOVA MALOHAT","ESHONQULOVA MUXLISA","SAIDAZIZOV SAID","SAIDAZIMOVA MUBINA","RAHMONOV MUHAMMAD","DAYNOVOVA SAIDA","SODIQOVA ANORA","UMARALIYEV SHERDOR","ABDUAZIZOVA EZOZA"],
-  "GROUP IELTS M/W/F 14:00":["RASHIDJANOVA FARANGIZ","RUZIYEVA GAVHAR","YADGARALIYEVA GULHAYO","MUHAMMADIYEVA SEVINCH","KHUDOYBERDIYEVA LAZIZA","ODIL RAZZOQOV","SOBIRJONOVA FOTIMA"],
+  "GROUP IELTS 17:00 MWF":["SARVAR ASADOV","QODIROV JAMSHID","SAIDAZIZOV SAID","ABDUMAJIDOVA MALOHAT","ESHONQULOVA MUXLISA"],
+  "GROUP IELTS M/W/F 14:00":["ASOMIDDINOVA XADICHA","TOLIBOYEV GAYBULLO","HAMRAYEVA MAVLUDA","MIRZALIEVA BARNO","ILHOMOVA ZUBAYRAXON"],
   "GROUP CEFR M/W/F 15:30":["TURGUNOVA GULCHEHRA","RAXMATULLAYEV SHAHBOZ","ABDULLAYEVA NAFISA","XODJAMQULOVA IRODA","BURXONOVA SARVINOZ","SAMIKOVA MUBINA","ANVAROV SARVARVARBEK","ERIKOVA AYNURA","YOLDOSHEVA DILRABO","TOXTAXODJAYEV ALISHER","UBAYDULLAYEV ISMOIL","BAXTIYOROV ABDULLOH","PRIMOVA MAFTUNA","MASHRAPOVA FARANGIZ","MIRVALIEV RAMZIDDIN","XUDOYOROVA DILAFRUZ","ABDUAZIZOVA HABIBA","GAIPNAZAROV BEHZOD","AXTAMOV OTABEK","UMAROVA RAXIMA","KHOSHIMOVA MUMTOZBONU","SERIKBAYEV AVAZBEK"],
   "GROUP IELTS T/T/S 9:00":["ZARINA FAYZULLAEVA","MURODOVA NOZIMA","AZIZA ERKINOVA","NURIDDIN QOCHQOROV","QIDIRALIEVA JAYNA","HAMROYEVA NIGORA","QILICHOVA GULISTON","AZIMOVA MUHTASAR"],
   "GROUP IELTS 10:30 TTS":["XAKIMOVA MOHIRA","AKBARJONOVA RUKHSORA","XOLMATOVA DILNURA","IKRAMOVA UMIDA","YULDASHEV MURODJON","OCHILOV LOCHINBEK"],
   "GROUP IELTS T/T/S 14:00":["ABDUAZIZOVA HABIBA","ABDUJABBOROVA LOLA","ABDUVALIYEVA OMINA","ALISHEROV NURMUHAMMAD","DJURAYEVA NURGUL","ISLOMBEKOVA EZOZA","ISMAILOVA EZOZA","JORABEKOV AFZALBEK","MAHMUDJONOV FAYZULLOH","MIRAHMEDOVA MUSLIMA","OLIMJONOVA DILNURA","TOJIBOYEV MUXAMMAD","UROLOV SIROJ","XUDOYBERDIYEV QOSIMBEK","SHODIYEVA ROBIYA","ABDULXAMIDOV DILYORBEK","KAYUMXODJAYEVA JASMINA","MIRSIDIQOV MIRABROR"],
   "GROUP IELTS 15:30 TTS":["FAYZULLAYEVA HILOLA","MUSTAFOYEVA SEVINCH","SOBIRJONOVA DURDONA","MIRVALIEVA XADICHA","ABDURAHMONOVA EZOZA","QODIRJANOVA RUSHANA","AMETOV UMIRBEK","SULTANBEKOVA LAZIZA","MIRFOTIHOVA HADICHA","ZOHIDOV ASILBEK","TOXIROV AYUBHON","SHAVKATOV HUSAN","MELIKUZIEVA FARZONA","SULTONOVA MUSLIMA","ABDUGANIEVA MOXINUR","SHAVKATOV KHASAN","URALOVA MUXLISA","TOSHXOJAYEV ISROILXOJA","AXMADJONOV DONIYOR","XASANOV JAHONGIR","UMARALIYEV OYATILLO","ESHMUHAMMEDOV SAIDAHROR"],
   "GROUP IELTS T/T/S 18:30":["GANIJONOV AZIZBEK", "ABDUMANNOPOV KAMRON", "HAMIDJONOV ABDULMALIK","IBROHIMOV JASURBEK","OLIMJONOV ABDUGAFFOR","RAXMATULAYEVA ROZIYA","SHOKIROV ABDURAZZOQ","ULMASOV DALER","ZAHRIDDINOV FAZLIDDIN","MIRZABOYEVA ROZYA","XUSHNAZAROV TEMUR","DAYNOVOVA ZEBINISO","JURAYEV KAMRON","TIMUR ABDUSADIKOV","SALOHIDDINOV BUNYOD","GANISHEROVA ZARIFA"],
-  "GROUP IELTS MAX T/T/S 18:30":["SHERMATOVA SHIRIN","HASANOV BEHRUZ","KHAKIMOV TEMURBEK","YUSUPOV SARDORBEK","OLIMJONOV SARDOR","TURDIEVA NIGORA","TOSHBADALOV BEHRUZ","PAYZILDAYEVA SEVINCH","MAVLONOVA MAVLUDA","KHALMUHAMMEDOV DINMUKHAMMED","SHAROPOVA FARZONA","ODILOV JAVOHIR","TOXTAYEVA IRODA","NURMATOVA UMIDA","AMINBOYEV ASADBEK"],
+  "GROUP IELTS MAX T/T/S 18:30":["SHERMATOVA SHIRIN","HASANOV BEHRUZ","KHAKIMOV TEMURBEK","YUSUPOV SARDORBEK","OLIMJONOV SARDOR","TURDIEVA NIGORA","TOSHBADALOV BEHRUZ","PAYZILDAYEVA SEVINCH","MAVLONOVA MAVLUDA","KHALMUHAMMEDOV DINMUKHAMMED","SHAROPOVA FARZONA","ODILOV JAVOHIR","TOXTAYEVA IRODA","NURMATOVA UMIDA"],
 };
 
 // ===== STAGES =====
@@ -1806,188 +1698,258 @@ function openInstruction(){
     +'<div class="alert-card"><b>Speaking tasks</b> now have a built-in recorder — choose audio or video, record your answer, and it uploads automatically.</div>';
 }
 
-// ===== AI CHECKER — UPGRADED (Groq + Grammarly Style) =====
-var _aiCurrentHw = "";
-
+// ===== AI CHECKER =====
+var _aiCurrentHw="";
 function openAI(hwName){
-  _aiCurrentHw = hwName;
-  document.getElementById("aiHwBadge").textContent = hwName;
-  document.getElementById("aiText").value = "";
-  if(document.getElementById("aiTopic")) document.getElementById("aiTopic").value = "";
-  document.getElementById("aiResult").innerHTML = "";
-  document.getElementById("aiWordCount").textContent = "0 words";
-  document.getElementById("aiBtn").disabled = false;
-  document.getElementById("aiModal").style.display = "block";
-  setTimeout(function(){ if(document.getElementById("aiTopic")) document.getElementById("aiTopic").focus(); else document.getElementById("aiText").focus(); }, 200);
+  _aiCurrentHw=hwName;
+  document.getElementById("aiHwBadge").textContent=hwName;
+  document.getElementById("aiText").value="";
+  document.getElementById("aiResult").innerHTML="";
+  document.getElementById("aiWordCount").textContent="0 words";
+  document.getElementById("aiBtn").disabled=false;
+  document.getElementById("aiModal").style.display="block";
+  setTimeout(function(){document.getElementById("aiText").focus();},200);
 }
-
-function closeAI(){ document.getElementById("aiModal").style.display = "none"; }
-
+function closeAI(){ document.getElementById("aiModal").style.display="none"; }
 function updateWordCount(){
-  var t = document.getElementById("aiText").value.trim();
-  var w = t ? t.split(/\s+/).filter(function(x){ return x; }).length : 0;
-  document.getElementById("aiWordCount").textContent = w + " word" + (w !== 1 ? "s" : "");
-}
-
-function setProgress(pct, label){
-  document.getElementById("aiResult").innerHTML =
-    '<div class="ai-reading-stage">'
-    + '<b>'+label+'</b>'
-    + '<div class="ai-progress-bar"><div class="ai-progress-fill" style="width:'+pct+'%"></div></div>'
-    + '</div>';
+  var t=document.getElementById("aiText").value.trim();
+  var w=t?t.split(/\s+/).filter(function(x){return x;}).length:0;
+  document.getElementById("aiWordCount").textContent=w+" word"+(w!==1?"s":"");
 }
 
 async function runCheck(){
-  var apiKey = (document.getElementById("groqApiKey")||{}).value||"";
-  apiKey = apiKey.trim();
-  if(!apiKey || !apiKey.startsWith("gsk_")){
-    document.getElementById("aiResult").innerHTML =
-      '<div class="ai-error">⚠️ API key missing. Please contact your teacher.</div>';
+  var text=document.getElementById("aiText").value.trim();
+  var wordCount=text?text.split(/\s+/).filter(function(x){return x;}).length:0;
+  if(!text||wordCount<50){
+    document.getElementById("aiResult").innerHTML='<div class="ai-error">Please paste at least 50 words of your writing.</div>';
     return;
   }
 
-  var topic = (document.getElementById("aiTopic")||{}).value||"";
-  topic = topic.trim();
-  var text = document.getElementById("aiText").value.trim();
-  var wordCount = text ? text.split(/\s+/).filter(function(x){ return x; }).length : 0;
+  var isTask2=_aiCurrentHw.toLowerCase().includes("task 2")||_aiCurrentHw.toLowerCase().includes("essay");
+  var taskType=isTask2?"Task 2":"Task 1";
+  var taskLabel=isTask2
+    ?"IELTS Academic Writing Task 2 — argumentative/opinion/discussion essay (minimum 250 words required)"
+    :"IELTS Academic Writing Task 1 — report describing visual data (graph/chart/table/map/diagram, minimum 150 words required)";
 
-  if(!text || wordCount < 20){
-    document.getElementById("aiResult").innerHTML = '<div class="ai-error">Please paste at least 20 words to check.</div>';
-    return;
-  }
+  document.getElementById("aiBtn").disabled=true;
+  document.getElementById("aiResult").innerHTML=
+    '<div class="ai-loading"><div class="ai-dots"><span></span><span></span><span></span></div>'
+    +'Checking with Claude AI… this may take 15–30 seconds</div>';
 
-  document.getElementById("aiBtn").disabled = true;
-
-  setProgress(15, "📖 Reading your essay…");
-  await new Promise(function(r){ setTimeout(r, 600); });
-  setProgress(35, "🔍 Checking topic relevance…");
-  await new Promise(function(r){ setTimeout(r, 400); });
-  setProgress(60, "✏️ Analyzing grammar & vocabulary…");
-
-  var topicLine = topic ? "Essay topic / question: \""+topic+"\"\n\n" : "";
-  var taskType = _aiCurrentHw.toLowerCase().includes("task 2") || _aiCurrentHw.toLowerCase().includes("essay") ? "Task 2 (discursive essay)" : "Task 1 (report/graph description)";
-
-  var sysPrompt =
-    "You are a professional IELTS Writing examiner and Grammarly-style AI writing assistant.\n\n"
-    + "IELTS task type: "+taskType+"\n"
-    + topicLine
-    + "Word count: "+wordCount+" words\n\n"
-    + "STEP 1: READ THE ESSAY carefully.\n"
-    + "STEP 2: CHECK TOPIC RELEVANCE.\n"
-    + "STEP 3: ANALYZE like Grammarly:\n"
-    + "  • Grammar & mechanics\n  • Vocabulary range\n  • Sentence structure\n  • Clarity & coherence\n  • Academic tone\n  • Task achievement\n\n"
-    + "Return ONLY valid JSON. No markdown, no backticks:\n"
-    + "{\n"
-    + "  \"overall_score\": 7.5,\n"
-    + "  \"grammar_score\": 8.0,\n"
-    + "  \"clarity_score\": 7.0,\n"
-    + "  \"vocabulary_score\": 7.5,\n"
-    + "  \"tone_score\": 7.0,\n"
-    + "  \"ielts_band_estimate\": 6.5,\n"
-    + "  \"topic_relevant\": true,\n"
-    + "  \"topic_comment\": \"one sentence about topic relevance\",\n"
-    + "  \"summary\": \"2-3 sentence overall impression\",\n"
-    + "  \"grammar_issues\": [{\"error\": \"phrase\", \"correction\": \"fixed\", \"explanation\": \"rule\"}],\n"
-    + "  \"clarity_suggestions\": [\"tip\"],\n"
-    + "  \"vocabulary_tips\": [{\"weak_word\": \"word\", \"better_option\": \"alternative\", \"reason\": \"why\"}],\n"
-    + "  \"style_notes\": \"tone assessment\",\n"
-    + "  \"strengths\": [\"strength\"],\n"
-    + "  \"top_priority_improvements\": [\"fix1\", \"fix2\", \"fix3\"]\n"
-    + "}";
+  var sysPrompt=
+    "You are a certified IELTS examiner with 15+ years of experience marking writing scripts. "
+    +"You use the official IELTS Writing Band Descriptors (Task Achievement/Response, Coherence & Cohesion, Lexical Resource, Grammatical Range & Accuracy). "
+    +"You are strict, precise, and give actionable, honest feedback. Never be generous — give the score the essay truly deserves.\n\n"
+    +"The student has submitted a "+taskLabel+".\n"
+    +"Word count submitted: "+wordCount+" words.\n\n"
+    +"Analyse the essay thoroughly and respond ONLY with a valid JSON object. No markdown, no code fences, no explanation outside JSON. "
+    +"Use this exact structure:\n"
+    +"{\n"
+    +"  \"overall\": 6.5,\n"
+    +"  \"ta\": 6.0,\n"
+    +"  \"cc\": 7.0,\n"
+    +"  \"lr\": 6.5,\n"
+    +"  \"gra\": 6.5,\n"
+    +"  \"word_count\": "+wordCount+",\n"
+    +"  \"word_count_note\": \"Comment on whether word count meets requirements and how it affects the score\",\n"
+    +"  \"band_desc\": \"One sentence describing what this overall band means for the student's level\",\n"
+    +"  \"summary\": \"3-4 sentences of overall honest assessment — what the examiner's first impression is, overall strengths and weaknesses\",\n"
+    +"  \"task_achievement\": \"3-4 sentences specifically about Task Achievement/Response: did they answer all parts? Is the position clear? Are ideas developed?\",\n"
+    +"  \"coherence\": \"3-4 sentences about Coherence & Cohesion: paragraph structure, logical flow, use of linking devices, referencing\",\n"
+    +"  \"lexical\": \"3-4 sentences about Lexical Resource: range of vocabulary, accuracy of word choice, collocations, spelling\",\n"
+    +"  \"grammar\": \"3-4 sentences about Grammatical Range & Accuracy: variety of structures, error frequency, punctuation\",\n"
+    +"  \"strengths\": [\"Specific strength with example from the text\", \"Another specific strength\", \"Third strength\"],\n"
+    +"  \"improvements\": [\"Most important thing to improve with specific advice\", \"Second priority improvement\", \"Third improvement\"],\n"
+    +"  \"grammar_errors\": [\n"
+    +"    {\"error\": \"exact phrase from essay\", \"fix\": \"corrected version\", \"reason\": \"grammatical explanation\"},\n"
+    +"    {\"error\": \"another error\", \"fix\": \"correction\", \"reason\": \"explanation\"}\n"
+    +"  ],\n"
+    +"  \"vocab_tips\": [\n"
+    +"    {\"weak\": \"word/phrase used\", \"better\": \"more academic alternative\", \"why\": \"reason it is better\"},\n"
+    +"    {\"weak\": \"another weak word\", \"better\": \"alternative\", \"why\": \"reason\"}\n"
+    +"  ],\n"
+    +"  \"model_phrases\": [\"Example of a well-written sentence the student could learn from their own essay or an improved version\", \"Another model phrase\"],\n"
+    +"  \"next_band\": \"Specific, concrete advice on exactly what the student must do to reach the next 0.5 band higher\",\n"
+    +"  \"human_percent\": 75,\n"
+    +"  \"ai_percent\": 25,\n"
+    +"  \"ai_note\": \"One sentence: signs of AI use detected or confirmation of authentic student writing\"\n"
+    +"}\n\n"
+    +"SCORING RULES:\n"
+    +"- Use only these band values: 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0\n"
+    +"- overall = average of ta+cc+lr+gra rounded to nearest 0.5\n"
+    +"- If word count is under minimum ("+taskType+" Task 1: 150, Task 2: 250), penalise Task Achievement\n"
+    +"- Find at least 3 real grammar errors from the actual text\n"
+    +"- human_percent + ai_percent must equal 100\n"
+    +"- Be honest and strict — never inflate scores";
 
   try {
-    var resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    var resp = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + apiKey
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [
-          { role: "system", content: sysPrompt },
-          { role: "user", content: "Analyze this essay:\n\n" + text }
-        ],
-        temperature: 0.4,
-        max_tokens: 2500
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 4000,
+        system: sysPrompt,
+        messages: [{ role: "user", content: "Here is the student's essay to analyse:\n\n" + text }]
       })
     });
 
     if(!resp.ok){
-      var errData = await resp.json().catch(function(){ return {}; });
-      var errMsg = errData.error && errData.error.message ? errData.error.message : "API error " + resp.status;
-      throw new Error(errMsg);
+      var errData=await resp.json().catch(function(){return{};});
+      throw new Error(errData.error&&errData.error.message ? errData.error.message : "API error "+resp.status);
     }
 
-    setProgress(85, "🧠 Generating detailed feedback…");
-    await new Promise(function(r){ setTimeout(r, 300); });
+    var data=await resp.json();
+    var raw=data.content[0].text.trim().replace(/^```json\s*/,"").replace(/^```\s*/,"").replace(/```\s*$/,"").trim();
 
-    var data = await resp.json();
-    if(!data.choices || !data.choices[0]) throw new Error("Invalid API response");
-
-    var raw = data.choices[0].message.content.trim()
-      .replace(/^```json\s*/,"").replace(/^```\s*/,"").replace(/```\s*$/,"");
-    var jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if(!jsonMatch) throw new Error("Could not parse AI response");
-
-    setProgress(100, "✅ Analysis complete!");
-    await new Promise(function(r){ setTimeout(r, 300); });
-
-    var result = safeParseJSON(jsonMatch[0]);
-    if(!result) throw new Error("Could not parse AI response");
-    renderGrammarResult(result, topic);
+    // Sometimes model adds text before/after JSON — extract just the JSON object
+    var jsonMatch=raw.match(/\{[\s\S]*\}/);
+    if(!jsonMatch) throw new Error("Could not parse AI response. Try again.");
+    var r=JSON.parse(jsonMatch[0]);
+    renderAIResult(r);
 
   } catch(err){
-    document.getElementById("aiResult").innerHTML = '<div class="ai-error">⚠️ ' + escapeHtml(err.message || String(err)) + '</div>';
+    document.getElementById("aiResult").innerHTML=
+      '<div class="ai-error">❌ Something went wrong.<br>'
+      +'<span style="font-size:11px;opacity:.7">'+escapeHtml(err.message)+'</span></div>';
   } finally {
-    document.getElementById("aiBtn").disabled = false;
+    document.getElementById("aiBtn").disabled=false;
   }
 }
 
-function safeParseJSON(str) {
-  try { return JSON.parse(str); } catch(e) {}
-  str = str.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
-  try { return JSON.parse(str); } catch(e) {}
-  str = str.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
-  try { return JSON.parse(str); } catch(e) { return null; }
+function renderAIResult(r){
+  var hp=Math.max(0,Math.min(100,r.human_percent||75));
+  var ap=100-hp;
+  var aiColor=ap>=60?"var(--red)":ap>=35?"var(--amber)":"var(--accent2)";
+
+  var s='<div class="ai-result">';
+
+  // Overall band
+  s+='<div class="ai-overall">'
+    +'<div class="ai-overall-label">Estimated IELTS Band</div>'
+    +'<div class="ai-overall-num">'+r.overall+'</div>'
+    +'<div class="ai-overall-desc">'+(r.band_desc||"")+'</div>'
+    +(r.word_count_note?'<div style="margin-top:8px;font-size:12px;color:var(--amber);background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.2);padding:6px 12px;border-radius:var(--rsm)">📝 '+escapeHtml(r.word_count_note)+'</div>':"")
+    +'</div>';
+
+  // 4 criterion scores
+  s+='<div class="ai-scores">'
+    +'<div class="ai-score ta"><div class="ai-score-lbl">Task Achievement</div><div class="ai-score-num">'+r.ta+'</div></div>'
+    +'<div class="ai-score cc"><div class="ai-score-lbl">Coherence & Cohesion</div><div class="ai-score-num">'+r.cc+'</div></div>'
+    +'<div class="ai-score lr"><div class="ai-score-lbl">Lexical Resource</div><div class="ai-score-num">'+r.lr+'</div></div>'
+    +'<div class="ai-score gra"><div class="ai-score-lbl">Grammatical Range</div><div class="ai-score-num">'+r.gra+'</div></div>'
+    +'</div>';
+
+  // AI Detection bar
+  s+='<div class="ai-detect">'
+    +'<div class="ai-detect-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>AI Detection</div>'
+    +'<div class="ai-detect-bar">'
+    +'<div class="ai-detect-human" style="width:'+hp+'%">'+hp+'%</div>'
+    +'<div class="ai-detect-ai" style="width:'+ap+'%;background:linear-gradient(90deg,#7c3aed,'+aiColor+')">'+ap+'%</div>'
+    +'</div>'
+    +'<div class="ai-detect-labels">'
+    +'<div class="ai-detect-lbl" style="color:var(--green)"><div class="ai-detect-dot" style="background:var(--green)"></div>Human — '+hp+'%</div>'
+    +'<div class="ai-detect-lbl" style="color:'+aiColor+'"><div class="ai-detect-dot" style="background:'+aiColor+'"></div>AI Written — '+ap+'%</div>'
+    +'</div>'
+    +(r.ai_note?'<div class="ai-detect-note">💡 '+escapeHtml(r.ai_note)+'</div>':"")
+    +'</div>';
+
+  // Helper functions
+  function blk(title,icon,body){
+    return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div>'
+      +'<div class="ai-section-body">'+body+'</div></div>';
+  }
+  function listBlk(title,icon,items,mapFn){
+    if(!items||!items.length) return "";
+    var li=items.map(function(x){ return '<li style="margin-bottom:8px">'+mapFn(x)+'</li>'; }).join("");
+    return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div>'
+      +'<div class="ai-section-body"><ul>'+li+'</ul></div></div>';
+  }
+
+  // Summary
+  s+=blk("📋 Overall Assessment",
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+    escapeHtml(r.summary||""));
+
+  // Criterion details
+  if(r.task_achievement) s+=blk("🎯 Task Achievement / Response",
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    escapeHtml(r.task_achievement));
+  if(r.coherence) s+=blk("🔗 Coherence & Cohesion",
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+    escapeHtml(r.coherence));
+  if(r.lexical) s+=blk("📚 Lexical Resource",
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+    escapeHtml(r.lexical));
+  if(r.grammar) s+=blk("⚙️ Grammatical Range & Accuracy",
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>',
+    escapeHtml(r.grammar));
+
+  // Strengths
+  if(r.strengths&&r.strengths.length)
+    s+=listBlk("✅ Strengths",
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
+      r.strengths, function(x){ return escapeHtml(x); });
+
+  // Improvements
+  if(r.improvements&&r.improvements.length)
+    s+=listBlk("⚠️ What to Improve",
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+      r.improvements, function(x){ return escapeHtml(x); });
+
+  // Grammar errors — detailed
+  if(r.grammar_errors&&r.grammar_errors.length){
+    var li=r.grammar_errors.map(function(e){
+      if(typeof e==="string") return '<li style="margin-bottom:8px">'+escapeHtml(e)+'</li>';
+      return '<li style="margin-bottom:10px">'
+        +'<div style="color:var(--red);margin-bottom:3px">❌ <s style="opacity:.7">'+escapeHtml(e.error||"")+'</s></div>'
+        +'<div style="color:var(--green);margin-bottom:3px">✅ '+escapeHtml(e.fix||"")+'</div>'
+        +'<div style="color:var(--muted);font-size:12px">💬 '+escapeHtml(e.reason||"")+'</div>'
+        +'</li>';
+    }).join("");
+    s+='<div class="ai-section"><div class="ai-section-title">'
+      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
+      +' Grammar Errors Found</div><div class="ai-section-body"><ul>'+li+'</ul></div></div>';
+  }
+
+  // Vocabulary tips — detailed
+  if(r.vocab_tips&&r.vocab_tips.length){
+    var li2=r.vocab_tips.map(function(v){
+      if(typeof v==="string") return '<li style="margin-bottom:8px">'+escapeHtml(v)+'</li>';
+      return '<li style="margin-bottom:10px">'
+        +'<div style="margin-bottom:3px"><span style="color:var(--muted)">Weak: </span><span style="color:var(--amber);text-decoration:underline">'+escapeHtml(v.weak||"")+'</span></div>'
+        +'<div style="margin-bottom:3px"><span style="color:var(--muted)">Better: </span><span style="color:var(--green);font-weight:600">'+escapeHtml(v.better||"")+'</span></div>'
+        +'<div style="color:var(--muted);font-size:12px">💬 '+escapeHtml(v.why||"")+'</div>'
+        +'</li>';
+    }).join("");
+    s+='<div class="ai-section"><div class="ai-section-title">'
+      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
+      +' Vocabulary Tips</div><div class="ai-section-body"><ul>'+li2+'</ul></div></div>';
+  }
+
+  // Model phrases
+  if(r.model_phrases&&r.model_phrases.length){
+    var li3=r.model_phrases.map(function(p){
+      return '<li style="margin-bottom:8px;font-style:italic;color:var(--accent)">„'+escapeHtml(p)+'"</li>';
+    }).join("");
+    s+='<div class="ai-section"><div class="ai-section-title">'
+      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+      +' Model Phrases</div><div class="ai-section-body"><ul>'+li3+'</ul></div></div>';
+  }
+
+  // Next band tip — highlighted
+  if(r.next_band){
+    s+='<div class="ai-section"><div class="ai-section-title">'
+      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>'
+      +' How to Reach the Next Band</div>'
+      +'<div class="ai-section-body" style="border-color:rgba(34,200,135,.3);background:rgba(34,200,135,.05);color:var(--text)">'+escapeHtml(r.next_band)+'</div></div>';
+  }
+
+  s+='</div>';
+  document.getElementById("aiResult").innerHTML=s;
 }
 
-function renderGrammarResult(r, topic){
-  var s = '<div class="ai-result">';
-  if(typeof r.topic_relevant !== "undefined"){
-    s += '<div class="ai-relevance '+(r.topic_relevant ? "on-topic" : "off-topic")+'">'+(r.topic_relevant ? "✅ On Topic" : "⚠️ Off Topic")+'</div>';
-    if(r.topic_comment) s += '<div style="font-size:12px;color:var(--muted);margin-bottom:14px;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm)">'+escapeHtml(r.topic_comment)+'</div>';
-  }
-  if(r.ielts_band_estimate){
-    s += '<div style="text-align:center;margin-bottom:16px"><span style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;font-weight:700">Estimated IELTS Band</span><span style="font-size:36px;font-weight:800;font-family:\'Space Mono\',monospace;color:var(--amber)">'+r.ielts_band_estimate+'</span></div>';
-  }
-  s += '<div class="ai-overall"><div class="ai-overall-label">Overall Writing Quality</div><div class="ai-overall-num">'+((r.overall_score||0).toFixed(1))+'/10</div><div class="ai-overall-desc">'+escapeHtml(r.summary||'')+'</div></div>';
-  s += '<div class="ai-scores">'
-    + '<div class="ai-score ta"><div class="ai-score-lbl">Grammar</div><div class="ai-score-num">'+((r.grammar_score||0).toFixed(1))+'</div></div>'
-    + '<div class="ai-score cc"><div class="ai-score-lbl">Clarity</div><div class="ai-score-num">'+((r.clarity_score||0).toFixed(1))+'</div></div>'
-    + '<div class="ai-score lr"><div class="ai-score-lbl">Vocabulary</div><div class="ai-score-num">'+((r.vocabulary_score||0).toFixed(1))+'</div></div>'
-    + '<div class="ai-score gra"><div class="ai-score-lbl">Tone</div><div class="ai-score-num">'+((r.tone_score||0).toFixed(1))+'</div></div>'
-    + '</div>';
-  if(r.grammar_issues && r.grammar_issues.length){
-    var errs=r.grammar_issues.map(function(e){ return '<li style="margin-bottom:10px"><div style="color:var(--red);margin-bottom:3px">❌ <s>'+escapeHtml(e.error||"")+'</s></div><div style="color:var(--green);margin-bottom:3px">✅ '+escapeHtml(e.correction||"")+'</div><div style="color:var(--muted);font-size:12px">💬 '+escapeHtml(e.explanation||"")+'</div></li>'; }).join("");
-    s += '<div class="ai-section"><div class="ai-section-title">❌ Grammar Issues</div><div class="ai-section-body"><ul>'+errs+'</ul></div></div>';
-  }
-  if(r.clarity_suggestions && r.clarity_suggestions.length){
-    s += '<div class="ai-section"><div class="ai-section-title">💬 Clarity Tips</div><div class="ai-section-body"><ul>'+r.clarity_suggestions.map(function(c){ return '<li style="margin-bottom:6px">💡 '+escapeHtml(c)+'</li>'; }).join("")+'</ul></div></div>';
-  }
-  if(r.vocabulary_tips && r.vocabulary_tips.length){
-    var vocab=r.vocabulary_tips.map(function(v){ return '<li style="margin-bottom:10px"><div><span style="color:var(--muted)">Weak: </span><span style="color:var(--amber)">'+escapeHtml(v.weak_word||"")+'</span></div><div><span style="color:var(--muted)">Better: </span><span style="color:var(--green);font-weight:600">'+escapeHtml(v.better_option||"")+'</span></div><div style="color:var(--muted);font-size:12px">📚 '+escapeHtml(v.reason||"")+'</div></li>'; }).join("");
-    s += '<div class="ai-section"><div class="ai-section-title">📚 Vocabulary Upgrades</div><div class="ai-section-body"><ul>'+vocab+'</ul></div></div>';
-  }
-  if(r.style_notes) s += '<div class="ai-section"><div class="ai-section-title">🎓 Tone & Style</div><div class="ai-section-body">'+escapeHtml(r.style_notes)+'</div></div>';
-  if(r.strengths && r.strengths.length) s += '<div class="ai-section"><div class="ai-section-title">✅ Strengths</div><div class="ai-section-body"><ul>'+r.strengths.map(function(st){ return '<li style="margin-bottom:6px">'+escapeHtml(st)+'</li>'; }).join("")+'</ul></div></div>';
-  if(r.top_priority_improvements && r.top_priority_improvements.length) s += '<div class="ai-section"><div class="ai-section-title">🚀 Top 3 Things to Fix</div><div class="ai-section-body" style="background:rgba(34,200,135,.05)"><ul>'+r.top_priority_improvements.map(function(p){ return '<li style="margin-bottom:6px">🎯 '+escapeHtml(p)+'</li>'; }).join("")+'</ul></div></div>';
-  s += '</div>';
-  document.getElementById("aiResult").innerHTML = s;
-}
-
-
-// ===== NOTIFICATIONS// ===== NOTIFICATIONS =====
+// ===== NOTIFICATIONS =====
 var _notifs=[]; var _unread=0;
 function _tstr(){ var n=new Date(); return n.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" · "+n.toLocaleDateString([],{day:"numeric",month:"short"}); }
 function pushNotif(title,body,type){
@@ -2049,5 +2011,3 @@ window.addEventListener('load', function(){
   }
 });
 </script>
-</body>
-</html>
