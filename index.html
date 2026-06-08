@@ -74,6 +74,14 @@ input[type=file]{display:none}
 .alert-card ul{padding-left:16px;margin-top:6px}
 .btn-new-group{background:rgba(34,200,135,.1);color:var(--green);border:1px solid rgba(34,200,135,.3);padding:9px 16px;border-radius:var(--rsm);font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:all .18s;white-space:nowrap;width:auto}
 .btn-new-group:hover{background:var(--green);color:var(--bg)}
+.btn-add-students{background:rgba(99,102,241,.1);color:#818cf8;border:1px solid rgba(99,102,241,.3);padding:9px 16px;border-radius:var(--rsm);font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:all .18s;white-space:nowrap;width:auto;margin-left:8px}
+.btn-add-students:hover{background:#6366f1;color:#fff}
+.as-group-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid var(--border);border-radius:var(--rsm);margin-bottom:8px;background:var(--card);cursor:pointer;transition:all .15s}
+.as-group-item.selected{border-color:#6366f1;background:rgba(99,102,241,.08)}
+.as-group-item-name{font-weight:700;font-size:13px}
+.as-group-item-count{font-size:11px;color:var(--muted)}
+.as-textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px;font-size:13px;font-family:inherit;color:var(--text);outline:none;resize:vertical;min-height:120px;line-height:1.6;box-sizing:border-box}
+.as-textarea:focus{border-color:#6366f1}
 .btn-delete-group{background:transparent;color:var(--muted);border:1px solid var(--border);padding:10px 14px;border-radius:var(--rsm);font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;transition:all .18s;white-space:nowrap;width:auto}
 .btn-delete-group:hover{background:var(--red);color:#fff;border-color:var(--red)}
 #notifBell{position:relative;width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);cursor:pointer;color:var(--muted);transition:all .2s;flex-shrink:0}
@@ -285,6 +293,27 @@ input[type=file]{display:none}
     <div class="modal-actions">
       <button class="btn-cancel" onclick="document.getElementById('newGroupModal').style.display='none'">Cancel</button>
       <button class="primary" onclick="submitNewGroup()">Create Group</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD STUDENTS MODAL -->
+<div id="addStudentsModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-title">Add Students</div>
+    <div class="modal-sub">Select a group, then enter students to add</div>
+    <div class="modal-field">
+      <label>Choose Group</label>
+      <div id="asGroupList" style="max-height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-top:4px"></div>
+    </div>
+    <div class="modal-field" id="asStudentsField" style="display:none">
+      <label>New Students — one per line</label>
+      <textarea class="as-textarea" id="asStudentsInput" placeholder="LASTNAME FIRSTNAME&#10;LASTNAME FIRSTNAME"></textarea>
+    </div>
+    <div class="modal-error" id="asError"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="document.getElementById('addStudentsModal').style.display='none'">Cancel</button>
+      <button class="primary" onclick="submitAddStudents()">Add Students</button>
     </div>
   </div>
 </div>
@@ -1507,7 +1536,8 @@ function admin(){
   app.innerHTML='<button class="back" onclick="home()">← Back</button>'
     +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'
     +'<h3 style="margin-bottom:0">Admin Panel</h3>'
-    +'<button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button></div>'
+    +'<button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button>'
+    +'<button class="btn-add-students" onclick="openAddStudentsModal()">+ Add Students</button></div>'
     +'<div id="groupList"></div>';
   var list=document.getElementById("groupList");
   Object.keys(GROUPS).forEach(function(g){
@@ -1684,6 +1714,44 @@ function deleteCustomGroup(g){
   delete GROUPS[g];
   _saveCustomGroups();
   pushNotif("Group Deleted", g+" has been deleted.", "blocked");
+  admin();
+}
+
+var _asSelectedGroup=null;
+function openAddStudentsModal(){
+  _asSelectedGroup=null;
+  document.getElementById("asStudentsField").style.display="none";
+  document.getElementById("asStudentsInput").value="";
+  document.getElementById("asError").textContent="";
+  var list=document.getElementById("asGroupList");
+  list.innerHTML="";
+  Object.keys(GROUPS).forEach(function(g){
+    var item=document.createElement("div"); item.className="as-group-item";
+    item.innerHTML='<span class="as-group-item-name">'+g+'</span><span class="as-group-item-count">'+GROUPS[g].length+' students</span>';
+    item.addEventListener("click",function(){
+      document.querySelectorAll(".as-group-item").forEach(function(el){el.classList.remove("selected");});
+      item.classList.add("selected");
+      _asSelectedGroup=g;
+      document.getElementById("asStudentsField").style.display="block";
+      document.getElementById("asError").textContent="";
+    });
+    list.appendChild(item);
+  });
+  document.getElementById("addStudentsModal").style.display="flex";
+}
+function submitAddStudents(){
+  if(!_asSelectedGroup){ document.getElementById("asError").textContent="Please select a group."; return; }
+  var raw=document.getElementById("asStudentsInput").value.trim();
+  if(!raw){ document.getElementById("asError").textContent="Enter at least one student name."; return; }
+  var newStudents=raw.split("\n").map(function(s){return s.trim().toUpperCase();}).filter(function(s){return s;});
+  var existing=GROUPS[_asSelectedGroup];
+  var added=0;
+  newStudents.forEach(function(s){
+    if(existing.indexOf(s)===-1){ existing.push(s); added++; }
+  });
+  _saveCustomGroups();
+  document.getElementById("addStudentsModal").style.display="none";
+  pushNotif("Students Added", added+" student(s) added to "+_asSelectedGroup+".", "success");
   admin();
 }
 
