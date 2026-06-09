@@ -147,7 +147,7 @@ input[type=file]{display:none}
 .notif-time{font-size:11px;color:var(--border);margin-top:5px;font-family:'Space Mono',monospace}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:999}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:32px 28px;width:100%;max-width:360px;margin:16px;box-shadow:0 24px 60px rgba(0,0,0,.5)}
-.modal-title{font-size:18px;font-weight:800;color:var(--white);margin-bottom:6px}
+.modal-title{font-size:18px;font-weight:800;color:var(--text);margin-bottom:6px}
 .modal-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
 .modal-field{margin-bottom:14px}
 .modal-field label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
@@ -168,7 +168,7 @@ input[type=file]{display:none}
 .ai-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:640px;max-height:92vh;overflow-y:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6);position:relative}
 @media(min-height:600px){.ai-modal{border-radius:20px;max-height:88vh;margin:16px}}
 .ai-modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.ai-modal-title{font-size:17px;font-weight:800;color:var(--white);display:flex;align-items:center;gap:8px}
+.ai-modal-title{font-size:17px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px}
 .ai-modal-title span{background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .ai-close-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;transition:all .15s}
 .ai-close-btn:hover{background:var(--red);color:#fff;border-color:var(--red)}
@@ -204,7 +204,7 @@ input[type=file]{display:none}
 .ai-score.lr .ai-score-num{color:var(--amber)}
 .ai-score.gra .ai-score-num{color:var(--accent2)}
 .ai-section{margin-bottom:16px}
-.ai-section-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.ai-section-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .ai-section-body{font-size:13px;color:var(--muted);line-height:1.7;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px}
 .ai-section-body ul{padding-left:18px}
 .ai-section-body li{margin-bottom:5px}
@@ -225,7 +225,7 @@ input[type=file]{display:none}
 .speak-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
 @media(min-height:600px){.speak-modal{border-radius:20px;margin:16px}}
 .speak-modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.speak-modal-title{font-size:17px;font-weight:800;color:var(--white);display:flex;align-items:center;gap:8px}
+.speak-modal-title{font-size:17px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px}
 .speak-close-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;transition:all .15s}
 .speak-close-btn:hover{background:var(--red);color:#fff;border-color:var(--red)}
 .speak-hw-badge{font-size:12px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.2);padding:5px 12px;border-radius:20px;display:inline-block}
@@ -234,10 +234,10 @@ input[type=file]{display:none}
 .speak-type-btn.active{border-color:var(--green);background:rgba(34,200,135,.08)}
 .speak-type-btn:hover{border-color:var(--green)}
 .speak-type-icon{font-size:24px;margin-bottom:6px}
-.speak-type-label{font-size:13px;font-weight:700;color:var(--white)}
+.speak-type-label{font-size:13px;font-weight:700;color:var(--text)}
 .speak-type-sub{font-size:11px;color:var(--muted);margin-top:2px}
 .speak-timer-wrap{text-align:center;margin:20px 0}
-.speak-timer{font-size:56px;font-weight:800;font-family:'Space Mono',monospace;color:var(--white);line-height:1}
+.speak-timer{font-size:56px;font-weight:800;font-family:'Space Mono',monospace;color:var(--text);line-height:1}
 .speak-timer.warning{color:var(--amber)}
 .speak-timer.danger{color:var(--red)}
 .speak-timer-label{font-size:12px;color:var(--muted);margin-top:6px}
@@ -263,18 +263,15 @@ input[type=file]{display:none}
 .speak-audio-player{width:100%;border-radius:var(--rsm);outline:none;accent-color:var(--green)}
 .speak-video-player{width:100%;border-radius:var(--rsm);max-height:200px;background:#000}
 .speak-min-warn{font-size:12px;color:var(--amber);text-align:center;margin-top:8px}
-/* Transcription */
 .transcript-wrap{margin-top:16px;border-top:1px solid var(--border);padding-top:16px}
 .transcript-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.transcript-title{font-size:13px;font-weight:700;color:var(--white);display:flex;align-items:center;gap:6px}
+.transcript-title{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}
 .transcript-copy-btn{background:rgba(79,142,247,.1);color:var(--accent);border:1px solid rgba(79,142,247,.3);padding:5px 12px;border-radius:var(--rsm);font-family:inherit;font-weight:600;font-size:12px;cursor:pointer;transition:all .18s;width:auto}
 .transcript-copy-btn:hover{background:var(--accent);color:#fff}
 .transcript-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:13px;color:var(--text);line-height:1.8;max-height:220px;overflow-y:auto;white-space:pre-wrap;word-break:break-word}
 .transcript-loading{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;padding:14px}
 .transcript-stats{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
 .transcript-stat{font-size:11px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);padding:3px 10px;border-radius:20px;font-family:'Space Mono',monospace}
-
-/* Error banner */
 .error-banner{background:rgba(247,85,106,.1);border:1px solid rgba(247,85,106,.3);border-radius:var(--r);padding:20px;margin:20px 0;color:var(--red);font-size:13px;line-height:1.7}
 .error-banner b{color:#ff8a9a;display:block;margin-bottom:8px;font-size:15px}
 .error-banner code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:12px;font-family:'Space Mono',monospace}
@@ -291,7 +288,7 @@ input[type=file]{display:none}
     </div>
     <button id="themeToggle" onclick="toggleTheme()" title="Toggle theme" style="width:40px;height:40px;border-radius:50%;border:1.5px solid var(--border);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;flex-shrink:0;padding:0;"><svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button>
     <div id="helpBtn" onclick="openInstruction()"><span id="helpBtnText">Instructions</span><svg id="helpBtnIcon" style="display:none" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
-    <span id="connIndicator" style="font-size:10px;font-weight:600;color:var(--muted);white-space:nowrap;opacity:.7">�� Online</span>
+    <span id="connIndicator" style="font-size:10px;font-weight:600;color:var(--muted);white-space:nowrap;opacity:.7">● Online</span>
   </div>
 </header>
 
@@ -403,7 +400,6 @@ input[type=file]{display:none}
       </div>
       <div id="speakHwBadge" class="speak-hw-badge"></div>
 
-      <!-- Mode selector: Audio or Video upload -->
       <div class="speak-type-row">
         <div class="speak-type-btn active" id="typeAudio" onclick="selectRecordType('audio')">
           <div class="speak-type-icon">🎤</div>
@@ -417,10 +413,7 @@ input[type=file]{display:none}
         </div>
       </div>
 
-      <!-- AUDIO MODE -->
       <div id="audioRecorderSection">
-
-        <!-- Saved progress banner -->
         <div id="speakSavedBanner" style="display:none;background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.3);border-radius:var(--rsm);padding:12px 14px;margin-bottom:14px">
           <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">⏸️ Unfinished recording found</div>
           <div id="speakSavedInfo" style="font-size:12px;color:var(--muted);margin-bottom:10px"></div>
@@ -444,7 +437,6 @@ input[type=file]{display:none}
         </div>
         <div class="speak-status" id="speakStatus">Press Record to begin your speaking</div>
 
-        <!-- Row 1: Record + Pause -->
         <div class="speak-controls" style="gap:8px;margin-bottom:8px">
           <button class="speak-start-btn" id="speakStartBtn" onclick="startSpeakRecording()" style="flex:1">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
@@ -456,7 +448,6 @@ input[type=file]{display:none}
             Pause
           </button>
         </div>
-        <!-- Row 2: Submit full width -->
         <button id="speakStopBtn" onclick="stopSpeakRecording()" disabled
           style="width:100%;background:rgba(247,85,106,.12);color:var(--red);border:1px solid rgba(247,85,106,.35);border-radius:var(--rsm);padding:13px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;margin-bottom:10px">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
@@ -469,7 +460,6 @@ input[type=file]{display:none}
           <div class="speak-preview-label">Preview your recording:</div>
           <div id="speakPreviewPlayer"></div>
           <div id="speakUploadStatus" style="margin-top:12px;text-align:center;font-size:13px;color:var(--muted)"></div>
-          <!-- TRANSCRIPTION -->
           <div class="transcript-wrap" id="transcriptWrap" style="display:none">
             <div class="transcript-header">
               <div class="transcript-title">
@@ -484,7 +474,6 @@ input[type=file]{display:none}
         </div>
       </div>
 
-      <!-- VIDEO UPLOAD MODE -->
       <div id="videoUploadSection" style="display:none">
         <div style="text-align:center;padding:20px 0 10px">
           <div style="font-size:48px;margin-bottom:10px">🎥</div>
@@ -985,13 +974,12 @@ var _spkGroup="",_spkStudent="",_spkStage="",_spkLesson="",_spkHw="";
 var _spkType="audio";
 var _spkMediaRecorder=null, _spkStream=null;
 var _spkInterval=null, _spkRecordedSecs=0;
-var _spkMinSecs=600; // 10 minutes minimum
+var _spkMinSecs=600;
 var _spkSelectedVideoFile=null;
-var _spkAllChunks=[]; // all chunks across all sessions (resume support)
+var _spkAllChunks=[];
 var _spkIsPaused=false;
-var _spkSaveKey=""; // localStorage key for this session
+var _spkSaveKey="";
 
-// Save progress to localStorage every 5 seconds
 function _spkSaveProgress(){
   if(!_spkSaveKey) return;
   try{
@@ -1016,7 +1004,6 @@ function _spkGetSaveKey(group,student,stage,lesson,hw){
 }
 
 function openSpeakModal(group,student,stage,lesson,hw){
-  // Stop any existing recording first
   if(_spkMediaRecorder && _spkMediaRecorder.state!=="inactive"){
     _spkMediaRecorder.onstop=null;
     try{ _spkMediaRecorder.stop(); }catch(e){}
@@ -1024,7 +1011,6 @@ function openSpeakModal(group,student,stage,lesson,hw){
   if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
   clearInterval(_spkInterval);
 
-  // Reset all state
   _spkGroup=group; _spkStudent=student; _spkStage=stage; _spkLesson=lesson; _spkHw=hw;
   _spkType="audio"; _spkSelectedVideoFile=null;
   _spkAllChunks=[]; _spkRecordedSecs=0; _spkIsPaused=false;
@@ -1034,17 +1020,14 @@ function openSpeakModal(group,student,stage,lesson,hw){
   document.getElementById("speakHwBadge").textContent=hw;
   _resetAudioUI();
 
-  // Check for saved progress
   try{
     var saved=localStorage.getItem(_spkSaveKey);
     if(saved){
       var s=JSON.parse(saved);
-      // Only show if saved in last 24 hours
       if(s && s.secs>0 && (Date.now()-s.ts)<86400000){
         document.getElementById("speakSavedBanner").style.display="block";
         document.getElementById("speakSavedInfo").textContent=
           "You recorded "+formatTime(s.secs)+" — saved "+_timeAgo(s.ts)+". Continue from where you left off.";
-        // Pre-load the saved seconds
         _spkRecordedSecs=s.secs;
         document.getElementById("speakTimer").textContent=formatTime(_spkRecordedSecs);
         _updateProgressBar();
@@ -1075,17 +1058,14 @@ function _resetAudioUI(){
   document.getElementById("speakProgressBar").className="speak-progress-bar";
   document.getElementById("speakStatus").textContent="Press Record to begin your speaking";
   document.getElementById("speakStatus").className="speak-status";
-  // Record button — fully reset
   document.getElementById("speakStartBtn").disabled=false;
   document.getElementById("speakStartBtn").innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg> Record';
-  // Pause button — fully reset
   var pauseBtn=document.getElementById("speakPauseBtn");
   pauseBtn.disabled=true;
   pauseBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause';
   pauseBtn.style.background="rgba(245,166,35,.12)";
   pauseBtn.style.color="var(--amber)";
   pauseBtn.style.borderColor="rgba(245,166,35,.35)";
-  // Stop button
   var stopBtn=document.getElementById("speakStopBtn");
   stopBtn.disabled=true;
   stopBtn.style.opacity="0.4";
@@ -1113,7 +1093,6 @@ function _timeAgo(ts){
 }
 
 function resumeSavedRecording(){
-  // Hide banner and just start recording — seconds already loaded
   document.getElementById("speakSavedBanner").style.display="none";
   startSpeakRecording();
 }
@@ -1128,7 +1107,6 @@ function discardSavedRecording(){
 }
 
 function closeSpeakModal(){
-  // If actively recording (not paused) and under minimum — block
   if(_spkMediaRecorder && _spkMediaRecorder.state==="recording" && _spkRecordedSecs < _spkMinSecs){
     var remaining=_spkMinSecs-_spkRecordedSecs;
     var warn=document.getElementById("speakMinWarn");
@@ -1137,11 +1115,10 @@ function closeSpeakModal(){
     _shakeEl(document.querySelector(".speak-close-btn"));
     return;
   }
-  // If recording, pause it automatically before closing (saves progress)
   if(_spkMediaRecorder && _spkMediaRecorder.state==="recording"){
     _pauseRecorderHard();
   }
-  _spkSaveProgress(); // save whatever we have
+  _spkSaveProgress();
   if(_spkStream) _spkStream.getTracks().forEach(function(t){t.stop();});
   clearInterval(_spkInterval);
   document.getElementById("speakModal").style.display="none";
@@ -1185,7 +1162,7 @@ function startSpeakRecording(){
                  MediaRecorder.isTypeSupported("audio/webm")?"audio/webm":"audio/ogg";
     _spkMediaRecorder=new MediaRecorder(_spkStream,{mimeType:mimeType});
     _spkMediaRecorder.ondataavailable=function(e){ if(e.data.size>0) _spkAllChunks.push(e.data); };
-    _spkMediaRecorder.onstop=function(){};  // handled manually
+    _spkMediaRecorder.onstop=function(){};
     _spkMediaRecorder.start(1000);
 
     document.getElementById("speakStartBtn").disabled=true;
@@ -1203,7 +1180,7 @@ function startSpeakRecording(){
     _spkInterval=setInterval(function(){
       _spkRecordedSecs++;
       saveCounter++;
-      if(saveCounter>=5){ _spkSaveProgress(); saveCounter=0; } // save every 5 secs
+      if(saveCounter>=5){ _spkSaveProgress(); saveCounter=0; }
 
       var timerEl=document.getElementById("speakTimer");
       timerEl.textContent=formatTime(_spkRecordedSecs);
@@ -1228,7 +1205,6 @@ function pauseSpeakRecording(){
   if(!_spkMediaRecorder) return;
 
   if(_spkMediaRecorder.state==="recording"){
-    // PAUSE
     _pauseRecorderHard();
     _spkSaveProgress();
     document.getElementById("speakPauseBtn").innerHTML=
@@ -1242,7 +1218,6 @@ function pauseSpeakRecording(){
     _spkIsPaused=true;
 
   } else if(_spkIsPaused){
-    // RESUME
     navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
       _spkStream=s;
       _spkIsPaused=false;
@@ -1253,7 +1228,6 @@ function pauseSpeakRecording(){
       _spkMediaRecorder.onstop=function(){};
       _spkMediaRecorder.start(1000);
 
-      // Reset timer interval
       clearInterval(_spkInterval);
       var saveCounter=0;
       _spkInterval=setInterval(function(){
@@ -1310,7 +1284,6 @@ function stopSpeakRecording(){
   document.getElementById("speakStatus").className="speak-status uploading";
   document.getElementById("speakStatus").textContent="Processing… please wait";
 
-  // Stop recorder if still running, then upload
   if(_spkMediaRecorder && _spkMediaRecorder.state==="recording"){
     _spkMediaRecorder.onstop=function(){ _doUpload(); };
     _spkMediaRecorder.stop();
@@ -1346,7 +1319,7 @@ function _doUpload(){
       recordingUrl:url, recordingType:"audio", duration:_spkRecordedSecs, time:Date.now()
     });
   }).then(function(){
-    _spkClearProgress(); // clear saved progress — done!
+    _spkClearProgress();
     document.getElementById("speakStatus").className="speak-status done";
     document.getElementById("speakStatus").textContent="✅ Audio uploaded!";
     document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--green);font-weight:700">✅ Saved! Transcribing your speech…</span>';
@@ -1358,13 +1331,11 @@ function _doUpload(){
     document.getElementById("speakStatus").textContent="❌ Upload failed. Try again.";
     document.getElementById("speakUploadStatus").innerHTML='<span style="color:var(--red)">Upload error: '+(err.message||err)+'</span>';
     document.getElementById("transcriptContent").innerHTML='<div style="color:var(--red);font-size:13px;padding:10px">⚠️ Upload failed — transcription skipped.</div>';
-    // Re-enable submit button so they can retry
     document.getElementById("speakStopBtn").disabled=false;
     _spkAllChunks=[];
   });
 }
 
-// ===== GROQ WHISPER TRANSCRIPTION =====
 var GROQ_KEY="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";
 
 async function transcribeAudio(blob){
@@ -1372,10 +1343,8 @@ async function transcribeAudio(blob){
     '<div class="transcript-loading"><div class="ai-dots"><span></span><span></span><span></span></div>Step 2/2: Transcribing with Whisper AI… this may take 30–60 seconds</div>';
 
   try {
-    // Groq Whisper accepts: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, webm — max 25MB
     var sizeMB = blob.size / 1024 / 1024;
 
-    // If over 24MB, we need to warn (very rare for 20min audio at low bitrate)
     if(sizeMB > 24){
       document.getElementById("transcriptContent").innerHTML=
         '<div style="color:var(--amber);font-size:13px;padding:12px;background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.25);border-radius:var(--rsm);">'
@@ -1384,11 +1353,10 @@ async function transcribeAudio(blob){
     }
 
     var formData = new FormData();
-    // Use .webm extension so Groq recognizes the format
     formData.append("file", blob, "recording.webm");
     formData.append("model", "whisper-large-v3");
-    formData.append("language", "en"); // English for IELTS
-    formData.append("response_format", "verbose_json"); // get word count etc
+    formData.append("language", "en");
+    formData.append("response_format", "verbose_json");
     formData.append("temperature", "0");
 
     var resp = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", {
@@ -1411,22 +1379,18 @@ async function transcribeAudio(blob){
       return;
     }
 
-    // Count words and estimate speaking rate
     var words = text.trim().split(/\s+/).filter(function(w){return w;}).length;
     var minutes = _spkRecordedSecs / 60;
     var wpm = Math.round(words / minutes);
 
-    // Render transcript
     document.getElementById("transcriptContent").innerHTML=
       '<div class="transcript-box">'+escapeHtml(text)+'</div>';
 
-    // Stats row
     document.getElementById("transcriptStats").innerHTML=
       '<span class="transcript-stat">'+words+' words</span>'
       +'<span class="transcript-stat">'+wpm+' wpm</span>'
       +'<span class="transcript-stat">'+formatTime(_spkRecordedSecs)+' duration</span>';
 
-    // Also save transcript to Firebase
     if(_fbReady && db){
       db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw+"/transcript").set({
         text: text, words: words, wpm: wpm, time: Date.now()
@@ -1459,14 +1423,12 @@ function copyTranscript(){
     btn.style.color="var(--bg)";
     setTimeout(function(){ btn.textContent="Copy"; btn.style.background=""; btn.style.color=""; },2000);
   }).catch(function(){
-    // Fallback
     var ta=document.createElement("textarea");
     ta.value=text; document.body.appendChild(ta); ta.select();
     document.execCommand("copy"); document.body.removeChild(ta);
   });
 }
 
-// ===== VIDEO FILE UPLOAD =====
 function handleVideoFileSelect(input){
   var file=input.files[0];
   if(!file) return;
@@ -1484,7 +1446,6 @@ async function submitVideoFile(){
   var file = _spkSelectedVideoFile;
   var sizeMB = Math.round(file.size / 1024 / 1024 * 10) / 10;
 
-  // Warn if very large (over 500MB)
   if(file.size > 500 * 1024 * 1024){
     alert("File is too large ("+sizeMB+"MB). Please choose a file under 500MB.");
     return;
@@ -1505,12 +1466,10 @@ async function submitVideoFile(){
   var path = "speaking/"+safe(_spkGroup)+"/"+safe(_spkStudent)+"/"+safe(_spkStage)+"/"+safe(_spkLesson)+"/"+safe(_spkHw)+"/"+Date.now()+"."+ext;
   var ref = storage.ref(path);
 
-  // Use uploadTask for progress tracking
   var uploadTask = ref.put(file);
 
   uploadTask.on('state_changed',
     function(snapshot){
-      // Progress
       var pct = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
       var bar = document.getElementById("videoProgressBar");
       var txt = document.getElementById("videoProgressText");
@@ -1518,7 +1477,6 @@ async function submitVideoFile(){
       if(txt) txt.textContent = pct + "% — " + Math.round(snapshot.bytesTransferred/1024/1024*10)/10 + "MB / " + sizeMB + "MB";
     },
     function(error){
-      // Error
       var msg = "";
       switch(error.code){
         case 'storage/unauthorized': msg = "Permission denied. Check Firebase Storage rules."; break;
@@ -1533,7 +1491,6 @@ async function submitVideoFile(){
       console.error("Firebase Storage upload error:", error);
     },
     function(){
-      // Success
       uploadTask.snapshot.ref.getDownloadURL().then(function(url){
         return db.ref("submissions/"+_spkGroup+"/"+_spkStudent+"/"+_spkStage+"/"+_spkLesson+"/"+_spkHw).set({
           recordingUrl: url,
@@ -1610,7 +1567,6 @@ function adminGroup(group){
   });
 }
 function adminStageSelect(group,stage){
-  // Detach live lesson listener when navigating away
   if(window._adminLessonRef&&window._adminLessonListener){ window._adminLessonRef.off('value',window._adminLessonListener); window._adminLessonRef=null; window._adminLessonListener=null; }
   app.innerHTML='<button class="back" onclick="adminGroup(\''+esc(group)+'\')">← Back</button><div class="bc">'+group+' › <b>'+stage+'</b></div><h3>Select Lesson</h3><div id="lessonList2"></div>';
   var list=document.getElementById("lessonList2");
@@ -1732,20 +1688,16 @@ async function exportCSV(group,stage,lesson){
 // ===== CUSTOM GROUPS + REALTIME SYNC =====
 var _BUILTIN=["GROUP IELTS 9:00 M/W/F","GROUP IELTS 17:00 MWF","GROUP IELTS M/W/F 14:00","GROUP CEFR M/W/F 15:30","GROUP IELTS T/T/S 9:00","GROUP IELTS 10:30 TTS","GROUP IELTS T/T/S 14:00","GROUP IELTS 15:30 TTS","GROUP IELTS T/T/S 18:30","GROUP IELTS MAX T/T/S 18:30"];
 
-// Write custom groups to Firebase
 function _saveCustomGroups(){
   if(!_fbReady||!db) return;
-  // Save ALL groups: both builtin overrides and custom groups
   var custom={};
   Object.keys(GROUPS).forEach(function(n){ if(_BUILTIN.indexOf(n)===-1) custom[n]=GROUPS[n]; });
   db.ref("custom_groups").set(custom).catch(function(e){ console.warn("Save custom groups error:",e); });
-  // Also save builtin group overrides (student additions)
   var overrides={};
   _BUILTIN.forEach(function(n){ if(GROUPS[n]) overrides[n]=GROUPS[n]; });
   db.ref("builtin_overrides").set(overrides).catch(function(e){ console.warn("Save overrides error:",e); });
 }
 
-// One-time load then attach live listener
 var _prevGroups={};
 function _loadCustomGroups(callback){
   if(!_fbReady||!db){ if(callback) callback(); return; }
@@ -1763,10 +1715,8 @@ function _loadCustomGroups(callback){
     }
     _prevGroups={};
     Object.keys(c).forEach(function(n){ _prevGroups[n]=(c[n]||[]).slice(); });
-    // Reset non-builtin groups then apply custom
     Object.keys(GROUPS).forEach(function(n){ if(_BUILTIN.indexOf(n)===-1) delete GROUPS[n]; });
     Object.keys(c).forEach(function(n){ GROUPS[n]=c[n]; });
-    // Load builtin overrides (students added to builtin groups)
     db.ref("builtin_overrides").once("value").then(function(oSnap){
       var ov=oSnap.val()||{};
       Object.keys(ov).forEach(function(n){ if(ov[n]&&ov[n].length) GROUPS[n]=ov[n]; });
@@ -1779,14 +1729,11 @@ function _loadCustomGroups(callback){
   }, function(e){ console.warn("Load groups error:",e); if(!fired){ fired=true; if(callback) callback(); } });
 }
 
-// Called when Firebase pushes a groups update to non-admin users
-var _currentStudentScreen=null; // "groups" | "students:<groupname>" | null
+var _currentStudentScreen=null;
 function _onGroupsUpdated(){
-  // Refresh admin panel if teacher is looking at it
   if(document.getElementById("groupList")){
     admin(); return;
   }
-  // Refresh student group list if open
   var h3=document.querySelector("h3");
   if(h3&&h3.textContent==="Select Group"){
     enterStudent(); return;
@@ -1847,20 +1794,75 @@ function openAddStudentsModal(){
   });
   document.getElementById("addStudentsModal").style.display="flex";
 }
+
+// ===== FIXED submitAddStudents FUNCTION =====
 function submitAddStudents(){
-  if(!_asSelectedGroup){ document.getElementById("asError").textContent="Please select a group."; return; }
+  if(!_asSelectedGroup){ 
+    document.getElementById("asError").textContent="Please select a group."; 
+    return; 
+  }
   var raw=document.getElementById("asStudentsInput").value.trim();
-  if(!raw){ document.getElementById("asError").textContent="Enter at least one student name."; return; }
+  if(!raw){ 
+    document.getElementById("asError").textContent="Enter at least one student name."; 
+    return; 
+  }
   var newStudents=raw.split("\n").map(function(s){return s.trim().toUpperCase();}).filter(function(s){return s;});
+  
+  // Ensure group exists
+  if(!GROUPS[_asSelectedGroup]){
+    GROUPS[_asSelectedGroup] = [];
+  }
+  
   var existing=GROUPS[_asSelectedGroup];
   var added=0;
+  var duplicateNames = [];
+  
   newStudents.forEach(function(s){
-    if(existing.indexOf(s)===-1){ existing.push(s); added++; }
+    if(existing.indexOf(s) === -1){ 
+      existing.push(s); 
+      added++; 
+    } else {
+      duplicateNames.push(s);
+    }
   });
+  
+  // Update GROUPS with the modified array
+  GROUPS[_asSelectedGroup] = existing;
+  
+  // Save to Firebase
   _saveCustomGroups();
+  
+  // Close modal
   document.getElementById("addStudentsModal").style.display="none";
-  pushNotif("Students Added", added+" student(s) added to "+_asSelectedGroup+".", "success");
-  admin();
+  
+  // Clear input
+  document.getElementById("asStudentsInput").value = "";
+  document.getElementById("asCount").innerHTML = "0 students entered";
+  document.getElementById("asStudentsField").style.display = "none";
+  
+  // Show result notification
+  if(added > 0){
+    var msg = added + " student(s) added to " + _asSelectedGroup;
+    if(duplicateNames.length > 0){
+      msg += ". Skipped duplicates: " + duplicateNames.join(", ");
+    }
+    pushNotif("Students Added", msg, "success");
+  } else if(duplicateNames.length > 0){
+    pushNotif("No Students Added", "All " + duplicateNames.length + " student(s) already exist in " + _asSelectedGroup, "info");
+  }
+  
+  // Refresh UI if admin panel is open
+  if(document.getElementById("groupList")){
+    admin();
+  } else if(document.querySelector("h3") && document.querySelector("h3").textContent === "Select Group"){
+    enterStudent();
+  } else if(window._adminLessonRef){
+    // If we're in a lesson view, refresh it
+    var ctx = window._lessonCtx;
+    if(ctx){
+      adminLessonView(ctx.group, ctx.stage, ctx.lesson);
+    }
+  }
 }
 
 // ===== INSTRUCTIONS =====
@@ -1978,7 +1980,6 @@ async function runCheck(){
     var data=await resp.json();
     var raw=data.content[0].text.trim().replace(/^```json\s*/,"").replace(/^```\s*/,"").replace(/```\s*$/,"").trim();
 
-    // Sometimes model adds text before/after JSON — extract just the JSON object
     var jsonMatch=raw.match(/\{[\s\S]*\}/);
     if(!jsonMatch) throw new Error("Could not parse AI response. Try again.");
     var r=JSON.parse(jsonMatch[0]);
@@ -2000,7 +2001,6 @@ function renderAIResult(r){
 
   var s='<div class="ai-result">';
 
-  // Overall band
   s+='<div class="ai-overall">'
     +'<div class="ai-overall-label">Estimated IELTS Band</div>'
     +'<div class="ai-overall-num">'+r.overall+'</div>'
@@ -2008,7 +2008,6 @@ function renderAIResult(r){
     +(r.word_count_note?'<div style="margin-top:8px;font-size:12px;color:var(--amber);background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.2);padding:6px 12px;border-radius:var(--rsm)">📝 '+escapeHtml(r.word_count_note)+'</div>':"")
     +'</div>';
 
-  // 4 criterion scores
   s+='<div class="ai-scores">'
     +'<div class="ai-score ta"><div class="ai-score-lbl">Task Achievement</div><div class="ai-score-num">'+r.ta+'</div></div>'
     +'<div class="ai-score cc"><div class="ai-score-lbl">Coherence & Cohesion</div><div class="ai-score-num">'+r.cc+'</div></div>'
@@ -2016,7 +2015,6 @@ function renderAIResult(r){
     +'<div class="ai-score gra"><div class="ai-score-lbl">Grammatical Range</div><div class="ai-score-num">'+r.gra+'</div></div>'
     +'</div>';
 
-  // AI Detection bar
   s+='<div class="ai-detect">'
     +'<div class="ai-detect-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>AI Detection</div>'
     +'<div class="ai-detect-bar">'
@@ -2030,7 +2028,6 @@ function renderAIResult(r){
     +(r.ai_note?'<div class="ai-detect-note">💡 '+escapeHtml(r.ai_note)+'</div>':"")
     +'</div>';
 
-  // Helper functions
   function blk(title,icon,body){
     return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div>'
       +'<div class="ai-section-body">'+body+'</div></div>';
@@ -2042,12 +2039,10 @@ function renderAIResult(r){
       +'<div class="ai-section-body"><ul>'+li+'</ul></div></div>';
   }
 
-  // Summary
   s+=blk("📋 Overall Assessment",
     '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
     escapeHtml(r.summary||""));
 
-  // Criterion details
   if(r.task_achievement) s+=blk("🎯 Task Achievement / Response",
     '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
     escapeHtml(r.task_achievement));
@@ -2061,19 +2056,16 @@ function renderAIResult(r){
     '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>',
     escapeHtml(r.grammar));
 
-  // Strengths
   if(r.strengths&&r.strengths.length)
     s+=listBlk("✅ Strengths",
       '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
       r.strengths, function(x){ return escapeHtml(x); });
 
-  // Improvements
   if(r.improvements&&r.improvements.length)
     s+=listBlk("⚠️ What to Improve",
       '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
       r.improvements, function(x){ return escapeHtml(x); });
 
-  // Grammar errors — detailed
   if(r.grammar_errors&&r.grammar_errors.length){
     var li=r.grammar_errors.map(function(e){
       if(typeof e==="string") return '<li style="margin-bottom:8px">'+escapeHtml(e)+'</li>';
@@ -2088,7 +2080,6 @@ function renderAIResult(r){
       +' Grammar Errors Found</div><div class="ai-section-body"><ul>'+li+'</ul></div></div>';
   }
 
-  // Vocabulary tips — detailed
   if(r.vocab_tips&&r.vocab_tips.length){
     var li2=r.vocab_tips.map(function(v){
       if(typeof v==="string") return '<li style="margin-bottom:8px">'+escapeHtml(v)+'</li>';
@@ -2103,7 +2094,6 @@ function renderAIResult(r){
       +' Vocabulary Tips</div><div class="ai-section-body"><ul>'+li2+'</ul></div></div>';
   }
 
-  // Model phrases
   if(r.model_phrases&&r.model_phrases.length){
     var li3=r.model_phrases.map(function(p){
       return '<li style="margin-bottom:8px;font-style:italic;color:var(--accent)">„'+escapeHtml(p)+'"</li>';
@@ -2113,7 +2103,6 @@ function renderAIResult(r){
       +' Model Phrases</div><div class="ai-section-body"><ul>'+li3+'</ul></div></div>';
   }
 
-  // Next band tip — highlighted
   if(r.next_band){
     s+='<div class="ai-section"><div class="ai-section-title">'
       +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>'
@@ -2174,10 +2163,8 @@ function toggleTheme(){
   var icon = document.getElementById("themeIcon");
   if(icon){
     if(isDark){
-      // Moon icon for dark mode
       icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
     } else {
-      // Sun icon for light mode
       icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
     }
   }
@@ -2201,14 +2188,12 @@ document.addEventListener("keydown",function(e){
 
 // ===== INIT =====
 applyTheme();
-// Wait for Firebase SDKs to load, then init
 window.addEventListener('load', function(){
   if(initFirebase()){
-    // Real-time connection state
     db.ref('.info/connected').on('value', function(snap){
       var online=snap.val()===true;
       var ind=document.getElementById('connIndicator');
-      if(ind){ ind.textContent=online?'\u25cf Online':'\u25cf Offline'; ind.style.color=online?'var(--green)':'var(--red)'; }
+      if(ind){ ind.textContent=online?'● Online':'● Offline'; ind.style.color=online?'var(--green)':'var(--red)'; }
     });
     _loadCustomGroups(function(){
       home();
@@ -2218,3 +2203,5 @@ window.addEventListener('load', function(){
   }
 });
 </script>
+</body>
+</html>
