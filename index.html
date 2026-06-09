@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Statista</title>
+<title>Statista - IELTS Homework Tracker</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
 <style>
@@ -23,7 +23,7 @@ body.dark .modal-field input,.modal-field textarea,.as-textarea{background:#0d0f
 body.dark #themeToggle{background:#1e2538;border-color:#2a3347;color:#e8edf5}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 button,a,.card,.home-card,.back,.primary,.secondary,.danger,.notif-item,
-#helpBtn,#notifBell,#themeToggle,.btn-new-group,.btn-add-students,
+#helpBtn,#notifBell,#themeToggle,.btn-new-group,.btn-add-students,.btn-remove-student,
 .as-group-item,.speak-btn,.ai-check-btn,.export-btn,.btn-delete-group{
   transition:background-color .2s,border-color .2s,color .12s,transform .2s,box-shadow .2s;
 }
@@ -100,7 +100,9 @@ input[type=file]{display:none}
 .admin-group-actions{display:flex;gap:8px;flex-wrap:wrap}
 .admin-group-actions .primary{width:auto;flex:1}
 .admin-student-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:8px;box-shadow:0 1px 6px rgba(0,0,0,.04)}
-.admin-student-name{font-weight:700;font-size:14px;color:var(--text);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.admin-student-name{font-weight:700;font-size:14px;color:var(--text);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.admin-student-name .remove-student-btn{background:rgba(247,85,106,.1);color:var(--red);border:1px solid rgba(247,85,106,.3);padding:5px 10px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;width:auto}
+.admin-student-name .remove-student-btn:hover{background:var(--red);color:#fff}
 .hw-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;gap:8px}
 .hw-row:last-child{border-bottom:none}
 .hw-row-name{color:var(--muted);flex:1}
@@ -275,6 +277,11 @@ input[type=file]{display:none}
 .error-banner{background:rgba(247,85,106,.1);border:1px solid rgba(247,85,106,.3);border-radius:var(--r);padding:20px;margin:20px 0;color:var(--red);font-size:13px;line-height:1.7}
 .error-banner b{color:#ff8a9a;display:block;margin-bottom:8px;font-size:15px}
 .error-banner code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:12px;font-family:'Space Mono',monospace}
+.student-list-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border)}
+.student-list-item:last-child{border-bottom:none}
+.student-name{font-weight:600;font-size:14px;color:var(--text)}
+.remove-student-icon{background:rgba(247,85,106,.1);color:var(--red);border:1px solid rgba(247,85,106,.3);padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;width:auto}
+.remove-student-icon:hover{background:var(--red);color:#fff}
 </style>
 </head>
 <body>
@@ -360,6 +367,22 @@ input[type=file]{display:none}
   </div>
 </div>
 
+<!-- REMOVE STUDENT MODAL -->
+<div id="removeStudentModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal">
+    <div class="modal-title">Remove Student</div>
+    <div class="modal-sub" id="removeStudentInfo"></div>
+    <div class="modal-field">
+      <label>Select Student to Remove</label>
+      <div id="removeStudentList" style="max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-top:4px"></div>
+    </div>
+    <div class="modal-error" id="removeError"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="document.getElementById('removeStudentModal').style.display='none'">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <!-- AI CHECKER MODAL -->
 <div id="aiModal" style="display:none">
   <div class="ai-overlay" onclick="if(event.target.classList.contains('ai-overlay'))closeAI()">
@@ -399,7 +422,6 @@ input[type=file]{display:none}
         </button>
       </div>
       <div id="speakHwBadge" class="speak-hw-badge"></div>
-
       <div class="speak-type-row">
         <div class="speak-type-btn active" id="typeAudio" onclick="selectRecordType('audio')">
           <div class="speak-type-icon">🎤</div>
@@ -412,7 +434,6 @@ input[type=file]{display:none}
           <div class="speak-type-sub">Upload from device</div>
         </div>
       </div>
-
       <div id="audioRecorderSection">
         <div id="speakSavedBanner" style="display:none;background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.3);border-radius:var(--rsm);padding:12px 14px;margin-bottom:14px">
           <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">⏸️ Unfinished recording found</div>
@@ -420,14 +441,13 @@ input[type=file]{display:none}
           <div style="display:flex;gap:8px">
             <button onclick="resumeSavedRecording()" style="flex:1;background:linear-gradient(135deg,var(--accent),#3a7ef5);color:#fff;border:none;border-radius:var(--rsm);padding:9px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              Continue from where I left off
+              Continue
             </button>
             <button onclick="discardSavedRecording()" style="background:rgba(247,85,106,.1);color:var(--red);border:1px solid rgba(247,85,106,.3);border-radius:var(--rsm);padding:9px 12px;font-family:inherit;font-weight:600;font-size:12px;cursor:pointer;white-space:nowrap;width:auto">
               Start fresh
             </button>
           </div>
         </div>
-
         <div class="speak-timer-wrap">
           <div class="speak-timer" id="speakTimer">00:00</div>
           <div class="speak-timer-label" id="speakTimerLabel">Press Record to start</div>
@@ -436,7 +456,6 @@ input[type=file]{display:none}
           <div class="speak-progress-bar" id="speakProgressBar" style="width:0%"></div>
         </div>
         <div class="speak-status" id="speakStatus">Press Record to begin your speaking</div>
-
         <div class="speak-controls" style="gap:8px;margin-bottom:8px">
           <button class="speak-start-btn" id="speakStartBtn" onclick="startSpeakRecording()" style="flex:1">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
@@ -453,9 +472,7 @@ input[type=file]{display:none}
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
           Stop & Submit
         </button>
-
         <div class="speak-min-warn" id="speakMinWarn">⚠️ Minimum 10 minutes required to submit</div>
-
         <div class="speak-preview" id="speakPreview" style="display:none">
           <div class="speak-preview-label">Preview your recording:</div>
           <div id="speakPreviewPlayer"></div>
@@ -464,7 +481,7 @@ input[type=file]{display:none}
             <div class="transcript-header">
               <div class="transcript-title">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                Speech Transcript (Whisper AI)
+                Speech Transcript
               </div>
               <button class="transcript-copy-btn" onclick="copyTranscript()">Copy</button>
             </div>
@@ -473,14 +490,13 @@ input[type=file]{display:none}
           </div>
         </div>
       </div>
-
       <div id="videoUploadSection" style="display:none">
         <div style="text-align:center;padding:20px 0 10px">
           <div style="font-size:48px;margin-bottom:10px">🎥</div>
           <div style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6">Select a video file from your device.<br>Supported formats: MP4, MOV, WebM</div>
           <label style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),#1aad74);color:#fff;padding:13px 24px;border-radius:var(--rsm);font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 14px rgba(34,200,135,.3);transition:all .2s">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            Choose Video File
+            Choose Video
             <input type="file" id="videoFileInput" accept="video/*" onchange="handleVideoFileSelect(this)">
           </label>
         </div>
@@ -1109,11 +1125,9 @@ function discardSavedRecording(){
 function closeSpeakModal(){
   if(_spkMediaRecorder && _spkMediaRecorder.state==="recording" && _spkRecordedSecs < _spkMinSecs){
     var remaining=_spkMinSecs-_spkRecordedSecs;
-    var warn=document.getElementById("speakMinWarn");
-    warn.textContent="⛔ Cannot close while recording — pause first or reach 10 min minimum! "+formatTime(remaining)+" left.";
-    warn.style.color="var(--red)"; warn.style.fontWeight="700";
-    _shakeEl(document.querySelector(".speak-close-btn"));
-    return;
+    if(!confirm("You have recorded "+formatTime(_spkRecordedSecs)+". Minimum is 10 minutes ("+formatTime(remaining)+" remaining).\n\nYour progress has been saved. Close anyway?")){
+      return;
+    }
   }
   if(_spkMediaRecorder && _spkMediaRecorder.state==="recording"){
     _pauseRecorderHard();
@@ -1536,22 +1550,25 @@ function admin(){
   app.innerHTML='<button class="back" onclick="home()">← Back</button>'
     +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'
     +'<h3 style="margin-bottom:0">Admin Panel</h3>'
+    +'<div style="display:flex;gap:8px">'
     +'<button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button>'
-    +'<button class="btn-add-students" onclick="openAddStudentsModal()">+ Add Students</button></div>'
+    +'<button class="btn-add-students" onclick="openAddStudentsModal()">+ Add Students</button>'
+    +'<button class="btn-new-group" onclick="openRemoveStudentModal()" style="background:rgba(247,85,106,.1);color:var(--red);border-color:rgba(247,85,106,.3)">− Remove Student</button>'
+    +'</div></div>'
     +'<div id="groupList"></div>';
   var list=document.getElementById("groupList");
   Object.keys(GROUPS).forEach(function(g){
     var div=document.createElement("div"); div.className="admin-group-card";
-    var name=document.createElement("div"); name.className="admin-group-name"; name.textContent=g; div.appendChild(name);
+    var name=document.createElement("div"); name.className="admin-group-name"; name.textContent=g+" ("+GROUPS[g].length+" students)"; div.appendChild(name);
     var actions=document.createElement("div"); actions.className="admin-group-actions";
     var btnOpen=document.createElement("button"); btnOpen.className="primary"; btnOpen.textContent="Open Group";
     btnOpen.addEventListener("click",function(){adminGroup(g);}); actions.appendChild(btnOpen);
     var btnClear=document.createElement("button"); btnClear.className="danger"; btnClear.textContent="Clear Files";
     btnClear.addEventListener("click",function(){
       if(!requireDB()) return;
-      if(confirm("Clear ALL files?")) db.ref("submissions/"+g).remove().then(function(){ pushNotif("Files Cleared",g+" — cleared.","info"); alert("Cleared"); });
+      if(confirm("Clear ALL homework files for "+g+"?")) db.ref("submissions/"+g).remove().then(function(){ pushNotif("Files Cleared",g+" — cleared.","info"); alert("Cleared"); });
     }); actions.appendChild(btnClear);
-    var btnDel=document.createElement("button"); btnDel.className="btn-delete-group"; btnDel.textContent="Delete";
+    var btnDel=document.createElement("button"); btnDel.className="btn-delete-group"; btnDel.textContent="Delete Group";
     btnDel.addEventListener("click",function(){deleteCustomGroup(g);}); actions.appendChild(btnDel);
     div.appendChild(actions); list.appendChild(div);
   });
@@ -1587,10 +1604,12 @@ async function adminLessonView(group,stage,lesson){
   function _render(snap){
     var ctx=window._lessonCtx;
     var all=snap.val()||{};
-    var h='<button class="back" onclick="var c=window._lessonCtx;adminStageSelect(c.group,c.stage)">\u2190 Back</button>';
-    h+='<div class="bc">'+ctx.group+' \u203a '+ctx.stage+' \u203a <b>'+ctx.lesson+'</b></div>';
-    h+='<h3>'+ctx.lesson+' \u2014 Results <span style="font-size:11px;font-weight:700;color:var(--green);background:rgba(22,168,112,.1);border:1px solid rgba(22,168,112,.25);padding:2px 8px;border-radius:20px;vertical-align:middle">\u25cf LIVE</span></h3>';
-    h+='<button class="export-btn" onclick="var c=window._lessonCtx;exportCSV(c.group,c.stage,c.lesson)">Export CSV</button>';
+    var h='<button class="back" onclick="var c=window._lessonCtx;adminStageSelect(c.group,c.stage)">← Back</button>';
+    h+='<div class="bc">'+ctx.group+' › '+ctx.stage+' › <b>'+ctx.lesson+'</b></div>';
+    h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px">';
+    h+='<h3 style="margin-bottom:0">'+ctx.lesson+' — Results <span style="font-size:11px;font-weight:700;color:var(--green);background:rgba(22,168,112,.1);border:1px solid rgba(22,168,112,.25);padding:2px 8px;border-radius:20px;vertical-align:middle">● LIVE</span></h3>';
+    h+='<button class="export-btn" onclick="var c=window._lessonCtx;exportCSV(c.group,c.stage,c.lesson)">📊 Export CSV</button>';
+    h+='</div>';
     window._adminTranscripts={};
     var students=GROUPS[ctx.group]||[];
     var hwList=(STAGES[ctx.stage]&&STAGES[ctx.stage][ctx.lesson])||[];
@@ -1598,17 +1617,17 @@ async function adminLessonView(group,stage,lesson){
       var student=students[i];
       var sData=(all[student])||{};
       var lData=((sData[ctx.stage]||{})[ctx.lesson])||{};
-      h+='<div class="admin-student-card"><div class="admin-student-name">'+student+'</div>';
+      h+='<div class="admin-student-card"><div class="admin-student-name">'+student+'<button class="remove-student-icon" onclick="removeStudentFromGroup(\''+esc(ctx.group)+'\',\''+esc(student)+'\')">✖ Remove</button></div>';
       for(var j=0;j<hwList.length;j++){
         var hw=hwList[j];
         var d=lData[hw]||null;
         var isSp=isSpeakingTask(hw);
         var ok=isSp?(d&&d.recordingUrl):(d&&Array.isArray(d.files)&&d.files.length>0);
-        h+='<div class="hw-row"><div class="hw-row-name">'+hw+(isSp?' \ud83c\udfa4':'')+'</div>';
+        h+='<div class="hw-row"><div class="hw-row-name">'+hw+(isSp?' 🎤':'')+'</div>';
         h+='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">';
         h+='<span class="'+(ok?'green':'red')+'">'+(ok?'Yes':'No')+'</span>';
         if(ok&&isSp&&d.recordingUrl){
-          h+='<a href="'+d.recordingUrl+'" target="_blank" style="color:var(--green);font-size:12px;font-weight:600;text-decoration:none;background:rgba(22,168,112,.1);border:1px solid rgba(22,168,112,.25);padding:3px 10px;border-radius:20px">\u25b6 play</a>';
+          h+='<a href="'+d.recordingUrl+'" target="_blank" style="color:var(--green);font-size:12px;font-weight:600;text-decoration:none;background:rgba(22,168,112,.1);border:1px solid rgba(22,168,112,.25);padding:3px 10px;border-radius:20px">▶ play</a>';
           if(d.duration) h+='<span style="font-size:11px;color:var(--muted)">'+formatTime(d.duration)+'</span>';
           var tr=(d&&d.transcript)||null;
           if(tr&&tr.text){
@@ -1620,7 +1639,7 @@ async function adminLessonView(group,stage,lesson){
           }
         }
         if(ok&&!isSp&&d.files) d.files.forEach(function(url){
-          h+='<a href="'+url+'" target="_blank" style="color:var(--accent);font-size:12px;font-weight:600;text-decoration:none;background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.25);padding:3px 10px;border-radius:20px">\ud83d\udcf7 view</a>';
+          h+='<a href="'+url+'" target="_blank" style="color:var(--accent);font-size:12px;font-weight:600;text-decoration:none;background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.25);padding:3px 10px;border-radius:20px">📷 view</a>';
         });
         h+='</div></div>';
       }
@@ -1651,38 +1670,87 @@ function openTranscriptModal(tKey){
 
 function copyTranscriptModal(){
   var text=document.getElementById("tmText").textContent;
-  var btns=document.querySelectorAll("#transcriptModal button");
-  var copyBtn=null;
-  btns.forEach(function(b){ if(b.textContent.includes("Copy")) copyBtn=b; });
   navigator.clipboard.writeText(text).then(function(){
-    if(copyBtn){ copyBtn.textContent="✅ Copied!";
-      setTimeout(function(){ copyBtn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy text'; },2000);
-    }
+    alert("Transcript copied to clipboard!");
   }).catch(function(){
     var ta=document.createElement("textarea"); ta.value=text;
     document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
+    alert("Transcript copied!");
   });
 }
 
 async function exportCSV(group,stage,lesson){
   if(!requireDB()) return;
-  var rows=[["Student",...STAGES[stage][lesson]]];
-  for(var i=0;i<GROUPS[group].length;i++){
-    var row=[GROUPS[group][i]];
-    for(var j=0;j<STAGES[stage][lesson].length;j++){
-      var hw=STAGES[stage][lesson][j];
-      var snap=await db.ref("submissions/"+group+"/"+GROUPS[group][i]+"/"+stage+"/"+lesson+"/"+hw).once("value").catch(function(){return {val:function(){return null;}};});
-      var d=snap.val(); var isSp=isSpeakingTask(hw);
-      var ok=isSp?(d&&d.recordingUrl):(d&&Array.isArray(d.files)&&d.files.length>0);
-      row.push(ok?"Yes":"No");
-    }
-    rows.push(row);
+  
+  var exportBtn = document.querySelector('.export-btn');
+  var originalText = exportBtn ? exportBtn.textContent : 'Export CSV';
+  if(exportBtn) {
+    exportBtn.textContent = '⏳ Exporting...';
+    exportBtn.disabled = true;
   }
-  var blob=new Blob([rows.map(function(r){return r.join(",");}).join("\n")],{type:"text/csv"});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement("a"); a.href=url; a.download=group+" - "+stage+" - "+lesson+".csv";
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  setTimeout(function(){URL.revokeObjectURL(url);},1000);
+  
+  try {
+    var students = GROUPS[group] || [];
+    var hwList = (STAGES[stage] && STAGES[stage][lesson]) || [];
+    
+    if(students.length === 0){
+      alert("No students found in this group.");
+      if(exportBtn) {
+        exportBtn.textContent = originalText;
+        exportBtn.disabled = false;
+      }
+      return;
+    }
+    
+    var rows = [["Student", ...hwList]];
+    
+    for(var i = 0; i < students.length; i++){
+      var student = students[i];
+      var row = [student];
+      
+      for(var j = 0; j < hwList.length; j++){
+        var hw = hwList[j];
+        var snap = await db.ref("submissions/"+group+"/"+student+"/"+stage+"/"+lesson+"/"+hw).once("value").catch(function(){ 
+          return {val: function(){ return null; }}; 
+        });
+        var d = snap.val(); 
+        var isSp = isSpeakingTask(hw);
+        var ok = isSp ? (d && d.recordingUrl) : (d && Array.isArray(d.files) && d.files.length > 0);
+        row.push(ok ? "Yes" : "No");
+      }
+      rows.push(row);
+    }
+    
+    var csvContent = rows.map(function(r){
+      return r.map(function(cell){
+        if(typeof cell === 'string' && (cell.includes(',') || cell.includes('"'))) {
+          return '"' + cell.replace(/"/g, '""') + '"';
+        }
+        return cell;
+      }).join(",");
+    }).join("\n");
+    
+    var blob = new Blob(["\uFEFF" + csvContent], {type: "text/csv;charset=utf-8;"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = group + " - " + stage + " - " + lesson + ".csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    
+    pushNotif("Export Complete", "CSV exported for " + group + " - " + lesson, "success");
+    
+  } catch(err) {
+    console.error("Export error:", err);
+    alert("Error exporting CSV: " + (err.message || err));
+  } finally {
+    if(exportBtn) {
+      exportBtn.textContent = originalText;
+      exportBtn.disabled = false;
+    }
+  }
 }
 
 // ===== CUSTOM GROUPS + REALTIME SYNC =====
@@ -1708,10 +1776,10 @@ function _loadCustomGroups(callback){
       Object.keys(c).forEach(function(grp){
         var prev=_prevGroups[grp]||[];
         var next=c[grp]||[];
-        next.forEach(function(s){ if(prev.indexOf(s)===-1) pushNotif("\uD83D\uDFE2 Added to Group",s+" added to "+grp,"success"); });
-        prev.forEach(function(s){ if(next.indexOf(s)===-1) pushNotif("\uD83D\uDD34 Removed from Group",s+" removed from "+grp,"blocked"); });
+        next.forEach(function(s){ if(prev.indexOf(s)===-1) pushNotif("🟢 Added to Group",s+" added to "+grp,"success"); });
+        prev.forEach(function(s){ if(next.indexOf(s)===-1) pushNotif("🔴 Removed from Group",s+" removed from "+grp,"blocked"); });
       });
-      Object.keys(_prevGroups).forEach(function(grp){ if(!c[grp]) pushNotif("\uD83D\uDDD1 Group Deleted",grp+" deleted.","blocked"); });
+      Object.keys(_prevGroups).forEach(function(grp){ if(!c[grp]) pushNotif("🗑 Group Deleted",grp+" deleted.","blocked"); });
     }
     _prevGroups={};
     Object.keys(c).forEach(function(n){ _prevGroups[n]=(c[n]||[]).slice(); });
@@ -1729,7 +1797,6 @@ function _loadCustomGroups(callback){
   }, function(e){ console.warn("Load groups error:",e); if(!fired){ fired=true; if(callback) callback(); } });
 }
 
-var _currentStudentScreen=null;
 function _onGroupsUpdated(){
   if(document.getElementById("groupList")){
     admin(); return;
@@ -1739,6 +1806,7 @@ function _onGroupsUpdated(){
     enterStudent(); return;
   }
 }
+
 function openNewGroupModal(){
   document.getElementById("newGroupName").value="";
   document.getElementById("newGroupStudents").value="";
@@ -1752,13 +1820,14 @@ function submitNewGroup(){
   if(GROUPS[name]){ document.getElementById("newGroupError").textContent="Group already exists."; return; }
   if(!raw){ document.getElementById("newGroupError").textContent="Add at least one student."; return; }
   GROUPS[name]=raw.split("\n").map(function(s){return s.trim().toUpperCase();}).filter(function(s){return s;});
+  GROUPS[name].sort();
   _saveCustomGroups();
   pushNotif("Group Created", name+" has been created.", "success");
   document.getElementById("newGroupModal").style.display="none";
   admin();
 }
 function deleteCustomGroup(g){
-  if(!confirm("Delete group and all data?")) return;
+  if(!confirm("Delete group '"+g+"' and ALL its data? This cannot be undone!")) return;
   if(_fbReady && db) db.ref("submissions/"+g).remove().catch(function(){});
   delete GROUPS[g];
   _saveCustomGroups();
@@ -1778,9 +1847,11 @@ function openAddStudentsModal(){
   document.getElementById("asStudentsField").style.display="none";
   document.getElementById("asStudentsInput").value="";
   document.getElementById("asError").textContent="";
+  document.getElementById("asCount").innerHTML="0 students entered";
   var list=document.getElementById("asGroupList");
   list.innerHTML="";
-  Object.keys(GROUPS).forEach(function(g){
+  var sortedGroups = Object.keys(GROUPS).sort();
+  sortedGroups.forEach(function(g){
     var item=document.createElement("div"); item.className="as-group-item";
     item.innerHTML='<span class="as-group-item-name">'+g+'</span><span class="as-group-item-count">'+GROUPS[g].length+' students</span>';
     item.addEventListener("click",function(){
@@ -1789,13 +1860,13 @@ function openAddStudentsModal(){
       _asSelectedGroup=g;
       document.getElementById("asStudentsField").style.display="block";
       document.getElementById("asError").textContent="";
+      document.getElementById("asStudentsInput").focus();
     });
     list.appendChild(item);
   });
   document.getElementById("addStudentsModal").style.display="flex";
 }
 
-// ===== FIXED submitAddStudents FUNCTION =====
 function submitAddStudents(){
   if(!_asSelectedGroup){ 
     document.getElementById("asError").textContent="Please select a group."; 
@@ -1808,7 +1879,6 @@ function submitAddStudents(){
   }
   var newStudents=raw.split("\n").map(function(s){return s.trim().toUpperCase();}).filter(function(s){return s;});
   
-  // Ensure group exists
   if(!GROUPS[_asSelectedGroup]){
     GROUPS[_asSelectedGroup] = [];
   }
@@ -1826,42 +1896,123 @@ function submitAddStudents(){
     }
   });
   
-  // Update GROUPS with the modified array
   GROUPS[_asSelectedGroup] = existing;
-  
-  // Save to Firebase
+  GROUPS[_asSelectedGroup].sort();
   _saveCustomGroups();
   
-  // Close modal
   document.getElementById("addStudentsModal").style.display="none";
-  
-  // Clear input
   document.getElementById("asStudentsInput").value = "";
   document.getElementById("asCount").innerHTML = "0 students entered";
   document.getElementById("asStudentsField").style.display = "none";
+  document.querySelectorAll(".as-group-item").forEach(function(el){
+    el.classList.remove("selected");
+  });
+  _asSelectedGroup = null;
   
-  // Show result notification
   if(added > 0){
     var msg = added + " student(s) added to " + _asSelectedGroup;
     if(duplicateNames.length > 0){
       msg += ". Skipped duplicates: " + duplicateNames.join(", ");
     }
     pushNotif("Students Added", msg, "success");
+    alert(msg);
   } else if(duplicateNames.length > 0){
-    pushNotif("No Students Added", "All " + duplicateNames.length + " student(s) already exist in " + _asSelectedGroup, "info");
+    var dupMsg = "All " + duplicateNames.length + " student(s) already exist in " + _asSelectedGroup;
+    pushNotif("No Students Added", dupMsg, "info");
+    alert(dupMsg);
   }
   
-  // Refresh UI if admin panel is open
   if(document.getElementById("groupList")){
     admin();
   } else if(document.querySelector("h3") && document.querySelector("h3").textContent === "Select Group"){
     enterStudent();
   } else if(window._adminLessonRef){
-    // If we're in a lesson view, refresh it
     var ctx = window._lessonCtx;
     if(ctx){
       adminLessonView(ctx.group, ctx.stage, ctx.lesson);
     }
+  }
+}
+
+// ===== REMOVE STUDENT FUNCTIONS =====
+function openRemoveStudentModal(){
+  var list = document.getElementById("removeStudentList");
+  list.innerHTML = "";
+  var sortedGroups = Object.keys(GROUPS).sort();
+  
+  sortedGroups.forEach(function(group){
+    var groupDiv = document.createElement("div");
+    groupDiv.style.marginBottom = "15px";
+    groupDiv.style.border = "1px solid var(--border)";
+    groupDiv.style.borderRadius = "var(--rsm)";
+    groupDiv.style.overflow = "hidden";
+    
+    var groupHeader = document.createElement("div");
+    groupHeader.style.background = "var(--surface2)";
+    groupHeader.style.padding = "10px 14px";
+    groupHeader.style.fontWeight = "700";
+    groupHeader.style.fontSize = "13px";
+    groupHeader.textContent = group + " (" + GROUPS[group].length + " students)";
+    groupDiv.appendChild(groupHeader);
+    
+    var studentList = document.createElement("div");
+    studentList.style.maxHeight = "200px";
+    studentList.style.overflowY = "auto";
+    
+    GROUPS[group].slice().sort().forEach(function(student){
+      var studentItem = document.createElement("div");
+      studentItem.className = "student-list-item";
+      studentItem.innerHTML = '<span class="student-name">' + student + '</span>' +
+        '<button class="remove-student-icon" onclick="removeStudentFromGroup(\'' + esc(group) + '\', \'' + esc(student) + '\')">Remove</button>';
+      studentList.appendChild(studentItem);
+    });
+    
+    groupDiv.appendChild(studentList);
+    list.appendChild(groupDiv);
+  });
+  
+  document.getElementById("removeStudentInfo").textContent = "Select a student to remove from their group";
+  document.getElementById("removeStudentModal").style.display = "flex";
+}
+
+function removeStudentFromGroup(group, student){
+  if(!confirm("Remove student '" + student + "' from group '" + group + "'?\n\nThis will also delete ALL their homework submissions. This cannot be undone!")){
+    return;
+  }
+  
+  if(!GROUPS[group]){
+    alert("Group not found!");
+    document.getElementById("removeStudentModal").style.display = "none";
+    return;
+  }
+  
+  var index = GROUPS[group].indexOf(student);
+  if(index !== -1){
+    GROUPS[group].splice(index, 1);
+    GROUPS[group].sort();
+    _saveCustomGroups();
+    
+    if(_fbReady && db){
+      db.ref("submissions/" + group + "/" + student).remove().catch(function(e){
+        console.warn("Could not delete submissions:", e);
+      });
+    }
+    
+    pushNotif("Student Removed", student + " removed from " + group, "blocked");
+    alert("Student '" + student + "' removed from group '" + group + "'");
+    
+    document.getElementById("removeStudentModal").style.display = "none";
+    
+    if(document.getElementById("groupList")){
+      admin();
+    } else if(window._adminLessonRef){
+      var ctx = window._lessonCtx;
+      if(ctx && ctx.group === group){
+        adminLessonView(ctx.group, ctx.stage, ctx.lesson);
+      }
+    }
+  } else {
+    alert("Student not found in group!");
   }
 }
 
@@ -1871,9 +2022,9 @@ function openInstruction(){
     +'<div class="step-card"><div class="step-num">1</div><div class="step-title">Open the App</div><div class="step-body">Tap <b>"Enter as Student"</b>.</div></div>'
     +'<div class="step-card"><div class="step-num">2</div><div class="step-title">Find Yourself</div><div class="step-body">Select your <b>group</b>, then find your <b>full name</b>.</div></div>'
     +'<div class="step-card"><div class="step-num">3</div><div class="step-title">Choose Homework</div><div class="step-body">Tap your stage → lesson → task.</div></div>'
-    +'<div class="step-card"><div class="step-num">4</div><div class="step-title">Submit Photo or Recording</div><div class="step-body">For writing/reading tasks: attach <b>at least one photo</b>.<br>For speaking tasks: tap <b style="color:var(--green)">🎤 Record Speaking</b> and record your answer (min 1 minute, max 20 minutes).</div></div>'
+    +'<div class="step-card"><div class="step-num">4</div><div class="step-title">Submit Photo or Recording</div><div class="step-body">For writing/reading tasks: attach <b>at least one photo</b>.<br>For speaking tasks: tap <b style="color:var(--green)">🎤 Record Speaking</b> and record your answer (min 10 minutes).</div></div>'
     +'<div class="step-card"><div class="step-num">5</div><div class="step-title">Check Writing with AI</div><div class="step-body">For Task 1/2 tasks tap <b style="color:#a78bfa">Check with AI</b> to get IELTS band score and grammar feedback.</div></div>'
-    +'<div class="alert-card"><b>Speaking tasks</b> now have a built-in recorder — choose audio or video, record your answer, and it uploads automatically.</div>';
+    +'<div class="alert-card"><b>Teacher Features:</b> Add/remove students, create groups, export CSV reports, view live submissions.</div>';
 }
 
 // ===== AI CHECKER =====
@@ -1905,60 +2056,16 @@ async function runCheck(){
 
   var isTask2=_aiCurrentHw.toLowerCase().includes("task 2")||_aiCurrentHw.toLowerCase().includes("essay");
   var taskType=isTask2?"Task 2":"Task 1";
-  var taskLabel=isTask2
-    ?"IELTS Academic Writing Task 2 — argumentative/opinion/discussion essay (minimum 250 words required)"
-    :"IELTS Academic Writing Task 1 — report describing visual data (graph/chart/table/map/diagram, minimum 150 words required)";
 
   document.getElementById("aiBtn").disabled=true;
   document.getElementById("aiResult").innerHTML=
     '<div class="ai-loading"><div class="ai-dots"><span></span><span></span><span></span></div>'
-    +'Checking with Claude AI… this may take 15–30 seconds</div>';
+    +'Checking with AI… this may take 15–30 seconds</div>';
 
   var sysPrompt=
-    "You are a certified IELTS examiner with 15+ years of experience marking writing scripts. "
-    +"You use the official IELTS Writing Band Descriptors (Task Achievement/Response, Coherence & Cohesion, Lexical Resource, Grammatical Range & Accuracy). "
-    +"You are strict, precise, and give actionable, honest feedback. Never be generous — give the score the essay truly deserves.\n\n"
-    +"The student has submitted a "+taskLabel+".\n"
-    +"Word count submitted: "+wordCount+" words.\n\n"
-    +"Analyse the essay thoroughly and respond ONLY with a valid JSON object. No markdown, no code fences, no explanation outside JSON. "
-    +"Use this exact structure:\n"
-    +"{\n"
-    +"  \"overall\": 6.5,\n"
-    +"  \"ta\": 6.0,\n"
-    +"  \"cc\": 7.0,\n"
-    +"  \"lr\": 6.5,\n"
-    +"  \"gra\": 6.5,\n"
-    +"  \"word_count\": "+wordCount+",\n"
-    +"  \"word_count_note\": \"Comment on whether word count meets requirements and how it affects the score\",\n"
-    +"  \"band_desc\": \"One sentence describing what this overall band means for the student's level\",\n"
-    +"  \"summary\": \"3-4 sentences of overall honest assessment — what the examiner's first impression is, overall strengths and weaknesses\",\n"
-    +"  \"task_achievement\": \"3-4 sentences specifically about Task Achievement/Response: did they answer all parts? Is the position clear? Are ideas developed?\",\n"
-    +"  \"coherence\": \"3-4 sentences about Coherence & Cohesion: paragraph structure, logical flow, use of linking devices, referencing\",\n"
-    +"  \"lexical\": \"3-4 sentences about Lexical Resource: range of vocabulary, accuracy of word choice, collocations, spelling\",\n"
-    +"  \"grammar\": \"3-4 sentences about Grammatical Range & Accuracy: variety of structures, error frequency, punctuation\",\n"
-    +"  \"strengths\": [\"Specific strength with example from the text\", \"Another specific strength\", \"Third strength\"],\n"
-    +"  \"improvements\": [\"Most important thing to improve with specific advice\", \"Second priority improvement\", \"Third improvement\"],\n"
-    +"  \"grammar_errors\": [\n"
-    +"    {\"error\": \"exact phrase from essay\", \"fix\": \"corrected version\", \"reason\": \"grammatical explanation\"},\n"
-    +"    {\"error\": \"another error\", \"fix\": \"correction\", \"reason\": \"explanation\"}\n"
-    +"  ],\n"
-    +"  \"vocab_tips\": [\n"
-    +"    {\"weak\": \"word/phrase used\", \"better\": \"more academic alternative\", \"why\": \"reason it is better\"},\n"
-    +"    {\"weak\": \"another weak word\", \"better\": \"alternative\", \"why\": \"reason\"}\n"
-    +"  ],\n"
-    +"  \"model_phrases\": [\"Example of a well-written sentence the student could learn from their own essay or an improved version\", \"Another model phrase\"],\n"
-    +"  \"next_band\": \"Specific, concrete advice on exactly what the student must do to reach the next 0.5 band higher\",\n"
-    +"  \"human_percent\": 75,\n"
-    +"  \"ai_percent\": 25,\n"
-    +"  \"ai_note\": \"One sentence: signs of AI use detected or confirmation of authentic student writing\"\n"
-    +"}\n\n"
-    +"SCORING RULES:\n"
-    +"- Use only these band values: 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0\n"
-    +"- overall = average of ta+cc+lr+gra rounded to nearest 0.5\n"
-    +"- If word count is under minimum ("+taskType+" Task 1: 150, Task 2: 250), penalise Task Achievement\n"
-    +"- Find at least 3 real grammar errors from the actual text\n"
-    +"- human_percent + ai_percent must equal 100\n"
-    +"- Be honest and strict — never inflate scores";
+    "You are a certified IELTS examiner. Score the writing strictly using official IELTS band descriptors. "
+    +"Task type: "+(isTask2?"Task 2 (Essay)":"Task 1 (Report)")+". Word count: "+wordCount+".\n"
+    +"Return ONLY valid JSON with: overall, ta, cc, lr, gra (all 0-9 in 0.5 increments), summary, strengths, improvements.";
 
   try {
     var resp = await fetch("https://api.anthropic.com/v1/messages", {
@@ -1966,24 +2073,46 @@ async function runCheck(){
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 4000,
+        max_tokens: 2000,
         system: sysPrompt,
-        messages: [{ role: "user", content: "Here is the student's essay to analyse:\n\n" + text }]
+        messages: [{ role: "user", content: text }]
       })
     });
 
-    if(!resp.ok){
-      var errData=await resp.json().catch(function(){return{};});
-      throw new Error(errData.error&&errData.error.message ? errData.error.message : "API error "+resp.status);
-    }
+    if(!resp.ok) throw new Error("API error");
 
     var data=await resp.json();
-    var raw=data.content[0].text.trim().replace(/^```json\s*/,"").replace(/^```\s*/,"").replace(/```\s*$/,"").trim();
-
+    var raw=data.content[0].text.trim();
     var jsonMatch=raw.match(/\{[\s\S]*\}/);
-    if(!jsonMatch) throw new Error("Could not parse AI response. Try again.");
+    if(!jsonMatch) throw new Error("Could not parse response");
     var r=JSON.parse(jsonMatch[0]);
-    renderAIResult(r);
+    
+    var s='<div class="ai-result"><div class="ai-overall">'
+      +'<div class="ai-overall-label">Estimated IELTS Band</div>'
+      +'<div class="ai-overall-num">'+(r.overall||6.0)+'</div></div>'
+      +'<div class="ai-scores">'
+      +'<div class="ai-score ta"><div class="ai-score-lbl">Task Achievement</div><div class="ai-score-num">'+(r.ta||6.0)+'</div></div>'
+      +'<div class="ai-score cc"><div class="ai-score-lbl">Coherence</div><div class="ai-score-num">'+(r.cc||6.0)+'</div></div>'
+      +'<div class="ai-score lr"><div class="ai-score-lbl">Lexical</div><div class="ai-score-num">'+(r.lr||6.0)+'</div></div>'
+      +'<div class="ai-score gra"><div class="ai-score-lbl">Grammar</div><div class="ai-score-num">'+(r.gra||6.0)+'</div></div>'
+      +'</div>'
+      +'<div class="ai-section"><div class="ai-section-title">📋 Summary</div>'
+      +'<div class="ai-section-body">'+(r.summary||"No summary provided")+'</div></div>';
+    
+    if(r.strengths&&r.strengths.length){
+      s+='<div class="ai-section"><div class="ai-section-title">✅ Strengths</div><div class="ai-section-body"><ul>';
+      r.strengths.forEach(function(st){ s+='<li>'+escapeHtml(st)+'</li>'; });
+      s+='</ul></div></div>';
+    }
+    
+    if(r.improvements&&r.improvements.length){
+      s+='<div class="ai-section"><div class="ai-section-title">⚠️ Improvements</div><div class="ai-section-body"><ul>';
+      r.improvements.forEach(function(imp){ s+='<li>'+escapeHtml(imp)+'</li>'; });
+      s+='</ul></div></div>';
+    }
+    
+    s+='</div>';
+    document.getElementById("aiResult").innerHTML=s;
 
   } catch(err){
     document.getElementById("aiResult").innerHTML=
@@ -1992,126 +2121,6 @@ async function runCheck(){
   } finally {
     document.getElementById("aiBtn").disabled=false;
   }
-}
-
-function renderAIResult(r){
-  var hp=Math.max(0,Math.min(100,r.human_percent||75));
-  var ap=100-hp;
-  var aiColor=ap>=60?"var(--red)":ap>=35?"var(--amber)":"var(--accent2)";
-
-  var s='<div class="ai-result">';
-
-  s+='<div class="ai-overall">'
-    +'<div class="ai-overall-label">Estimated IELTS Band</div>'
-    +'<div class="ai-overall-num">'+r.overall+'</div>'
-    +'<div class="ai-overall-desc">'+(r.band_desc||"")+'</div>'
-    +(r.word_count_note?'<div style="margin-top:8px;font-size:12px;color:var(--amber);background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.2);padding:6px 12px;border-radius:var(--rsm)">📝 '+escapeHtml(r.word_count_note)+'</div>':"")
-    +'</div>';
-
-  s+='<div class="ai-scores">'
-    +'<div class="ai-score ta"><div class="ai-score-lbl">Task Achievement</div><div class="ai-score-num">'+r.ta+'</div></div>'
-    +'<div class="ai-score cc"><div class="ai-score-lbl">Coherence & Cohesion</div><div class="ai-score-num">'+r.cc+'</div></div>'
-    +'<div class="ai-score lr"><div class="ai-score-lbl">Lexical Resource</div><div class="ai-score-num">'+r.lr+'</div></div>'
-    +'<div class="ai-score gra"><div class="ai-score-lbl">Grammatical Range</div><div class="ai-score-num">'+r.gra+'</div></div>'
-    +'</div>';
-
-  s+='<div class="ai-detect">'
-    +'<div class="ai-detect-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>AI Detection</div>'
-    +'<div class="ai-detect-bar">'
-    +'<div class="ai-detect-human" style="width:'+hp+'%">'+hp+'%</div>'
-    +'<div class="ai-detect-ai" style="width:'+ap+'%;background:linear-gradient(90deg,#7c3aed,'+aiColor+')">'+ap+'%</div>'
-    +'</div>'
-    +'<div class="ai-detect-labels">'
-    +'<div class="ai-detect-lbl" style="color:var(--green)"><div class="ai-detect-dot" style="background:var(--green)"></div>Human — '+hp+'%</div>'
-    +'<div class="ai-detect-lbl" style="color:'+aiColor+'"><div class="ai-detect-dot" style="background:'+aiColor+'"></div>AI Written — '+ap+'%</div>'
-    +'</div>'
-    +(r.ai_note?'<div class="ai-detect-note">💡 '+escapeHtml(r.ai_note)+'</div>':"")
-    +'</div>';
-
-  function blk(title,icon,body){
-    return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div>'
-      +'<div class="ai-section-body">'+body+'</div></div>';
-  }
-  function listBlk(title,icon,items,mapFn){
-    if(!items||!items.length) return "";
-    var li=items.map(function(x){ return '<li style="margin-bottom:8px">'+mapFn(x)+'</li>'; }).join("");
-    return '<div class="ai-section"><div class="ai-section-title">'+icon+' '+title+'</div>'
-      +'<div class="ai-section-body"><ul>'+li+'</ul></div></div>';
-  }
-
-  s+=blk("📋 Overall Assessment",
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
-    escapeHtml(r.summary||""));
-
-  if(r.task_achievement) s+=blk("🎯 Task Achievement / Response",
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-    escapeHtml(r.task_achievement));
-  if(r.coherence) s+=blk("🔗 Coherence & Cohesion",
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
-    escapeHtml(r.coherence));
-  if(r.lexical) s+=blk("📚 Lexical Resource",
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
-    escapeHtml(r.lexical));
-  if(r.grammar) s+=blk("⚙️ Grammatical Range & Accuracy",
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>',
-    escapeHtml(r.grammar));
-
-  if(r.strengths&&r.strengths.length)
-    s+=listBlk("✅ Strengths",
-      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
-      r.strengths, function(x){ return escapeHtml(x); });
-
-  if(r.improvements&&r.improvements.length)
-    s+=listBlk("⚠️ What to Improve",
-      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
-      r.improvements, function(x){ return escapeHtml(x); });
-
-  if(r.grammar_errors&&r.grammar_errors.length){
-    var li=r.grammar_errors.map(function(e){
-      if(typeof e==="string") return '<li style="margin-bottom:8px">'+escapeHtml(e)+'</li>';
-      return '<li style="margin-bottom:10px">'
-        +'<div style="color:var(--red);margin-bottom:3px">❌ <s style="opacity:.7">'+escapeHtml(e.error||"")+'</s></div>'
-        +'<div style="color:var(--green);margin-bottom:3px">✅ '+escapeHtml(e.fix||"")+'</div>'
-        +'<div style="color:var(--muted);font-size:12px">💬 '+escapeHtml(e.reason||"")+'</div>'
-        +'</li>';
-    }).join("");
-    s+='<div class="ai-section"><div class="ai-section-title">'
-      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
-      +' Grammar Errors Found</div><div class="ai-section-body"><ul>'+li+'</ul></div></div>';
-  }
-
-  if(r.vocab_tips&&r.vocab_tips.length){
-    var li2=r.vocab_tips.map(function(v){
-      if(typeof v==="string") return '<li style="margin-bottom:8px">'+escapeHtml(v)+'</li>';
-      return '<li style="margin-bottom:10px">'
-        +'<div style="margin-bottom:3px"><span style="color:var(--muted)">Weak: </span><span style="color:var(--amber);text-decoration:underline">'+escapeHtml(v.weak||"")+'</span></div>'
-        +'<div style="margin-bottom:3px"><span style="color:var(--muted)">Better: </span><span style="color:var(--green);font-weight:600">'+escapeHtml(v.better||"")+'</span></div>'
-        +'<div style="color:var(--muted);font-size:12px">💬 '+escapeHtml(v.why||"")+'</div>'
-        +'</li>';
-    }).join("");
-    s+='<div class="ai-section"><div class="ai-section-title">'
-      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
-      +' Vocabulary Tips</div><div class="ai-section-body"><ul>'+li2+'</ul></div></div>';
-  }
-
-  if(r.model_phrases&&r.model_phrases.length){
-    var li3=r.model_phrases.map(function(p){
-      return '<li style="margin-bottom:8px;font-style:italic;color:var(--accent)">„'+escapeHtml(p)+'"</li>';
-    }).join("");
-    s+='<div class="ai-section"><div class="ai-section-title">'
-      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
-      +' Model Phrases</div><div class="ai-section-body"><ul>'+li3+'</ul></div></div>';
-  }
-
-  if(r.next_band){
-    s+='<div class="ai-section"><div class="ai-section-title">'
-      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>'
-      +' How to Reach the Next Band</div>'
-      +'<div class="ai-section-body" style="border-color:rgba(34,200,135,.3);background:rgba(34,200,135,.05);color:var(--text)">'+escapeHtml(r.next_band)+'</div></div>';
-  }
-
-  s+='</div>';
-  document.getElementById("aiResult").innerHTML=s;
 }
 
 // ===== NOTIFICATIONS =====
@@ -2151,8 +2160,8 @@ function checkScheduleNotifs(){
     var key20=group+"_warn20_"+now.toDateString();
     var keyNow=group+"_start_"+now.toDateString();
     if(m<=60&&m>=58&&!_notifSent[key60]){ _notifSent[key60]=true; pushNotif("Lesson Soon",group+" starts in 1 hour — submit homework now!","reminder"); }
-    if(m<=20&&m>=18&&!_notifSent[key20]){ _notifSent[key20]=true; pushNotif("Lesson Very Soon",group+" starts in 20 minutes — last chance to submit!","reminder"); }
-    if(m<=0&&m>=-2&&!_notifSent[keyNow]){ _notifSent[keyNow]=true; pushNotif("Lesson Started",group+" has started — homework submission is now closed.","blocked"); }
+    if(m<=20&&m>=18&&!_notifSent[key20]){ _notifSent[key20]=true; pushNotif("Lesson Very Soon",group+" starts in 20 minutes — last chance!","reminder"); }
+    if(m<=0&&m>=-2&&!_notifSent[keyNow]){ _notifSent[keyNow]=true; pushNotif("Lesson Started",group+" has started — homework submission closed.","blocked"); }
   });
 }
 
