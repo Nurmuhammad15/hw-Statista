@@ -126,7 +126,9 @@ input[type=file]{display:none}
 .as-textarea:focus{border-color:#6366f1}
 .btn-delete-group{background:transparent;color:var(--muted);border:1px solid var(--border);padding:10px 14px;border-radius:var(--rsm);font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;transition:all .18s;white-space:nowrap;width:auto}
 .btn-delete-group:hover{background:var(--red);color:#fff;border-color:var(--red)}
-.btn-delete-student{background:rgba(232,65,90,.08);color:var(--red);border:1px solid rgba(232,65,90,.3);padding:9px 16px;border-radius:var(--rsm);font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:all .18s;white-space:nowrap;width:auto;margin-left:8px}
+.admin-action-btns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.admin-action-btns button{flex:1;min-width:0;justify-content:center;text-align:center}
+.btn-delete-student{background:rgba(232,65,90,.08);color:var(--red);border:1px solid rgba(232,65,90,.3);padding:9px 12px;border-radius:var(--rsm);font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:all .18s;white-space:nowrap;width:auto}
 .btn-delete-student:hover{background:var(--red);color:#fff}
 #notifBell{position:relative;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:#eef1f8;border:1.5px solid var(--border);border-radius:50%;cursor:pointer;color:#7a8499;transition:all .25s;flex-shrink:0}
 #notifBell:hover{background:rgba(79,142,247,.08);border-color:var(--accent);color:var(--accent);transform:scale(1.08)}
@@ -1601,11 +1603,12 @@ function submitLogin(){
 }
 function admin(){
   app.innerHTML='<button class="back" onclick="home()">← Back</button>'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'
-    +'<h3 style="margin-bottom:0">Admin Panel</h3>'
+    +'<h3 style="margin-bottom:10px">Admin Panel</h3>'
+    +'<div class="admin-action-btns">'
     +'<button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button>'
     +'<button class="btn-add-students" onclick="openAddStudentsModal()">+ Add Students</button>'
-    +'<button class="btn-delete-student" onclick="openDeleteStudentModal()">\u2212 Delete Student</button></div>'
+    +'<button class="btn-delete-student" onclick="openDeleteStudentModal()">\u2212 Delete Student</button>'
+    +'</div>'
     +'<div id="groupList"></div>';
   var list=document.getElementById("groupList");
   Object.keys(GROUPS).forEach(function(g){
