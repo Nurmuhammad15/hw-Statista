@@ -126,13 +126,6 @@ input[type=file]{display:none}
 .as-textarea:focus{border-color:#6366f1}
 .btn-delete-group{background:transparent;color:var(--muted);border:1px solid var(--border);padding:10px 14px;border-radius:var(--rsm);font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;transition:all .18s;white-space:nowrap;width:auto}
 .btn-delete-group:hover{background:var(--red);color:#fff;border-color:var(--red)}
-.admin-action-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.btn-new-group{background:rgba(34,200,135,.1);color:var(--green);border:1px solid rgba(34,200,135,.3);padding:11px 16px;border-radius:var(--rsm);font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:all .18s;width:100%;text-align:center;justify-content:center}
-.btn-new-group:hover{background:var(--green);color:var(--bg)}
-.btn-add-students{background:rgba(99,102,241,.1);color:#818cf8;border:1px solid rgba(99,102,241,.3);padding:11px 16px;border-radius:var(--rsm);font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:all .18s;width:100%;text-align:center;justify-content:center}
-.btn-add-students:hover{background:#6366f1;color:#fff}
-.btn-delete-student{background:rgba(232,65,90,.08);color:var(--red);border:1px solid rgba(232,65,90,.3);padding:11px 16px;border-radius:var(--rsm);font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:all .18s;width:100%;text-align:center;justify-content:center}
-.btn-delete-student:hover{background:var(--red);color:#fff}
 #notifBell{position:relative;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:#eef1f8;border:1.5px solid var(--border);border-radius:50%;cursor:pointer;color:#7a8499;transition:all .25s;flex-shrink:0}
 #notifBell:hover{background:rgba(79,142,247,.08);border-color:var(--accent);color:var(--accent);transform:scale(1.08)}
 #notifBadge{position:absolute;top:-4px;right:-4px;background:linear-gradient(135deg,#f7556a,#e8415a);color:#fff;font-size:9px;font-weight:800;min-width:17px;height:17px;border-radius:20px;display:flex;align-items:center;justify-content:center;padding:0 3px;font-family:'Space Mono',monospace;pointer-events:none;border:2px solid #fff;box-shadow:0 2px 6px rgba(232,65,90,.4)}
@@ -366,28 +359,6 @@ input[type=file]{display:none}
     <div class="modal-actions">
       <button class="btn-cancel" onclick="document.getElementById('addStudentsModal').style.display='none'">Cancel</button>
       <button class="primary" onclick="submitAddStudents()">Add Students</button>
-    </div>
-  </div>
-</div>
-
-<!-- DELETE STUDENT MODAL -->
-<div id="deleteStudentModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeDeleteStudentModal()">
-  <div class="modal" style="max-width:480px">
-    <div class="modal-title">Delete Student</div>
-    <div class="modal-sub">Select a group, then choose the student to remove</div>
-    <div class="modal-field">
-      <label>Choose Group</label>
-      <div id="dsGroupList" style="max-height:180px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-top:4px"></div>
-    </div>
-    <div class="modal-field" id="dsStudentField" style="display:none">
-      <label style="display:flex;align-items:center;justify-content:space-between">Choose Students <span id="dsSelectedCount" style="color:var(--red);font-size:11px;font-weight:700;font-family:'Space Mono',monospace;text-transform:none;letter-spacing:0"></span></label>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Tap to select multiple students</div>
-      <div id="dsStudentList" style="max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;margin-top:4px"></div>
-    </div>
-    <div class="modal-error" id="dsError"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeDeleteStudentModal()">Cancel</button>
-      <button class="primary" style="background:linear-gradient(135deg,var(--red),#c93050)" onclick="submitDeleteStudent()">Delete Student</button>
     </div>
   </div>
 </div>
@@ -1606,12 +1577,10 @@ function submitLogin(){
 }
 function admin(){
   app.innerHTML='<button class="back" onclick="home()">← Back</button>'
-    +'<h3 style="margin-bottom:10px">Admin Panel</h3>'
-    +'<div class="admin-action-btns">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'
+    +'<h3 style="margin-bottom:0">Admin Panel</h3>'
     +'<button class="btn-new-group" onclick="openNewGroupModal()">+ New Group</button>'
-    +'<button class="btn-add-students" onclick="openAddStudentsModal()">+ Add Students</button>'
-    +'<button class="btn-delete-student" onclick="openDeleteStudentModal()">\u2212 Delete Student</button>'
-    +'</div>'
+    +'<button class="btn-add-students" onclick="openAddStudentsModal()">+ Add Students</button></div>'
     +'<div id="groupList"></div>';
   var list=document.getElementById("groupList");
   Object.keys(GROUPS).forEach(function(g){
@@ -1753,21 +1722,11 @@ async function exportCSV(group,stage,lesson){
     }
     rows.push(row);
   }
-  var csvContent=rows.map(function(r){
-    return r.map(function(cell){
-      var s=String(cell);
-      if(s.indexOf(",")!==-1||s.indexOf("\"")!==-1||s.indexOf("\n")!==-1) s='"'+s.replace(/"/g,'""')+'"';
-      return s;
-    }).join(",");
-  }).join("\r\n");
-  // Use data: URI to avoid WPS/dialog conflict with createObjectURL
-  var dataUri="data:text/csv;charset=utf-8,"+encodeURIComponent("\uFEFF"+csvContent);
-  var a=document.createElement("a");
-  a.setAttribute("href", dataUri);
-  a.setAttribute("download", group+" - "+stage+" - "+lesson+".csv");
-  a.style.display="none";
-  document.body.appendChild(a);
-  setTimeout(function(){ a.click(); document.body.removeChild(a); }, 0);
+  var blob=new Blob([rows.map(function(r){return r.join(",");}).join("\n")],{type:"text/csv"});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a"); a.href=url; a.download=group+" - "+stage+" - "+lesson+".csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(url);},1000);
 }
 
 // ===== CUSTOM GROUPS + REALTIME SYNC =====
@@ -1833,89 +1792,6 @@ function _onGroupsUpdated(){
     enterStudent(); return;
   }
 }
-// ===== DELETE STUDENT =====
-var _dsSelectedGroup=null;
-var _dsSelectedStudents=[]; // multi-select
-
-function openDeleteStudentModal(){
-  _dsSelectedGroup=null;
-  _dsSelectedStudents=[];
-  document.getElementById("dsStudentField").style.display="none";
-  document.getElementById("dsStudentList").innerHTML="";
-  document.getElementById("dsError").textContent="";
-  document.getElementById("dsSelectedCount").textContent="";
-  var list=document.getElementById("dsGroupList");
-  list.innerHTML="";
-  Object.keys(GROUPS).forEach(function(g){
-    var item=document.createElement("div"); item.className="as-group-item";
-    item.innerHTML='<span class="as-group-item-name">'+g+'</span><span class="as-group-item-count">'+GROUPS[g].length+' students</span>';
-    item.addEventListener("click",function(){
-      document.querySelectorAll("#dsGroupList .as-group-item").forEach(function(el){el.classList.remove("selected");});
-      item.classList.add("selected");
-      _dsSelectedGroup=g;
-      _dsSelectedStudents=[];
-      document.getElementById("dsError").textContent="";
-      document.getElementById("dsSelectedCount").textContent="";
-      var sList=document.getElementById("dsStudentList");
-      sList.innerHTML="";
-      GROUPS[g].forEach(function(s){
-        var si=document.createElement("div"); si.className="as-group-item";
-        si.style.cssText="justify-content:flex-start;gap:10px;";
-        si.innerHTML='<span style="width:18px;height:18px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;" class="ds-check"></span>'
-          +'<span class="as-group-item-name">'+s+'</span>';
-        si.addEventListener("click",function(){
-          var idx2=_dsSelectedStudents.indexOf(s);
-          if(idx2===-1){
-            _dsSelectedStudents.push(s);
-            si.classList.add("selected");
-            si.querySelector(".ds-check").innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
-            si.querySelector(".ds-check").style.background="var(--red)";
-            si.querySelector(".ds-check").style.borderColor="var(--red)";
-          } else {
-            _dsSelectedStudents.splice(idx2,1);
-            si.classList.remove("selected");
-            si.querySelector(".ds-check").innerHTML="";
-            si.querySelector(".ds-check").style.background="";
-            si.querySelector(".ds-check").style.borderColor="";
-          }
-          var cnt=_dsSelectedStudents.length;
-          document.getElementById("dsSelectedCount").textContent=cnt>0?cnt+" student"+(cnt>1?"s":"")+" selected":"";
-          document.getElementById("dsError").textContent="";
-        });
-        sList.appendChild(si);
-      });
-      document.getElementById("dsStudentField").style.display="block";
-    });
-    list.appendChild(item);
-  });
-  document.getElementById("deleteStudentModal").style.display="flex";
-}
-
-function closeDeleteStudentModal(){
-  document.getElementById("deleteStudentModal").style.display="none";
-  _dsSelectedStudents=[];
-  _dsSelectedGroup=null;
-}
-function submitDeleteStudent(){
-  if(!_dsSelectedGroup){ document.getElementById("dsError").textContent="Please select a group."; return; }
-  var toDelete=_dsSelectedStudents.slice(); // copy before clearing
-  if(!toDelete.length){ document.getElementById("dsError").textContent="Please select at least one student."; return; }
-  // Close modal FIRST, then delete
-  document.getElementById("deleteStudentModal").style.display="none";
-  // Delete students from group
-  toDelete.forEach(function(s){
-    var i=GROUPS[_dsSelectedGroup].indexOf(s);
-    if(i!==-1) GROUPS[_dsSelectedGroup].splice(i,1);
-  });
-  // Update prevGroups immediately to prevent Firebase revert
-  _prevGroups[_dsSelectedGroup]=(GROUPS[_dsSelectedGroup]||[]).slice();
-  _saveCustomGroups();
-  _dsSelectedStudents=[];
-  _dsSelectedGroup=null;
-  pushNotif("Students Removed",toDelete.length+" student(s) removed.","blocked");
-  admin();
-}
-
 function openNewGroupModal(){
   document.getElementById("newGroupName").value="";
   document.getElementById("newGroupStudents").value="";
@@ -1929,8 +1805,6 @@ function submitNewGroup(){
   if(GROUPS[name]){ document.getElementById("newGroupError").textContent="Group already exists."; return; }
   if(!raw){ document.getElementById("newGroupError").textContent="Add at least one student."; return; }
   GROUPS[name]=raw.split("\n").map(function(s){return s.trim().toUpperCase();}).filter(function(s){return s;});
-  // Update _prevGroups so Firebase listener does not revert
-  _prevGroups[name]=(GROUPS[name]||[]).slice();
   _saveCustomGroups();
   pushNotif("Group Created", name+" has been created.", "success");
   document.getElementById("newGroupModal").style.display="none";
@@ -1938,11 +1812,32 @@ function submitNewGroup(){
 }
 function deleteCustomGroup(g){
   if(!confirm("Delete group and all data?")) return;
-  if(_fbReady && db) db.ref("submissions/"+g).remove().catch(function(){});
+  // Remove from local state immediately
   delete GROUPS[g];
-  // Update _prevGroups so Firebase listener does not restore the group
   delete _prevGroups[g];
-  _saveCustomGroups();
+  // Detach listener before saving to prevent Firebase reverting the deletion
+  if(_fbReady && db){
+    db.ref("custom_groups").off();
+    db.ref("submissions/"+g).remove().catch(function(){});
+    var custom={};
+    Object.keys(GROUPS).forEach(function(n){ if(_BUILTIN.indexOf(n)===-1) custom[n]=GROUPS[n]; });
+    var overrides={};
+    _BUILTIN.forEach(function(n){ if(GROUPS[n]) overrides[n]=GROUPS[n]; });
+    db.ref("custom_groups").set(custom).then(function(){
+      db.ref("builtin_overrides").set(overrides).catch(function(){});
+      // Re-attach live listener after save confirmed
+      db.ref("custom_groups").on("value", function(snap){
+        var c=snap.val()||{};
+        Object.keys(GROUPS).forEach(function(n){ if(_BUILTIN.indexOf(n)===-1) delete GROUPS[n]; });
+        Object.keys(c).forEach(function(n){ GROUPS[n]=c[n]; });
+        db.ref("builtin_overrides").once("value").then(function(oSnap){
+          var ov=oSnap.val()||{};
+          Object.keys(ov).forEach(function(n){ if(ov[n]&&ov[n].length) GROUPS[n]=ov[n]; });
+          _onGroupsUpdated();
+        }).catch(function(){ _onGroupsUpdated(); });
+      }, function(e){ console.warn("Load groups error:",e); });
+    }).catch(function(e){ console.warn("Delete group save error:",e); });
+  }
   pushNotif("Group Deleted", g+" has been deleted.", "blocked");
   admin();
 }
@@ -1980,23 +1875,13 @@ function submitAddStudents(){
   var raw=document.getElementById("asStudentsInput").value.trim();
   if(!raw){ document.getElementById("asError").textContent="Enter at least one student name."; return; }
   var newStudents=raw.split("\n").map(function(s){return s.trim().toUpperCase();}).filter(function(s){return s;});
-  // Make sure group still exists
-  if(!GROUPS[_asSelectedGroup]) GROUPS[_asSelectedGroup]=[];
   var existing=GROUPS[_asSelectedGroup];
   var added=0;
   newStudents.forEach(function(s){
-    if(s && existing.indexOf(s)===-1){ existing.push(s); added++; }
+    if(existing.indexOf(s)===-1){ existing.push(s); added++; }
   });
-  if(added===0){
-    document.getElementById("asError").textContent="All students already exist in this group.";
-    return;
-  }
-  // Update _prevGroups immediately so Firebase listener does not revert the change
-  _prevGroups[_asSelectedGroup]=(GROUPS[_asSelectedGroup]||[]).slice();
-  // Close modal immediately
-  document.getElementById("addStudentsModal").style.display="none";
-  // Save and show result
   _saveCustomGroups();
+  document.getElementById("addStudentsModal").style.display="none";
   pushNotif("Students Added", added+" student(s) added to "+_asSelectedGroup+".", "success");
   admin();
 }
