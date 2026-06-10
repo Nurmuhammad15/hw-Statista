@@ -375,8 +375,9 @@ input[type=file]{display:none}
       <div id="dsGroupList" style="max-height:180px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-top:4px"></div>
     </div>
     <div class="modal-field" id="dsStudentField" style="display:none">
-      <label>Choose Student</label>
-      <div id="dsStudentList" style="max-height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-top:4px"></div>
+      <label style="display:flex;align-items:center;justify-content:space-between">Choose Students <span id="dsSelectedCount" style="color:var(--red);font-size:11px;font-weight:700;font-family:'Space Mono',monospace;text-transform:none;letter-spacing:0"></span></label>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Tap to select multiple students</div>
+      <div id="dsStudentList" style="max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;margin-top:4px"></div>
     </div>
     <div class="modal-error" id="dsError"></div>
     <div class="modal-actions">
@@ -1828,14 +1829,15 @@ function _onGroupsUpdated(){
 }
 // ===== DELETE STUDENT =====
 var _dsSelectedGroup=null;
-var _dsSelectedStudent=null;
+var _dsSelectedStudents=[]; // multi-select
 
 function openDeleteStudentModal(){
   _dsSelectedGroup=null;
-  _dsSelectedStudent=null;
+  _dsSelectedStudents=[];
   document.getElementById("dsStudentField").style.display="none";
   document.getElementById("dsStudentList").innerHTML="";
   document.getElementById("dsError").textContent="";
+  document.getElementById("dsSelectedCount").textContent="";
   var list=document.getElementById("dsGroupList");
   list.innerHTML="";
   Object.keys(GROUPS).forEach(function(g){
@@ -1845,18 +1847,33 @@ function openDeleteStudentModal(){
       document.querySelectorAll("#dsGroupList .as-group-item").forEach(function(el){el.classList.remove("selected");});
       item.classList.add("selected");
       _dsSelectedGroup=g;
-      _dsSelectedStudent=null;
+      _dsSelectedStudents=[];
       document.getElementById("dsError").textContent="";
-      // Populate student list
+      document.getElementById("dsSelectedCount").textContent="";
       var sList=document.getElementById("dsStudentList");
       sList.innerHTML="";
       GROUPS[g].forEach(function(s){
         var si=document.createElement("div"); si.className="as-group-item";
-        si.innerHTML='<span class="as-group-item-name">'+s+'</span>';
+        si.style.cssText="justify-content:flex-start;gap:10px;";
+        si.innerHTML='<span style="width:18px;height:18px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;" class="ds-check"></span>'
+          +'<span class="as-group-item-name">'+s+'</span>';
         si.addEventListener("click",function(){
-          document.querySelectorAll("#dsStudentList .as-group-item").forEach(function(el){el.classList.remove("selected");});
-          si.classList.add("selected");
-          _dsSelectedStudent=s;
+          var idx2=_dsSelectedStudents.indexOf(s);
+          if(idx2===-1){
+            _dsSelectedStudents.push(s);
+            si.classList.add("selected");
+            si.querySelector(".ds-check").innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+            si.querySelector(".ds-check").style.background="var(--red)";
+            si.querySelector(".ds-check").style.borderColor="var(--red)";
+          } else {
+            _dsSelectedStudents.splice(idx2,1);
+            si.classList.remove("selected");
+            si.querySelector(".ds-check").innerHTML="";
+            si.querySelector(".ds-check").style.background="";
+            si.querySelector(".ds-check").style.borderColor="";
+          }
+          var cnt=_dsSelectedStudents.length;
+          document.getElementById("dsSelectedCount").textContent=cnt>0?cnt+" student"+(cnt>1?"s":"")+" selected":"";
           document.getElementById("dsError").textContent="";
         });
         sList.appendChild(si);
@@ -1870,15 +1887,18 @@ function openDeleteStudentModal(){
 
 function submitDeleteStudent(){
   if(!_dsSelectedGroup){ document.getElementById("dsError").textContent="Please select a group."; return; }
-  if(!_dsSelectedStudent){ document.getElementById("dsError").textContent="Please select a student."; return; }
-  if(!confirm("Remove "+_dsSelectedStudent+" from "+_dsSelectedGroup+"?")) return;
-  var idx=GROUPS[_dsSelectedGroup].indexOf(_dsSelectedStudent);
-  if(idx!==-1) GROUPS[_dsSelectedGroup].splice(idx,1);
-  // Update _prevGroups so Firebase listener does not revert
+  if(!_dsSelectedStudents.length){ document.getElementById("dsError").textContent="Please select at least one student."; return; }
+  var names=_dsSelectedStudents.join(", ");
+  if(!confirm("Remove "+_dsSelectedStudents.length+" student(s) from "+_dsSelectedGroup+"?\n\n"+names)) return;
+  _dsSelectedStudents.forEach(function(s){
+    var i=GROUPS[_dsSelectedGroup].indexOf(s);
+    if(i!==-1) GROUPS[_dsSelectedGroup].splice(i,1);
+  });
   _prevGroups[_dsSelectedGroup]=(GROUPS[_dsSelectedGroup]||[]).slice();
   _saveCustomGroups();
   document.getElementById("deleteStudentModal").style.display="none";
-  pushNotif("Student Removed",_dsSelectedStudent+" removed from "+_dsSelectedGroup+".","blocked");
+  pushNotif("Students Removed",_dsSelectedStudents.length+" student(s) removed from "+_dsSelectedGroup+".","blocked");
+  _dsSelectedStudents=[];
   admin();
 }
 
