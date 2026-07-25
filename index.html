@@ -826,16 +826,31 @@ var _currentStudent = null; // {group, student}
 // ===== TEST LINKS =====
 // Developers add real test links here directly — key format is "category|number".
 // Category is one of: listening, reading, writing.
+// "number" is the running slot index (1..TESTS_PER_CATEGORY) — use cambridgeInfo(number)
+// to see which Cambridge book/test that slot maps to.
 // Example:
-// "listening|1": "https://your-test-site.com/listening-test-1",
+// "listening|1": "https://your-test-site.com/listening-test-1", // Cambridge 10 — Test 1
 // "reading|1": "https://your-test-site.com/reading-test-1",
 var TEST_LINKS = {
 
 };
 
-// How many "IELTS Test N" slots show up under each category tab.
-// Raise or lower this number as you add more tests.
-var TESTS_PER_CATEGORY = 12;
+// Test bank is organized as Cambridge books CAMBRIDGE_START..CAMBRIDGE_END,
+// each containing TESTS_PER_BOOK tests (Cambridge books normally have 4 tests each).
+var CAMBRIDGE_START = 10;
+var CAMBRIDGE_END = 20;
+var TESTS_PER_BOOK = 4;
+
+// Total number of "slots" per category tab — derived from the range above.
+var TESTS_PER_CATEGORY = (CAMBRIDGE_END - CAMBRIDGE_START + 1) * TESTS_PER_BOOK;
+
+// Given a running slot index (1..TESTS_PER_CATEGORY), returns which Cambridge
+// book and which test-within-the-book it corresponds to, plus a display label.
+function cambridgeInfo(i){
+  var book = CAMBRIDGE_START + Math.floor((i - 1) / TESTS_PER_BOOK);
+  var testNum = ((i - 1) % TESTS_PER_BOOK) + 1;
+  return {book: book, testNum: testNum, label: "Cambridge " + book + " — Test " + testNum};
+}
 
 // Maximum correct answers possible per test (IELTS Listening/Reading style, out of 40).
 // Percentage is calculated automatically from this.
@@ -2296,7 +2311,7 @@ function _cabOpenLesson(stage, lesson){
 
 async function openTestLink(cat, num){
   if(!requireDB()) return;
-  var name = "IELTS Test "+num;
+  var name = cambridgeInfo(num).label;
   window._tsmCtx = {cat: cat, num: num, name: name};
   document.getElementById("tsmHwName").textContent = cat.charAt(0).toUpperCase()+cat.slice(1)+" — "+name;
   document.getElementById("tsmError").textContent = "Opening the test in a new tab… once you finish, come back here and enter how many you got correct.";
@@ -2355,10 +2370,14 @@ function _cabTestsSection(){
   h += '<div class="cab-card-title">'+_cabTestsCat.charAt(0).toUpperCase()+_cabTestsCat.slice(1)+' Tests</div>';
   h += '<div class="cab-muted" style="margin-bottom:10px">Separate from homework — click a test, solve it, then enter how many answers you got correct.</div>';
   for(var i=1; i<=TESTS_PER_CATEGORY; i++){
+    var info = cambridgeInfo(i);
+    if(info.testNum === 1){
+      h += '<div class="cab-muted" style="margin:'+(i===1?'0':'16px')+' 0 6px;font-weight:800;color:var(--text);font-size:13px">Cambridge '+info.book+'</div>';
+    }
     var key = _cabTestsCat+"_"+i;
     var scoreRec = c.testScores[key];
     h += '<div class="hw-row">';
-    h += '<div class="hw-row-name">IELTS Test '+i+'</div>';
+    h += '<div class="hw-row-name">'+info.label+'</div>';
     if(scoreRec){
       h += '<span class="test-score-badge">✓ '+scoreRec.correct+'/'+scoreRec.max+' — '+scoreRec.pct+'%</span>';
     } else {
