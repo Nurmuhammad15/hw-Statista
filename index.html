@@ -355,6 +355,13 @@ body.cabinet-mode .container{max-width:100%;padding:0;margin:0}
 .cab-tab.active{background:linear-gradient(135deg,#4f8ef7,#7b5cf5);color:#fff;border-color:transparent}
 .test-solve-btn{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#4f8ef7,#7b5cf5);color:#fff;border:none;padding:6px 14px;border-radius:20px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap}
 .test-score-badge{display:inline-flex;align-items:center;gap:4px;color:var(--green);font-weight:700;font-size:12px;background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.25);padding:3px 12px;border-radius:20px;white-space:nowrap}
+.cab-test-select{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;font-size:13px;font-family:inherit;font-weight:700;color:var(--text);outline:none;cursor:pointer}
+.cab-test-subtitle{font-weight:800;font-size:13px;color:var(--accent);margin:18px 0 10px}
+.cab-qrow{margin-bottom:12px}
+.cab-qrow label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+.cab-qrow input[type=text]{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--rsm);padding:10px 12px;font-size:13.5px;font-family:inherit;color:var(--text);outline:none;box-sizing:border-box;transition:border-color .18s}
+.cab-qrow input[type=text]:focus{border-color:var(--accent)}
+.cab-qrow input[type=text]:disabled{opacity:.65;cursor:not-allowed}
 .chat-contact{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .15s}
 .chat-contact:last-child{border-bottom:none}
 .chat-contact:hover{background:var(--surface2)}
@@ -453,24 +460,6 @@ body.admin-mode .container{max-width:100%;padding:0;margin:0}
     <div class="modal-actions">
       <button class="btn-cancel" onclick="document.getElementById('studentLoginModal').style.display='none'">Cancel</button>
       <button class="primary" onclick="submitStudentLogin()">Sign In</button>
-    </div>
-  </div>
-</div>
-
-<!-- TEST SCORE MODAL -->
-<div id="testScoreModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)this.style.display='none'">
-  <div class="modal">
-    <div class="modal-title">Enter Your Test Score</div>
-    <div class="modal-sub" id="tsmHwName">Test</div>
-    <div class="modal-field">
-      <label id="tsmCorrectLabel">Correct Answers (out of 40)</label>
-      <input type="number" id="tsmCorrect" min="0" max="40" value="0" oninput="_tsmUpdatePreview()" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px;font-size:14px;font-family:inherit;color:var(--text);outline:none">
-      <div class="cab-muted" style="margin-top:6px" id="tsmPctPreview">0% correct</div>
-    </div>
-    <div class="modal-error" id="tsmError"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="document.getElementById('testScoreModal').style.display='none'">Cancel</button>
-      <button class="primary" onclick="submitTestScore()">Save Score</button>
     </div>
   </div>
 </div>
@@ -823,38 +812,84 @@ var GROUPS = {};
 var DEFAULT_STUDENT_PW = "student123";
 var _currentStudent = null; // {group, student}
 
-// ===== TEST LINKS =====
-// Developers add real test links here directly — key format is "category|number".
-// Category is one of: listening, reading, writing.
-// "number" is the running slot index (1..TESTS_PER_CATEGORY) — use cambridgeInfo(number)
-// to see which Cambridge book/test that slot maps to.
-// Example:
-// "listening|1": "https://your-test-site.com/listening-test-1", // Cambridge 10 — Test 1
-// "reading|1": "https://your-test-site.com/reading-test-1",
-var TEST_LINKS = {
-
-};
-
-// Test bank is organized as Cambridge books CAMBRIDGE_START..CAMBRIDGE_END,
-// each containing TESTS_PER_BOOK tests (Cambridge books normally have 4 tests each).
+// ===== TESTS SYSTEM =====
+// Four tabs in the student cabinet: Cambridge, Listening, Reading, Writing.
+// Every test is solved IN THE APP — the student types answers directly into
+// input fields (no external links). Listening/Reading are graded automatically
+// against an answer key; Writing is scored by word count against a minimum.
+//
+// -------------------------------------------------------------------------------
+// CAMBRIDGE CATEGORY — organized as Cambridge books CAMBRIDGE_START..CAMBRIDGE_END,
+// each with TESTS_PER_BOOK tests. The student picks book + test number from two
+// dropdowns (e.g. "Cambridge 12" + "Test 3"), then answers 4 Reading + 4 Listening
+// questions for that specific test.
+// -------------------------------------------------------------------------------
 var CAMBRIDGE_START = 10;
 var CAMBRIDGE_END = 20;
 var TESTS_PER_BOOK = 4;
 
-// Total number of "slots" per category tab — derived from the range above.
-var TESTS_PER_CATEGORY = (CAMBRIDGE_END - CAMBRIDGE_START + 1) * TESTS_PER_BOOK;
+// CAMBRIDGE_BANK[book][testNum] = { reading:[{q,a},...x4], listening:[{q,a},...x4] }
+// "q" = question text shown to the student. "a" = array of accepted answers
+// (matching is case-insensitive and trims whitespace — list every acceptable
+// spelling/variant). TEACHERS: replace the placeholder "q" text and fill in "a"
+// with the real Cambridge questions/answer keys. A question with an empty "a"
+// array is skipped when grading (it will not count against the student).
+var CAMBRIDGE_BANK = {};
+(function(){
+  for(var book = CAMBRIDGE_START; book <= CAMBRIDGE_END; book++){
+    CAMBRIDGE_BANK[book] = {};
+    for(var t = 1; t <= TESTS_PER_BOOK; t++){
+      CAMBRIDGE_BANK[book][t] = {
+        reading:   [1,2,3,4].map(function(n){ return {q:"Reading question " + n, a:[]}; }),
+        listening: [1,2,3,4].map(function(n){ return {q:"Listening question " + n, a:[]}; })
+      };
+    }
+  }
+})();
 
-// Given a running slot index (1..TESTS_PER_CATEGORY), returns which Cambridge
-// book and which test-within-the-book it corresponds to, plus a display label.
-function cambridgeInfo(i){
-  var book = CAMBRIDGE_START + Math.floor((i - 1) / TESTS_PER_BOOK);
-  var testNum = ((i - 1) % TESTS_PER_BOOK) + 1;
-  return {book: book, testNum: testNum, label: "Cambridge " + book + " — Test " + testNum};
+// -------------------------------------------------------------------------------
+// STANDALONE CATEGORIES — Listening, Reading, Writing.
+// Each has its own bank of SIMPLE_TESTS_COUNT tests (independent from the
+// Cambridge books above).
+// -------------------------------------------------------------------------------
+var SIMPLE_TESTS_COUNT = 12;
+
+// LISTENING_BANK[n] / READING_BANK[n] = [{q,a},...x4] — same rules as CAMBRIDGE_BANK.
+var LISTENING_BANK = {}, READING_BANK = {};
+(function(){
+  for(var n = 1; n <= SIMPLE_TESTS_COUNT; n++){
+    LISTENING_BANK[n] = [1,2,3,4].map(function(k){ return {q:"Listening question " + k, a:[]}; });
+    READING_BANK[n]   = [1,2,3,4].map(function(k){ return {q:"Reading question " + k, a:[]}; });
+  }
+})();
+
+// WRITING_BANK[n] = { prompt: "...", minWords: 150 } — one essay task per test slot.
+// TEACHERS: replace "prompt" with the real Task 1/Task 2 prompt for that test.
+var WRITING_BANK = {};
+(function(){
+  for(var n = 1; n <= SIMPLE_TESTS_COUNT; n++){
+    WRITING_BANK[n] = { prompt: "Writing task " + n + " — add the real prompt here.", minWords: 150 };
+  }
+})();
+
+// Grades an array of typed answers against a question bank ({q,a}[]).
+// Questions with no answer key yet (a.length===0) are skipped (not counted
+// toward the total), so an unfilled bank never unfairly penalizes a student.
+function gradeAnswers(userAnswers, bank){
+  var correct = 0, graded = 0;
+  (bank||[]).forEach(function(item, i){
+    var accepted = item.a || [];
+    if(!accepted.length) return;
+    graded++;
+    var val = String((userAnswers||[])[i] || "").trim().toLowerCase();
+    if(!val) return;
+    for(var j = 0; j < accepted.length; j++){
+      if(String(accepted[j]).trim().toLowerCase() === val){ correct++; break; }
+    }
+  });
+  var total = graded || (bank||[]).length;
+  return {correct: correct, total: total};
 }
-
-// Maximum correct answers possible per test (IELTS Listening/Reading style, out of 40).
-// Percentage is calculated automatically from this.
-var MAX_TEST_SCORE = 40;
 
 // ===== STAGES =====
 var STAGES = {
@@ -2024,7 +2059,8 @@ async function studentCabinet(group, student){
   await _cabLoadData(group, student);
   _cabView = "dashboard";
   _cabTestsOpen = false;
-  _cabTestsCat = "listening";
+  _cabTestsCat = "cambridge";
+  _cabOpenTest = null;
   _cabRender();
 }
 
@@ -2081,9 +2117,12 @@ var _CAB_NAV = [
   {id:"settings", label:"Settings", group:"account"},
   {id:"help", label:"Help & Support", group:"account"}
 ];
-var _CAB_TESTS_CATS = ["listening","reading","writing"];
+var _CAB_TESTS_CATS = ["cambridge","listening","reading","writing"];
 var _cabTestsOpen = false;
-var _cabTestsCat = "listening";
+var _cabTestsCat = "cambridge";
+var _cabCambBook = CAMBRIDGE_START;
+var _cabCambTest = 1;
+var _cabOpenTest = null; // {cat, num} — currently open Listening/Reading/Writing test detail view
 var _cabChatWith = null; // "__teacher__" or a student's full name
 var _cabChatCache = null;
 var _cabLeaderboardCache = null;
@@ -2105,6 +2144,9 @@ function _cabGoTests(cat){
   _cabTestsCat = cat;
   _cabTestsOpen = true;
   _cabView = "tests";
+  _cabOpenTest = null;
+  window._cambRetry = false;
+  window._simpleRetry = false;
   _cabRender();
 }
 
@@ -2309,84 +2351,233 @@ function _cabOpenLesson(stage, lesson){
   showHomework(c.group, c.student, stage, lesson);
 }
 
-async function openTestLink(cat, num){
-  if(!requireDB()) return;
-  var name = cambridgeInfo(num).label;
-  window._tsmCtx = {cat: cat, num: num, name: name};
-  document.getElementById("tsmHwName").textContent = cat.charAt(0).toUpperCase()+cat.slice(1)+" — "+name;
-  document.getElementById("tsmError").textContent = "Opening the test in a new tab… once you finish, come back here and enter how many you got correct.";
-  document.getElementById("tsmCorrectLabel").textContent = "Correct Answers (out of "+MAX_TEST_SCORE+")";
-  var inp = document.getElementById("tsmCorrect");
-  inp.max = MAX_TEST_SCORE; inp.value = "0";
-  _tsmUpdatePreview();
-  document.getElementById("testScoreModal").style.display = "flex";
-  var link = TEST_LINKS[cat+"|"+num];
-  if(link){
-    window.open(link, "_blank");
-  } else {
-    document.getElementById("tsmError").textContent = "⚠️ No link added for this test yet. You can still solve it elsewhere and enter your score below.";
-  }
-}
-
-function _tsmUpdatePreview(){
-  var inp = document.getElementById("tsmCorrect");
-  var correct = parseInt(inp.value, 10);
-  if(isNaN(correct)) correct = 0;
-  if(correct < 0) correct = 0;
-  if(correct > MAX_TEST_SCORE) correct = MAX_TEST_SCORE;
-  var pct = Math.round(correct / MAX_TEST_SCORE * 100);
-  document.getElementById("tsmPctPreview").textContent = correct+" / "+MAX_TEST_SCORE+" correct — "+pct+"%";
-}
-
-async function submitTestScore(){
-  if(!requireDB() || !_currentStudent) return;
-  var ctx = window._tsmCtx;
-  if(!ctx) return;
-  var correct = parseInt(document.getElementById("tsmCorrect").value, 10);
-  if(isNaN(correct) || correct < 0) correct = 0;
-  if(correct > MAX_TEST_SCORE) correct = MAX_TEST_SCORE;
-  var pct = Math.round(correct / MAX_TEST_SCORE * 100);
-  var key = ctx.cat+"_"+ctx.num;
-  await db.ref("testScores/"+safe(_currentStudent.group)+"/"+safe(_currentStudent.student)+"/"+key).set({
-    correct: correct, max: MAX_TEST_SCORE, pct: pct, points: pct, time: Date.now(),
-    cat: ctx.cat, num: ctx.num, name: ctx.name,
-    group: _currentStudent.group, student: _currentStudent.student
-  });
-  document.getElementById("testScoreModal").style.display = "none";
-  pushNotif("Test Score Saved", ctx.cat.charAt(0).toUpperCase()+ctx.cat.slice(1)+" "+ctx.name+" — "+correct+"/"+MAX_TEST_SCORE+" ("+pct+"%)", "success");
-  await _cabLoadData(_currentStudent.group, _currentStudent.student);
-  _cabRender();
-}
-
+// ===== TESTS SECTION — Cambridge dropdown + Listening/Reading/Writing lists =====
 function _cabTestsSection(){
-  var c = _cabCache;
   var h = '<div class="cab-tabs">';
   _CAB_TESTS_CATS.forEach(function(cat){
     h += '<div class="cab-tab'+(cat===_cabTestsCat?" active":"")+'" onclick="_cabGoTests(\''+cat+'\')">'+cat.charAt(0).toUpperCase()+cat.slice(1)+'</div>';
   });
   h += '</div>';
 
-  h += '<div class="cab-card">';
-  h += '<div class="cab-card-title">'+_cabTestsCat.charAt(0).toUpperCase()+_cabTestsCat.slice(1)+' Tests</div>';
-  h += '<div class="cab-muted" style="margin-bottom:10px">Separate from homework — click a test, solve it, then enter how many answers you got correct.</div>';
-  for(var i=1; i<=TESTS_PER_CATEGORY; i++){
-    var info = cambridgeInfo(i);
-    if(info.testNum === 1){
-      h += '<div class="cab-muted" style="margin:'+(i===1?'0':'16px')+' 0 6px;font-weight:800;color:var(--text);font-size:13px">Cambridge '+info.book+'</div>';
-    }
-    var key = _cabTestsCat+"_"+i;
+  if(_cabTestsCat === "cambridge") return h + _cabCambridgeHtml();
+  return h + _cabSimpleTestsHtml(_cabTestsCat);
+}
+
+// ----- Cambridge: dropdown book + test, 4 Reading + 4 Listening answer inputs -----
+function _cabCambridgeHtml(){
+  var c = _cabCache;
+  var h = '<div class="cab-card">';
+  h += '<div class="cab-card-title">Cambridge IELTS Practice Tests</div>';
+  h += '<div class="cab-muted" style="margin-bottom:14px">Choose a book and a test, then write your answers — 4 Reading + 4 Listening tasks, graded automatically.</div>';
+
+  h += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px">';
+  h += '<select class="cab-test-select" id="cambBookSelect" onchange="_cabCambSelect()">';
+  for(var b=CAMBRIDGE_START; b<=CAMBRIDGE_END; b++){
+    h += '<option value="'+b+'"'+(b===_cabCambBook?" selected":"")+'>Cambridge '+b+'</option>';
+  }
+  h += '</select>';
+  h += '<select class="cab-test-select" id="cambTestSelect" onchange="_cabCambSelect()">';
+  for(var t=1; t<=TESTS_PER_BOOK; t++){
+    h += '<option value="'+t+'"'+(t===_cabCambTest?" selected":"")+'>Test '+t+'</option>';
+  }
+  h += '</select>';
+  h += '</div>';
+
+  var key = "cambridge_"+_cabCambBook+"_"+_cabCambTest;
+  var scoreRec = c.testScores[key];
+  var data = (CAMBRIDGE_BANK[_cabCambBook] && CAMBRIDGE_BANK[_cabCambBook][_cabCambTest]) || {reading:[],listening:[]};
+  var savedAnswers = (scoreRec && scoreRec.answers) || null;
+  var locked = !!scoreRec && !window._cambRetry;
+
+  if(scoreRec){
+    h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">';
+    h += '<span class="test-score-badge">✓ '+scoreRec.correct+'/'+scoreRec.max+' — '+scoreRec.pct+'%</span>';
+    if(locked) h += '<button class="test-solve-btn" onclick="window._cambRetry=true;_cabRender()">Try Again</button>';
+    h += '</div>';
+  }
+
+  h += '<div class="cab-test-subtitle">📖 Reading (4 tasks)</div>';
+  data.reading.forEach(function(item,i){
+    var val = savedAnswers ? (savedAnswers.reading[i]||"") : "";
+    h += '<div class="cab-qrow"><label>'+(i+1)+'. '+escapeHtml(item.q)+'</label><input type="text" id="cambR'+i+'" placeholder="Your answer" value="'+escapeHtml(val)+'"'+(locked?" disabled":"")+'></div>';
+  });
+  h += '<div class="cab-test-subtitle">🎧 Listening (4 tasks)</div>';
+  data.listening.forEach(function(item,i){
+    var val = savedAnswers ? (savedAnswers.listening[i]||"") : "";
+    h += '<div class="cab-qrow"><label>'+(i+1)+'. '+escapeHtml(item.q)+'</label><input type="text" id="cambL'+i+'" placeholder="Your answer" value="'+escapeHtml(val)+'"'+(locked?" disabled":"")+'></div>';
+  });
+
+  if(!locked) h += '<button class="primary" style="width:auto;margin-top:8px" onclick="submitCambridgeAnswers()">Submit Answers</button>';
+  h += '</div>';
+  return h;
+}
+
+function _cabCambSelect(){
+  _cabCambBook = parseInt(document.getElementById("cambBookSelect").value, 10);
+  _cabCambTest = parseInt(document.getElementById("cambTestSelect").value, 10);
+  window._cambRetry = false;
+  _cabRender();
+}
+
+async function submitCambridgeAnswers(){
+  if(!requireDB() || !_currentStudent) return;
+  var data = (CAMBRIDGE_BANK[_cabCambBook] && CAMBRIDGE_BANK[_cabCambBook][_cabCambTest]) || {reading:[],listening:[]};
+  var rAns = data.reading.map(function(_,i){ return document.getElementById("cambR"+i).value; });
+  var lAns = data.listening.map(function(_,i){ return document.getElementById("cambL"+i).value; });
+  var rGrade = gradeAnswers(rAns, data.reading);
+  var lGrade = gradeAnswers(lAns, data.listening);
+  var correct = rGrade.correct + lGrade.correct;
+  var max = (rGrade.total + lGrade.total) || 8;
+  var pct = max ? Math.round(correct/max*100) : 0;
+  var key = "cambridge_"+_cabCambBook+"_"+_cabCambTest;
+  var name = "Cambridge "+_cabCambBook+" — Test "+_cabCambTest;
+  await db.ref("testScores/"+safe(_currentStudent.group)+"/"+safe(_currentStudent.student)+"/"+key).set({
+    correct: correct, max: max, pct: pct, points: pct, time: Date.now(),
+    cat: "cambridge", name: name, book: _cabCambBook, testNum: _cabCambTest,
+    answers: {reading: rAns, listening: lAns},
+    group: _currentStudent.group, student: _currentStudent.student
+  });
+  window._cambRetry = false;
+  pushNotif("Test Score Saved", name+" — "+correct+"/"+max+" ("+pct+"%)", "success");
+  await _cabLoadData(_currentStudent.group, _currentStudent.student);
+  _cabRender();
+}
+
+// ----- Listening / Reading / Writing: 12 standalone tests, list + detail view -----
+function _cabSimpleTestsHtml(cat){
+  var c = _cabCache;
+  if(_cabOpenTest && _cabOpenTest.cat === cat){
+    return cat === "writing" ? _cabWritingDetailHtml(_cabOpenTest.num) : _cabSimpleDetailHtml(cat, _cabOpenTest.num);
+  }
+  var h = '<div class="cab-card">';
+  h += '<div class="cab-card-title">'+cat.charAt(0).toUpperCase()+cat.slice(1)+' Tests</div>';
+  h += '<div class="cab-muted" style="margin-bottom:10px">'+SIMPLE_TESTS_COUNT+' practice tests — write your answers directly, no external links.</div>';
+  for(var i=1; i<=SIMPLE_TESTS_COUNT; i++){
+    var key = cat+"_"+i;
     var scoreRec = c.testScores[key];
     h += '<div class="hw-row">';
-    h += '<div class="hw-row-name">'+info.label+'</div>';
+    h += '<div class="hw-row-name">Test '+i+'</div>';
     if(scoreRec){
-      h += '<span class="test-score-badge">✓ '+scoreRec.correct+'/'+scoreRec.max+' — '+scoreRec.pct+'%</span>';
+      h += '<span class="test-score-badge">✓ '+scoreRec.correct+(cat==="writing"?" words":"/"+scoreRec.max)+' — '+scoreRec.pct+'%</span>';
     } else {
-      h += '<button class="test-solve-btn" onclick="openTestLink(\''+_cabTestsCat+'\','+i+')">Take Test →</button>';
+      h += '<button class="test-solve-btn" onclick="_cabOpenTestDetail(\''+cat+'\','+i+')">Open →</button>';
     }
     h += '</div>';
   }
   h += '</div>';
   return h;
+}
+
+function _cabOpenTestDetail(cat, num){
+  _cabOpenTest = {cat: cat, num: num};
+  window._simpleRetry = false;
+  _cabRender();
+}
+function _cabCloseTestDetail(){
+  _cabOpenTest = null;
+  _cabRender();
+}
+
+function _cabSimpleDetailHtml(cat, num){
+  var c = _cabCache;
+  var bank = (cat === "listening" ? LISTENING_BANK : READING_BANK)[num] || [];
+  var key = cat+"_"+num;
+  var scoreRec = c.testScores[key];
+  var locked = !!scoreRec && !window._simpleRetry;
+  var savedAnswers = (scoreRec && scoreRec.answers) || null;
+
+  var h = '<div class="cab-card">';
+  h += '<button class="back" onclick="_cabCloseTestDetail()">← Back to tests</button>';
+  h += '<div class="cab-card-title">'+cat.charAt(0).toUpperCase()+cat.slice(1)+' — Test '+num+'</div>';
+
+  if(scoreRec){
+    h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">';
+    h += '<span class="test-score-badge">✓ '+scoreRec.correct+'/'+scoreRec.max+' — '+scoreRec.pct+'%</span>';
+    if(locked) h += '<button class="test-solve-btn" onclick="window._simpleRetry=true;_cabRender()">Try Again</button>';
+    h += '</div>';
+  }
+
+  bank.forEach(function(item,i){
+    var val = savedAnswers ? (savedAnswers[i]||"") : "";
+    h += '<div class="cab-qrow"><label>'+(i+1)+'. '+escapeHtml(item.q)+'</label><input type="text" id="simpAns'+i+'" placeholder="Your answer" value="'+escapeHtml(val)+'"'+(locked?" disabled":"")+'></div>';
+  });
+
+  if(!locked) h += '<button class="primary" style="width:auto;margin-top:8px" onclick="submitSimpleAnswers(\''+cat+'\','+num+')">Submit Answers</button>';
+  h += '</div>';
+  return h;
+}
+
+async function submitSimpleAnswers(cat, num){
+  if(!requireDB() || !_currentStudent) return;
+  var bank = (cat === "listening" ? LISTENING_BANK : READING_BANK)[num] || [];
+  var ans = bank.map(function(_,i){ return document.getElementById("simpAns"+i).value; });
+  var grade = gradeAnswers(ans, bank);
+  var pct = grade.total ? Math.round(grade.correct/grade.total*100) : 0;
+  var key = cat+"_"+num;
+  var name = "Test "+num;
+  await db.ref("testScores/"+safe(_currentStudent.group)+"/"+safe(_currentStudent.student)+"/"+key).set({
+    correct: grade.correct, max: grade.total, pct: pct, points: pct, time: Date.now(),
+    cat: cat, name: name, num: num, answers: ans,
+    group: _currentStudent.group, student: _currentStudent.student
+  });
+  window._simpleRetry = false;
+  pushNotif("Test Score Saved", cat.charAt(0).toUpperCase()+cat.slice(1)+" "+name+" — "+grade.correct+"/"+grade.total+" ("+pct+"%)", "success");
+  await _cabLoadData(_currentStudent.group, _currentStudent.student);
+  _cabRender();
+}
+
+// ----- Writing: essay prompt + textarea, scored by word count -----
+function _cabWritingDetailHtml(num){
+  var c = _cabCache;
+  var task = WRITING_BANK[num] || {prompt:"", minWords:150};
+  var key = "writing_"+num;
+  var scoreRec = c.testScores[key];
+  var locked = !!scoreRec && !window._simpleRetry;
+  var savedText = (scoreRec && scoreRec.essay) || "";
+  var initWords = savedText.trim() ? savedText.trim().split(/\s+/).filter(Boolean).length : 0;
+
+  var h = '<div class="cab-card">';
+  h += '<button class="back" onclick="_cabCloseTestDetail()">← Back to tests</button>';
+  h += '<div class="cab-card-title">Writing — Test '+num+'</div>';
+  h += '<div class="cab-muted" style="margin-bottom:14px">'+escapeHtml(task.prompt)+' <b style="color:var(--text)">(minimum '+task.minWords+' words)</b></div>';
+
+  if(scoreRec){
+    h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">';
+    h += '<span class="test-score-badge">✓ '+scoreRec.correct+' words — '+scoreRec.pct+'%</span>';
+    if(locked) h += '<button class="test-solve-btn" onclick="window._simpleRetry=true;_cabRender()">Try Again</button>';
+    h += '</div>';
+  }
+
+  h += '<textarea class="as-textarea" id="writingEssay" style="min-height:220px" placeholder="Write your essay here..." oninput="_wcUpdate(this,'+task.minWords+')"'+(locked?" disabled":"")+'>'+escapeHtml(savedText)+'</textarea>';
+  h += '<div class="cab-muted" style="margin:8px 0" id="writingWordCount">'+initWords+' words (minimum '+task.minWords+')</div>';
+  if(!locked) h += '<button class="primary" style="width:auto" onclick="submitWritingAnswer('+num+')">Submit Essay</button>';
+  h += '</div>';
+  return h;
+}
+
+function _wcUpdate(el, min){
+  var words = el.value.trim() ? el.value.trim().split(/\s+/).filter(Boolean).length : 0;
+  var span = document.getElementById("writingWordCount");
+  if(span) span.textContent = words+" words (minimum "+min+")";
+}
+
+async function submitWritingAnswer(num){
+  if(!requireDB() || !_currentStudent) return;
+  var task = WRITING_BANK[num] || {minWords:150};
+  var text = document.getElementById("writingEssay").value || "";
+  var words = text.trim() ? text.trim().split(/\s+/).filter(Boolean).length : 0;
+  var pct = task.minWords ? Math.min(100, Math.round(words/task.minWords*100)) : 0;
+  var key = "writing_"+num;
+  var name = "Test "+num;
+  await db.ref("testScores/"+safe(_currentStudent.group)+"/"+safe(_currentStudent.student)+"/"+key).set({
+    correct: words, max: task.minWords, pct: pct, points: pct, time: Date.now(),
+    cat: "writing", name: name, num: num, essay: text,
+    group: _currentStudent.group, student: _currentStudent.student
+  });
+  window._simpleRetry = false;
+  pushNotif("Test Score Saved", "Writing "+name+" — "+words+" words ("+pct+"%)", "success");
+  await _cabLoadData(_currentStudent.group, _currentStudent.student);
+  _cabRender();
 }
 
 function _cabBandSection(){
