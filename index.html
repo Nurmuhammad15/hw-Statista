@@ -355,6 +355,27 @@ body.cabinet-mode .container{max-width:100%;padding:0;margin:0}
 .cab-tab.active{background:linear-gradient(135deg,#4f8ef7,#7b5cf5);color:#fff;border-color:transparent}
 .test-solve-btn{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#4f8ef7,#7b5cf5);color:#fff;border:none;padding:6px 14px;border-radius:20px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap}
 .test-score-badge{display:inline-flex;align-items:center;gap:4px;color:var(--green);font-weight:700;font-size:12px;background:rgba(34,200,135,.1);border:1px solid rgba(34,200,135,.25);padding:3px 12px;border-radius:20px;white-space:nowrap}
+
+/* Custom pretty dropdown (Cambridge book / test selector) */
+.cab-ddown{position:relative}
+.cab-ddown-btn{display:inline-flex;align-items:center;gap:10px;justify-content:space-between;min-width:150px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:11px 14px;font-size:13.5px;font-family:inherit;font-weight:700;color:var(--text);cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.04)}
+.cab-ddown-btn:hover{border-color:var(--accent)}
+.cab-ddown-chevron{color:var(--muted);transition:transform .2s;flex-shrink:0}
+.cab-ddown-chevron.open{transform:rotate(180deg)}
+.cab-ddown-list{list-style:none;position:absolute;top:calc(100% + 8px);left:0;min-width:190px;max-height:260px;overflow-y:auto;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.28);padding:6px;z-index:60;display:none}
+.cab-ddown-list.open{display:block;animation:ddownIn .16s ease}
+@keyframes ddownIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.cab-ddown-list li{padding:9px 12px;border-radius:9px;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;white-space:nowrap}
+.cab-ddown-list li:hover{background:var(--surface2)}
+.cab-ddown-list li.sel{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+
+/* Reading / Listening accordion blocks */
+.cab-acc{border:1.5px solid var(--border);border-radius:14px;margin-bottom:14px;overflow:hidden;background:var(--surface)}
+.cab-acc-head{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;cursor:pointer;font-weight:800;font-size:14.5px;color:var(--text);background:var(--surface2)}
+.cab-acc-chevron{display:inline-flex;color:var(--muted);transition:transform .2s}
+.cab-acc-chevron.open{transform:rotate(180deg)}
+.cab-acc-body{max-height:0;overflow:hidden;transition:max-height .28s ease,padding .28s ease;padding:0 18px}
+.cab-acc-body.open{max-height:260px;padding:18px}
 .cab-test-select{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;font-size:13px;font-family:inherit;font-weight:700;color:var(--text);outline:none;cursor:pointer}
 .cab-test-subtitle{font-weight:800;font-size:13px;color:var(--accent);margin:18px 0 10px}
 .cab-qrow{margin-bottom:12px}
@@ -820,32 +841,16 @@ var _currentStudent = null; // {group, student}
 //
 // -------------------------------------------------------------------------------
 // CAMBRIDGE CATEGORY — organized as Cambridge books CAMBRIDGE_START..CAMBRIDGE_END,
-// each with TESTS_PER_BOOK tests. The student picks book + test number from two
-// dropdowns (e.g. "Cambridge 12" + "Test 3"), then answers 4 Reading + 4 Listening
-// questions for that specific test.
+// each with TESTS_PER_BOOK tests. The student picks book + test from two dropdowns
+// (e.g. "Cambridge 12" + "Test 3"), then opens the Reading or Listening block for
+// that test. Real IELTS Reading/Listening each have 40 questions — the student
+// solves the real paper test on paper/PDF and simply enters how many of the 40
+// they got correct; the app calculates the percentage automatically.
 // -------------------------------------------------------------------------------
 var CAMBRIDGE_START = 10;
 var CAMBRIDGE_END = 20;
 var TESTS_PER_BOOK = 4;
-
-// CAMBRIDGE_BANK[book][testNum] = { reading:[{q,a},...x4], listening:[{q,a},...x4] }
-// "q" = question text shown to the student. "a" = array of accepted answers
-// (matching is case-insensitive and trims whitespace — list every acceptable
-// spelling/variant). TEACHERS: replace the placeholder "q" text and fill in "a"
-// with the real Cambridge questions/answer keys. A question with an empty "a"
-// array is skipped when grading (it will not count against the student).
-var CAMBRIDGE_BANK = {};
-(function(){
-  for(var book = CAMBRIDGE_START; book <= CAMBRIDGE_END; book++){
-    CAMBRIDGE_BANK[book] = {};
-    for(var t = 1; t <= TESTS_PER_BOOK; t++){
-      CAMBRIDGE_BANK[book][t] = {
-        reading:   [1,2,3,4].map(function(n){ return {q:"Reading question " + n, a:[]}; }),
-        listening: [1,2,3,4].map(function(n){ return {q:"Listening question " + n, a:[]}; })
-      };
-    }
-  }
-})();
+var CAMBRIDGE_MAX_SCORE = 40; // Reading and Listening are each out of 40 questions
 
 // -------------------------------------------------------------------------------
 // STANDALONE CATEGORIES — Listening, Reading, Writing.
@@ -854,7 +859,11 @@ var CAMBRIDGE_BANK = {};
 // -------------------------------------------------------------------------------
 var SIMPLE_TESTS_COUNT = 12;
 
-// LISTENING_BANK[n] / READING_BANK[n] = [{q,a},...x4] — same rules as CAMBRIDGE_BANK.
+// LISTENING_BANK[n] / READING_BANK[n] = [{q,a},...x4]. "q" = question text shown
+// to the student, "a" = array of accepted answers (case-insensitive, trimmed —
+// list every acceptable variant). A question with an empty "a" array is skipped
+// when grading (it won't count against the student). TEACHERS: fill in the real
+// questions and answer keys below.
 var LISTENING_BANK = {}, READING_BANK = {};
 (function(){
   for(var n = 1; n <= SIMPLE_TESTS_COUNT; n++){
@@ -2061,6 +2070,8 @@ async function studentCabinet(group, student){
   _cabTestsOpen = false;
   _cabTestsCat = "cambridge";
   _cabOpenTest = null;
+  _cabCambBookOpen = false; _cabCambTestOpen = false;
+  _cabCambSecOpen = {reading:false, listening:false};
   _cabRender();
 }
 
@@ -2122,6 +2133,9 @@ var _cabTestsOpen = false;
 var _cabTestsCat = "cambridge";
 var _cabCambBook = CAMBRIDGE_START;
 var _cabCambTest = 1;
+var _cabCambBookOpen = false;   // custom dropdown open state
+var _cabCambTestOpen = false;   // custom dropdown open state
+var _cabCambSecOpen = {reading:false, listening:false}; // accordion open state
 var _cabOpenTest = null; // {cat, num} — currently open Listening/Reading/Writing test detail view
 var _cabChatWith = null; // "__teacher__" or a student's full name
 var _cabChatCache = null;
@@ -2145,7 +2159,9 @@ function _cabGoTests(cat){
   _cabTestsOpen = true;
   _cabView = "tests";
   _cabOpenTest = null;
-  window._cambRetry = false;
+  _cabCambBookOpen = false; _cabCambTestOpen = false;
+  _cabCambSecOpen = {reading:false, listening:false};
+  window._cambReadingRetry = false; window._cambListeningRetry = false;
   window._simpleRetry = false;
   _cabRender();
 }
@@ -2368,77 +2384,131 @@ function _cabCambridgeHtml(){
   var c = _cabCache;
   var h = '<div class="cab-card">';
   h += '<div class="cab-card-title">Cambridge IELTS Practice Tests</div>';
-  h += '<div class="cab-muted" style="margin-bottom:14px">Choose a book and a test, then write your answers — 4 Reading + 4 Listening tasks, graded automatically.</div>';
+  h += '<div class="cab-muted" style="margin-bottom:18px">Pick a book and a test below, then open Reading or Listening and enter how many out of '+CAMBRIDGE_MAX_SCORE+' you got correct — your percentage is calculated automatically.</div>';
 
-  h += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px">';
-  h += '<select class="cab-test-select" id="cambBookSelect" onchange="_cabCambSelect()">';
-  for(var b=CAMBRIDGE_START; b<=CAMBRIDGE_END; b++){
-    h += '<option value="'+b+'"'+(b===_cabCambBook?" selected":"")+'>Cambridge '+b+'</option>';
-  }
-  h += '</select>';
-  h += '<select class="cab-test-select" id="cambTestSelect" onchange="_cabCambSelect()">';
-  for(var t=1; t<=TESTS_PER_BOOK; t++){
-    h += '<option value="'+t+'"'+(t===_cabCambTest?" selected":"")+'>Test '+t+'</option>';
-  }
-  h += '</select>';
+  h += '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px">';
+  h += _cabCambDropdownHtml("book");
+  h += _cabCambDropdownHtml("test");
   h += '</div>';
 
-  var key = "cambridge_"+_cabCambBook+"_"+_cabCambTest;
-  var scoreRec = c.testScores[key];
-  var data = (CAMBRIDGE_BANK[_cabCambBook] && CAMBRIDGE_BANK[_cabCambBook][_cabCambTest]) || {reading:[],listening:[]};
-  var savedAnswers = (scoreRec && scoreRec.answers) || null;
-  var locked = !!scoreRec && !window._cambRetry;
-
-  if(scoreRec){
-    h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">';
-    h += '<span class="test-score-badge">✓ '+scoreRec.correct+'/'+scoreRec.max+' — '+scoreRec.pct+'%</span>';
-    if(locked) h += '<button class="test-solve-btn" onclick="window._cambRetry=true;_cabRender()">Try Again</button>';
+  ["reading","listening"].forEach(function(sub){
+    var key = "cambridge_"+_cabCambBook+"_"+_cabCambTest+"_"+sub;
+    var scoreRec = c.testScores[key];
+    var open = !!_cabCambSecOpen[sub];
+    var icon = sub === "reading" ? "📖" : "🎧";
+    h += '<div class="cab-acc">';
+    h += '<div class="cab-acc-head" onclick="_cabCambToggleSection(\''+sub+'\')">';
+    h += '<span>'+icon+' '+_cap(sub)+'</span>';
+    h += '<span style="display:flex;align-items:center;gap:10px">';
+    if(scoreRec) h += '<span class="test-score-badge">✓ '+scoreRec.correct+'/'+CAMBRIDGE_MAX_SCORE+' — '+scoreRec.pct+'%</span>';
+    h += '<span class="cab-acc-chevron'+(open?" open":"")+'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>';
+    h += '</span></div>';
+    h += '<div class="cab-acc-body'+(open?" open":"")+'">'+_cabCambSectionBody(sub)+'</div>';
     h += '</div>';
-  }
-
-  h += '<div class="cab-test-subtitle">📖 Reading (4 tasks)</div>';
-  data.reading.forEach(function(item,i){
-    var val = savedAnswers ? (savedAnswers.reading[i]||"") : "";
-    h += '<div class="cab-qrow"><label>'+(i+1)+'. '+escapeHtml(item.q)+'</label><input type="text" id="cambR'+i+'" placeholder="Your answer" value="'+escapeHtml(val)+'"'+(locked?" disabled":"")+'></div>';
-  });
-  h += '<div class="cab-test-subtitle">🎧 Listening (4 tasks)</div>';
-  data.listening.forEach(function(item,i){
-    var val = savedAnswers ? (savedAnswers.listening[i]||"") : "";
-    h += '<div class="cab-qrow"><label>'+(i+1)+'. '+escapeHtml(item.q)+'</label><input type="text" id="cambL'+i+'" placeholder="Your answer" value="'+escapeHtml(val)+'"'+(locked?" disabled":"")+'></div>';
   });
 
-  if(!locked) h += '<button class="primary" style="width:auto;margin-top:8px" onclick="submitCambridgeAnswers()">Submit Answers</button>';
   h += '</div>';
   return h;
 }
 
-function _cabCambSelect(){
-  _cabCambBook = parseInt(document.getElementById("cambBookSelect").value, 10);
-  _cabCambTest = parseInt(document.getElementById("cambTestSelect").value, 10);
-  window._cambRetry = false;
+// Renders the body of the Reading / Listening accordion — a single "how many
+// correct out of 40" input with a live percentage preview, or a locked summary
+// with a "Try Again" button if a score was already saved for this book/test.
+function _cabCambSectionBody(sub){
+  var c = _cabCache;
+  var key = "cambridge_"+_cabCambBook+"_"+_cabCambTest+"_"+sub;
+  var scoreRec = c.testScores[key];
+  var retryFlag = sub === "reading" ? window._cambReadingRetry : window._cambListeningRetry;
+  var locked = !!scoreRec && !retryFlag;
+  var idBase = "camb"+_cap(sub);
+
+  if(locked){
+    var h = '<div class="cab-muted" style="margin-bottom:12px">Saved: <b style="color:var(--text)">'+scoreRec.correct+' / '+CAMBRIDGE_MAX_SCORE+'</b> correct — '+scoreRec.pct+'%.</div>';
+    h += '<button class="test-solve-btn" onclick="'+(sub==="reading"?"window._cambReadingRetry=true":"window._cambListeningRetry=true")+';_cabRender()">Try Again</button>';
+    return h;
+  }
+
+  var val = scoreRec ? scoreRec.correct : "";
+  var pct = val !== "" ? Math.round(val/CAMBRIDGE_MAX_SCORE*100) : 0;
+  var h = '<label style="display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px">How many did you get correct? (out of '+CAMBRIDGE_MAX_SCORE+')</label>';
+  h += '<input type="number" min="0" max="'+CAMBRIDGE_MAX_SCORE+'" id="'+idBase+'Correct" value="'+val+'" placeholder="e.g. 35" oninput="_cabCambPreview(\''+sub+'\')" style="width:100%;max-width:220px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--rsm);padding:11px 14px;font-size:14px;font-family:inherit;color:var(--text);outline:none;box-sizing:border-box">';
+  h += '<div class="cab-muted" style="margin-top:8px" id="'+idBase+'Preview">'+(val!==""?val:0)+' / '+CAMBRIDGE_MAX_SCORE+' correct — '+pct+'%</div>';
+  h += '<button class="primary" style="width:auto;margin-top:14px" onclick="submitCambridgeSection(\''+sub+'\')">Save Score</button>';
+  return h;
+}
+
+function _cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+function _cabCambPreview(sub){
+  var inp = document.getElementById("camb"+_cap(sub)+"Correct");
+  var prev = document.getElementById("camb"+_cap(sub)+"Preview");
+  if(!inp || !prev) return;
+  var val = parseInt(inp.value, 10);
+  if(isNaN(val) || val < 0) val = 0;
+  if(val > CAMBRIDGE_MAX_SCORE) val = CAMBRIDGE_MAX_SCORE;
+  var pct = Math.round(val/CAMBRIDGE_MAX_SCORE*100);
+  prev.textContent = val+" / "+CAMBRIDGE_MAX_SCORE+" correct — "+pct+"%";
+}
+
+// ----- Custom pretty dropdown for Cambridge book / test selection -----
+function _cabCambDropdownHtml(kind){
+  var isBook = kind === "book";
+  var openFlag = isBook ? _cabCambBookOpen : _cabCambTestOpen;
+  var label = isBook ? "Cambridge "+_cabCambBook : "Test "+_cabCambTest;
+  var toggleCall = isBook ? "_cabCambToggleBookList()" : "_cabCambToggleTestList()";
+  var h = '<div class="cab-ddown">';
+  h += '<button type="button" class="cab-ddown-btn" onclick="event.stopPropagation();'+toggleCall+'"><span>'+label+'</span><svg class="cab-ddown-chevron'+(openFlag?" open":"")+'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>';
+  h += '<ul class="cab-ddown-list'+(openFlag?" open":"")+'">';
+  if(isBook){
+    for(var b=CAMBRIDGE_START; b<=CAMBRIDGE_END; b++){
+      h += '<li class="'+(b===_cabCambBook?"sel":"")+'" onclick="event.stopPropagation();_cabCambPickBook('+b+')">Cambridge '+b+'</li>';
+    }
+  } else {
+    for(var t=1; t<=TESTS_PER_BOOK; t++){
+      h += '<li class="'+(t===_cabCambTest?"sel":"")+'" onclick="event.stopPropagation();_cabCambPickTest('+t+')">Test '+t+'</li>';
+    }
+  }
+  h += '</ul></div>';
+  return h;
+}
+
+function _cabCambToggleBookList(){ _cabCambBookOpen = !_cabCambBookOpen; _cabCambTestOpen = false; _cabRender(); }
+function _cabCambToggleTestList(){ _cabCambTestOpen = !_cabCambTestOpen; _cabCambBookOpen = false; _cabRender(); }
+
+function _cabCambPickBook(b){
+  _cabCambBook = b; _cabCambBookOpen = false;
+  _cabCambSecOpen = {reading:false, listening:false};
+  window._cambReadingRetry = false; window._cambListeningRetry = false;
+  _cabRender();
+}
+function _cabCambPickTest(t){
+  _cabCambTest = t; _cabCambTestOpen = false;
+  _cabCambSecOpen = {reading:false, listening:false};
+  window._cambReadingRetry = false; window._cambListeningRetry = false;
   _cabRender();
 }
 
-async function submitCambridgeAnswers(){
+function _cabCambToggleSection(sub){
+  _cabCambSecOpen[sub] = !_cabCambSecOpen[sub];
+  _cabRender();
+}
+
+async function submitCambridgeSection(sub){
   if(!requireDB() || !_currentStudent) return;
-  var data = (CAMBRIDGE_BANK[_cabCambBook] && CAMBRIDGE_BANK[_cabCambBook][_cabCambTest]) || {reading:[],listening:[]};
-  var rAns = data.reading.map(function(_,i){ return document.getElementById("cambR"+i).value; });
-  var lAns = data.listening.map(function(_,i){ return document.getElementById("cambL"+i).value; });
-  var rGrade = gradeAnswers(rAns, data.reading);
-  var lGrade = gradeAnswers(lAns, data.listening);
-  var correct = rGrade.correct + lGrade.correct;
-  var max = (rGrade.total + lGrade.total) || 8;
-  var pct = max ? Math.round(correct/max*100) : 0;
-  var key = "cambridge_"+_cabCambBook+"_"+_cabCambTest;
-  var name = "Cambridge "+_cabCambBook+" — Test "+_cabCambTest;
+  var inp = document.getElementById("camb"+_cap(sub)+"Correct");
+  var correct = parseInt(inp.value, 10);
+  if(isNaN(correct) || correct < 0) correct = 0;
+  if(correct > CAMBRIDGE_MAX_SCORE) correct = CAMBRIDGE_MAX_SCORE;
+  var pct = Math.round(correct/CAMBRIDGE_MAX_SCORE*100);
+  var key = "cambridge_"+_cabCambBook+"_"+_cabCambTest+"_"+sub;
+  var name = "Cambridge "+_cabCambBook+" — Test "+_cabCambTest+" ("+_cap(sub)+")";
   await db.ref("testScores/"+safe(_currentStudent.group)+"/"+safe(_currentStudent.student)+"/"+key).set({
-    correct: correct, max: max, pct: pct, points: pct, time: Date.now(),
-    cat: "cambridge", name: name, book: _cabCambBook, testNum: _cabCambTest,
-    answers: {reading: rAns, listening: lAns},
+    correct: correct, max: CAMBRIDGE_MAX_SCORE, pct: pct, points: pct, time: Date.now(),
+    cat: "cambridge", subcat: sub, name: name, book: _cabCambBook, testNum: _cabCambTest,
     group: _currentStudent.group, student: _currentStudent.student
   });
-  window._cambRetry = false;
-  pushNotif("Test Score Saved", name+" — "+correct+"/"+max+" ("+pct+"%)", "success");
+  if(sub === "reading") window._cambReadingRetry = false; else window._cambListeningRetry = false;
+  pushNotif("Test Score Saved", name+" — "+correct+"/"+CAMBRIDGE_MAX_SCORE+" ("+pct+"%)", "success");
   await _cabLoadData(_currentStudent.group, _currentStudent.student);
   _cabRender();
 }
@@ -3955,6 +4025,16 @@ function applyTheme(){
     if(icon) icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
   }
 }
+
+// ===== CAMBRIDGE DROPDOWN — close on outside click =====
+document.addEventListener("click", function(e){
+  if(_cabCambBookOpen || _cabCambTestOpen){
+    if(!e.target.closest || !e.target.closest(".cab-ddown")){
+      _cabCambBookOpen = false; _cabCambTestOpen = false;
+      if(_cabView === "tests") _cabRender();
+    }
+  }
+});
 
 // ===== DEVTOOLS PROTECTION =====
 document.addEventListener("contextmenu",function(e){e.preventDefault();});
