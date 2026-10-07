@@ -734,52 +734,206 @@ window._firebaseError = null;
 window._fbLoadCount = 0;
 window._fbLoadDone = function(){
   window._fbLoadCount++;
-  if(window._fbLoadCount === 3) window._firebaseLoaded = true;
+  if(window._fbLoadCount === 1) window._firebaseLoaded = true;
 };
 window._fbLoadFail = function(name){
   if(!window._firebaseError) window._firebaseError = name + " failed to load";
 };
 </script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"
-  onload="window._fbLoadDone()"
-  onerror="window._fbLoadFail('firebase-app')"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"
-  onload="window._fbLoadDone()"
-  onerror="window._fbLoadFail('firebase-database')"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"
-  onload="window._fbLoadDone()"
-  onerror="window._fbLoadFail('firebase-storage')"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="window._fbLoadFail('supabase-js')"></script>
+
+
 
 <script>
-// ===== FIREBASE INIT =====
-var db = null;
-var storage = null;
-var _fbReady = false;
+// ===== SUPABASE INIT (replaces Firebase; same db.ref()/storage.ref() API so the rest of the app is unchanged) =====
+var SUPABASE_URL = "https://ycsnautlqikzldoyzqgc.supabase.co";
+var SUPABASE_KEY = "sb_publishable_jtRiPApacXKmET9FUOtriQ_6q2_IoKp";
+var sb = null, db = null, storage = null, _fbReady = false;
 
 function initFirebase() {
-  if (typeof firebase === 'undefined') {
-    _showConnError();
-    return false;
-  }
+  if (typeof supabase === 'undefined') { _showConnError(); return false; }
   try {
-    if (!firebase.apps.length) {
-      firebase.initializeApp({
-        apiKey: "AIzaSyDJDVZazGiEUshVicJX8ObvxIjDPgA5rTo",
-        authDomain: "studentstatista.firebaseapp.com",
-        databaseURL: "https://studentstatista-default-rtdb.firebaseio.com",
-        projectId: "studentstatista",
-        storageBucket: "studentstatista.firebasestorage.app"
-      });
-    }
-    db = firebase.database();
-    storage = firebase.storage();
+    sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    db = { ref: function(p){ return new _Ref(p); } };
+    storage = {
+      ref: function(p){ return new _SRef(p); },
+      refFromURL: function(url){
+        return { delete: function(){
+          var m = String(url).split('/storage/v1/object/public/uploads/')[1];
+          if(!m) return Promise.resolve(); // old Firebase file — left in place
+          return sb.storage.from('uploads').remove([decodeURIComponent(m.split('?')[0])]).then(_ok);
+        }};
+      }
+    };
     _fbReady = true;
     return true;
-  } catch(e) {
-    _showConnError("Error: " + e.message);
-    return false;
-  }
+  } catch(e) { _showConnError("Error: " + e.message); return false; }
 }
+
+function _ok(r){ if(r && r.error) throw r.error; return r ? r.data : null; }
+function _nn(v){ if(v===undefined) return null; if(v && typeof v==='object' && !Array.isArray(v) && !Object.keys(v).length) return null; return v; }
+function _snap(v){ v=_nn(v); return { val: function(){ return v; } }; }
+function _known(){ var o={}; [GROUPS, GROUPS_DEFAULT, window._grpCache||{}].forEach(function(m){ Object.keys(m).forEach(function(k){ o[k]=1; }); }); return Object.keys(o); }
+function _cands(sg){ var c=_known().filter(function(n){ return safe(n)===sg; }); if(c.indexOf(sg)<0) c.push(sg); return c; }
+function _splitG(rest){
+  var best=null; _known().forEach(function(n){ if((rest===n||rest.indexOf(n+'/')===0)&&(!best||n.length>best.length)) best=n; });
+  if(!best) best=rest.split('/')[0];
+  return { g: best, tail: rest.length>best.length ? rest.slice(best.length+1).split('/') : [] };
+}
+function _seg(rest){ return rest ? rest.split('/') : []; }
+function _pick(tree, segs){ var v=tree; for(var i=0;i<segs.length&&v;i++) v=v[segs[i]]; return v; }
+
+var _R = {}, _TBL = {groups:'groups',submissions:'submissions',studentAuth:'student_auth',testScores:'test_scores',attendance:'attendance',studentMsgs:'student_msgs',studentNotifs:'student_notifs',peerChats:'peer_chats'};
+
+_R.groups = {
+  read: async function(rest){
+    var rows=_ok(await sb.from('groups').select('*')), t={}; window._grpCache=window._grpCache||{};
+    rows.forEach(function(r){ t[safe(r.name)]={name:r.name,students:r.students||[]}; window._grpCache[r.name]=1; });
+    return _pick(t,_seg(rest));
+  },
+  write: async function(rest,val,mode){
+    var s=_seg(rest), rows=_ok(await sb.from('groups').select('name'));
+    if(!s.length){ // whole-tree set
+      var list=Object.keys(val||{}).map(function(k){ return {name:val[k].name||k, students:val[k].students||[]}; });
+      var keep=list.map(function(r){return r.name;}), gone=rows.map(function(r){return r.name;}).filter(function(n){return keep.indexOf(n)<0;});
+      if(gone.length) _ok(await sb.from('groups').delete().in('name',gone));
+      if(list.length) _ok(await sb.from('groups').upsert(list,{onConflict:'name'}));
+    } else if(mode==='remove'){
+      var hit=rows.filter(function(r){return safe(r.name)===s[0];}).map(function(r){return r.name;});
+      if(hit.length) _ok(await sb.from('groups').delete().in('name',hit));
+    } else {
+      _ok(await sb.from('groups').upsert({name:val.name||s[0], students:val.students||[]},{onConflict:'name'}));
+    }
+  }
+};
+
+_R.submissions = {
+  read: async function(rest){
+    var s=_splitG(rest), t=s.tail, q=sb.from('submissions').select('*').eq('group_name',s.g);
+    if(t[0]) q=q.eq('student_name',t[0]); if(t[1]) q=q.eq('stage',t[1]); if(t[2]) q=q.eq('lesson',t[2]);
+    var tree={};
+    _ok(await q).forEach(function(r){
+      var a=tree[r.student_name]=tree[r.student_name]||{}, b=a[r.stage]=a[r.stage]||{}, c=b[r.lesson]=b[r.lesson]||{};
+      c[r.hw]=Object.assign({},r.data,{time:r.ts});
+    });
+    return _pick(tree, t.length>3 ? t.slice(0,3).concat([t.slice(3).join('/')]) : t);
+  },
+  write: async function(rest,val,mode){
+    var s=_splitG(rest), t=s.tail;
+    if(mode==='remove'){
+      var q=sb.from('submissions').delete().eq('group_name',s.g);
+      if(t[0]) q=q.eq('student_name',t[0]); if(t[1]) q=q.eq('stage',t[1]); if(t[2]) q=q.eq('lesson',t[2]); if(t.length>3) q=q.eq('hw',t.slice(3).join('/'));
+      return _ok(await q);
+    }
+    if(t.length<4) throw new Error('Bad submission path');
+    var isTr = t.length>=5 && t[t.length-1]==='transcript', hw = (isTr?t.slice(3,-1):t.slice(3)).join('/');
+    var key={group_name:s.g,student_name:t[0],stage:t[1],lesson:t[2],hw:hw}, row;
+    if(isTr){
+      var ex=_ok(await sb.from('submissions').select('*').eq('group_name',s.g).eq('student_name',t[0]).eq('stage',t[1]).eq('lesson',t[2]).eq('hw',hw))[0];
+      var d=Object.assign({},ex?ex.data:{}); d.transcript=val; row=Object.assign(key,{data:d,ts:ex?ex.ts:(val&&val.time)||Date.now()});
+    } else { var dd=Object.assign({},val); delete dd.time; row=Object.assign(key,{data:dd,ts:val.time||Date.now()}); }
+    _ok(await sb.from('submissions').upsert(row,{onConflict:'group_name,student_name,stage,lesson,hw'}));
+  }
+};
+
+_R.studentAuth = {
+  _get: async function(rest){
+    var s=_splitG(rest), st=s.tail.join('/');
+    var r=_ok(await sb.from('student_auth').select('*').eq('group_name',s.g).eq('student_name',st))[0];
+    return {s:s,st:st,rec:r?{password:r.password,createdAt:r.created_at,photoUrl:r.photo_url||undefined}:null};
+  },
+  read: async function(rest){ return (await this._get(rest)).rec; },
+  write: async function(rest,val,mode){
+    var x=await this._get(rest), m=mode==='update'?Object.assign({},x.rec||{},val):val;
+    _ok(await sb.from('student_auth').upsert({group_name:x.s.g,student_name:x.st,password:m.password||DEFAULT_STUDENT_PW,photo_url:m.photoUrl||null,created_at:m.createdAt||Date.now()},{onConflict:'group_name,student_name'}));
+  }
+};
+
+_R.testScores = {
+  read: async function(rest){
+    var s=_seg(rest), q=sb.from('test_scores').select('*'); if(s[0]) q=q.in('group_name',_cands(s[0]));
+    var t={}; _ok(await q).forEach(function(r){ var a=t[safe(r.group_name)]=t[safe(r.group_name)]||{}, b=a[safe(r.student_name)]=a[safe(r.student_name)]||{}; b[r.test_key]=r.data; });
+    return _pick(t,s);
+  },
+  write: async function(rest,val){
+    var s=_seg(rest);
+    _ok(await sb.from('test_scores').upsert({group_name:val.group||_cands(s[0])[0],student_name:val.student||s[1],test_key:s[2],data:val,ts:val.time||Date.now()},{onConflict:'group_name,student_name,test_key'}));
+  }
+};
+
+_R.attendance = {
+  read: async function(rest){
+    var s=_seg(rest), r=_ok(await sb.from('attendance').select('*').in('group_name',_cands(s[0])).eq('day',s[1]))[0];
+    return r?r.records:null;
+  },
+  write: async function(rest,val){
+    var s=_seg(rest);
+    _ok(await sb.from('attendance').upsert({group_name:_cands(s[0])[0],day:s[1],records:val||{}},{onConflict:'group_name,day'}));
+  }
+};
+
+function _inbox(table, toRec, toRow){ return {
+  read: async function(rest){
+    var s=_seg(rest), q=sb.from(table).select('*').order('id'); if(s[0]) q=q.in('group_name',_cands(s[0]));
+    var t={}; _ok(await q).forEach(function(r){ var a=t[safe(r.group_name)]=t[safe(r.group_name)]||{}, b=a[safe(r.student_name)]=a[safe(r.student_name)]||{}; b[String(r.id)]=toRec(r); });
+    return _pick(t,s);
+  },
+  write: async function(rest,val){ var s=_seg(rest); _ok(await sb.from(table).insert(toRow(s,val))); }
+};}
+_R.studentMsgs = _inbox('student_msgs',
+  function(r){ return {text:r.message,time:r.ts,group:r.group_name,student:r.student_name}; },
+  function(s,v){ return {group_name:v.group||_cands(s[0])[0],student_name:v.student||s[1],message:v.text,ts:v.time||Date.now()}; });
+_R.studentNotifs = _inbox('student_notifs',
+  function(r){ return {title:r.title,body:r.body,time:r.ts,group:r.group_name,student:r.student_name}; },
+  function(s,v){ return {group_name:v.group||_cands(s[0])[0],student_name:v.student||s[1],title:v.title,body:v.body,ts:v.time||Date.now()}; });
+
+_R.peerChats = {
+  read: async function(rest){
+    var s=_seg(rest), t={};
+    _ok(await sb.from('peer_chats').select('*').in('group_name',_cands(s[0])).eq('chat_key',s[1]).order('id')).forEach(function(r){ t[String(r.id)]={from:r.from_student,text:r.message,time:r.ts}; });
+    return t;
+  },
+  write: async function(rest,val){ var s=_seg(rest); _ok(await sb.from('peer_chats').insert({group_name:_cands(s[0])[0],chat_key:s[1],from_student:val.from,message:val.text,ts:val.time||Date.now()})); }
+};
+
+function _Ref(p){ this.p=String(p); }
+_Ref.prototype._r=function(){ var i=this.p.indexOf('/'); return {root:i<0?this.p:this.p.slice(0,i), rest:i<0?'':this.p.slice(i+1)}; };
+_Ref.prototype.child=function(k){ return new _Ref(this.p+'/'+k); };
+_Ref.prototype._w=function(mode,val){ var r=this._r(), h=_R[r.root]; if(!h) return Promise.reject(new Error('Unknown path '+this.p)); return h.write(r.rest,val,mode); };
+_Ref.prototype.set=function(v){ return this._w('set',v); };
+_Ref.prototype.update=function(v){ return this._w('update',v); };
+_Ref.prototype.push=function(v){ return this._w('push',v); };
+_Ref.prototype.remove=function(){ return this._w('remove'); };
+_Ref.prototype.once=function(){
+  if(this.p==='.info/connected') return Promise.resolve(_snap(navigator.onLine));
+  var r=this._r(), h=_R[r.root]; if(!h) return Promise.reject(new Error('Unknown path '+this.p));
+  return h.read(r.rest).then(_snap);
+};
+_Ref.prototype.on=function(ev,cb,errCb){
+  if(this.p==='.info/connected'){ var f=function(){ cb(_snap(navigator.onLine)); }; window.addEventListener('online',f); window.addEventListener('offline',f); f(); return cb; }
+  var self=this, run=function(){ self.once().then(cb,function(e){ if(errCb) errCb(e); }); };
+  run();
+  cb.__ch = sb.channel('rt'+Math.random().toString(36).slice(2)).on('postgres_changes',{event:'*',schema:'public',table:_TBL[this._r().root]},run).subscribe();
+  return cb;
+};
+_Ref.prototype.off=function(ev,cb){ if(cb&&cb.__ch){ sb.removeChannel(cb.__ch); cb.__ch=null; } };
+
+function _SRef(path){ this.path=path; }
+_SRef.prototype.put=function(file){
+  var self=this, task={snapshot:null};
+  var prom=sb.storage.from('uploads').upload(self.path,file,{upsert:true,contentType:file.type||undefined}).then(function(r){
+    if(r.error) throw r.error;
+    task.snapshot={bytesTransferred:file.size,totalBytes:file.size,ref:self}; return task.snapshot;
+  });
+  task.then=prom.then.bind(prom); task.catch=prom.catch.bind(prom);
+  task.on=function(ev,prog,err,done){
+    if(prog) prog({bytesTransferred:0,totalBytes:file.size});
+    prom.then(function(){ if(prog) prog(task.snapshot); if(done) done(); },function(e){ if(err) err(e); });
+    return task;
+  };
+  return task;
+};
+_SRef.prototype.getDownloadURL=function(){ return Promise.resolve(sb.storage.from('uploads').getPublicUrl(this.path).data.publicUrl); };
 
 function _showConnError(detail) {
   var app = document.getElementById("app");
@@ -790,7 +944,7 @@ function _showConnError(detail) {
     + '</div>'
     + '<h3 style="margin-bottom:8px;color:var(--text)">No Internet Connection</h3>'
     + '<p style="color:var(--muted);font-size:14px;max-width:300px;margin-bottom:24px">'
-    + (detail || 'Could not connect to Firebase. Please check your internet connection.') + '</p>'
+    + (detail || 'Could not connect to the database. Please check your internet connection.') + '</p>'
     + '<button onclick="location.reload()" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:12px 28px;border-radius:30px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 4px 14px rgba(79,142,247,.35)">'
     + '&#8635; Retry</button>'
     + '</div>';
@@ -798,7 +952,7 @@ function _showConnError(detail) {
 
 function requireDB() {
   if (!_fbReady || !db) {
-    alert("Firebase is not connected. Please check your internet connection and reload.");
+    alert("Database is not connected. Please check your internet connection and reload.");
     return false;
   }
   return true;
@@ -1835,7 +1989,7 @@ async function submitVideoFile(){
       // Error
       var msg = "";
       switch(error.code){
-        case 'storage/unauthorized': msg = "Permission denied. Check Firebase Storage rules."; break;
+        case 'storage/unauthorized': msg = "Permission denied. Check storage settings."; break;
         case 'storage/canceled': msg = "Upload was cancelled."; break;
         case 'storage/unknown': msg = "Unknown error. Check your internet connection."; break;
         default: msg = error.message || error.code || "Upload failed";
@@ -1844,7 +1998,7 @@ async function submitVideoFile(){
         + '<div style="font-size:11px;color:var(--muted);margin-top:4px">Open DevTools (F12) → Console for more details</div>';
       btn.disabled = false;
       btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Retry Submit';
-      console.error("Firebase Storage upload error:", error);
+      console.error("Storage upload error:", error);
     },
     function(){
       // Success
@@ -1864,7 +2018,7 @@ async function submitVideoFile(){
         pushNotif("Speaking Video Submitted","Your video for \""+_spkHw+"\" was uploaded ("+sizeMB+"MB).","success");
       }).catch(function(err){
         statusEl.innerHTML = '<div style="color:var(--red)">✅ File uploaded but failed to save record: '+(err.message||err)+'</div>';
-        console.error("Firebase DB save error:", err);
+        console.error("DB save error:", err);
       });
     }
   );
