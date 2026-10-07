@@ -429,14 +429,15 @@ header b{font-family:'Plus Jakarta Sans',sans-serif!important;font-weight:800!im
 header b::before{content:'';width:40px;height:34px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 34'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%234fa3ff'/%3E%3Cstop offset='1' stop-color='%237b4cf5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M20 2 38 11 20 20 2 11z' fill='url(%23g)'/%3E%3Cpath d='M9 15v9c0 4 22 4 22 0v-9l-11 6z' fill='url(%23g)' opacity='.85'/%3E%3Cpath d='M35 12v9' stroke='%234fa3ff' stroke-width='2'/%3E%3C/svg%3E") center/contain no-repeat}
 #notifBell,#themeToggle{width:40px!important;height:40px!important;border-radius:50%!important;background:rgba(255,255,255,.8)!important;border:1px solid rgba(47,124,246,.1)!important;color:#3a4766!important}
 body.dark #notifBell,body.dark #themeToggle{background:#0f1a3a!important;border-color:#1d2b55!important;color:#e8edff!important}
-#helpBtn{background:#0f1a3a!important;color:#fff!important;box-shadow:none!important;border:1px solid #24356a!important;font-weight:600!important;padding:10px 18px!important}
-#helpBtn::before{content:'?';display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;background:#3b7dff;color:#fff;font-size:11px;font-weight:800;margin-right:7px;vertical-align:-3px}body.dark #helpBtn::before{background:#3b7dff}
-body.dark #helpBtn{background:#0f1a3a!important;border-color:#24356a!important;color:#fff!important}
+#helpBtn{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;background:linear-gradient(135deg,#ffffff,#edf4ff)!important;color:#1a2340!important;box-shadow:0 10px 28px rgba(47,124,246,.12)!important;border:1px solid rgba(47,124,246,.12)!important;font-weight:700!important;padding:10px 18px 10px 14px!important;border-radius:999px!important;line-height:1.1!important}
+#helpBtn::before{content:'?';display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#3b7dff,#5c4ef7);color:#fff;font-size:12px;font-weight:800;box-shadow:0 4px 10px rgba(59,125,255,.35)}
+body.dark #helpBtn{background:linear-gradient(135deg,#0f1a3a,#101b38)!important;border-color:#24356a!important;color:#f5f8ff!important;box-shadow:0 10px 24px rgba(11,20,46,.45)!important}
+body.dark #helpBtn::before{background:linear-gradient(135deg,#4f9bff,#3d6bff)!important;box-shadow:0 4px 10px rgba(69,119,255,.35)}
 #connIndicator{font-size:13px!important;color:#16a870!important;opacity:1!important;margin-left:8px;padding-left:16px;border-left:1px solid var(--border)}
 body.dark #connIndicator{color:#22c887!important}
 
-body.home-mode{background:var(--bg) url('/images/bg-light.png') center top/cover no-repeat fixed}
-body.dark.home-mode{background:#070d22 url('/images/bg-dark.jpg') center top/cover no-repeat fixed}
+body.home-mode{background:var(--bg) url('media/bg-light.png') center top/cover no-repeat fixed}
+body.dark.home-mode{background:#070d22 url('media/bg-dark.jpg') center top/cover no-repeat fixed}
 body.home-mode::before{display:none;content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(circle at -5% 5%,rgba(150,185,240,.35) 0 16%,transparent 16.2%),radial-gradient(circle at -6% 45%,rgba(150,185,240,.25) 0 9%,transparent 9.2%),radial-gradient(circle at 105% 92%,rgba(150,185,240,.3) 0 18%,transparent 18.2%),linear-gradient(90deg,var(--bg) 34%,transparent 62%),linear-gradient(0deg,var(--bg) 42%,transparent 62%)}
 body.dark.home-mode::before{background:radial-gradient(circle at -5% 5%,rgba(40,80,200,.35) 0 16%,transparent 16.2%),radial-gradient(circle at -6% 48%,rgba(40,80,200,.22) 0 9%,transparent 9.2%),radial-gradient(circle at 105% 92%,rgba(40,80,200,.3) 0 18%,transparent 18.2%),linear-gradient(90deg,#070d22 34%,transparent 62%),linear-gradient(0deg,#070d22 0%,transparent 45%)}
 body.home-mode .container{max-width:none!important;padding:0!important;position:relative;z-index:1}
@@ -469,7 +470,7 @@ body.dark .home-card.teacher{background:linear-gradient(135deg,#1a1450,#0f0f35)!
 .home-card .label{font-size:24px!important;font-weight:800!important;position:relative;z-index:1}
 .home-card .sub{font-size:14.5px!important;color:#4a5573!important;max-width:260px;line-height:1.5;position:relative;z-index:1}
 body.dark .home-card .sub{color:#d6defa!important}
-.home-card .art{position:absolute;right:6px;top:18px;width:150px;height:150px;object-fit:contain;pointer-events:none}
+.home-card .art{position:absolute;right:12px;top:18px;width:220px;height:220px;object-fit:contain;pointer-events:none;filter:drop-shadow(0 22px 26px rgba(47,124,246,.14));}
 .hx-btn{margin-top:auto;display:inline-flex;align-items:center;gap:10px;background:linear-gradient(90deg,#2f7cf6,#2563eb);color:#fff;font-weight:600;font-size:14px;padding:11px 22px;border-radius:999px;box-shadow:0 8px 20px rgba(47,124,246,.35);position:relative;z-index:1}
 .teacher .hx-btn{background:linear-gradient(90deg,#7b4cf5,#5b3ae0);box-shadow:0 8px 20px rgba(123,76,245,.35)}
 .hx-arrow{position:absolute;right:26px;bottom:28px;color:#2f7cf6;font-size:20px}
@@ -499,7 +500,7 @@ body.dark .hx-bar i{opacity:1}
  .hx-quote,.hx-dots,.hx-script{display:none}
  .hx-badge,.home-title,.home-sub,.hx-desc{margin-left:0!important}
  .home-cards{grid-template-columns:1fr!important}
- .home-card .art{width:110px;height:110px}
+ .home-card .art{width:170px;height:170px;right:18px;top:22px}
  .hx-gname{min-width:0}.hx-bar{display:none}
  .home-wrap{padding:24px 16px 60px!important}
 }
@@ -1259,12 +1260,12 @@ function home(){
     + '<div class="hx-desc">Track homework, earn points and compete with your group.</div>'
     + '<div class="home-cards">'
     + '<div class="home-card student" onclick="openStudentLogin()">'
-    + '<img class="art" src="/images/student.png" alt="">'
+    + '<img class="art" src="media/student.png" alt="">'
     + '<div class="card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="#fff" stroke="#fff" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2z"/><circle cx="12" cy="7" r="4"/></svg></div>'
     + '<div class="label">Student</div><div class="sub">Submit homework, track progress, earn points and climb the leaderboard.</div>'
     + '<div class="hx-btn">Open dashboard &rarr;</div><span class="hx-arrow">&rarr;</span></div>'
     + '<div class="home-card teacher" onclick="loginAdmin()">'
-    + '<img class="art" src="/images/teacher.png" alt="">'
+    + '<img class="art" src="media/teacher.png" alt="">'
     + '<div class="card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>'
     + '<div class="label">Teacher</div><div class="sub">Manage students, check homework, track groups and progress.</div>'
     + '<div class="hx-btn">Open panel &rarr;</div><span class="hx-arrow">&rarr;</span></div>'
